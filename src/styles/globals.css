@@ -1,0 +1,235 @@
+@import "tailwindcss";
+
+/* === Dark theme (default) === */
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #111118;
+  --bg-card: #1a1a24;
+  --bg-card-hover: #22222e;
+  --text-primary: #f0f0f5;
+  --text-secondary: #8888a0;
+  --text-muted: #55556a;
+  --accent-gold: #d4a843;
+  --accent-gold-hover: #f0c040;
+  --accent-gold-muted: rgba(212, 168, 67, 0.15);
+  --accent-teal: #00c9b7;
+  --accent-teal-hover: #0ed3cf;
+  --accent-teal-muted: rgba(0, 201, 183, 0.15);
+  --border: #2a2a3a;
+  --border-hover: #3a3a4a;
+  --success: #22c55e;
+  --error: #ef4444;
+  --warning: #f59e0b;
+}
+
+/* === Light theme === */
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f8;
+  --bg-card: #eeeef2;
+  --bg-card-hover: #e4e4ea;
+  --text-primary: #1a1a2e;
+  --text-secondary: #5a5a72;
+  --text-muted: #8888a0;
+  --accent-gold: #b8922e;
+  --accent-gold-hover: #d4a843;
+  --accent-gold-muted: rgba(184, 146, 46, 0.12);
+  --accent-teal: #009e90;
+  --accent-teal-hover: #00c9b7;
+  --accent-teal-muted: rgba(0, 158, 144, 0.12);
+  --border: #d0d0da;
+  --border-hover: #b8b8c8;
+  --success: #22c55e;
+  --error: #ef4444;
+  --warning: #f59e0b;
+}
+
+/* === Tailwind v4 theme tokens === */
+@theme inline {
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-card: var(--bg-card);
+  --color-bg-card-hover: var(--bg-card-hover);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent-gold: var(--accent-gold);
+  --color-accent-gold-hover: var(--accent-gold-hover);
+  --color-accent-gold-muted: var(--accent-gold-muted);
+  --color-accent-teal: var(--accent-teal);
+  --color-accent-teal-hover: var(--accent-teal-hover);
+  --color-accent-teal-muted: var(--accent-teal-muted);
+  --color-border-default: var(--border);
+  --color-border-hover: var(--border-hover);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-warning: var(--warning);
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+}
+
+/* === Base styles === */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+/* === Animations (only when motion is allowed) === */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes heroGlow {
+    0%, 100% {
+      opacity: 0.05;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.1;
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes pricingGlow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(212, 168, 67, 0.05);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(212, 168, 67, 0.15);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) translateX(0);
+    }
+    25% {
+      transform: translateY(-10px) translateX(5px);
+    }
+    50% {
+      transform: translateY(-5px) translateX(-5px);
+    }
+    75% {
+      transform: translateY(-15px) translateX(3px);
+    }
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .animate-fade-up-delay-1 {
+    animation: fadeUp 0.6s ease both;
+    animation-delay: 150ms;
+  }
+
+  .animate-fade-up-delay-2 {
+    animation: fadeUp 0.6s ease both;
+    animation-delay: 300ms;
+  }
+
+  .animate-fade-up-delay-3 {
+    animation: fadeUp 0.6s ease both;
+    animation-delay: 450ms;
+  }
+
+  .animate-hero-glow {
+    animation: heroGlow 10s ease-in-out infinite;
+  }
+
+  .animate-pricing-glow {
+    animation: pricingGlow 4s ease-in-out infinite;
+  }
+
+  .animate-float {
+    animation: float 20s ease-in-out infinite;
+  }
+
+  /* Scroll reveal base state */
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Theme toggle rotation */
+  .theme-icon-rotate {
+    transition: transform 300ms ease;
+  }
+
+  /* Mobile nav slide */
+  .mobile-nav-enter {
+    transform: translateX(100%);
+    transition: transform 200ms ease-out;
+  }
+
+  .mobile-nav-enter.open {
+    transform: translateX(0);
+  }
+
+  /* FAQ accordion */
+  .faq-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 200ms ease;
+  }
+
+  .faq-content.open {
+    grid-template-rows: 1fr;
+  }
+}
+
+/* Reduced motion: no animations, instant state */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .mobile-nav-enter {
+    transform: translateX(100%);
+  }
+
+  .mobile-nav-enter.open {
+    transform: translateX(0);
+  }
+
+  .faq-content {
+    display: grid;
+    grid-template-rows: 0fr;
+  }
+
+  .faq-content.open {
+    grid-template-rows: 1fr;
+  }
+}
+
+/* === Skip to content === */
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--accent-gold);
+  color: #0a0a0f;
+  font-weight: 500;
+}
+
+.skip-to-content:focus {
+  left: 0;
+}
