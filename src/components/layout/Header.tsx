@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Logo } from "@/components/icons/Logo";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { MobileNav } from "@/components/layout/MobileNav";
-import { Button } from "@/components/ui/Button";
+import { HeaderAuth } from "@/components/layout/HeaderAuth";
 import { NAV_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -48,11 +48,7 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <div className="hidden md:block">
-            <Button href="/waitlist" className="text-sm px-4 py-2">
-              Join the Waitlist
-            </Button>
-          </div>
+          <HeaderAuth />
           <MobileNav />
         </div>
       </div>

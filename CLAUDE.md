@@ -10,7 +10,7 @@ The full product and infrastructure spec is in `innerzero_web_spec.md` — read 
 
 **Phase 1: Marketing Frontend**
 
-Status: IN PROGRESS — frontend build complete, pending responsive/accessibility testing and Vercel deploy
+Status: Phase 2 COMPLETE — Supabase auth, database, accounts. Pending: transactional emails, responsive/accessibility testing, Vercel deploy.
 
 No backend, no database, no auth, no Stripe. Pure static marketing site with email capture.
 
@@ -252,17 +252,23 @@ innerzero_website/
 
 | Route | Page | SEO title | Status |
 |-------|------|-----------|--------|
-| `/` | Home | InnerZero — Private AI Assistant That Runs on Your PC | NOT STARTED |
-| `/features` | Features | Features \| InnerZero — Private AI Assistant | NOT STARTED |
-| `/pricing` | Pricing | Pricing \| InnerZero — Private AI Assistant | NOT STARTED |
-| `/privacy` | Privacy | Privacy \| InnerZero — Private AI Assistant | NOT STARTED |
-| `/about` | About | About \| InnerZero — Private AI Assistant | NOT STARTED |
-| `/contact` | Contact | Contact \| InnerZero — Private AI Assistant | NOT STARTED |
-| `/waitlist` | Waitlist | Join the Waitlist \| InnerZero | NOT STARTED |
-| `/download` | Download | Download \| InnerZero | NOT STARTED |
-| `/blog` | Blog | Blog \| InnerZero | NOT STARTED |
-| `/changelog` | Changelog | Changelog \| InnerZero | NOT STARTED |
-| `/terms` | Terms | Terms of Service \| InnerZero | NOT STARTED |
+| `/` | Home | InnerZero — Private AI Assistant That Runs on Your PC | COMPLETE |
+| `/features` | Features | Features \| InnerZero — Private AI Assistant | COMPLETE |
+| `/pricing` | Pricing | Pricing \| InnerZero — Private AI Assistant | COMPLETE |
+| `/privacy` | Privacy | Privacy \| InnerZero — Private AI Assistant | COMPLETE |
+| `/about` | About | About \| InnerZero — Private AI Assistant | COMPLETE |
+| `/contact` | Contact | Contact \| InnerZero — Private AI Assistant | COMPLETE |
+| `/waitlist` | Waitlist | Join the Waitlist \| InnerZero | COMPLETE |
+| `/download` | Download | Download \| InnerZero | COMPLETE |
+| `/blog` | Blog | Blog \| InnerZero | COMPLETE |
+| `/changelog` | Changelog | Changelog \| InnerZero | COMPLETE |
+| `/terms` | Terms | Terms of Service \| InnerZero | COMPLETE |
+| `/login` | Login | Log In \| InnerZero | COMPLETE |
+| `/register` | Register | Sign Up \| InnerZero | COMPLETE |
+| `/forgot-password` | Password Reset | Reset Password \| InnerZero | COMPLETE |
+| `/reset-password` | New Password | Set New Password \| InnerZero | COMPLETE |
+| `/account` | Dashboard | Account \| InnerZero | COMPLETE |
+| `/account/settings` | Settings | Settings \| InnerZero | COMPLETE |
 
 ---
 
@@ -663,10 +669,10 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Phase 1** | Responsive testing | NOT STARTED |
 | **Phase 1** | Accessibility pass | NOT STARTED |
 | **Phase 1** | Deploy to Vercel | NOT STARTED |
-| **Phase 2** | Supabase setup + schema | NOT STARTED |
-| **Phase 2** | Auth (login / register / reset) | NOT STARTED |
-| **Phase 2** | Account dashboard | NOT STARTED |
-| **Phase 2** | Migrate waitlist to database | NOT STARTED |
+| **Phase 2** | Supabase setup + schema | COMPLETE 2026-03-29 |
+| **Phase 2** | Auth (login / register / reset) | COMPLETE 2026-03-29 |
+| **Phase 2** | Account dashboard | COMPLETE 2026-03-29 |
+| **Phase 2** | Migrate waitlist to database | COMPLETE 2026-03-29 |
 | **Phase 2** | Transactional emails | NOT STARTED |
 | **Phase 3** | Stripe integration | NOT STARTED |
 | **Phase 3** | Checkout + webhook handlers | NOT STARTED |
