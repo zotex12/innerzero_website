@@ -12,7 +12,7 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Logo className="mb-4 inline-block" />
+            <Logo className="mb-4 inline-flex" imageSize={24} />
             <p className="text-sm text-text-secondary leading-relaxed">
               Your AI. Your machine. Your data.
             </p>
