@@ -69,8 +69,8 @@ export function MobileNav() {
         </ul>
 
         <div className="mt-8">
-          <Button href="/waitlist" className="w-full" onClick={() => setOpen(false)}>
-            Join the Waitlist
+          <Button href="/download" className="w-full" onClick={() => setOpen(false)}>
+            Download Free
           </Button>
         </div>
       </nav>

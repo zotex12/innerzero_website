@@ -34,51 +34,32 @@ export default function PrivacyPage() {
                 How InnerZero Protects Your Privacy
               </h2>
 
-              <div className="mt-6 space-y-6 text-text-secondary leading-relaxed">
-                <div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-2">
-                    All AI runs on your hardware
-                  </h3>
-                  <p>
-                    InnerZero downloads an AI model to your PC during setup. Every conversation, every query, every response is processed locally. Nothing is sent to a cloud server. There is no remote API handling your prompts.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-2">
-                    Memory stays on your machine
-                  </h3>
-                  <p>
-                    InnerZero&apos;s personal memory system stores everything in a local database on your computer. Your conversations, preferences, facts, and documents are never uploaded anywhere. If you delete InnerZero, you can delete all your data with it.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-2">
-                    The only network call: licence verification
-                  </h3>
-                  <p>
-                    The only time InnerZero connects to the internet is to verify your subscription licence. This check sends only:
-                  </p>
-                  <ul className="mt-2 list-disc pl-6 space-y-1">
-                    <li>Your licence token (a unique key, not your email or password)</li>
-                    <li>A device fingerprint hash (a one-way hash — cannot identify your hardware)</li>
-                    <li>App version and OS name (for update compatibility)</li>
-                  </ul>
-                  <p className="mt-2">
-                    It does <strong>not</strong> send any conversation content, memory data, file contents, prompts, responses, or usage patterns. Ever.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-2">
-                    No telemetry, no tracking
-                  </h3>
-                  <p>
-                    InnerZero does not include any analytics, telemetry, or tracking in the desktop app. We do not monitor how you use the app, what you ask, or how often you use it.
-                  </p>
-                </div>
-              </div>
+              <ul className="mt-6 space-y-4">
+                <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
+                  All AI processing happens on your hardware
+                </li>
+                <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
+                  Memory and conversations are stored locally — never uploaded
+                </li>
+                <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
+                  No account required to use InnerZero
+                </li>
+                <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
+                  If you enable optional cloud mode, your prompts are sent to the AI provider (e.g. DeepSeek, Anthropic, OpenAI) and returned — InnerZero never stores or logs them
+                </li>
+                <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
+                  If you use BYO API keys, requests go directly to the provider — InnerZero is not involved at all
+                </li>
+                <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
+                  No telemetry, no tracking, no analytics on your usage
+                </li>
+              </ul>
             </section>
           </ScrollReveal>
 
@@ -107,7 +88,7 @@ export default function PrivacyPage() {
                     2. What data the desktop app collects
                   </h3>
                   <p>
-                    The InnerZero desktop application does not collect or transmit any personal data. All AI processing, conversations, memory, and documents remain on your local machine. The only outbound connection is licence verification, which sends a licence token, device fingerprint hash, app version, and operating system name.
+                    The InnerZero desktop application does not collect or transmit any personal data. All AI processing, conversations, memory, and documents remain on your local machine. No telemetry, analytics, or usage tracking is included.
                   </p>
                 </div>
 

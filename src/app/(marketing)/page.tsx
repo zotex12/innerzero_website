@@ -1,8 +1,22 @@
+import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
 import { FeatureCards } from "@/components/sections/FeatureCards";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { PrivacyStatement } from "@/components/sections/PrivacyStatement";
 import { CTABanner } from "@/components/sections/CTABanner";
+import { createMetadata } from "@/lib/metadata";
+
+export const metadata: Metadata = createMetadata({
+  title: "InnerZero — Free Private AI Assistant That Runs on Your PC",
+  description:
+    "InnerZero is a free private AI assistant that runs entirely on your PC. No cloud. No tracking. Just you and your AI.",
+  openGraph: {
+    title: "InnerZero — Free Private AI Assistant That Runs on Your PC",
+    description:
+      "InnerZero is a free private AI assistant that runs entirely on your PC. No cloud. No tracking. Just you and your AI.",
+    url: "https://innerzero.com",
+  },
+});
 
 export default function Home() {
   return (
@@ -24,7 +38,7 @@ export default function Home() {
               name: "InnerZero",
               url: "https://innerzero.com",
               description:
-                "InnerZero is a private AI assistant that runs entirely on your PC.",
+                "InnerZero is a free private AI assistant that runs entirely on your PC.",
               brand: {
                 "@type": "Brand",
                 name: "InnerZero",
@@ -42,13 +56,12 @@ export default function Home() {
               applicationCategory: "DesktopEnhancement",
               operatingSystem: "Windows",
               description:
-                "A private AI assistant that runs entirely on your PC. No cloud. No tracking.",
+                "A free private AI assistant that runs entirely on your PC. No cloud. No tracking.",
               offers: {
-                "@type": "AggregateOffer",
-                lowPrice: "6.67",
-                highPrice: "9.99",
+                "@type": "Offer",
+                price: "0",
                 priceCurrency: "GBP",
-                offerCount: 2,
+                availability: "https://schema.org/InStock",
               },
             },
           ]),

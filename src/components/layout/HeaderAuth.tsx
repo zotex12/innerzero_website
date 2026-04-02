@@ -28,7 +28,6 @@ export function HeaderAuth() {
   }, []);
 
   if (!loaded) {
-    // Placeholder to avoid layout shift
     return <div className="hidden md:block w-[130px]" />;
   }
 
@@ -52,8 +51,8 @@ export function HeaderAuth() {
       >
         Log In
       </Link>
-      <Button href="/waitlist" className="text-sm px-4 py-2">
-        Join the Waitlist
+      <Button href="/download" className="text-sm px-4 py-2">
+        Download Free
       </Button>
     </div>
   );

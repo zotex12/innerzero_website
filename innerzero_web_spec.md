@@ -2,11 +2,11 @@
 
 ## Purpose
 
-This document is the complete specification for InnerZero's online presence: the marketing website, account system, payment processing, licence API, download delivery, and how the desktop app connects to all of it.
+This document is the complete specification for InnerZero's online presence: the marketing website, account system, payment processing, cloud API service, and how the desktop app connects to all of it.
 
 This is written for Claude and Claude Code so all implementation stays aligned.
 
-The desktop app (formerly Pantheon, now InnerZero) is covered by the separate `pantheon_claude_spec.md` and `CLAUDE.md`. This document covers everything on the web/server side.
+The desktop app is covered by the separate `CLAUDE.md`. This document covers everything on the web/server side.
 
 ---
 
@@ -27,15 +27,17 @@ The desktop app (formerly Pantheon, now InnerZero) is covered by the separate `p
 
 ### Brand positioning
 - Local-first private AI assistant
-- Runs entirely on your machine
-- No cloud. No tracking. No data leaves your device.
-- Subscription-licensed desktop software
-- One plan. One price. Everything included.
+- Runs entirely on your machine — free forever
+- No cloud required. No tracking. No data leaves your device.
+- Optional cloud features for faster reasoning, convenience, and premium models
+- Privacy is the default. Cloud is the choice.
 
-### Pricing
-- **£9.99/month** or **£79.99/year** (~£6.67/mo)
-- 14-day free trial, full access, no card required
-- Future add-ons (multi-device sync, team features) priced separately when they exist
+### Pricing model
+- **Local app: Free forever.** No subscription required to use InnerZero locally.
+- **Cloud AI plans:** Optional monthly "phone plan" style API bundles with credit allowances
+- **Pay As You Go:** Optional per-credit cloud usage, no subscription required
+- **Supporter:** Optional monthly donation to support development (separate from compute)
+- **BYO API keys:** Power users can add their own provider keys for free, no markup
 
 ---
 
@@ -106,14 +108,14 @@ The desktop app (formerly Pantheon, now InnerZero) is covered by the separate `p
 - Automatic HTTPS, CDN, edge functions
 - Deploy from GitHub repo
 
-### Backend (Phase 2+)
-- **Supabase** (Postgres + Auth + Row Level Security)
-- Or standalone Postgres + NextAuth.js if more control needed
-- Decision deferred to Phase 2 — frontend is independent
+### Backend
+- **Supabase** (Postgres + Auth + Row Level Security) — COMPLETE (Phase 2)
+- Auth, waitlist, user accounts all live
 
 ### Payments (Phase 3)
 - **Stripe** (Checkout + Customer Portal + Webhooks)
-- Stripe handles subscription lifecycle, invoices, payment methods
+- Stripe handles supporter subscriptions, credit pack purchases, billing
+- Stripe Billing for recurring cloud plans
 - No custom billing UI beyond what Stripe provides
 
 ### Email (future)
@@ -124,20 +126,20 @@ The desktop app (formerly Pantheon, now InnerZero) is covered by the separate `p
 
 ## 4. Site Structure
 
-### Public marketing pages (Phase 1)
+### Public marketing pages (Phase 1 — COMPLETE)
 
 | Route | Page | Purpose |
 |-------|------|---------|
 | `/` | Home | Hero, feature summary, social proof, CTA |
 | `/features` | Features | Detailed feature breakdown with sections |
-| `/pricing` | Pricing | Plan card, FAQ, CTA |
+| `/pricing` | Pricing | Free local, cloud plans, supporter, FAQ |
 | `/privacy` | Privacy | Privacy policy + "how your data stays local" explainer |
 | `/about` | About | About InnerZero, Summers Solutions, the mission |
 | `/blog` | Blog index | Empty shell for now, route exists for SEO |
 | `/blog/[slug]` | Blog post | MDX-based blog posts (added over time) |
 | `/contact` | Contact | Contact form (Formspree or similar initially) |
 | `/waitlist` | Waitlist | Email capture, "coming soon" messaging |
-| `/download` | Download | Coming soon initially; later: gated installer download |
+| `/download` | Download | Free download with system requirements |
 | `/docs` | Documentation | Placeholder; later: setup guides, FAQ, troubleshooting |
 | `/changelog` | Changelog | Release notes (can be MDX-based) |
 | `/terms` | Terms of Service | Legal page |
@@ -149,28 +151,25 @@ The desktop app (formerly Pantheon, now InnerZero) is covered by the separate `p
 | `/login` | Login | Email + password login |
 | `/register` | Register | Account creation |
 | `/forgot-password` | Password reset | Reset flow |
-| `/account` | Dashboard | Subscription status, plan, usage |
+| `/account` | Dashboard | Cloud plan status, credit balance, supporter status |
 | `/account/billing` | Billing | Stripe Customer Portal redirect |
-| `/account/devices` | Devices | Registered devices, deactivate option |
-| `/account/downloads` | Downloads | Installer download links (gated) |
-| `/account/settings` | Settings | Email, password, preferences |
+| `/account/usage` | Usage | Credit usage history, remaining balance |
+| `/account/settings` | Settings | Email, password, preferences, API keys |
 
-### API routes (Phase 2-3)
+### API routes (Phase 3+)
 
 | Route | Method | Purpose |
 |-------|--------|---------|
-| `/api/waitlist` | POST | Collect waitlist emails (Phase 1) |
-| `/api/auth/*` | Various | NextAuth.js or Supabase Auth handlers |
-| `/api/licence/validate` | POST | Desktop app validates licence token |
-| `/api/licence/activate` | POST | Desktop app activates on first run |
-| `/api/licence/deactivate` | POST | Desktop app or web portal deactivates device |
-| `/api/licence/status` | GET | Check subscription state |
-| `/api/download/[channel]` | GET | Return signed download URL for installer |
-| `/api/updates/check` | GET | Desktop app checks for available updates |
-| `/api/updates/[channel]/latest` | GET | Returns latest version info + download URL |
+| `/api/waitlist` | POST | Collect waitlist emails (Phase 1 — COMPLETE) |
+| `/api/auth/*` | Various | Supabase Auth handlers (Phase 2 — COMPLETE) |
 | `/api/stripe/webhook` | POST | Stripe webhook handler |
-| `/api/stripe/checkout` | POST | Create Stripe Checkout session |
+| `/api/stripe/checkout` | POST | Create Stripe Checkout session (cloud plan or supporter) |
 | `/api/stripe/portal` | POST | Create Stripe Customer Portal session |
+| `/api/credits/balance` | GET | Desktop app checks credit balance |
+| `/api/credits/use` | POST | Desktop app reports credit usage |
+| `/api/cloud/proxy` | POST | Managed API proxy (routes to provider, deducts credits) |
+| `/api/download/[channel]` | GET | Return download URL for installer |
+| `/api/updates/check` | GET | Desktop app checks for available updates |
 
 ---
 
@@ -200,285 +199,302 @@ Every page must export unique:
 - Lighthouse score target: 95+ on all public pages
 
 ### Content strategy (ongoing)
-- Blog posts targeting: "local AI assistant", "private AI", "AI privacy", "run AI locally", "AI on your PC"
+- Blog posts targeting: "local AI assistant", "private AI", "AI privacy", "run AI locally", "AI on your PC", "free AI assistant"
 - Feature pages with clear H2/H3 structure for featured snippets
 - FAQ sections with schema markup
 
 ---
 
-## 6. Page Content Plan
+## 6. Pricing Strategy
 
-### Home page (`/`)
+### Core principles
+1. **Local is free forever.** No subscription, no account, no trial period for local AI usage.
+2. **Cloud is optional.** Users who want faster reasoning, premium models, or convenience can opt into managed cloud plans.
+3. **BYO API keys always free.** Power users can add their own provider API keys at zero markup.
+4. **Supporter is separate from compute.** Supporting the project does not buy API credits.
+5. **No unlimited AI promises.** All cloud plans have clear credit allowances.
+6. **Simple is better than clever.** Credits, not raw tokens. One credit ≈ one standard AI message.
 
-**Hero section**
-- Headline: "Your AI. Your machine. Your data."
-- Tagline below: "inner peace. inner joy. innerzero."
-- 1-2 sentence description: InnerZero is a private AI assistant that runs entirely on your PC. No cloud. No tracking. Just you and your AI.
-- Primary CTA: "Join the Waitlist" (Phase 1) → "Download for Windows" (later)
-- Secondary CTA: "Learn more" (scrolls to features)
-- Subtle ambient glow / gradient animation in background (gold + teal on dark)
+### API cost reference (April 2026)
 
-**Feature highlights (3-4 cards)**
-- Runs 100% locally — your conversations never leave your machine
-- Learns and remembers — personal memory that grows with every interaction
-- Voice + text — talk to Zero or type, your choice
-- Hardware-aware — automatically configures itself for your PC
+These are the underlying provider costs InnerZero pays. This table is internal — never shown to users.
 
-**How it works (3 steps)**
-1. Download and install — one click, InnerZero handles the rest
-2. Zero configures itself — detects your hardware, downloads the right AI model
-3. Start talking — text or voice, Zero remembers everything locally
+| Provider | Model | Input/1M tokens | Output/1M tokens | Cost per standard message (~1K in + 500 out) |
+|----------|-------|-----------------|-------------------|-----------------------------------------------|
+| DeepSeek | V3.2 / V4 | $0.28–0.30 | $0.42–0.50 | ~£0.0004 |
+| Google | Gemini Flash | $0.30 | $2.50 | ~£0.001 |
+| Anthropic | Haiku 4.5 | $1.00 | $5.00 | ~£0.003 |
+| Anthropic | Sonnet 4.6 | $3.00 | $15.00 | ~£0.008 |
+| Anthropic | Opus 4.6 | $5.00 | $25.00 | ~£0.012 |
+| OpenAI | GPT-5.2 | $1.75 | $14.00 | ~£0.005 |
 
-**Trust / privacy statement**
-- Bold statement about zero data leaving the machine
-- Brief explainer: no accounts required for AI features, no telemetry, no cloud processing
+**Key insight:** API costs have dropped dramatically. Budget models cost fractions of a penny per message. Margins on managed plans should be 80%+ — this is normal for API resellers providing convenience, routing, and simplified billing. Do not price at 1.5x markup; that leaves almost zero revenue at these underlying costs.
 
-**Social proof**
-- Placeholder for testimonials / user count (when available)
-- "Built by Summers Solutions" trust badge
+### Credit system
 
-**Final CTA**
-- Pricing summary + "Join the Waitlist" / "Get Started"
+**1 credit = 1 standard AI cloud message.** This abstracts away token math for users.
 
-### Features page (`/features`)
+Credit costs vary by model tier — the system auto-routes by default, or users choose:
 
-Detailed sections with icons/illustrations:
+| Model tier | Credit cost | What it covers |
+|------------|-------------|----------------|
+| Auto (smart routing) | 1 credit | System picks best model for the task |
+| Budget (DeepSeek, Gemini Flash) | 1 credit | Fast, cheap, good for simple tasks |
+| Standard (Haiku, GPT-mini) | 2 credits | Better reasoning, moderate tasks |
+| Premium (Sonnet, GPT-5) | 4 credits | Strong reasoning, complex tasks |
+| Ultra (Opus) | 8 credits | Best available, hardest problems |
 
-1. **Local-first AI** — runs on your PC, works offline, no internet required for AI
-2. **Private memory system** — remembers your conversations, preferences, facts. All stored locally.
-3. **Voice interaction** — speak to Zero, hear responses. STT + TTS built in.
-4. **Document knowledge** — upload documents, ask questions across your files
-5. **Smart tools** — web search, file management, calculations, URL fetching
-6. **Hardware-aware setup** — detects your GPU, RAM, CPU and picks the best configuration
-7. **Sleep & reflection** — Zero reviews past conversations and learns while idle
-8. **One-click install** — download, run setup, start chatting. No technical setup required.
+**Expensive operations** (image generation, voice synthesis, web search) cost additional credits per use — metered separately from standard chat credits. Exact rates set when these features are built.
 
-Future features (marked as "Coming Soon"):
-- Multi-device sync
-- Team/office shared memory
-- Email integration
-- Mobile companion app
+### Phase 1 pricing (launch)
 
-### Pricing page (`/pricing`)
+#### Free Local — £0/forever
+- Full InnerZero desktop app
+- All local AI features (chat, voice, memory, tools, sleep, projects)
+- Runs on user's hardware via Ollama
+- No account required
+- No internet required for local features
+- BYO API keys: user adds their own provider keys for free, zero markup
 
-**Single plan card** (centered, prominent):
-- InnerZero — £9.99/month or £79.99/year
-- "Everything included. No tiers. No limits."
-- Feature checklist showing everything
-- CTA: "Start 14-Day Free Trial" / "Join Waitlist"
+#### Supporter — £4.99/month
+- Supports InnerZero development (not compute)
+- Perks: supporter badge in app, early access to new features, extra themes, Discord role, roadmap voting
+- No API credits included — this is donation, not usage
+- Cancel anytime
+- One-off donations also accepted (any amount via Stripe)
 
-**FAQ section** (below pricing):
-- What happens after the trial?
-- Do I need a powerful PC?
-- Is my data really private?
-- Can I use Zero offline?
-- What AI models does it use?
-- Can I cancel anytime?
-- What about updates?
-- Will there be a Mac/Linux version? (Planned)
+#### Founder — £79 one-time
+- Limited to first 100 buyers — then retired permanently
+- Permanent supporter perks (badge, themes, early access, Discord role)
+- Includes future hosted personal tier when it launches (Phase 2 only — not business/team)
+- Does NOT include unlimited cloud credits
+- Scope is explicitly limited: supporter perks + personal hosted access. Nothing else is promised.
 
-### Privacy page (`/privacy`)
+### Phase 1b pricing (after 50+ active users — adds cloud plans)
 
-Two sections:
-1. **How InnerZero protects your privacy** — plain-language explainer (not legal text)
-   - All AI runs on your hardware
-   - Memory stored in local database on your machine
-   - No cloud processing, no data uploads
-   - Subscription validation is the only network call (and what it sends: licence key, app version — nothing personal)
-   - Optional telemetry: none by default. May add opt-in anonymous crash reporting later.
+#### Cloud Starter — £9.99/month
+- 300 credits/month
+- Auto-routed model selection
+- Access to Budget + Standard model tiers
+- Overage: £4 per 100 credits
 
-2. **Privacy Policy** — standard legal privacy policy
-   - What data the website collects (account email, payment via Stripe, basic analytics)
-   - What data the app collects (nothing leaves your machine except licence checks)
-   - Cookie policy for the website
-   - GDPR compliance
+#### Cloud Plus — £19.99/month
+- 800 credits/month
+- All model tiers including Premium (Sonnet, GPT-5)
+- Priority routing
+- Overage: £3.50 per 100 credits
 
-### About page (`/about`)
-- What InnerZero is and why it exists
-- Mission: AI should be personal and private
-- About Summers Solutions
-- Link to contact
+#### Cloud Pro — £39.99/month
+- 2,000 credits/month
+- All model tiers including Ultra (Opus)
+- Priority routing
+- Overage: £3 per 100 credits
+
+#### Pay As You Go — no subscription
+- Buy credit packs: 100 credits = £5 (£0.05/credit)
+- Access to Budget + Standard tiers
+- Premium/Ultra available at higher credit cost
+- Credits expire after 90 days
+- No monthly commitment
+
+### Phase 1b cloud plan rules
+- Credits do NOT roll over month to month. Unused credits expire at billing cycle reset.
+- Overage is charged per 100-credit block, auto-billed to payment method on file.
+- Hard spending cap available: user sets monthly maximum, service pauses when reached. No surprise bills.
+- Soft cap warning at 80% usage via email and in-app notification.
+- PAYG credit packs are one-time purchases, not subscriptions.
+
+### Phase 2 pricing (future — hosted convenience)
+
+#### Cloud Hosted — ~£19.99/month (on top of cloud plan)
+- One-click setup (no Ollama/Docker manual install)
+- Cloud sync across devices
+- Remote access via web dashboard
+- Automatic backups
+- Managed updates
+- Includes 500 cloud credits (stacks with any cloud plan)
+
+This sits alongside local, never replaces it. Users choose: run locally (free), or pay for hosted convenience. Messaging: "Same Zero. Hosted for convenience."
+
+### Phase 3 pricing (future — pro automation)
+
+#### Cloud Pro+ / Automation — ~£39.99–49.99/month
+- Everything in Cloud Hosted
+- Scheduled jobs and background tasks
+- Cloud-triggered actions
+- Advanced observability and logging
+- Higher credit allowance (3,000+ credits)
+- Webhook integrations
+
+### Phase 4 pricing (future — business)
+
+#### Business — ~£99–299/month
+- Team accounts with user management
+- Role-based permissions
+- Audit logs
+- Shared knowledge bases
+- Policy controls
+- Priority support
+- Commercial use licence
+- Optional onboarding: ~£299–499 one-time setup fee
+
+Framing: "Business" or "Team", never "Commercial Licence" — the latter sounds like a penalty for using the product at work.
+
+Self-hosted business tier (same features, runs on company infrastructure) planned for later.
 
 ---
 
 ## 7. Desktop App ↔ Website Connection
 
-This is how InnerZero (the desktop app) connects to the online account system. This follows the same pattern as Adobe Creative Cloud, JetBrains IDEs, and similar subscription desktop software.
+### How it works under the new model
 
-### Activation flow (first run)
+The desktop app is **free and fully functional offline.** No login required for local use.
+
+An account is only needed when the user wants:
+- Managed cloud AI (credit plans or PAYG)
+- Supporter/founder perks
+- Future hosted features (sync, backup, web dashboard)
+
+### Account linking flow
 
 ```
-User installs InnerZero
-    → First-run wizard starts
-    → Step 2: "Log in or start free trial"
-    → User has two options:
+User installs InnerZero (free download)
+    → First-run wizard runs (hardware check → model download → benchmark)
+    → App works immediately — no login, no account, no internet needed
 
-    Option A: User already has an account (bought via website)
-        → Enters email + password
-        → App calls POST /api/licence/activate
-            Body: { email, password, device_id, hardware_fingerprint, app_version }
-        → Server validates credentials + subscription status
-        → Server creates device record, returns licence_token + expiry
-        → App stores licence_token in user_data/settings/licence.json
-        → App proceeds to hardware check → model download → setup complete
+    Later, user wants cloud AI or supporter perks:
+    → Settings > Account > "Connect Account"
+    → User logs in or creates account (opens innerzero.com/login in browser)
+    → Browser redirects back to app with auth token
+    → App stores account token in user_data/settings/account.json
+    → Cloud features become available in app
 
-    Option B: User has no account (starts trial from app)
-        → Enters email only (or email + password to create account)
-        → App calls POST /api/licence/activate
-            Body: { email, password?, device_id, hardware_fingerprint, app_version, trial: true }
-        → Server creates account (if needed) + starts 14-day trial
-        → Server creates device record, returns licence_token + expiry + trial_end_date
-        → App stores licence_token in user_data/settings/licence.json
-        → App proceeds to setup
+    User adds BYO API keys (no account needed):
+    → Settings > API Keys
+    → User enters provider API key (DeepSeek, OpenAI, Anthropic, etc.)
+    → Stored locally in user_data/settings/api_keys.json (encrypted)
+    → Cloud models become available immediately, routed directly to provider
+    → Zero markup, zero tracking
 ```
 
-### Licence token structure
+### Account token structure
 
-The licence token is a signed JWT (or similar signed payload) containing:
 ```json
 {
   "user_id": "uuid",
   "email": "user@example.com",
-  "subscription_status": "active|trial|grace",
-  "trial_end": "2026-04-11T00:00:00Z",
-  "subscription_end": "2026-04-28T00:00:00Z",
-  "device_id": "unique-device-hash",
-  "max_devices": 2,
-  "channel": "stable",
-  "issued_at": "2026-03-28T00:00:00Z",
-  "expires_at": "2026-04-04T00:00:00Z"
+  "plan": "cloud_starter|cloud_plus|cloud_pro|payg|supporter|founder|free",
+  "credits_remaining": 245,
+  "credits_monthly_allowance": 300,
+  "supporter": true,
+  "founder": false,
+  "billing_cycle_end": "2026-05-01T00:00:00Z",
+  "issued_at": "2026-04-02T00:00:00Z",
+  "expires_at": "2026-04-09T00:00:00Z"
 }
 ```
 
-The token itself expires after 7 days, forcing periodic revalidation. The subscription can be valid much longer — the token just needs refreshing.
+Token expires after 7 days, app refreshes silently in background. If server unreachable, local features continue working — only cloud features pause.
 
-### Periodic validation (while app is running)
-
-```
-App starts
-    → Reads licence.json
-    → Checks token expiry
-
-    If token is still valid (not expired):
-        → App launches normally
-        → Schedules background revalidation every 24 hours
-
-    If token is expired:
-        → App calls POST /api/licence/validate
-            Body: { licence_token, device_id, app_version }
-        → Server checks subscription status
-        → If active: returns fresh token → app stores it → launches normally
-        → If expired/revoked: returns error → app shows "subscription expired" screen
-        → If server unreachable: grace period logic (see below)
-```
-
-### Grace period (offline / server unreachable)
+### Credit usage flow
 
 ```
-Token is expired AND server is unreachable:
+User sends a cloud-routed message in InnerZero:
+    → App checks: has account token? has credits?
+    → If yes: sends request to /api/cloud/proxy with auth token
+    → Server routes to appropriate provider (DeepSeek, Claude, GPT, etc.)
+    → Server deducts credits based on model tier
+    → Returns AI response to app
+    → App updates local credit display
 
-    If last successful validation was < 7 days ago:
-        → App launches normally (offline grace period)
-        → Shows subtle "offline — reconnect to verify licence" indicator
-
-    If last successful validation was 7-14 days ago:
-        → App launches with warning banner
-        → "Your licence hasn't been verified in X days. Please connect to the internet."
-
-    If last successful validation was > 14 days ago:
-        → App shows locked screen
-        → "Unable to verify your subscription. Please connect to the internet or contact support."
-        → User data is NOT deleted — just app access is blocked
+    If BYO API key is set for that provider:
+    → App routes directly to provider API
+    → No server involvement, no credit deduction
+    → Zero markup
 ```
-
-### Licence states (app-side)
-
-| State | Meaning | App behaviour |
-|-------|---------|---------------|
-| `active` | Paid subscription, verified | Full access |
-| `trial` | Free trial period | Full access, trial countdown shown |
-| `grace` | Server unreachable, within grace window | Full access, subtle warning |
-| `expired` | Subscription ended or trial expired | Locked screen, upgrade prompt |
-| `revoked` | Manually revoked (refund, abuse, etc.) | Locked screen, contact support |
-
-### Device management
-
-- Each licence allows **2 devices** by default (can adjust later)
-- Device identified by a hardware fingerprint hash (CPU ID + motherboard serial + OS install ID or similar)
-- Users can deactivate devices from the web portal (`/account/devices`)
-- If user tries to activate a 3rd device, activation fails with "device limit reached — deactivate a device at innerzero.com/account/devices"
 
 ### What the desktop app sends to the server
 
-This is critical for the privacy story. The app sends ONLY:
-- Email + password (on login/activation only)
-- Licence token (on validation)
-- Device fingerprint hash (not raw hardware IDs)
-- App version string
-- OS name (for update channel matching)
+**When using managed cloud (credit plans):**
+- Auth token
+- The AI prompt/message (sent to provider via our proxy)
+- Model preference
+- App version
 
-The app NEVER sends:
-- Conversation content
-- Memory data
+**When using BYO API keys:**
+- Nothing. Direct to provider. InnerZero server is not involved.
+
+**When checking for updates:**
+- App version, OS name (no personal data)
+
+**Never sent (regardless of mode):**
+- Local memory data
+- Local conversation history
 - File contents
-- Usage patterns
-- Prompts or responses
-- Personal facts or profile data
-- Any AI-related data whatsoever
+- Personal profile facts
+- Usage patterns or analytics
 
 This must be documented clearly on the Privacy page.
 
-### Desktop app file: `licence.json`
+### Grace period (cloud features)
 
-Stored at `user_data/settings/licence.json`:
-```json
-{
-  "token": "eyJ...",
-  "email": "user@example.com",
-  "status": "active",
-  "trial_end": null,
-  "last_validated": "2026-03-28T10:00:00Z",
-  "device_id": "sha256-hash-of-hardware"
-}
 ```
+Server unreachable:
 
-This file is:
-- Created on first activation
-- Updated on every successful validation
-- Never deleted by app updates
-- Deleted only on explicit logout or full uninstall
+    Local features: Always work. No grace period needed.
+
+    Cloud features:
+    If last successful token refresh < 7 days ago:
+        → Cloud features work (cached token still valid)
+        → Subtle "offline" indicator
+
+    If last refresh > 7 days ago:
+        → Cloud features pause
+        → Local features continue
+        → "Connect to internet to refresh cloud access"
+
+    App never locks. Local AI always works.
+```
 
 ---
 
 ## 8. Stripe Integration
 
-### Subscription model
-- One product: "InnerZero"
-- Two prices: Monthly (£9.99) and Annual (£79.99)
-- 14-day free trial on both
-- Stripe handles all billing, invoices, payment methods, cancellation
+### Products and prices
 
-### Checkout flow (website)
+Stripe products to create:
+
+| Product | Type | Price | Stripe mode |
+|---------|------|-------|-------------|
+| Cloud Starter | Subscription | £9.99/month | `subscription` |
+| Cloud Plus | Subscription | £19.99/month | `subscription` |
+| Cloud Pro | Subscription | £39.99/month | `subscription` |
+| Supporter | Subscription | £4.99/month | `subscription` |
+| Founder | One-time | £79 | `payment` |
+| PAYG 100 credits | One-time | £5 | `payment` |
+| PAYG 500 credits | One-time | £22 | `payment` |
+| One-off donation | One-time | Variable | `payment` (custom amount) |
+| Overage 100 credits | Metered | £3–4 (tier dependent) | `subscription` add-on or auto-charge |
+
+### Checkout flow
 
 ```
-User clicks "Start Free Trial" or "Subscribe"
+User clicks "Subscribe" or "Buy Credits" on innerzero.com or in-app:
     → Frontend calls POST /api/stripe/checkout
         Body: { price_id, email? }
     → Server creates Stripe Checkout Session
-        - mode: "subscription"
-        - trial_period_days: 14
+        - mode: "subscription" or "payment" depending on product
         - success_url: /account?session_id={CHECKOUT_SESSION_ID}
         - cancel_url: /pricing
     → Redirect user to Stripe Checkout
     → User completes payment
     → Stripe redirects to success_url
-    → Stripe fires webhook: checkout.session.completed
-    → Server creates/updates user record with subscription_id
+    → Stripe fires webhook
+    → Server updates user record (plan, credits, supporter status)
 ```
 
 ### Billing management
-
-- "Manage Billing" button in `/account/billing`
+- "Manage Billing" button in `/account`
 - Creates Stripe Customer Portal session (POST /api/stripe/portal)
 - User can: update payment method, view invoices, cancel subscription, switch plan
 - No custom billing UI needed — Stripe handles it all
@@ -487,18 +503,18 @@ User clicks "Start Free Trial" or "Subscribe"
 
 | Event | Action |
 |-------|--------|
-| `checkout.session.completed` | Create user record, set status to trial/active |
-| `customer.subscription.updated` | Update subscription status |
-| `customer.subscription.deleted` | Set status to expired |
-| `invoice.payment_succeeded` | Confirm active, extend period |
-| `invoice.payment_failed` | Set grace period, send email warning |
-| `customer.subscription.trial_will_end` | Send email: trial ending in 3 days |
+| `checkout.session.completed` | Update user plan, add credits, set supporter/founder status |
+| `customer.subscription.updated` | Update plan tier |
+| `customer.subscription.deleted` | Revert to free, keep local access |
+| `invoice.payment_succeeded` | Refresh credits for new billing cycle |
+| `invoice.payment_failed` | Pause cloud features, send email warning |
 
 ### Important Stripe rules
 - Always verify webhook signatures
 - Idempotent webhook handling (same event may fire multiple times)
-- Store Stripe customer_id and subscription_id in user record
+- Store Stripe customer_id in user record
 - Never store card details — Stripe handles all PCI compliance
+- Failed payment pauses cloud features only — local app continues working
 
 ---
 
@@ -516,7 +532,7 @@ Response:
   "update_available": true,
   "latest_version": "0.2.0",
   "current_version": "0.1.0",
-  "download_url": "https://innerzero.com/api/download/stable/innerzero-0.2.0-win-setup.exe",
+  "download_url": "https://innerzero.com/downloads/innerzero-0.2.0-win-setup.exe",
   "release_notes_url": "https://innerzero.com/changelog#v0.2.0",
   "release_notes_summary": "Voice improvements, memory performance, bug fixes",
   "mandatory": false,
@@ -528,77 +544,70 @@ Response:
 
 | Channel | Audience | Update frequency |
 |---------|----------|-----------------|
-| `stable` | All customers | Tested releases only |
+| `stable` | All users | Tested releases only |
 | `beta` | Opt-in testers | Pre-release builds |
 | `dev` | Louie only | Every build |
 
 ### Download delivery
-- Installer files stored in cloud storage (Vercel Blob, S3, or similar)
-- Download URLs are signed/temporary (expire after 1 hour)
-- Downloads gated behind active subscription check (except trial)
-- No direct public link to installer binary
+- Installer hosted on GitHub Releases or Vercel Blob
+- Downloads are **free and public** — no paywall, no login required
+- Update checker runs on app startup (non-blocking)
 
 ---
 
-## 10. Database Schema (Phase 2)
+## 10. Database Schema
 
-### Users table
+### Users table (extends Supabase Auth)
 ```sql
-CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    email TEXT UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL,
+CREATE TABLE user_profiles (
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     stripe_customer_id TEXT,
-    stripe_subscription_id TEXT,
-    subscription_status TEXT DEFAULT 'none',
-    trial_end TIMESTAMPTZ,
-    subscription_end TIMESTAMPTZ,
-    max_devices INTEGER DEFAULT 2,
+    plan TEXT DEFAULT 'free',
+    credits_balance INTEGER DEFAULT 0,
+    credits_monthly_allowance INTEGER DEFAULT 0,
+    supporter BOOLEAN DEFAULT false,
+    founder BOOLEAN DEFAULT false,
+    billing_cycle_end TIMESTAMPTZ,
     release_channel TEXT DEFAULT 'stable',
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now()
 );
 ```
 
-### Devices table
-```sql
-CREATE TABLE devices (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    device_fingerprint TEXT NOT NULL,
-    device_name TEXT,
-    os TEXT,
-    app_version TEXT,
-    last_validated TIMESTAMPTZ DEFAULT now(),
-    activated_at TIMESTAMPTZ DEFAULT now(),
-    is_active BOOLEAN DEFAULT true,
-    UNIQUE(user_id, device_fingerprint)
-);
-```
-
-### Waitlist table (Phase 1, simple)
+### Waitlist table (Phase 1 — COMPLETE)
 ```sql
 CREATE TABLE waitlist (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email TEXT UNIQUE NOT NULL,
     source TEXT DEFAULT 'website',
     created_at TIMESTAMPTZ DEFAULT now()
 );
 ```
 
-### Licence events table (audit log)
+### Credit transactions table (Phase 3)
 ```sql
-CREATE TABLE licence_events (
+CREATE TABLE credit_transactions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES users(id),
-    device_id UUID REFERENCES devices(id),
-    event_type TEXT NOT NULL,
-    metadata JSONB DEFAULT '{}',
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    amount INTEGER NOT NULL,
+    type TEXT NOT NULL,
+    description TEXT,
+    model_tier TEXT,
     created_at TIMESTAMPTZ DEFAULT now()
 );
 ```
 
-Event types: `activated`, `validated`, `validation_failed`, `deactivated`, `expired`, `revoked`, `grace_period_entered`, `trial_started`, `trial_ended`, `subscription_started`, `subscription_cancelled`, `subscription_renewed`
+Transaction types: `monthly_grant`, `purchase`, `usage`, `overage`, `expiry`, `refund`
+
+### Founder tracking (Phase 3)
+```sql
+CREATE TABLE founder_slots (
+    id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
+    claimed_at TIMESTAMPTZ DEFAULT now()
+);
+-- Max 100 rows. Check count before allowing new founder purchases.
+```
 
 ---
 
@@ -610,17 +619,17 @@ Sent via Resend or Postmark:
 | Trigger | Email |
 |---------|-------|
 | Account created | Welcome + confirm email |
-| Trial started | Welcome to your trial |
-| Trial ending (3 days before) | Trial expires soon — subscribe to keep access |
-| Trial expired | Trial ended — subscribe to continue |
-| Subscription started | Payment confirmed, you're subscribed |
+| Cloud plan started | Welcome to your cloud plan, credits info |
+| Credits running low (80%) | Usage alert |
+| Credits exhausted | Credits used up — upgrade or buy more |
+| Supporter started | Thank you for supporting InnerZero |
+| Founder purchased | Founder welcome + perks summary |
 | Payment failed | Payment failed — update payment method |
 | Password reset | Reset link |
-| Device activated | New device logged in |
-| Subscription cancelled | Cancellation confirmed + access end date |
+| Plan cancelled | Cancellation confirmed, local access continues |
 
 ### Marketing emails (later)
-- Waitlist announcements ("InnerZero is live!")
+- Waitlist announcements ("InnerZero is live — download free!")
 - Product updates / new features
 - Blog post notifications
 - Must include unsubscribe link (CAN-SPAM / GDPR)
@@ -630,128 +639,78 @@ Sent via Resend or Postmark:
 ## 12. Security Requirements
 
 ### Authentication
-- Email + password (bcrypt hashed)
+- Supabase Auth (email + password, bcrypt hashed)
 - Rate limiting on login attempts (5 per minute per IP)
 - CSRF protection on all forms
 - Secure, HttpOnly, SameSite cookies for web sessions
-- JWT tokens for desktop app communication (signed with server secret, short expiry)
+- Short-lived JWT tokens for desktop app communication
 
 ### API security
-- All licence API endpoints require valid licence token or credentials
+- Cloud proxy endpoint requires valid auth token + positive credit balance
 - Stripe webhooks verified via signature
 - Rate limiting on all API endpoints
 - Input validation on all parameters
 - No sensitive data in URL query strings
-
-### Desktop app security
-- Licence token stored in user_data, not in app code
-- Device fingerprint is a one-way hash (cannot be reversed to identify hardware)
-- HTTPS only for all server communication
-- Certificate pinning considered for licence validation (optional, adds complexity)
+- BYO API keys stored locally on user's machine, never sent to InnerZero servers
 
 ### Data protection
 - GDPR compliant: user can request data export or deletion
-- Minimal data collection: email, payment (via Stripe), device records
+- Minimal data collection: email, payment (via Stripe), credit usage records
 - No tracking, no analytics cookies without consent
-- Support bundle from desktop app never includes memory/conversation data unless user opts in
+- Cloud proxy forwards prompts to the provider and returns responses — InnerZero does not store, log, or read prompt content
 
 ---
 
 ## 13. Build Order
 
-### Phase 1: Marketing Frontend (immediate)
-**Goal: Get innerzero.com live with branding, pages, and waitlist capture.**
+### Phase 1: Marketing Frontend — COMPLETE
+Live at innerzero.com. 12 pages, dark/light themes, responsive, SEO, waitlist capture.
+
+### Phase 2: Database + Auth — COMPLETE
+Supabase Auth, login/register/reset, account dashboard, waitlist migrated to database, branded email templates.
+
+### Phase 3: Stripe + Cloud Plans
+**Goal: Users can pay for supporter tier, founder slot, and cloud credit plans.**
 
 Build:
-1. Initialise Next.js project (TypeScript, Tailwind, App Router)
-2. Set up CSS custom properties for dark/light theme
-3. Theme toggle component with localStorage persistence
-4. Shared layout: header (nav + theme toggle), footer
-5. Home page with all sections
-6. Features page
-7. Pricing page (with "Coming Soon" / waitlist CTA)
-8. Privacy page
-9. About page
-10. Contact page (Formspree integration)
-11. Waitlist page with email capture (Next.js API route → JSON file or Formspree)
-12. Download page (placeholder "Coming Soon")
-13. Blog index (empty shell)
-14. Changelog page (empty shell)
-15. Terms of Service page
-16. SEO: metadata, sitemap, robots.txt, structured data
-17. Responsive: mobile-first, tested on phone/tablet/desktop
-18. Deploy to Vercel
-
-**No database, no auth, no Stripe.** Pure static marketing site with a simple email capture.
-
-Deliverable: Live website at innerzero.com that looks professional and collects waitlist emails.
-
-### Phase 2: Database + Auth
-**Goal: User accounts exist.**
-
-Build:
-1. Set up Supabase project (or standalone Postgres)
-2. Users table + Waitlist table
-3. Auth system (NextAuth.js or Supabase Auth)
-4. Login page
-5. Register page
-6. Password reset flow
-7. Basic account dashboard (shows email, account created date)
-8. Migrate waitlist from JSON/Formspree to database
-9. Transactional email setup (Resend or Postmark) for welcome + password reset
-
-Deliverable: Users can create accounts and log in. No payment yet.
-
-### Phase 3: Stripe + Subscriptions
-**Goal: Users can pay.**
-
-Build:
-1. Stripe product + prices created (monthly + annual)
+1. Stripe products + prices created (supporter, founder, cloud plans, PAYG packs)
 2. POST /api/stripe/checkout endpoint
 3. POST /api/stripe/portal endpoint
 4. POST /api/stripe/webhook endpoint
-5. Webhook handlers for all subscription events
-6. Account dashboard shows subscription status
-7. Billing page redirects to Stripe Customer Portal
-8. Trial flow: 14 days free on first subscription
-9. "Start Free Trial" and "Subscribe" CTAs replace waitlist CTAs on pricing page
-10. Trial-ending and payment-failed transactional emails
+5. Webhook handlers for all subscription/payment events
+6. user_profiles table with plan, credits, supporter/founder fields
+7. credit_transactions table for usage tracking
+8. founder_slots table with 100-slot cap
+9. Account dashboard shows: plan status, credit balance, supporter badge, founder badge
+10. Billing page redirects to Stripe Customer Portal
+11. Pricing page updated: free local + cloud plans + supporter + founder (if slots remain)
+12. PAYG credit purchase flow
+13. One-off donation flow
+14. Credit balance API endpoint for desktop app
 
-Deliverable: Users can subscribe, pay, manage billing, cancel. Full subscription lifecycle.
-
-### Phase 4: Licence API + Download Gating
-**Goal: Desktop app can activate and validate.**
+### Phase 4: Cloud API Proxy + Credit Metering
+**Goal: Desktop app can use managed cloud AI via InnerZero's proxy.**
 
 Build:
-1. Devices table
-2. Licence events table
-3. POST /api/licence/activate endpoint
-4. POST /api/licence/validate endpoint
-5. POST /api/licence/deactivate endpoint
-6. GET /api/licence/status endpoint
-7. Device management page in account portal
-8. Download page: gated behind active subscription
-9. Signed download URLs (temporary, 1 hour expiry)
-10. GET /api/updates/check endpoint
-11. Release channel support (stable/beta/dev)
-12. Licence event audit logging
-
-Deliverable: Desktop app can activate, validate, and receive updates. Downloads are gated.
+1. POST /api/cloud/proxy — accepts auth token + prompt, routes to provider, deducts credits
+2. Model routing logic (auto-route or user-selected tier)
+3. Credit deduction per model tier
+4. Overage handling (auto-charge or hard cap based on user preference)
+5. Usage dashboard in /account/usage
+6. Spending cap configuration
+7. 80% usage warning emails
 
 ### Phase 5: Desktop App Integration
-**Goal: Wire InnerZero desktop app to the licence system.**
+**Goal: Wire InnerZero desktop app to optional account system.**
 
 Build (in the desktop app codebase, not the website):
-1. `licence.py` module: activate, validate, deactivate, read/write licence.json
-2. Device fingerprint generation (hashed hardware ID)
-3. First-run wizard: login/trial step calls /api/licence/activate
-4. Background validation task (every 24 hours)
-5. Grace period logic
-6. Locked screen for expired/revoked state
-7. "Log out" / "Deactivate device" in Settings
-8. Update checker: calls /api/updates/check on startup
-
-Deliverable: Full activation loop working end-to-end. User signs up on website → pays → downloads → activates → uses.
+1. `account.py` module: login, token refresh, credit balance check
+2. Settings > Account section: connect/disconnect, plan display, credit balance
+3. Cloud routing in reasoning layer: if managed plan → route via proxy; if BYO key → route direct
+4. Credit display in status bar (when cloud plan active)
+5. Graceful degradation: cloud unavailable → fall back to local model
+6. BYO API key management UI in Settings (local storage, encrypted)
+7. Update checker: calls /api/updates/check on startup
 
 ### Phase 6: Polish + Production Hardening
 **Goal: Ready for real customers.**
@@ -759,14 +718,14 @@ Deliverable: Full activation loop working end-to-end. User signs up on website �
 Build:
 1. Rate limiting on all API endpoints
 2. Error monitoring (Sentry or similar)
-3. Transactional email for all triggers (device activated, trial ending, etc.)
+3. Transactional email for all triggers
 4. Account deletion / data export (GDPR)
 5. Support / docs pages with real content
 6. Blog with initial posts (SEO)
 7. Analytics (privacy-respecting: Plausible or Fathom, not Google Analytics)
 8. Cookie consent banner if needed
-9. Load testing on licence validation endpoint
-10. Security audit of auth + licence flows
+9. Load testing on cloud proxy endpoint
+10. Security audit of auth + payment + proxy flows
 
 ---
 
@@ -777,14 +736,14 @@ These are planned future revenue extensions. Do not build yet. Listed here for a
 ### Multi-device sync
 - Sync project memory across multiple InnerZero devices
 - Requires a sync server (likely Supabase Realtime or custom)
-- Separate add-on pricing: TBD (£5-10/mo on top of base)
+- Part of future hosted tier
 - Privacy consideration: encrypted sync, server never reads content
 
-### Team / Office plan
+### Team / Business plan
 - Shared project memory across a team
 - Admin controls, user management
-- Centralised licence management
-- Separate pricing tier: TBD (£20-30/seat/mo)
+- Centralised billing and credit pools
+- Separate pricing tier: ~£99–299/month
 - Requires significant backend work
 
 ### Email integration
@@ -802,80 +761,80 @@ These are planned future revenue extensions. Do not build yet. Listed here for a
 
 ## 15. Hard Rules
 
-1. The website must never have access to user conversation data, memory, or AI content
-2. The only data the server stores about users is: email, payment info (via Stripe), device records, and licence events
-3. The desktop app only contacts the server for: licence validation, update checks, and (optionally) crash reports
-4. App updates must never overwrite user memory data
-5. Downloads must be gated behind active subscription
-6. All licence API endpoints must be rate-limited
-7. Stripe webhook signatures must always be verified
-8. Grace period must exist — users must never be locked out due to a server outage
-9. Public builds must never expose dev/beta download links
+1. The local app is free forever. No subscription, no trial, no lockout.
+2. The website must never have access to user conversation data, memory, or AI content
+3. The only data the server stores about users is: email, payment info (via Stripe), credit balance, and usage records
+4. When using the cloud proxy, prompts are forwarded to the AI provider and returned — never stored or logged by InnerZero
+5. BYO API keys are stored locally on the user's machine, never transmitted to InnerZero
+6. Downloads are free and public — no login required to download InnerZero
+7. All cloud API endpoints must be rate-limited
+8. Stripe webhook signatures must always be verified
+9. Cloud features pause gracefully when payment fails — local app always works
 10. GDPR compliance: users can delete their account and all server-side data
+11. Supporter perks must never overlap with paid cloud features — supporter is donation, not compute
+12. Founder slots capped at 100 — never increase the cap
+13. Never promise "unlimited" cloud AI usage on any plan
 
 ---
 
-## 16. File Structure (Phase 1)
+## 16. File Structure
 
 ```
 innerzero_website/
 ├── public/
 │   ├── favicon.ico
-│   ├── og-image.png            # Default Open Graph image
+│   ├── favicon-16x16.png
+│   ├── favicon-32x32.png
+│   ├── apple-touch-icon.png
+│   ├── og-default.png
 │   ├── robots.txt
-│   └── images/                 # Marketing images, screenshots
+│   └── images/
 ├── src/
 │   ├── app/
-│   │   ├── layout.tsx          # Root layout: fonts, theme, header, footer
-│   │   ├── page.tsx            # Home page
-│   │   ├── features/
-│   │   │   └── page.tsx
-│   │   ├── pricing/
-│   │   │   └── page.tsx
-│   │   ├── privacy/
-│   │   │   └── page.tsx
-│   │   ├── about/
-│   │   │   └── page.tsx
-│   │   ├── contact/
-│   │   │   └── page.tsx
-│   │   ├── waitlist/
-│   │   │   └── page.tsx
-│   │   ├── download/
-│   │   │   └── page.tsx
-│   │   ├── blog/
-│   │   │   ├── page.tsx        # Blog index
-│   │   │   └── [slug]/
-│   │   │       └── page.tsx    # Individual posts
-│   │   ├── changelog/
-│   │   │   └── page.tsx
-│   │   ├── terms/
-│   │   │   └── page.tsx
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── features/page.tsx
+│   │   ├── pricing/page.tsx
+│   │   ├── privacy/page.tsx
+│   │   ├── about/page.tsx
+│   │   ├── contact/page.tsx
+│   │   ├── waitlist/page.tsx
+│   │   ├── download/page.tsx
+│   │   ├── blog/page.tsx
+│   │   ├── blog/[slug]/page.tsx
+│   │   ├── changelog/page.tsx
+│   │   ├── terms/page.tsx
+│   │   ├── not-found.tsx
+│   │   ├── login/page.tsx
+│   │   ├── register/page.tsx
+│   │   ├── forgot-password/page.tsx
+│   │   ├── reset-password/page.tsx
+│   │   ├── account/page.tsx
+│   │   ├── account/billing/page.tsx
+│   │   ├── account/usage/page.tsx
+│   │   ├── account/settings/page.tsx
 │   │   └── api/
-│   │       └── waitlist/
-│   │           └── route.ts    # Email capture endpoint
+│   │       ├── waitlist/route.ts
+│   │       ├── stripe/checkout/route.ts
+│   │       ├── stripe/webhook/route.ts
+│   │       ├── stripe/portal/route.ts
+│   │       ├── credits/balance/route.ts
+│   │       ├── credits/use/route.ts
+│   │       ├── cloud/proxy/route.ts
+│   │       └── updates/check/route.ts
 │   ├── components/
 │   │   ├── layout/
-│   │   │   ├── Header.tsx
-│   │   │   ├── Footer.tsx
-│   │   │   └── ThemeToggle.tsx
 │   │   ├── ui/
-│   │   │   ├── Button.tsx
-│   │   │   ├── Card.tsx
-│   │   │   ├── Input.tsx
-│   │   │   └── Badge.tsx
 │   │   ├── sections/
-│   │   │   ├── Hero.tsx
-│   │   │   ├── Features.tsx
-│   │   │   ├── HowItWorks.tsx
-│   │   │   ├── Pricing.tsx
-│   │   │   ├── Privacy.tsx
-│   │   │   └── CTA.tsx
 │   │   └── icons/
-│   │       └── Logo.tsx
 │   ├── lib/
-│   │   └── utils.ts            # Shared utilities
+│   │   ├── constants.ts
+│   │   ├── metadata.ts
+│   │   ├── utils.ts
+│   │   ├── supabase/
+│   │   └── stripe.ts
 │   └── styles/
-│       └── globals.css         # Tailwind + CSS custom properties
+│       └── globals.css
 ├── next.config.ts
 ├── tailwind.config.ts
 ├── tsconfig.json
@@ -901,9 +860,7 @@ Start with **Stripe + Stripe Tax** if you want maximum control and lower fees. S
 If selling to EU customers: EU VAT MOSS rules apply. Stripe Tax handles this automatically. If using Paddle, they handle everything.
 
 ### Display
-Pricing on the website should show:
-- UK: £9.99/month (inc. VAT) — or £8.33 + VAT depending on preference
-- Clearest option: show the price the customer actually pays. "£9.99/month" is the final price.
+Pricing on the website should show the price the customer actually pays. "£9.99/month" is the final price including VAT where applicable.
 
 ---
 
@@ -913,47 +870,47 @@ Pricing on the website should show:
 
 **Terms of Service** (`/terms`)
 Must cover:
-- What InnerZero is (local desktop software, subscription licence)
-- Subscription terms: auto-renewal, billing cycle, cancellation
+- What InnerZero is (free local desktop software with optional paid cloud services)
+- Cloud plan terms: auto-renewal, billing cycle, cancellation, credit expiry
+- Supporter terms: recurring donation, cancel anytime
+- Founder terms: one-time purchase, scope of included perks, non-refundable
 - Refund policy (see below)
-- Licence scope: personal use, single user, device limits
-- Intellectual property: software is licensed not sold
+- Intellectual property: software is provided under free personal licence; cloud services are a separate subscription
 - Limitation of liability: InnerZero provides no guarantees about AI output accuracy
-- Termination: right to revoke access for abuse
+- Cloud proxy disclaimer: prompts forwarded to third-party AI providers (named) — user accepts provider terms
+- Termination: right to revoke cloud access for abuse
 - Governing law: England and Wales
-- Can be generated initially via Termly, iubenda, or similar — then reviewed by a solicitor before significant revenue
 
 **Privacy Policy** (`/privacy`)
 Must cover:
 - UK GDPR compliance
-- What data the website collects (email, payment via Stripe, basic analytics if any)
-- What data the desktop app collects (nothing leaves the machine except licence checks — be explicit)
-- What the licence check sends (licence token, device fingerprint hash, app version, OS — nothing personal)
+- What data the website collects (email, payment via Stripe, credit usage)
+- What data the desktop app collects locally (all AI data stays on machine)
+- What the cloud proxy handles (prompts forwarded to provider, not stored)
+- What BYO API key mode does (direct to provider, InnerZero not involved)
 - Cookie usage on the website
 - Data retention periods
 - Right to access, correct, delete personal data
-- Data processor details (Stripe, Supabase/hosting provider, email service)
+- Data processor details (Stripe, Supabase, AI providers when using managed cloud)
 - Contact details for data requests
-- Should be generated via a proper GDPR-compliant tool or template, not hand-written
 
 **EULA (End User Licence Agreement)**
 Shown during desktop app install or first run. Covers:
-- Software is licensed, not sold
-- Subscription required for continued use
+- Software is free for personal use
+- Cloud services require separate subscription
 - No warranty on AI output
 - User is responsible for their local data
 - Restrictions: no reverse engineering, no redistribution
-- Can be a separate document or incorporated into Terms of Service
+- Can be incorporated into Terms of Service
 
 ### Refund policy
-Recommendation:
-- 14-day free trial means most users never pay before trying
-- After payment: **30-day money-back guarantee**, no questions asked
-- After 30 days: no refunds, user can cancel to prevent future charges
-- Refunds processed via Stripe (simple, one-click from dashboard)
-- This policy builds trust, reduces payment disputes, and very few people actually claim refunds on working software
-
-State the refund policy clearly on the pricing page and in the Terms of Service.
+- Local app is free — no refund needed
+- Cloud plans: **7-day money-back guarantee** on first subscription month, no questions asked
+- After 7 days: no refunds, user can cancel to prevent future charges
+- PAYG credit packs: non-refundable once purchased (credits are consumable)
+- Supporter subscriptions: cancel anytime, no refund for current period
+- Founder: non-refundable (limited collectible, explicit at purchase)
+- Refunds processed via Stripe (one-click from dashboard)
 
 ---
 
@@ -971,6 +928,8 @@ The `/docs` page needs real content covering:
 - System requirements (minimum and recommended specs)
 - Installation guide (step-by-step with screenshots)
 - First-run setup walkthrough
+- How to add BYO API keys
+- How to connect an account for cloud features
 - Common issues and fixes (Ollama not starting, model download failed, etc.)
 - How to update InnerZero
 - How to uninstall
@@ -978,17 +937,17 @@ The `/docs` page needs real content covering:
 - FAQ (can overlap with pricing page FAQ)
 
 ### Status page
-If the licence server goes down, users need to know. Set up a simple status page:
+Set up a simple status page for cloud API availability:
 - **Instatus** (free tier) or **Upptime** (free, GitHub Pages hosted)
-- Monitors: licence API endpoint, website, Stripe webhook endpoint
+- Monitors: cloud proxy endpoint, website, Stripe webhook endpoint
 - Link from footer: "System Status"
-- Takes 10 minutes to set up, prevents panicked support emails during outages
 
 ### Operational monitoring
 - **Vercel** provides basic analytics and function logs for free
 - **Sentry** (free tier) for error tracking on API routes
 - **UptimeRobot** (free) or similar for uptime monitoring + email alerts
 - Review Stripe dashboard weekly for failed payments, disputes, churn
+- Monitor cloud proxy costs vs revenue weekly
 
 ---
 
@@ -1000,10 +959,10 @@ If the licence server goes down, users need to know. Set up a simple status page
 - The moment any analytics (even privacy-friendly ones like Plausible) or third-party scripts are added, a cookie consent banner is required
 
 ### Recommendation
-- Launch Phase 1 with **no analytics** — no cookie banner needed
+- Launch with **no analytics** — no cookie banner needed
 - When adding analytics in Phase 6, add a simple cookie consent banner
 - Use a lightweight solution (cookie-consent by Osano, or a simple custom banner)
-- Never use Google Analytics — use Plausible or Fathom (privacy-respecting, often don't require consent for basic page views, but check current UK guidance)
+- Never use Google Analytics — use Plausible or Fathom
 
 ---
 
@@ -1016,7 +975,6 @@ Before announcing InnerZero publicly or taking payments, all of these must be do
 - [ ] Privacy Policy — real text, UK GDPR compliant
 - [ ] Refund policy stated on pricing page
 - [ ] Cookie consent banner if any analytics are active
-- [ ] EULA ready for desktop app installer
 
 ### Tax
 - [ ] VAT handling configured (Stripe Tax or Paddle)
@@ -1028,41 +986,73 @@ Before announcing InnerZero publicly or taking payments, all of these must be do
 - [ ] Contact form tested end-to-end
 - [ ] Documentation pages populated with real content
 - [ ] FAQ answers written
-- [ ] Status page live and monitoring
+- [ ] Status page live and monitoring (when cloud features launch)
 
 ### Technical
 - [ ] All pages render correctly on mobile, tablet, desktop
 - [ ] Both themes (dark/light) tested on all pages
 - [ ] Waitlist / signup flow tested end-to-end
-- [ ] Payment flow tested with Stripe test mode
-- [ ] Licence activation tested end-to-end with desktop app
-- [ ] Grace period logic tested (disconnect from server, verify app still works)
-- [ ] Emails sending correctly (welcome, trial ending, payment failed, etc.)
+- [ ] Supporter payment flow tested with Stripe test mode
+- [ ] Founder purchase flow tested with Stripe test mode
+- [ ] Cloud plan subscription flow tested with Stripe test mode
+- [ ] Credit purchase (PAYG) tested with Stripe test mode
+- [ ] Emails sending correctly (welcome, plan confirmation, payment failed, etc.)
 - [ ] SSL certificate valid on innerzero.com
 - [ ] Sitemap submitted to Google Search Console
 - [ ] OG images rendering correctly when shared on social media
 - [ ] 404 page working
 - [ ] All links checked — no broken links
 - [ ] Lighthouse score 95+ on all public pages
+- [ ] Desktop app download accessible without login
 
 ### Business
 - [ ] Stripe account fully verified and activated
 - [ ] Bank account connected to Stripe for payouts
-- [ ] Domain email set up (help@innerzero.com, hello@innerzero.com)
+- [ ] Domain email set up (help@innerzero.com, louie@innerzero.com)
 - [ ] At minimum one blog post live (for SEO, even if basic)
 - [ ] Social media accounts created (even if empty — reserve the names)
 
 ---
 
-## 22. Summary
+## 22. Internal Pricing Policy
 
-InnerZero's online infrastructure has four layers:
+These rules are for internal reference only — never shown to users.
 
-1. **Marketing website** — public pages, branding, SEO, waitlist capture
-2. **Account system** — user registration, authentication, account management
-3. **Payment system** — Stripe subscriptions, billing, trial management
-4. **Licence API** — desktop app activation, validation, device management, update delivery
+1. **Local is free.** Never charge for the desktop app itself. Monetisation comes from optional cloud services.
+2. **Supporter is separate from compute.** Supporter perks are cosmetic and access-based (badges, themes, early access). Supporters do not get API credits.
+3. **Founder lifetime is limited.** Capped at 100 slots. Includes supporter perks + future personal hosted tier. Does NOT include unlimited credits, business features, or team access. Scope is locked — never expand what "founder" includes after launch.
+4. **Expensive tools get separate metering.** Image generation, voice synthesis via cloud, and web search may cost additional credits beyond standard chat messages. Price these when built, not before.
+5. **Never promise unlimited AI usage.** All plans have credit caps. Hard spending limits available. This protects against runaway costs and sets sustainable expectations.
+6. **Keep pricing simple.** Credits, not tokens. One credit ≈ one message. Users should never need to understand token math.
+7. **Do not undermine future tiers.** Free local must not include features that should be in paid hosted/business tiers. Keep clear boundaries: local = your hardware; hosted = our infrastructure; business = team features.
+8. **Margins must be healthy.** Cloud plans should maintain 80%+ gross margin on API costs. If provider prices change significantly, adjust credit allowances rather than plan prices.
+9. **Monitor cost per user.** Track actual API spend per plan tier monthly. Adjust credit allowances or model routing if margins drop below 70%.
 
-These are built in order, each layer independent from the next. Phase 1 (marketing frontend) ships immediately with zero backend dependencies.
+---
 
-The desktop app connects to the online system only for licence validation and update checks. All AI processing, memory, conversations, and user data remain entirely local on the user's machine.
+## 23. Risks and Mistakes to Avoid
+
+1. **Pricing too cheap.** The underlying API costs are pennies. Don't pass those savings to users — charge for convenience, simplicity, and routing. 80%+ margin is normal in this space.
+2. **Pricing too complex.** Three cloud tiers + PAYG + supporter + founder is already a lot. Do not add more tiers, add-ons, or per-feature charges until usage data justifies it.
+3. **Unlimited usage traps.** Never offer "unlimited" on any cloud plan. Credits with clear caps. Always.
+4. **Supporter cannibalising paid tiers.** Supporter perks must be cosmetic only. If supporters get early access to features that later require a paid plan, that's fine — but never give supporters free cloud credits.
+5. **Founder scope creep.** "Founder includes personal hosted tier" is already generous. Do not expand this to include team features, business use, or unlimited anything. If founders complain, they paid £79 — they got a great deal.
+6. **Mixing business and personal poorly.** Business use requires business pricing. Do not allow £9.99/month personal plans to be used by companies. Add "personal use only" to Terms of Service for personal plans. Business plan addresses this.
+7. **Building cloud infrastructure too early.** Phase 1 launch is free local + supporter only. Cloud plans (Phase 1b) only after you have 50+ active users and real usage data. Do not build the proxy, metering, or credit system before there are users to serve.
+8. **Ignoring provider price changes.** API pricing drops regularly. If DeepSeek halves their price, do not halve your plan price — keep your margins and give users more credits instead.
+
+---
+
+## 24. Summary
+
+InnerZero's online infrastructure has five layers:
+
+1. **Marketing website** — public pages, branding, SEO, waitlist capture, free download
+2. **Account system** — user registration, authentication, optional account linking
+3. **Payment system** — Stripe subscriptions (cloud plans, supporter), one-time purchases (founder, PAYG credits, donations)
+4. **Cloud API proxy** — managed AI routing, credit metering, model selection
+5. **Update system** — desktop app version checks, download delivery
+
+These are built in order, each layer independent from the next. The desktop app is free and fully functional without any of these layers.
+
+The desktop app connects to the online system only for: optional cloud AI (managed plans), optional account features (supporter/founder perks), and update checks. All AI processing, memory, conversations, and user data remain entirely local on the user's machine unless the user explicitly opts into cloud routing.

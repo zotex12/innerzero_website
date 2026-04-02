@@ -8,11 +8,13 @@ The full product and infrastructure spec is in `innerzero_web_spec.md` — read 
 
 ## Current phase
 
-**Phase 1: Marketing Frontend**
+**Phase 2: Supabase Auth + Database — COMPLETE**
 
-Status: Phase 2 COMPLETE — Supabase auth, database, accounts. Pending: transactional emails, responsive/accessibility testing, Vercel deploy.
+Phase 1 (marketing frontend) and Phase 2 (auth + database) are done and deployed to Vercel at innerzero.com.
 
-No backend, no database, no auth, no Stripe. Pure static marketing site with email capture.
+**Next immediate work:** Update pricing page, download page, home page CTAs, and FAQ to reflect the new free-local pricing model. Then Phase 3 (Stripe: supporter + founder + donations).
+
+Cloud credit plans (Phase 3b) and cloud API proxy (Phase 4) are deferred until there are 50+ active users.
 
 ---
 
@@ -26,6 +28,8 @@ No backend, no database, no auth, no Stripe. Pure static marketing site with ema
 | Icons | Lucide React | Or inline SVGs — no icon font libraries |
 | Forms | Native + server actions | Formspree for contact, API route for waitlist |
 | Sitemap | next-sitemap | Auto-generated on build |
+| Auth | Supabase Auth (@supabase/ssr) | Cookie-based session management |
+| Database | Supabase (Postgres + RLS) | Row Level Security on all tables |
 | Hosting | Vercel | Deploy from GitHub, auto HTTPS |
 | Analytics | None yet | Plausible or Fathom later (never Google Analytics) |
 
@@ -48,8 +52,11 @@ No backend, no database, no auth, no Stripe. Pure static marketing site with ema
 | Tagline | inner peace. inner joy. innerzero. |
 | Supporting line | Your AI. Your machine. Your data. |
 | Company | Summers Solutions |
-| Pricing | £9.99/month or £79.99/year |
-| Trial | 14 days free, full access, no card required |
+| Local app | Free forever — no subscription, no trial, no account required |
+| Cloud plans | Optional — £9.99/£19.99/£39.99/month (Phase 3b, after users exist) |
+| BYO API keys | Free — user adds their own, zero markup |
+| Supporter | £4.99/month — donation, not compute |
+| Founder | £79 one-time — first 100 only |
 
 ---
 
@@ -201,8 +208,19 @@ innerzero_website/
 │   │   ├── changelog/page.tsx
 │   │   ├── terms/page.tsx
 │   │   ├── not-found.tsx            # Custom 404
+│   │   ├── login/page.tsx
+│   │   ├── register/page.tsx
+│   │   ├── forgot-password/page.tsx
+│   │   ├── reset-password/page.tsx
+│   │   ├── account/page.tsx
+│   │   ├── account/settings/page.tsx
+│   │   ├── account/billing/page.tsx     # Phase 3
+│   │   ├── account/usage/page.tsx       # Phase 3b
 │   │   └── api/
-│   │       └── waitlist/route.ts    # POST: email capture
+│   │       ├── waitlist/route.ts        # POST: email capture
+│   │       ├── stripe/checkout/route.ts # Phase 3
+│   │       ├── stripe/webhook/route.ts  # Phase 3
+│   │       └── stripe/portal/route.ts   # Phase 3
 │   ├── components/
 │   │   ├── layout/
 │   │   │   ├── Header.tsx           # Fixed header: logo, nav, theme toggle, CTA
@@ -222,16 +240,17 @@ innerzero_website/
 │   │   │   ├── FeatureCards.tsx      # 3-4 feature highlight cards
 │   │   │   ├── HowItWorks.tsx       # 3-step flow
 │   │   │   ├── PrivacyStatement.tsx  # Bold trust section
-│   │   │   ├── PricingCard.tsx       # Single plan card
+│   │   │   ├── PricingSection.tsx    # Free local + cloud plans + supporter (replaces PricingCard.tsx)
 │   │   │   ├── FAQ.tsx              # Expandable FAQ items
 │   │   │   ├── WaitlistForm.tsx     # Email capture form
 │   │   │   └── CTABanner.tsx        # Reusable bottom CTA section
 │   │   └── icons/
 │   │       └── Logo.tsx             # InnerZero text logo component
 │   ├── lib/
-│   │   ├── constants.ts            # Brand copy, nav links, feature lists
+│   │   ├── constants.ts            # Brand copy, nav links, feature lists, pricing data
 │   │   ├── metadata.ts             # SEO helpers: generateMetadata defaults
-│   │   └── utils.ts                # cn() classname merger, etc.
+│   │   ├── utils.ts                # cn() classname merger, etc.
+│   │   └── supabase/               # Supabase client + middleware
 │   └── styles/
 │       └── globals.css             # @tailwind directives + CSS custom properties + base styles
 ├── next.config.ts
@@ -252,23 +271,25 @@ innerzero_website/
 
 | Route | Page | SEO title | Status |
 |-------|------|-----------|--------|
-| `/` | Home | InnerZero — Private AI Assistant That Runs on Your PC | COMPLETE |
+| `/` | Home | InnerZero — Free Private AI Assistant That Runs on Your PC | NEEDS UPDATE |
 | `/features` | Features | Features \| InnerZero — Private AI Assistant | COMPLETE |
-| `/pricing` | Pricing | Pricing \| InnerZero — Private AI Assistant | COMPLETE |
-| `/privacy` | Privacy | Privacy \| InnerZero — Private AI Assistant | COMPLETE |
+| `/pricing` | Pricing | Pricing \| InnerZero — Free AI, Optional Cloud | NEEDS REWRITE |
+| `/privacy` | Privacy | Privacy \| InnerZero — Private AI Assistant | NEEDS UPDATE |
 | `/about` | About | About \| InnerZero — Private AI Assistant | COMPLETE |
 | `/contact` | Contact | Contact \| InnerZero — Private AI Assistant | COMPLETE |
 | `/waitlist` | Waitlist | Join the Waitlist \| InnerZero | COMPLETE |
-| `/download` | Download | Download \| InnerZero | COMPLETE |
+| `/download` | Download | Download Free \| InnerZero | NEEDS UPDATE |
 | `/blog` | Blog | Blog \| InnerZero | COMPLETE |
 | `/changelog` | Changelog | Changelog \| InnerZero | COMPLETE |
-| `/terms` | Terms | Terms of Service \| InnerZero | COMPLETE |
+| `/terms` | Terms | Terms of Service \| InnerZero | NEEDS UPDATE |
 | `/login` | Login | Log In \| InnerZero | COMPLETE |
 | `/register` | Register | Sign Up \| InnerZero | COMPLETE |
 | `/forgot-password` | Password Reset | Reset Password \| InnerZero | COMPLETE |
 | `/reset-password` | New Password | Set New Password \| InnerZero | COMPLETE |
-| `/account` | Dashboard | Account \| InnerZero | COMPLETE |
+| `/account` | Dashboard | Account \| InnerZero | NEEDS UPDATE |
 | `/account/settings` | Settings | Settings \| InnerZero | COMPLETE |
+| `/account/billing` | Billing | Billing \| InnerZero | NOT STARTED (Phase 3) |
+| `/account/usage` | Usage | Usage \| InnerZero | NOT STARTED (Phase 3b) |
 
 ---
 
@@ -276,20 +297,31 @@ innerzero_website/
 
 ### Home (`/`)
 Sections in order:
-1. **Hero**: Large headline "Your AI. Your machine. Your data." + tagline "inner peace. inner joy. innerzero." + 1-2 line description + primary CTA "Join the Waitlist" + secondary "Learn more" link. Background: subtle radial gradient glow (gold centre fading to dark, positioned top-centre, slow CSS pulse animation). Staggered text entrance: headline → tagline → description → CTA with 150ms delays. See "Animations and motion" section for full spec.
+1. **Hero**: Large headline "Your AI. Your machine. Your data." + tagline "inner peace. inner joy. innerzero." + 1-2 line description + primary CTA "Download Free" + secondary "Learn more" link. Background: subtle radial gradient glow (gold centre fading to dark, positioned top-centre, slow CSS pulse animation). Staggered text entrance: headline → tagline → description → CTA with 150ms delays. See "Animations and motion" section for full spec.
 2. **Feature cards**: 4 cards in 2x2 grid (stacks to 1 col on mobile). Each: icon + title + 2-line description. Features: Runs locally, Learns & remembers, Voice + text, Hardware-aware.
-3. **How it works**: 3-step horizontal flow (stacks vertical on mobile). Each step: number badge + title + description. Steps: Download & install → Zero configures itself → Start talking.
+3. **How it works**: 3-step horizontal flow (stacks vertical on mobile). Each step: number badge + title + description. Steps: Download free → Zero configures itself → Start talking.
 4. **Privacy statement**: Full-width dark section with bold headline "Zero data leaves your machine." + 3-4 trust points.
-5. **CTA banner**: Pricing summary + "Join the Waitlist" button.
+5. **CTA banner**: "Download Free" button + secondary "View pricing" link for cloud/supporter options.
 
 ### Features (`/features`)
-Full feature breakdown — each feature gets a section with heading + paragraph + optional icon/illustration placeholder. Alternate alignment (left/right) for visual rhythm. Include "Coming Soon" section at bottom for future features (multi-device, team, email, mobile).
+Full feature breakdown — each feature gets a section with heading + paragraph + optional icon/illustration placeholder. Alternate alignment (left/right) for visual rhythm. Include "Coming Soon" section at bottom for future features (cloud AI boost, multi-device, team, email, mobile). Mention BYO API keys as a feature.
 
 ### Pricing (`/pricing`)
-Single centred card showing both price points (monthly toggle / annual toggle or both shown). Feature checklist. Below card: FAQ section with expandable items (click to expand, no JS library — use `<details>` or simple useState toggle).
+**Three sections, vertically stacked:**
+
+1. **Free Local** — prominent card, highlighted as primary. "Free forever. No account required." Full feature list of local capabilities. "Download Free" CTA.
+
+2. **Cloud AI** (Phase 3b — show as "Coming Soon" for now) — three plan cards side by side (Starter £9.99, Plus £19.99, Pro £39.99). Credit allowances, model tiers, overage rates. Also mention BYO API keys as the free alternative. "Join Waitlist" CTA until cloud plans are live.
+
+3. **Support InnerZero** — Supporter card (£4.99/month) + Founder card (£79 one-time, "X of 100 remaining"). Perks listed. Clear messaging: "This supports development, not compute."
+
+Below all cards: FAQ section with expandable items. Updated questions for the new model.
 
 ### Privacy (`/privacy`)
-Two distinct sections: (1) plain-language privacy explainer (how InnerZero works, what stays local, what the licence check sends), (2) formal privacy policy text.
+Two distinct sections: (1) plain-language privacy explainer (how InnerZero works, what stays local, what cloud mode sends, what BYO key mode does, that InnerZero never stores prompts), (2) formal privacy policy text.
+
+### Download (`/download`)
+**Free download page — no login, no paywall.** System requirements (minimum and recommended specs). Download button (links to GitHub Releases or hosted installer). Brief "what you get" summary. "Need cloud AI? See pricing" secondary link.
 
 ### About (`/about`)
 What InnerZero is. Why it exists. The mission (AI should be personal and private). About Summers Solutions. Team (just Louie for now — keep it authentic).
@@ -298,10 +330,7 @@ What InnerZero is. Why it exists. The mission (AI should be personal and private
 Simple form: name, email, subject, message. Submits to Formspree (or similar). Success/error states. Also show email address for direct contact.
 
 ### Waitlist (`/waitlist`)
-Hero-style page with email capture form. Submits to `/api/waitlist` (POST). Stores to a local JSON file at `data/waitlist.json` (Phase 1 — no database). Shows success message. Validates email format client-side and server-side.
-
-### Download (`/download`)
-"Coming Soon" page. Brief description of what InnerZero is. System requirements preview. "Join the Waitlist" CTA. Will become gated download page in Phase 4.
+Hero-style page with email capture form. Submits to `/api/waitlist` (POST). Stores to Supabase. Shows success message. Validates email format client-side and server-side.
 
 ### Blog (`/blog`)
 Empty index page with "Coming soon" message. Route exists for SEO. Blog posts will be MDX files added over time. Each post gets `/blog/[slug]`.
@@ -310,7 +339,10 @@ Empty index page with "Coming soon" message. Route exists for SEO. Blog posts wi
 Empty page with "Check back soon" message. Will show release notes grouped by version.
 
 ### Terms (`/terms`)
-Standard Terms of Service. Can be placeholder text initially with a note to replace with real legal copy.
+Terms of Service covering: free local software, optional paid cloud services, supporter/founder terms, AI output disclaimer. Can be placeholder text initially with a note to replace with real legal copy.
+
+### Account (`/account`)
+Dashboard showing: supporter/founder status (if any), cloud plan status (if any — "No cloud plan" for free users), credit balance (if applicable), quick links to billing/settings. Free users see a clean page with upgrade options, not an empty/broken state.
 
 ### 404 (`not-found.tsx`)
 Branded 404 page. "Looks like you've gone off the grid." Link back to home.
@@ -375,8 +407,8 @@ export function FeatureCards({ className }: FeatureCardsProps) {
 - [ ] Page is in sitemap
 
 ### Structured data (JSON-LD)
-- Home page: `Organization` + `SoftwareApplication`
-- Pricing page: `Product` with `offers`
+- Home page: `Organization` + `SoftwareApplication` (with `offers: { price: "0" }`)
+- Pricing page: `SoftwareApplication` with free offer + `Product` for cloud plans
 - FAQ sections: `FAQPage`
 - Blog posts: `Article`
 
@@ -460,7 +492,7 @@ export default config;
 
 ---
 
-## API route: waitlist (Phase 1)
+## API route: waitlist (Phase 1 — COMPLETE, migrated to Supabase in Phase 2)
 
 ```
 POST /api/waitlist
@@ -471,10 +503,7 @@ Validation:
 - email matches basic regex
 - email is not already in the list
 
-Storage (Phase 1):
-- Append to data/waitlist.json (create if missing)
-- Format: [{ "email": "...", "timestamp": "..." }]
-- This is temporary — moves to Supabase in Phase 2
+Storage: Supabase waitlist table
 
 Response:
 - 200: { "success": true, "message": "You're on the list!" }
@@ -486,28 +515,27 @@ Response:
 
 ## Environment variables
 
-### Phase 1 (.env.local)
+### Phase 1-2 (.env.local) — CURRENT
 ```
 NEXT_PUBLIC_SITE_URL=https://innerzero.com
-FORMSPREE_ENDPOINT=https://formspree.io/f/xxxxx    # Contact form
-```
-
-### Phase 2+ (added later)
-```
-SUPABASE_URL=
-SUPABASE_ANON_KEY=
+FORMSPREE_ENDPOINT=https://formspree.io/f/xxxxx
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
-NEXTAUTH_SECRET=
-NEXTAUTH_URL=
 ```
 
-### Phase 3+ (added later)
+### Phase 3 (added when Stripe is wired)
 ```
 STRIPE_SECRET_KEY=
 STRIPE_PUBLISHABLE_KEY=
 STRIPE_WEBHOOK_SECRET=
-STRIPE_PRICE_MONTHLY=
-STRIPE_PRICE_ANNUAL=
+STRIPE_PRICE_SUPPORTER=          # £4.99/month supporter subscription
+STRIPE_PRICE_FOUNDER=            # £79 one-time founder purchase
+STRIPE_PRICE_CLOUD_STARTER=      # £9.99/month (Phase 3b)
+STRIPE_PRICE_CLOUD_PLUS=         # £19.99/month (Phase 3b)
+STRIPE_PRICE_CLOUD_PRO=          # £39.99/month (Phase 3b)
+STRIPE_PRICE_PAYG_100=           # £5 one-time (Phase 3b)
+STRIPE_PRICE_PAYG_500=           # £22 one-time (Phase 3b)
 RESEND_API_KEY=
 ```
 
@@ -531,7 +559,7 @@ Rules:
 - Navigation collapses to hamburger at `md` breakpoint
 - Hero headline resizes at `md` and `lg`
 - Feature grids: 1 col → 2 col (`md`) → 4 col (`lg`) on home, 1 → 2 on features page
-- Pricing card: full width on mobile, max-w-md centred on desktop
+- Pricing section: cards stack to 1 col on mobile, side-by-side on `lg`
 
 ---
 
@@ -571,7 +599,7 @@ The site should feel polished and alive — not static, but never distracting. A
   // Adds 'revealed' class when in view → opacity-1 translate-y-0
   // Optional stagger prop for child delay
   ```
-- Apply to: feature cards, how-it-works steps, pricing card, privacy points, about sections
+- Apply to: feature cards, how-it-works steps, pricing cards, privacy points, about sections
 
 **Feature cards:**
 - Hover: slight scale (1.02), border colour shifts to `--accent-gold` or `--accent-teal`, subtle glow via `box-shadow`
@@ -602,11 +630,12 @@ The site should feel polished and alive — not static, but never distracting. A
 
 **Page load:**
 - Minimal — just the hero entrance animation. Other content is already visible from SSG, scroll reveals activate as user scrolls.
-- No full-page loading screen or skeleton screens needed in Phase 1 (pages are static)
+- No full-page loading screen or skeleton screens needed (pages are static)
 
-**Pricing card:**
-- Subtle border glow animation on the plan card (gold, slow pulse, `box-shadow` keyframes, 4s cycle)
-- Annual/monthly toggle: smooth colour swap on the active pill
+**Pricing cards:**
+- Free Local card: subtle teal border glow (always-on, not animated — this is the recommended option)
+- Supporter/Founder cards: subtle gold border on hover
+- Cloud plan cards (when live): standard hover lift
 
 ### Not allowed
 - No parallax scrolling
@@ -638,7 +667,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 - Total page weight: < 500KB on home page (excluding fonts)
 - No layout shift from font loading (use `font-display: swap` + size-adjust)
 - No render-blocking scripts
-- All pages statically generated in Phase 1
+- All pages statically generated where possible
 
 ---
 
@@ -668,24 +697,39 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Phase 1** | SEO: structured data (JSON-LD) | COMPLETE 2026-03-29 |
 | **Phase 1** | Responsive testing | NOT STARTED |
 | **Phase 1** | Accessibility pass | NOT STARTED |
-| **Phase 1** | Deploy to Vercel | NOT STARTED |
+| **Phase 1** | Deploy to Vercel | COMPLETE 2026-03-30 |
 | **Phase 2** | Supabase setup + schema | COMPLETE 2026-03-29 |
 | **Phase 2** | Auth (login / register / reset) | COMPLETE 2026-03-29 |
 | **Phase 2** | Account dashboard | COMPLETE 2026-03-29 |
 | **Phase 2** | Migrate waitlist to database | COMPLETE 2026-03-29 |
-| **Phase 2** | Transactional emails | NOT STARTED |
-| **Phase 3** | Stripe integration | NOT STARTED |
-| **Phase 3** | Checkout + webhook handlers | NOT STARTED |
-| **Phase 3** | Billing portal | NOT STARTED |
-| **Phase 3** | Trial flow | NOT STARTED |
-| **Phase 4** | Licence API (activate/validate/deactivate) | NOT STARTED |
-| **Phase 4** | Device management | NOT STARTED |
-| **Phase 4** | Download gating | NOT STARTED |
-| **Phase 4** | Update check API | NOT STARTED |
-| **Phase 5** | Desktop app licence.py module | NOT STARTED |
-| **Phase 5** | First-run wizard integration | NOT STARTED |
-| **Phase 5** | Background validation | NOT STARTED |
-| **Phase 5** | Grace period logic | NOT STARTED |
+| **Phase 2** | Logo added to site + favicons | COMPLETE 2026-03-30 |
+| **Phase 2** | Branded Supabase email templates | COMPLETE 2026-03-30 |
+| **Phase 2** | Transactional emails (Resend/Postmark) | NOT STARTED |
+| **Pricing pivot** | Update pricing page (free local + cloud coming soon + supporter) | COMPLETE 2026-04-02 |
+| **Pricing pivot** | Update home page CTAs (Download Free) | COMPLETE 2026-04-02 |
+| **Pricing pivot** | Update download page (free, no paywall) | COMPLETE 2026-04-02 |
+| **Pricing pivot** | Update privacy page (cloud mode explanation) | COMPLETE 2026-04-02 |
+| **Pricing pivot** | Update FAQ (new pricing questions) | COMPLETE 2026-04-02 |
+| **Pricing pivot** | Update terms page (free software + optional services) | COMPLETE 2026-04-02 |
+| **Pricing pivot** | Rename PricingCard.tsx → PricingSection.tsx | COMPLETE 2026-04-02 |
+| **Pricing pivot** | Update constants.ts pricing copy | COMPLETE 2026-04-02 |
+| **Pricing pivot** | Update account dashboard (supporter/founder status) | COMPLETE 2026-04-02 |
+| **Phase 3** | Stripe integration (supporter + founder + donations) | NOT STARTED |
+| **Phase 3** | Stripe checkout + webhook handlers | NOT STARTED |
+| **Phase 3** | Stripe billing portal | NOT STARTED |
+| **Phase 3** | Founder slot tracking (100 cap) | NOT STARTED |
+| **Phase 3** | Account dashboard: plan + supporter + founder display | NOT STARTED |
+| **Phase 3b** | Cloud plan subscriptions in Stripe | NOT STARTED |
+| **Phase 3b** | Credit balance + usage tracking | NOT STARTED |
+| **Phase 3b** | PAYG credit purchase flow | NOT STARTED |
+| **Phase 3b** | Account usage page | NOT STARTED |
+| **Phase 4** | Cloud API proxy endpoint | NOT STARTED |
+| **Phase 4** | Credit metering + overage | NOT STARTED |
+| **Phase 4** | Spending caps + usage alerts | NOT STARTED |
+| **Phase 5** | Desktop app account.py module | NOT STARTED |
+| **Phase 5** | Desktop app cloud routing integration | NOT STARTED |
+| **Phase 5** | Desktop app BYO API key UI | NOT STARTED |
+| **Phase 5** | Update check API | NOT STARTED |
 | **Phase 6** | Rate limiting | NOT STARTED |
 | **Phase 6** | Error monitoring | NOT STARTED |
 | **Phase 6** | GDPR: account deletion | NOT STARTED |
@@ -730,12 +774,14 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 - Casual reference is "Zero"
 - Never "Inner Zero" (two words)
 - Tagline: "inner peace. inner joy. innerzero." (all lowercase, periods)
-- Currency is GBP (£) — prices shown as £9.99/month, £79.99/year
+- Currency is GBP (£)
+- Local app is always described as "free" — never "freemium", never "free tier", never "free plan"
+- Cloud plans are "optional" — never imply they are required
 
 ### File management
 - All new files go in the correct directory per the file structure above
 - No files outside of the defined structure without explicit reason
-- Keep the `/data/` directory in `.gitignore` (waitlist data)
+- Keep the `/data/` directory in `.gitignore` (legacy waitlist data)
 
 ### Testing changes
 - Run `npm run build` after significant changes to catch build errors
@@ -755,7 +801,9 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 ### Hero
 **Headline:** Your AI. Your machine. Your data.
 **Tagline:** inner peace. inner joy. innerzero.
-**Description:** InnerZero is a private AI assistant that runs entirely on your PC. No cloud. No tracking. Just you and your AI.
+**Description:** InnerZero is a private AI assistant that runs entirely on your PC. Free forever. No cloud required. Just you and your AI.
+**Primary CTA:** Download Free
+**Secondary CTA:** Learn more
 
 ### Feature card titles + descriptions
 1. **Runs 100% Locally** — Your conversations never leave your machine. No cloud servers. No data uploads. Ever.
@@ -764,7 +812,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 4. **Hardware-Aware** — InnerZero detects your PC's capabilities and automatically configures the best AI model for your system.
 
 ### How it works steps
-1. **Download & Install** — One click. InnerZero handles everything — dependencies, models, configuration.
+1. **Download Free** — One click. InnerZero handles everything — dependencies, models, configuration.
 2. **Zero Configures Itself** — Detects your hardware, downloads the right AI model, and optimises for your system.
 3. **Start Talking** — Text or voice. Zero remembers everything locally. Your private AI assistant is ready.
 
@@ -773,15 +821,57 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 **Points:**
 - All AI processing happens on your hardware
 - Memory stored in a local database — never uploaded
-- The only network call is licence verification — and it sends nothing personal
-- No telemetry. No tracking. No analytics on your usage.
+- No account required — no sign-up, no login, no tracking
+- Optional cloud mode is your choice — off by default, transparent when on
 
-### Pricing card
-**Plan name:** InnerZero
-**Monthly:** £9.99/month
-**Annual:** £79.99/year (Save 33%)
-**Trial:** 14-day free trial — no card required
-**Tagline:** Everything included. No tiers. No limits. Your hardware is the only limit.
+### Pricing section copy
+
+**Free Local card:**
+**Title:** InnerZero
+**Price:** Free forever
+**Description:** Full AI assistant on your PC. No account. No limits. No catch.
+**Features:** Local AI chat, voice, memory, 30+ tools, document knowledge, sleep/reflection, all themes
+**CTA:** Download Free
+
+**Cloud AI section (coming soon):**
+**Title:** Cloud AI Boost
+**Subtitle:** Optional. Faster reasoning, premium models, zero hassle.
+**Note:** Coming soon. Or add your own API keys now — free, zero markup.
+
+**Supporter card:**
+**Title:** Support InnerZero
+**Price:** £4.99/month
+**Description:** Help fund development. Get supporter badge, extra themes, early access, and Discord perks.
+**CTA:** Become a Supporter
+
+**Founder card:**
+**Title:** Founder
+**Price:** £79 one-time
+**Description:** Limited to 100. Permanent supporter perks + future hosted access. X remaining.
+**CTA:** Claim Founder Spot
+
+### FAQ (pricing page)
+
+**Is InnerZero really free?**
+Yes. The desktop app is completely free. No trial. No subscription. No account required. It runs on your hardware using open-source AI models.
+
+**What are cloud plans?**
+Optional. If you want faster reasoning or access to premium AI models (Claude, GPT, DeepSeek), you can subscribe to a cloud plan. Your local AI always works without one.
+
+**Can I use my own API keys?**
+Yes. Add your own API keys from any supported provider — DeepSeek, OpenAI, Anthropic, and more. Zero markup. We never touch your keys.
+
+**What does the Supporter tier include?**
+Supporter is a monthly donation to fund InnerZero development. You get a supporter badge, extra themes, early access to new features, and a Discord role. It does not include cloud AI credits.
+
+**What is the Founder tier?**
+A one-time £79 purchase, limited to the first 100 buyers. You get permanent supporter perks plus access to the future hosted version when it launches. Once 100 are claimed, it's gone.
+
+**Is my data private?**
+Yes. All AI processing, memory, and conversations stay on your machine. If you enable cloud mode, your prompts are forwarded to the AI provider and returned — InnerZero never stores or reads them.
+
+**Do I need an account?**
+No. The local app works without any account. You only need an account if you want cloud AI plans, supporter perks, or future hosted features.
 
 ### 404
 **Headline:** Looks like you've gone off the grid.
@@ -790,7 +880,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 
 ---
 
-## Dependencies (Phase 1 package.json)
+## Dependencies
 
 ```json
 {
@@ -801,7 +891,9 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
     "clsx": "^2.0.0",
     "tailwind-merge": "^2.0.0",
     "lucide-react": "^0.300.0",
-    "next-sitemap": "^4.0.0"
+    "next-sitemap": "^4.0.0",
+    "@supabase/ssr": "^0.1.0",
+    "@supabase/supabase-js": "^2.0.0"
   },
   "devDependencies": {
     "typescript": "^5.0.0",
@@ -815,4 +907,6 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 }
 ```
 
-Do not add any packages beyond these without explicit instruction.
+Phase 3 will add: `stripe` (Stripe Node.js SDK). Do not add until Phase 3 begins.
+
+Do not add any other packages without explicit instruction.

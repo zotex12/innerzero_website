@@ -9,7 +9,7 @@ export const DEFAULT_METADATA: Metadata = {
     template: "%s | InnerZero — Private AI Assistant",
   },
   description:
-    "InnerZero is a private AI assistant that runs entirely on your PC. No cloud. No tracking. Your AI, your machine, your data.",
+    "InnerZero is a free private AI assistant that runs entirely on your PC. No cloud. No tracking. Your AI, your machine, your data.",
   openGraph: {
     type: "website",
     locale: "en_GB",

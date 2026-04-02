@@ -12,6 +12,8 @@ import {
   Smartphone,
   Users,
   Mail,
+  Key,
+  Gift,
   type LucideIcon,
 } from "lucide-react";
 
@@ -36,9 +38,9 @@ export const HERO = {
   headline: "Your AI. Your machine. Your data.",
   tagline: "inner peace. inner joy. innerzero.",
   description:
-    "InnerZero is a private AI assistant that runs entirely on your PC. No cloud. No tracking. Just you and your AI.",
-  primaryCta: "Join the Waitlist",
-  primaryCtaHref: "/waitlist",
+    "InnerZero is a private AI assistant that runs entirely on your PC. Free forever. No cloud required. Just you and your AI.",
+  primaryCta: "Download Free",
+  primaryCtaHref: "/download",
   secondaryCta: "Learn more",
   secondaryCtaHref: "/features",
 } as const;
@@ -89,9 +91,9 @@ export interface HowItWorksStep {
 export const HOW_IT_WORKS: HowItWorksStep[] = [
   {
     number: 1,
-    title: "Download & Install",
+    title: "Download Free",
     description:
-      "One click. InnerZero handles everything — dependencies, models, configuration.",
+      "One click. InnerZero handles everything — dependencies, models, configuration. Free, no account required.",
   },
   {
     number: 2,
@@ -114,33 +116,70 @@ export const PRIVACY_STATEMENT = {
   points: [
     "All AI processing happens on your hardware",
     "Memory stored in a local database — never uploaded",
-    "The only network call is licence verification — and it sends nothing personal",
-    "No telemetry. No tracking. No analytics on your usage.",
+    "No account required — no sign-up, no login, no tracking",
+    "Optional cloud mode is your choice — off by default, transparent when on",
   ],
 } as const;
 
-/* ── Pricing ── */
+/* ── Pricing: Free local features ── */
 
-export const PRICING = {
+export const PRICING_FREE = {
   planName: "InnerZero",
-  monthly: "£9.99",
-  monthlyPeriod: "/month",
-  annual: "£79.99",
-  annualPeriod: "/year",
-  annualSaving: "Save 33%",
-  trial: "14-day free trial — no card required",
-  tagline:
-    "Everything included. No tiers. No limits. Your hardware is the only limit.",
+  price: "Free forever.",
+  subtitle: "A complete private AI assistant on your PC. No account. No subscription. No catch.",
   features: [
-    "Full local AI assistant",
-    "Unlimited conversations",
+    "Local AI chat and voice",
     "Personal memory system",
-    "Voice + text interaction",
+    "30+ built-in tools",
     "Document knowledge base",
-    "Smart tools (web search, files, calculations)",
-    "Hardware-aware auto-configuration",
-    "All future updates included",
+    "Hardware-aware setup",
+    "Sleep and reflection",
+    "All themes included",
+    "All future updates",
   ],
+  cta: "Download Free",
+  ctaHref: "/download",
+} as const;
+
+/* ── Pricing: Cloud AI plans (coming soon) ── */
+
+export interface CloudPlan {
+  name: string;
+  price: string;
+  period: string;
+  features: string[];
+}
+
+export const CLOUD_PLANS: CloudPlan[] = [
+  {
+    name: "Cloud Starter",
+    price: "£9.99",
+    period: "/month",
+    features: ["300 credits/month", "Budget + Standard models", "Auto-routed model selection"],
+  },
+  {
+    name: "Cloud Plus",
+    price: "£19.99",
+    period: "/month",
+    features: ["800 credits/month", "All models including Premium", "Priority routing"],
+  },
+  {
+    name: "Cloud Pro",
+    price: "£39.99",
+    period: "/month",
+    features: ["2,000 credits/month", "All models including Ultra", "Priority routing"],
+  },
+];
+
+/* ── Pricing: Supporter ── */
+
+export const SUPPORTER = {
+  price: "£4.99",
+  period: "/month",
+  description:
+    "Fund development and get perks: supporter badge, extra themes, early access, Discord role, roadmap voting.",
+  cta: "Become a Supporter",
+  ctaHref: "https://ko-fi.com/innerzero",
 } as const;
 
 /* ── FAQ ── */
@@ -152,44 +191,39 @@ export interface FAQItem {
 
 export const FAQ_DATA: FAQItem[] = [
   {
-    question: "What happens after the trial?",
+    question: "Is InnerZero really free?",
     answer:
-      "After your 14-day free trial, you can subscribe to continue using InnerZero. If you choose not to subscribe, the app will stop working but your data stays on your machine — nothing is deleted.",
+      "Yes. The desktop app is completely free. No trial. No subscription. No account required. It runs on your hardware using open-source AI models.",
   },
   {
-    question: "Do I need a powerful PC?",
+    question: "What are cloud plans?",
     answer:
-      "InnerZero works on a range of hardware. A modern CPU with 8GB+ RAM is the minimum. For the best experience, a dedicated GPU (NVIDIA with 6GB+ VRAM) is recommended. InnerZero automatically detects your hardware and selects the best AI model for your system.",
+      "Optional. If you want faster reasoning or access to premium AI models (Claude, GPT, DeepSeek), you can subscribe to a cloud plan. Your local AI always works without one.",
   },
   {
-    question: "Is my data really private?",
+    question: "Can I use my own API keys?",
     answer:
-      "Yes. All AI processing happens on your machine. Your conversations, memory, and documents never leave your PC. The only network call InnerZero makes is to verify your subscription licence — and that sends nothing personal.",
+      "Yes. Add your own API keys from any supported provider — DeepSeek, OpenAI, Anthropic, and more. Zero markup. We never touch your keys.",
   },
   {
-    question: "Can I use Zero offline?",
+    question: "What does the Supporter tier include?",
     answer:
-      "Yes. Once InnerZero is set up, the AI runs entirely on your hardware. You can use it without an internet connection. The only online requirement is periodic licence verification (once every 7 days).",
+      "Supporter is a monthly donation to fund InnerZero development. You get a supporter badge, extra themes, early access to new features, and a Discord role. It does not include cloud AI credits.",
   },
   {
-    question: "What AI models does it use?",
+    question: "Is my data private?",
     answer:
-      "InnerZero uses open-source AI models optimised for local use. It automatically selects and downloads the best model for your hardware during setup. Models are updated and improved over time through app updates.",
+      "Yes. All AI processing, memory, and conversations stay on your machine. If you enable cloud mode, your prompts are forwarded to the AI provider and returned — InnerZero never stores or reads them.",
   },
   {
-    question: "Can I cancel anytime?",
+    question: "Do I need an account?",
     answer:
-      "Absolutely. You can cancel your subscription at any time from your account dashboard. You\u2019ll continue to have access until the end of your current billing period. No questions asked.",
+      "No. The local app works without any account. You only need an account if you want cloud AI plans, supporter perks, or future hosted features.",
   },
   {
-    question: "What about updates?",
+    question: "When will cloud plans be available?",
     answer:
-      "All updates are included in your subscription. InnerZero checks for updates automatically and prompts you when a new version is available. Updates never overwrite your personal data.",
-  },
-  {
-    question: "Will there be a Mac/Linux version?",
-    answer:
-      "Windows is the priority for launch. Mac and Linux versions are planned for the future. Join the waitlist to be notified when they become available.",
+      "We're building cloud AI plans now. Join the waitlist to be the first to know when they launch.",
   },
 ];
 
@@ -250,6 +284,18 @@ export const DETAILED_FEATURES: DetailedFeature[] = [
     description:
       "Download, run the setup wizard, and start chatting. InnerZero handles all the technical complexity — downloading AI models, configuring your system, and setting up dependencies. No terminal required.",
   },
+  {
+    icon: Gift,
+    title: "Free & Open",
+    description:
+      "InnerZero is free to download and use. No subscription, no trial, no account required. Optional cloud features available for those who want them.",
+  },
+  {
+    icon: Key,
+    title: "BYO API Keys",
+    description:
+      "Bring your own API keys from any supported provider — DeepSeek, OpenAI, Anthropic, and more. Zero markup. Full control. Your keys, your usage, no middleman.",
+  },
 ];
 
 export interface ComingSoonFeature {
@@ -294,7 +340,7 @@ export const SYSTEM_REQUIREMENTS = {
     "Modern CPU (Intel i5 / AMD Ryzen 5 or equivalent)",
   ],
   recommended: [
-    "Windows 11 (64-bit)",
+    "Windows 10/11 (64-bit)",
     "16GB+ RAM",
     "20GB+ free disk space",
     "NVIDIA GPU with 6GB+ VRAM",
@@ -306,7 +352,7 @@ export const SYSTEM_REQUIREMENTS = {
 
 export interface FooterColumn {
   title: string;
-  links: NavLink[];
+  links: (NavLink & { external?: boolean })[];
 }
 
 export const FOOTER_COLUMNS: FooterColumn[] = [
@@ -326,6 +372,13 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       { label: "Blog", href: "/blog" },
       { label: "Contact", href: "/contact" },
       { label: "Waitlist", href: "/waitlist" },
+    ],
+  },
+  {
+    title: "Community",
+    links: [
+      { label: "Discord", href: "https://discord.gg/5XjCe2RNAJ", external: true },
+      { label: "Support us", href: "https://ko-fi.com/innerzero", external: true },
     ],
   },
   {

@@ -9,7 +9,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border-default bg-bg-secondary py-12 md:py-16">
       <Container>
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-5">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Logo className="mb-4 inline-flex" imageSize={24} />
@@ -27,12 +27,23 @@ export function Footer() {
               <ul className="flex flex-col gap-2">
                 {col.links.map((link) => (
                   <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-text-secondary transition-colors hover:text-text-primary"
-                    >
-                      {link.label}
-                    </Link>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-text-secondary transition-colors hover:text-text-primary"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="text-sm text-text-secondary transition-colors hover:text-text-primary"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

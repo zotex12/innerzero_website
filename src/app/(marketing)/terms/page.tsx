@@ -5,7 +5,7 @@ import { createMetadata } from "@/lib/metadata";
 export const metadata: Metadata = createMetadata({
   title: "Terms of Service",
   description:
-    "InnerZero Terms of Service — subscription terms, licence scope, liability, and governing law.",
+    "InnerZero Terms of Service — free desktop software, optional paid services, liability, and governing law.",
   openGraph: {
     title: "Terms of Service | InnerZero",
     description: "InnerZero Terms of Service.",
@@ -21,7 +21,7 @@ export default function TermsPage() {
           <h1 className="text-3xl font-bold text-text-primary md:text-[2.5rem] md:leading-[1.2]">
             Terms of Service
           </h1>
-          <p className="mt-2 text-sm text-text-muted">Last updated: March 2026</p>
+          <p className="mt-2 text-sm text-text-muted">Last updated: April 2026</p>
 
           <div className="mt-10 space-y-8 text-text-secondary leading-relaxed text-sm">
             <p className="rounded-lg border border-warning/30 bg-warning/10 p-4 text-warning text-sm">
@@ -33,16 +33,24 @@ export default function TermsPage() {
                 1. What InnerZero Is
               </h2>
               <p>
-                InnerZero is a subscription-licensed desktop software application that provides a local AI assistant. The software runs on your personal computer and processes all AI tasks locally on your hardware.
+                InnerZero is free desktop software that provides a local AI assistant. The software runs on your personal computer and processes all AI tasks locally on your hardware. No subscription, account, or payment is required to use the core software.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                2. Subscription Terms
+                2. Optional Paid Services
               </h2>
               <p>
-                InnerZero requires an active subscription to use. Subscriptions are available on a monthly (£9.99/month) or annual (£79.99/year) basis. All subscriptions auto-renew unless cancelled before the next billing date. A 14-day free trial is available for new users — no card required.
+                InnerZero offers optional paid services that are separate from the free desktop software:
+              </p>
+              <ul className="mt-2 list-disc pl-6 space-y-1">
+                <li><strong>Cloud AI plans:</strong> Optional monthly subscriptions for access to premium cloud AI models through InnerZero. These plans have credit-based allowances and are billed monthly via Stripe.</li>
+                <li><strong>Supporter membership:</strong> A voluntary monthly donation (£4.99/month) to support InnerZero development. Includes perks such as a supporter badge, extra themes, early access, and a Discord role.</li>
+                <li><strong>Founder purchase:</strong> A one-time £79 purchase, limited to the first 100 buyers. Includes permanent supporter perks and access to the future hosted version.</li>
+              </ul>
+              <p className="mt-2">
+                All paid services auto-renew (where applicable) unless cancelled before the next billing date. You can cancel at any time from your account dashboard.
               </p>
             </section>
 
@@ -51,7 +59,7 @@ export default function TermsPage() {
                 3. Refund Policy
               </h2>
               <p>
-                We offer a 30-day money-back guarantee after your first payment. After 30 days, no refunds are issued, but you may cancel at any time to prevent future charges. Refunds are processed via Stripe.
+                We offer a 30-day money-back guarantee on first payments for cloud plans and supporter memberships. After 30 days, no refunds are issued, but you may cancel at any time to prevent future charges. Refunds are processed via Stripe.
               </p>
             </section>
 
@@ -60,7 +68,7 @@ export default function TermsPage() {
                 4. Licence Scope
               </h2>
               <p>
-                Your subscription grants you a personal, non-transferable licence to use InnerZero on up to 2 devices. The software is licensed, not sold. You may not redistribute, reverse-engineer, or modify the software.
+                InnerZero is free to use on any number of personal devices. The software is licensed, not sold. You may not redistribute, reverse-engineer, or modify the software.
               </p>
             </section>
 
@@ -87,7 +95,7 @@ export default function TermsPage() {
                 7. Termination
               </h2>
               <p>
-                We reserve the right to revoke access to InnerZero in cases of abuse or violation of these terms. You may terminate your account at any time from your account dashboard or by contacting support.
+                We reserve the right to revoke access to paid services in cases of abuse or violation of these terms. The free desktop software will continue to function regardless. You may terminate your account at any time from your account dashboard or by contacting support.
               </p>
             </section>
 

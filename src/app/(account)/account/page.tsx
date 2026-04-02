@@ -39,12 +39,6 @@ export default async function AccountPage() {
       })
     : "Unknown";
 
-  const subscriptionLabel =
-    profile?.subscription_status === "none" || !profile?.subscription_status
-      ? "No active subscription"
-      : profile.subscription_status.charAt(0).toUpperCase() +
-        profile.subscription_status.slice(1);
-
   return (
     <div>
       <h1 className="text-2xl font-bold text-text-primary">Account Dashboard</h1>
@@ -73,15 +67,32 @@ export default async function AccountPage() {
           </dl>
         </section>
 
-        {/* Subscription */}
+        {/* InnerZero status */}
         <section className="rounded-xl border border-border-default bg-bg-card p-6">
           <h2 className="text-lg font-semibold text-text-primary mb-4">
-            Subscription
+            InnerZero
           </h2>
-          <p className="text-sm text-text-secondary">{subscriptionLabel}</p>
-          <p className="mt-2 text-xs text-text-muted">
-            Billing and subscription management coming soon.
+          <p className="text-sm text-text-secondary">
+            InnerZero is free to use locally. Connect your account in the desktop app for cloud features and supporter perks when they become available.
           </p>
+          <div className="mt-4 flex flex-col gap-2">
+            <a
+              href="https://ko-fi.com/innerzero"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-accent-gold hover:text-accent-gold-hover transition-colors"
+            >
+              Support InnerZero on Ko-fi
+            </a>
+            <a
+              href="https://discord.gg/5XjCe2RNAJ"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-accent-teal hover:text-accent-teal-hover transition-colors"
+            >
+              Join the Discord community
+            </a>
+          </div>
         </section>
 
         {/* Quick links */}
@@ -94,7 +105,7 @@ export default async function AccountPage() {
               Manage Billing — coming soon
             </span>
             <span className="text-sm text-text-muted">
-              Devices — coming soon
+              Cloud AI Usage — coming soon
             </span>
           </div>
         </section>

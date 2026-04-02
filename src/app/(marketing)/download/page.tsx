@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SYSTEM_REQUIREMENTS } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
-  title: "Download",
+  title: "Download Free | InnerZero — Private AI Assistant",
   description:
-    "Download InnerZero — a private AI assistant for Windows. Coming soon. Check system requirements and join the waitlist.",
+    "Download InnerZero for free. A private AI assistant that runs on your PC with no subscription, no account, and no cloud required.",
   openGraph: {
-    title: "Download | InnerZero",
+    title: "Download Free | InnerZero — Private AI Assistant",
     description:
-      "Download InnerZero for Windows. Coming soon — join the waitlist.",
+      "Download InnerZero for free. A private AI assistant that runs on your PC.",
     url: "https://innerzero.com/download",
   },
 });
@@ -23,16 +23,18 @@ export default function DownloadPage() {
     <div className="pt-28 pb-12 md:pt-36 md:pb-20">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
-          <Badge variant="gold">Coming Soon</Badge>
-          <h1 className="mt-4 text-3xl font-bold text-text-primary md:text-[2.5rem] md:leading-[1.2]">
+          <h1 className="text-3xl font-bold text-text-primary md:text-[2.5rem] md:leading-[1.2]">
             Download InnerZero
           </h1>
+          <p className="mt-2 text-xl font-medium text-accent-teal">
+            Free. Private. Yours.
+          </p>
           <p className="mt-4 text-lg text-text-secondary">
-            InnerZero is currently in development. Join the waitlist to be the first to download when we launch.
+            InnerZero runs entirely on your PC. No account required. No subscription. Download and start chatting in minutes.
           </p>
 
           <div className="mt-8">
-            <Button href="/waitlist">Join the Waitlist</Button>
+            <Button href="#">Download for Windows</Button>
           </div>
         </div>
 
@@ -73,6 +75,20 @@ export default function DownloadPage() {
             </div>
           </div>
         </ScrollReveal>
+
+        <div className="mx-auto mt-12 max-w-2xl text-center">
+          <p className="text-sm text-text-muted">
+            macOS and Linux versions are planned for the future.
+          </p>
+          <p className="mt-4">
+            <Link
+              href="/pricing"
+              className="text-sm text-text-secondary transition-colors hover:text-accent-gold"
+            >
+              Need cloud AI? See pricing
+            </Link>
+          </p>
+        </div>
       </Container>
     </div>
   );
