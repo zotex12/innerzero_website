@@ -159,6 +159,9 @@ export default function TermsPage() {
               <p>
                 To the maximum extent permitted by law, InnerZero is provided &quot;as is&quot; and &quot;as available&quot; without warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement. Summers Solutions Ltd shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits, data, or goodwill, arising from or related to your use of InnerZero, regardless of the cause of action. In no event shall the total liability of Summers Solutions Ltd exceed the amount you have paid to Summers Solutions Ltd in the twelve months preceding the claim, or £50, whichever is greater.
               </p>
+              <p className="mt-2">
+                Without limiting the foregoing, Summers Solutions Ltd shall not be liable for any damage to your computer hardware, software, operating system, or data arising from the installation, use, or uninstallation of InnerZero. This includes but is not limited to data loss, file corruption, system instability, GPU or hardware damage, driver conflicts, or any interaction between InnerZero and other software on your system. You acknowledge that InnerZero runs AI models locally on your hardware, which may place significant load on your CPU, GPU, and memory. You are responsible for ensuring your system meets the recommended requirements and is adequately maintained.
+              </p>
             </section>
 
             <section>
