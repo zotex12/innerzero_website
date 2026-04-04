@@ -34,7 +34,7 @@ export default function DownloadPage() {
           </p>
 
           <div className="mt-8">
-            <Button href="#">Download for Windows</Button>
+            <Button href="https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.0.exe">Download for Windows</Button>
           </div>
         </div>
 

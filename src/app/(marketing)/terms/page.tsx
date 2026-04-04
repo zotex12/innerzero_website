@@ -5,7 +5,7 @@ import { createMetadata } from "@/lib/metadata";
 export const metadata: Metadata = createMetadata({
   title: "Terms of Service",
   description:
-    "InnerZero Terms of Service — free desktop software, optional paid services, liability, and governing law.",
+    "InnerZero Terms of Service — free desktop software, optional paid services, AI output disclaimer, unrestricted mode, liability, and governing law.",
   openGraph: {
     title: "Terms of Service | InnerZero",
     description: "InnerZero Terms of Service.",
@@ -24,93 +24,179 @@ export default function TermsPage() {
           <p className="mt-2 text-sm text-text-muted">Last updated: April 2026</p>
 
           <div className="mt-10 space-y-8 text-text-secondary leading-relaxed text-sm">
-            <p className="rounded-lg border border-warning/30 bg-warning/10 p-4 text-warning text-sm">
-              Note: These are placeholder terms. Real legal text reviewed by a solicitor will replace this before launch.
-            </p>
-
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                1. What InnerZero Is
+                1. Agreement
               </h2>
               <p>
-                InnerZero is free desktop software that provides a local AI assistant. The software runs on your personal computer and processes all AI tasks locally on your hardware. No subscription, account, or payment is required to use the core software.
+                By downloading, installing, or using InnerZero, you agree to these terms. If you do not agree, do not use the software. InnerZero is provided by Summers Solutions Ltd (Company No. 16448945), registered in England and Wales.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                2. Optional Paid Services
+                2. What InnerZero Is
               </h2>
               <p>
-                InnerZero offers optional paid services that are separate from the free desktop software:
+                InnerZero is free desktop software that provides a local AI assistant. The software runs on your personal computer and processes AI tasks locally using third-party open-source AI models. No subscription, account, or payment is required to use the core software.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold text-text-primary mb-3">
+                3. Optional Paid Services
+              </h2>
+              <p>
+                InnerZero offers optional paid support and services separate from the free desktop software:
               </p>
               <ul className="mt-2 list-disc pl-6 space-y-1">
-                <li><strong>Cloud AI plans:</strong> Optional monthly subscriptions for access to premium cloud AI models through InnerZero. These plans have credit-based allowances and are billed monthly via Stripe.</li>
-                <li><strong>Supporter membership:</strong> A voluntary monthly donation (£4.99/month) to support InnerZero development. Includes perks such as a supporter badge, extra themes, early access, and a Discord role.</li>
-                <li><strong>Founder purchase:</strong> A one-time £79 purchase, limited to the first 100 buyers. Includes permanent supporter perks and access to the future hosted version.</li>
+                <li><strong>Supporter membership:</strong> A voluntary monthly contribution (£4.99/month) to support InnerZero development, processed through Ko-fi and PayPal. Includes perks such as a supporter badge, extra themes, early access to new features, and a Discord role. Supporter membership does not include cloud AI credits or compute.</li>
+                <li><strong>Cloud AI plans:</strong> Optional monthly subscriptions for access to premium cloud AI models (coming soon). Details will be published when available.</li>
+                <li><strong>One-off donations:</strong> Optional one-time contributions of any amount via Ko-fi to help fund development.</li>
               </ul>
               <p className="mt-2">
-                All paid services auto-renew (where applicable) unless cancelled before the next billing date. You can cancel at any time from your account dashboard.
+                InnerZero does not process payments directly. All transactions are handled by Ko-fi and PayPal (for supporter and donations) or Stripe (for future cloud plans). Refund requests for supporter memberships and donations should be directed to Ko-fi or PayPal per their respective refund policies.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                3. Refund Policy
+                4. Licence
               </h2>
               <p>
-                We offer a 30-day money-back guarantee on first payments for cloud plans and supporter memberships. After 30 days, no refunds are issued, but you may cancel at any time to prevent future charges. Refunds are processed via Stripe.
+                InnerZero is licensed, not sold. You are granted a personal, non-exclusive, non-transferable, revocable licence to use InnerZero on any number of personal devices. You may not redistribute, sublicence, reverse-engineer, decompile, or modify the InnerZero software. This licence does not grant any rights to InnerZero source code. Summers Solutions Ltd reserves the right to modify or revoke this licence at any time.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                4. Licence Scope
+                5. AI Output Disclaimer
               </h2>
               <p>
-                InnerZero is free to use on any number of personal devices. The software is licensed, not sold. You may not redistribute, reverse-engineer, or modify the software.
+                InnerZero uses third-party open-source AI models to generate responses. AI-generated output is not guaranteed to be accurate, complete, factual, or appropriate. You must not rely on AI output as professional, legal, medical, financial, or safety-critical advice. You are solely responsible for evaluating, verifying, and deciding how to use any content generated by InnerZero. Summers Solutions Ltd accepts no liability whatsoever for AI-generated output, including any loss, damage, or harm arising from reliance on such output.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                5. Intellectual Property
+                6. Unrestricted Mode
               </h2>
               <p>
-                InnerZero and all related trademarks, logos, and code are the property of Summers Solutions. Content you create using InnerZero belongs to you.
+                InnerZero includes an optional Unrestricted Mode that replaces the standard AI models with third-party uncensored versions. These uncensored models (modified by huihui.ai, based on Qwen3 by Alibaba Cloud and Gemma3 by Google) have had safety filtering removed and may generate sensitive, offensive, harmful, illegal, or otherwise inappropriate content. The uncensored models are third-party software not created, trained, or endorsed by Summers Solutions Ltd.
+              </p>
+              <p className="mt-2">
+                Unrestricted Mode is disabled by default and requires explicit opt-in within the desktop application, including acknowledgement of a warning dialogue. By enabling Unrestricted Mode, you:
+              </p>
+              <ul className="mt-2 list-disc pl-6 space-y-1">
+                <li>Confirm you are 18 years of age or older.</li>
+                <li>Accept full and sole responsibility for all content generated while Unrestricted Mode is enabled.</li>
+                <li>Acknowledge that Summers Solutions Ltd has no control over and accepts no liability for outputs produced by uncensored models.</li>
+                <li>Agree not to use Unrestricted Mode to generate content that violates any applicable law, including but not limited to content that is illegal, threatening, defamatory, harassing, or that infringes the rights of others.</li>
+              </ul>
+              <p className="mt-2">
+                Summers Solutions Ltd reserves the right to remove or modify Unrestricted Mode at any time without notice.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                6. Limitation of Liability
+                7. Cloud Mode and BYO API Keys
               </h2>
               <p>
-                InnerZero is provided &quot;as is&quot; without warranty. We make no guarantees about the accuracy of AI-generated output. InnerZero is not a substitute for professional advice. We are not liable for any damages arising from the use of the software.
+                InnerZero offers an optional Cloud Mode that routes AI requests to third-party cloud providers (such as DeepSeek, OpenAI, Anthropic, Google AI, or Qwen/DashScope). When Cloud Mode is enabled, your prompts are sent to the selected provider and responses are returned. Each provider has its own terms of service and privacy policy, which you are responsible for reviewing and accepting.
+              </p>
+              <p className="mt-2">
+                InnerZero also supports BYO (Bring Your Own) API keys, allowing you to use your own accounts with supported providers. When using BYO API keys, requests go directly from your machine to the provider. InnerZero does not proxy, store, log, or read your prompts, responses, or API keys. Your API keys are encrypted and stored locally on your device.
+              </p>
+              <p className="mt-2">
+                Summers Solutions Ltd is not responsible for any charges, data handling, or terms imposed by third-party AI providers.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                7. Termination
+                8. Acceptable Use
               </h2>
               <p>
-                We reserve the right to revoke access to paid services in cases of abuse or violation of these terms. The free desktop software will continue to function regardless. You may terminate your account at any time from your account dashboard or by contacting support.
+                You agree not to use InnerZero to: generate content that is illegal under the laws of England and Wales or your local jurisdiction; harass, threaten, defame, or harm any person; generate child sexual abuse material or any content that exploits minors; infringe any third-party intellectual property rights; attempt to circumvent any safety mechanisms in the software beyond those explicitly offered (such as Unrestricted Mode); or redistribute InnerZero or any AI-generated output in a way that misrepresents it as human-authored professional advice.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                8. Governing Law
+                9. Third-Party Software
               </h2>
               <p>
-                These terms are governed by the laws of England and Wales. Any disputes will be resolved in the courts of England and Wales.
+                InnerZero incorporates third-party open-source software and AI models, each subject to its own licence. Key components include: Qwen3 (Alibaba Cloud, Apache 2.0), Gemma3 (Google, Gemma Terms of Use), Ollama (MIT), Kokoro TTS (Hexgrad, Apache 2.0), faster-whisper (SYSTRAN, MIT), Silero VAD (MIT), PyTorch (BSD-3-Clause), and others. Unrestricted models are provided by huihui.ai under Apache 2.0. Full attribution and licence details are available within the desktop application under Settings &gt; General &gt; Third-Party Licences &amp; Notices. Summers Solutions Ltd does not claim ownership of any third-party software or models.
               </p>
             </section>
 
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                9. Contact
+                10. Age Requirement
+              </h2>
+              <p>
+                You must be at least 13 years old to use InnerZero. You must be at least 18 years old to enable Unrestricted Mode. If you are under 18, you may use InnerZero only with the consent of a parent or legal guardian.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold text-text-primary mb-3">
+                11. Intellectual Property
+              </h2>
+              <p>
+                InnerZero and all related trademarks, logos, branding, and proprietary code are the property of Summers Solutions Ltd. Content you create using InnerZero belongs to you, subject to any applicable third-party model licence terms.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold text-text-primary mb-3">
+                12. Limitation of Liability
+              </h2>
+              <p>
+                To the maximum extent permitted by law, InnerZero is provided &quot;as is&quot; and &quot;as available&quot; without warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement. Summers Solutions Ltd shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits, data, or goodwill, arising from or related to your use of InnerZero, regardless of the cause of action. In no event shall the total liability of Summers Solutions Ltd exceed the amount you have paid to Summers Solutions Ltd in the twelve months preceding the claim, or £50, whichever is greater.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold text-text-primary mb-3">
+                13. Indemnification
+              </h2>
+              <p>
+                You agree to indemnify, defend, and hold harmless Summers Solutions Ltd, its directors, officers, and employees from and against any claims, damages, losses, liabilities, costs, and expenses (including reasonable legal fees) arising from: your use of InnerZero; your use of Unrestricted Mode; content you generate using InnerZero; your violation of these terms; or your violation of any applicable law.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold text-text-primary mb-3">
+                14. Termination
+              </h2>
+              <p>
+                We may revoke access to paid services in cases of abuse or violation of these terms. The free desktop software will continue to function regardless. You may stop using InnerZero at any time by uninstalling the software. These terms survive termination where applicable (including sections on liability, indemnification, and intellectual property).
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold text-text-primary mb-3">
+                15. Changes to Terms
+              </h2>
+              <p>
+                We may update these terms from time to time. Material changes will be noted on this page with an updated date. Continued use of InnerZero after changes constitutes acceptance of the updated terms.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold text-text-primary mb-3">
+                16. Governing Law
+              </h2>
+              <p>
+                These terms are governed by and construed in accordance with the laws of England and Wales. Any disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold text-text-primary mb-3">
+                17. Contact
               </h2>
               <p>
                 For questions about these terms, contact us at{" "}

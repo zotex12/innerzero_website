@@ -70,65 +70,139 @@ export default function PrivacyPage() {
                 Privacy Policy
               </h2>
               <p className="mt-2 text-sm text-text-muted">
-                Last updated: March 2026
+                Last updated: April 2026
               </p>
 
               <div className="mt-6 space-y-6 text-text-secondary leading-relaxed text-sm">
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    1. What data the website collects
+                    1. Who We Are
                   </h3>
                   <p>
-                    When you create an account on innerzero.com, we collect your email address. Payment information is processed securely by Stripe — we never store your card details. If you join our waitlist, we store your email address. We may use privacy-respecting analytics (such as Plausible) in the future — never Google Analytics.
+                    InnerZero is provided by Summers Solutions Ltd (Company No. 16448945), registered in England and Wales at Mclaren Building, 46 The Priory Queensway, Birmingham, B4 7LR. For privacy enquiries:{" "}
+                    <a href="mailto:help@innerzero.com" className="text-accent-gold hover:text-accent-gold-hover transition-colors">
+                      help@innerzero.com
+                    </a>.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    2. What data the desktop app collects
+                    2. What Data the Desktop App Collects
                   </h3>
                   <p>
-                    The InnerZero desktop application does not collect or transmit any personal data. All AI processing, conversations, memory, and documents remain on your local machine. No telemetry, analytics, or usage tracking is included.
+                    The InnerZero desktop application does not collect or transmit any personal data by default. All AI processing, conversations, memory, and documents remain on your local machine. No telemetry, analytics, usage tracking, or crash reporting is included.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    3. Cookies
+                    3. Cloud Mode
                   </h3>
                   <p>
-                    The InnerZero website uses only essential cookies for functionality (such as theme preference stored in localStorage). We do not use advertising or tracking cookies. If we add analytics in the future, we will update this policy and provide a cookie consent mechanism.
+                    If you enable the optional Cloud Mode, your prompts are sent to the third-party AI provider you select (such as DeepSeek, OpenAI, Anthropic, Google AI, or Qwen/DashScope) and responses are returned to your device. InnerZero does not store, log, intercept, or read your prompts or responses at any point. Each AI provider has its own privacy policy governing how they handle your data — you should review the relevant provider&apos;s privacy policy before enabling Cloud Mode.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    4. GDPR compliance
+                    4. BYO API Keys
                   </h3>
                   <p>
-                    We comply with UK GDPR. You have the right to access, correct, or delete your personal data at any time. To make a data request, contact us at help@innerzero.com. We will respond within 30 days.
+                    If you use the BYO (Bring Your Own) API key feature, your API keys are encrypted and stored locally on your device only. Keys are never transmitted to Summers Solutions Ltd or any InnerZero server. Requests using BYO keys go directly from your machine to the provider.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    5. Data processors
+                    5. Unrestricted Mode
                   </h3>
                   <p>
-                    We use the following third-party services to operate InnerZero:
+                    Enabling Unrestricted Mode does not cause any additional data to be collected or transmitted. The uncensored models run locally on your device, and all generated content remains on your machine.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-2">
+                    6. What Data the Website Collects
+                  </h3>
+                  <p>
+                    When you create an account on innerzero.com, we collect your email address. If you join our waitlist, we store your email address. Payment information for supporter memberships and donations is processed by Ko-fi and PayPal — we do not receive or store your payment card details. If future cloud plans are offered via Stripe, Stripe will process payments — we will never store card details directly.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-2">
+                    7. Cookies
+                  </h3>
+                  <p>
+                    The InnerZero website uses only essential cookies for functionality (such as authentication session cookies and theme preference stored in localStorage). We do not use advertising, marketing, or third-party tracking cookies. If we add privacy-respecting analytics in the future (such as Plausible), we will update this policy accordingly.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-2">
+                    8. Data Processors
+                  </h3>
+                  <p>
+                    We use the following third-party services:
                   </p>
                   <ul className="mt-2 list-disc pl-6 space-y-1">
-                    <li>Vercel — website hosting</li>
-                    <li>Stripe — payment processing</li>
+                    <li>Supabase — authentication and database hosting (EU region)</li>
+                    <li>Vercel — website hosting and deployment</li>
+                    <li>Ko-fi and PayPal — supporter membership and donation payment processing</li>
+                    <li>Formspree — contact form submissions</li>
                   </ul>
+                  <p className="mt-2">
+                    We will add Stripe to this list if and when cloud AI plans launch.
+                  </p>
                 </div>
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    6. Contact
+                    9. Data Retention
                   </h3>
                   <p>
-                    For any privacy-related questions or data requests, contact us at{" "}
+                    Account data (email address) is retained for as long as your account is active. Waitlist data is retained until the waitlist is no longer needed, after which it will be deleted. You may request deletion of your data at any time.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-2">
+                    10. Your Rights (UK GDPR)
+                  </h3>
+                  <p>
+                    Under UK GDPR, you have the right to: access your personal data; correct inaccurate data; request deletion of your data; object to processing; request data portability; and withdraw consent at any time. To exercise any of these rights, contact{" "}
+                    <a href="mailto:help@innerzero.com" className="text-accent-gold hover:text-accent-gold-hover transition-colors">
+                      help@innerzero.com
+                    </a>. We will respond within 30 days.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-2">
+                    11. Children
+                  </h3>
+                  <p>
+                    InnerZero is not intended for children under 13. We do not knowingly collect personal data from children under 13. If you believe a child under 13 has provided us with personal data, contact us and we will delete it promptly.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-2">
+                    12. Changes to This Policy
+                  </h3>
+                  <p>
+                    We may update this privacy policy from time to time. Changes will be reflected on this page with an updated date.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-2">
+                    13. Contact
+                  </h3>
+                  <p>
+                    For any privacy-related questions or data requests:{" "}
                     <a href="mailto:help@innerzero.com" className="text-accent-gold hover:text-accent-gold-hover transition-colors">
                       help@innerzero.com
                     </a>.
