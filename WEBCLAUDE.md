@@ -715,6 +715,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Pricing pivot** | Update constants.ts pricing copy | COMPLETE 2026-04-02 |
 | **Pricing pivot** | Update account dashboard (supporter/founder status) | COMPLETE 2026-04-02 |
 | **Terms/Privacy** | Terms and Privacy rewrite — removed placeholder, added unrestricted mode liability/indemnification/18+ gate, AI output disclaimer, acceptable use, third-party software attribution, cloud mode/BYO keys terms, Ko-fi/PayPal as payment processors, Supabase as data processor, GDPR rights, age requirements, Founder tier removed | COMPLETE 2026-04-04 |
+| **Fix** | Download link pointed to real installer URL + version/size info line; favicon.ico added to layout.tsx icons metadata (was missing, causing Vercel default to show) | COMPLETE 2026-04-04 |
 | **Phase 3** | Stripe integration (supporter + founder + donations) | NOT STARTED |
 | **Phase 3** | Stripe checkout + webhook handlers | NOT STARTED |
 | **Phase 3** | Stripe billing portal | NOT STARTED |

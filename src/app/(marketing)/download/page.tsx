@@ -35,6 +35,9 @@ export default function DownloadPage() {
 
           <div className="mt-8">
             <Button href="https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.0.exe">Download for Windows</Button>
+            <p className="mt-3 text-sm text-text-muted">
+              v0.1.0 · ~265 MB · Windows 10/11 64-bit
+            </p>
           </div>
         </div>
 
