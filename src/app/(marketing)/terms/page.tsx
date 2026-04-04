@@ -144,6 +144,9 @@ export default function TermsPage() {
               <p>
                 InnerZero incorporates third-party open-source software and AI models, each subject to its own licence. Key components include: Qwen3 (Alibaba Cloud, Apache 2.0), Gemma3 (Google, Gemma Terms of Use), Ollama (MIT), Kokoro TTS (Hexgrad, Apache 2.0), faster-whisper (SYSTRAN, MIT), Silero VAD (MIT), PyTorch (BSD-3-Clause), and others. Unrestricted models are provided by huihui.ai under Apache 2.0. Full attribution and licence details are available within the desktop application under Settings &gt; General &gt; Third-Party Licences &amp; Notices. Summers Solutions Ltd does not claim ownership of any third-party software or models.
               </p>
+              <p className="mt-2">
+                InnerZero&apos;s knowledge packs contain content sourced from Wikipedia and other Wikimedia projects, licensed under the Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0). If you redistribute content retrieved from knowledge packs, you must comply with the CC BY-SA 4.0 licence terms.
+              </p>
             </section>
 
             <section>
@@ -205,7 +208,34 @@ export default function TermsPage() {
 
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                17. Governing Law
+                17. Severability
+              </h2>
+              <p>
+                If any provision of these terms is found to be invalid, illegal, or unenforceable by a court of competent jurisdiction, the remaining provisions shall continue in full force and effect.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold text-text-primary mb-3">
+                18. Entire Agreement
+              </h2>
+              <p>
+                These terms, together with the Privacy Policy, constitute the entire agreement between you and Summers Solutions Ltd regarding your use of InnerZero. They supersede any prior agreements, communications, or understandings.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold text-text-primary mb-3">
+                19. No Waiver
+              </h2>
+              <p>
+                Failure by Summers Solutions Ltd to enforce any provision of these terms shall not constitute a waiver of that provision or any other provision. Any waiver must be in writing and signed by Summers Solutions Ltd.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold text-text-primary mb-3">
+                20. Governing Law
               </h2>
               <p>
                 These terms are governed by and construed in accordance with the laws of England and Wales. Any disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales.
@@ -214,7 +244,7 @@ export default function TermsPage() {
 
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                18. Contact
+                21. Contact
               </h2>
               <p>
                 For questions about these terms, contact us at{" "}

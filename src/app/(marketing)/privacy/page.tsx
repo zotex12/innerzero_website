@@ -124,7 +124,16 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    6. What Data the Website Collects
+                    6. Voice and Microphone
+                  </h3>
+                  <p>
+                    If you use InnerZero&apos;s voice features, the application accesses your microphone to capture speech for local speech-to-text processing. All audio is processed locally on your device using offline speech recognition models. No audio recordings are transmitted, stored, or sent to any server. Audio data is processed in real-time and discarded immediately after transcription. If Cloud Voice mode is enabled, your transcribed text (not audio) is sent to OpenAI for response generation — see Section 3 (Cloud Mode) for details.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-2">
+                    7. What Data the Website Collects
                   </h3>
                   <p>
                     When you create an account on innerzero.com, we collect your email address. If you join our waitlist, we store your email address. Payment information for supporter memberships and donations is processed by Ko-fi and PayPal — we do not receive or store your payment card details. If future cloud plans are offered via Stripe, Stripe will process payments — we will never store card details directly.
@@ -133,7 +142,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    7. Cookies
+                    8. Cookies
                   </h3>
                   <p>
                     The InnerZero website uses only essential cookies for functionality (such as authentication session cookies and theme preference stored in localStorage). We do not use advertising, marketing, or third-party tracking cookies. If we add privacy-respecting analytics in the future (such as Plausible), we will update this policy accordingly.
@@ -142,7 +151,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    8. Data Processors
+                    9. Data Processors
                   </h3>
                   <p>
                     We use the following third-party services:
@@ -160,7 +169,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    9. Data Retention
+                    10. Data Retention
                   </h3>
                   <p>
                     Account data (email address) is retained for as long as your account is active. Waitlist data is retained until the waitlist is no longer needed, after which it will be deleted. You may request deletion of your data at any time.
@@ -169,7 +178,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    10. Your Rights (UK GDPR)
+                    11. Your Rights (UK GDPR)
                   </h3>
                   <p>
                     Under UK GDPR, you have the right to: access your personal data; correct inaccurate data; request deletion of your data; object to processing; request data portability; and withdraw consent at any time. To exercise any of these rights, contact{" "}
@@ -181,7 +190,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    11. Children
+                    12. Children
                   </h3>
                   <p>
                     InnerZero is not intended for children under 13. We do not knowingly collect personal data from children under 13. If you believe a child under 13 has provided us with personal data, contact us and we will delete it promptly.
@@ -190,7 +199,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    12. Changes to This Policy
+                    13. Changes to This Policy
                   </h3>
                   <p>
                     We may update this privacy policy from time to time. Changes will be reflected on this page with an updated date.
@@ -199,7 +208,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    13. Contact
+                    14. Contact
                   </h3>
                   <p>
                     For any privacy-related questions or data requests:{" "}
