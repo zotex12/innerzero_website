@@ -85,7 +85,7 @@ export default async function AccountPage() {
               Support InnerZero on Ko-fi
             </a>
             <a
-              href="https://discord.gg/5XjCe2RNAJ"
+              href="https://discord.gg/rn9SPXgThT"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-accent-teal hover:text-accent-teal-hover transition-colors"

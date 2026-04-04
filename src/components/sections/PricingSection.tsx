@@ -218,7 +218,7 @@ export function PricingSection({ className }: PricingSectionProps) {
 
             <div className="mt-6 text-center">
               <a
-                href="https://discord.gg/5XjCe2RNAJ"
+                href="https://discord.gg/rn9SPXgThT"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-sm text-text-secondary transition-colors hover:text-accent-teal"
