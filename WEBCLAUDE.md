@@ -723,6 +723,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Terms** | Added Section 8 Screen Automation liability (disabled by default, unintended actions disclaimer, emergency stop), strengthened AI disclaimer to cover all AI-directed actions, added Screen Automation acceptable use restrictions; renumbered sections 8→18 | COMPLETE 2026-04-04 |
 | **Terms** | Strengthened AI accuracy disclaimers — Section 5 now lists specific failure modes (hallucinations, math errors, tool misinterpretation); Section 6 adds unrestricted mode false-confidence warning for medical/legal/financial info | COMPLETE 2026-04-04 |
 | **Terms/Privacy** | Added CC BY-SA 4.0 knowledge pack licensing to Section 10; added Sections 17-19 (Severability, Entire Agreement, No Waiver); renumbered to 21 sections. Privacy: added Section 6 Voice and Microphone (local-only audio processing); renumbered to 14 sections | COMPLETE 2026-04-04 |
+| **Terms** | Added supported platform/GPU terms to Section 2 — Windows 10/11 64-bit only, NVIDIA CUDA recommended, AMD/Intel unsupported, no macOS/Linux, unsupported usage at own risk | COMPLETE 2026-04-04 |
 | **Phase 3** | Stripe integration (supporter + founder + donations) | NOT STARTED |
 | **Phase 3** | Stripe checkout + webhook handlers | NOT STARTED |
 | **Phase 3** | Stripe billing portal | NOT STARTED |

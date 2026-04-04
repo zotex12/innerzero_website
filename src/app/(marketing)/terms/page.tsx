@@ -38,7 +38,7 @@ export default function TermsPage() {
                 2. What InnerZero Is
               </h2>
               <p>
-                InnerZero is free desktop software that provides a local AI assistant. The software runs on your personal computer and processes AI tasks locally using third-party open-source AI models. No subscription, account, or payment is required to use the core software.
+                InnerZero is free desktop software that provides a local AI assistant. The software runs on your personal computer and processes AI tasks locally using third-party open-source AI models. No subscription, account, or payment is required to use the core software. InnerZero is currently supported on Windows 10 and Windows 11 (64-bit) only. NVIDIA GPUs with CUDA support are recommended for optimal performance; AMD and Intel GPUs are not officially supported and may result in reduced functionality or errors. macOS and Linux are not currently supported. Running InnerZero on unsupported operating systems, hardware configurations, or modified environments is entirely at your own risk, and Summers Solutions Ltd accepts no liability for any issues arising from unsupported usage.
               </p>
             </section>
 
