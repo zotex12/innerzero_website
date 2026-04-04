@@ -379,6 +379,9 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
     links: [
       { label: "Discord", href: "https://discord.gg/rn9SPXgThT", external: true },
       { label: "Support us", href: "https://ko-fi.com/innerzero", external: true },
+      { label: "X (Twitter)", href: "https://x.com/InnerZero_ai", external: true },
+      { label: "Instagram", href: "https://www.instagram.com/innerzero_ai", external: true },
+      { label: "LinkedIn", href: "https://www.linkedin.com/company/innerzero", external: true },
     ],
   },
   {
