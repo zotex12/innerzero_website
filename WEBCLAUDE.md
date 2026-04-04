@@ -719,7 +719,8 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Fix** | favicon.ico converted from renamed PNG to proper ICO container (16x16 + 32x32, 2.5KB) via Pillow; no duplicate terms/privacy page files found — deployment cache issue only | COMPLETE 2026-04-04 |
 | **Fix** | Updated Discord invite link to rn9SPXgThT across constants.ts, account page, and PricingSection | COMPLETE 2026-04-04 |
 | **Terms** | Strengthened BYO API key liability in Section 7 — added API consumption/billing responsibility paragraph and "entirely at your own risk" clause | COMPLETE 2026-04-04 |
-| **Terms** | Added hardware/data damage liability exclusion to Section 12 — covers data loss, file corruption, system instability, GPU damage, driver conflicts, local AI hardware load | COMPLETE 2026-04-04 |
+| **Terms** | Added hardware/data damage liability exclusion to Section 13 — covers data loss, file corruption, system instability, GPU damage, driver conflicts, local AI hardware load | COMPLETE 2026-04-04 |
+| **Terms** | Added Section 8 Screen Automation liability (disabled by default, unintended actions disclaimer, emergency stop), strengthened AI disclaimer to cover all AI-directed actions, added Screen Automation acceptable use restrictions; renumbered sections 8→18 | COMPLETE 2026-04-04 |
 | **Phase 3** | Stripe integration (supporter + founder + donations) | NOT STARTED |
 | **Phase 3** | Stripe checkout + webhook handlers | NOT STARTED |
 | **Phase 3** | Stripe billing portal | NOT STARTED |
