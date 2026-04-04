@@ -718,6 +718,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Fix** | Download link pointed to real installer URL + version/size info line; favicon.ico added to layout.tsx icons metadata (was missing, causing Vercel default to show) | COMPLETE 2026-04-04 |
 | **Fix** | favicon.ico converted from renamed PNG to proper ICO container (16x16 + 32x32, 2.5KB) via Pillow; no duplicate terms/privacy page files found — deployment cache issue only | COMPLETE 2026-04-04 |
 | **Fix** | Updated Discord invite link to rn9SPXgThT across constants.ts, account page, and PricingSection | COMPLETE 2026-04-04 |
+| **Terms** | Strengthened BYO API key liability in Section 7 — added API consumption/billing responsibility paragraph and "entirely at your own risk" clause | COMPLETE 2026-04-04 |
 | **Phase 3** | Stripe integration (supporter + founder + donations) | NOT STARTED |
 | **Phase 3** | Stripe checkout + webhook handlers | NOT STARTED |
 | **Phase 3** | Stripe billing portal | NOT STARTED |

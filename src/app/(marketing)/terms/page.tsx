@@ -109,7 +109,10 @@ export default function TermsPage() {
                 InnerZero also supports BYO (Bring Your Own) API keys, allowing you to use your own accounts with supported providers. When using BYO API keys, requests go directly from your machine to the provider. InnerZero does not proxy, store, log, or read your prompts, responses, or API keys. Your API keys are encrypted and stored locally on your device.
               </p>
               <p className="mt-2">
-                Summers Solutions Ltd is not responsible for any charges, data handling, or terms imposed by third-party AI providers.
+                You are solely responsible for managing your API key usage, costs, and billing with each provider. InnerZero does not monitor, limit, or control your API consumption. If your usage of a third-party provider results in unexpected charges, Summers Solutions Ltd accepts no liability. We recommend setting spending limits directly with your provider.
+              </p>
+              <p className="mt-2">
+                Summers Solutions Ltd is not responsible for any charges, data handling, or terms imposed by third-party AI providers. Use of Cloud Mode and BYO API keys is entirely at your own risk.
               </p>
             </section>
 
