@@ -721,6 +721,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Terms** | Strengthened BYO API key liability in Section 7 — added API consumption/billing responsibility paragraph and "entirely at your own risk" clause | COMPLETE 2026-04-04 |
 | **Terms** | Added hardware/data damage liability exclusion to Section 13 — covers data loss, file corruption, system instability, GPU damage, driver conflicts, local AI hardware load | COMPLETE 2026-04-04 |
 | **Terms** | Added Section 8 Screen Automation liability (disabled by default, unintended actions disclaimer, emergency stop), strengthened AI disclaimer to cover all AI-directed actions, added Screen Automation acceptable use restrictions; renumbered sections 8→18 | COMPLETE 2026-04-04 |
+| **Terms** | Strengthened AI accuracy disclaimers — Section 5 now lists specific failure modes (hallucinations, math errors, tool misinterpretation); Section 6 adds unrestricted mode false-confidence warning for medical/legal/financial info | COMPLETE 2026-04-04 |
 | **Phase 3** | Stripe integration (supporter + founder + donations) | NOT STARTED |
 | **Phase 3** | Stripe checkout + webhook handlers | NOT STARTED |
 | **Phase 3** | Stripe billing portal | NOT STARTED |
