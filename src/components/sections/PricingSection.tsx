@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { PRICING_FREE, CLOUD_PLANS, SUPPORTER, BUSINESS_LICENCE, FAQ_DATA, type FAQItem } from "@/lib/constants";
+import { BusinessLicenceButton } from "@/components/sections/BusinessLicenceButton";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 
@@ -277,15 +278,7 @@ export function PricingSection({ className }: PricingSectionProps) {
                 </ul>
 
                 <div className="mt-8">
-                  <a
-                    href={BUSINESS_LICENCE.ctaHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-gold px-6 py-3 text-[15px] font-medium text-[#0a0a0f] transition-all duration-150 hover:bg-accent-gold-hover"
-                  >
-                    {BUSINESS_LICENCE.cta}
-                    <ExternalLink className="h-3.5 w-3.5" />
-                  </a>
+                  <BusinessLicenceButton />
                 </div>
               </div>
             </div>

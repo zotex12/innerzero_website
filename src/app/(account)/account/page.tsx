@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { createMetadata } from "@/lib/metadata";
 import type { Database } from "@/lib/supabase/types";
 import { LogoutButton } from "./LogoutButton";
+import { ManageBillingButton } from "./ManageBillingButton";
+import { CopyButton } from "./CopyButton";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+type Licence = Database["public"]["Tables"]["licences"]["Row"];
 
 export const metadata: Metadata = createMetadata({
   title: "Account",
@@ -30,6 +34,28 @@ export default async function AccountPage() {
     .single();
 
   const profile = data as Profile | null;
+
+  // Fetch licence data if the user has a business licence
+  let licence: Licence | null = null;
+  if (profile?.business_licence) {
+    const { data: licData } = await supabase
+      .from("licences")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("status", "active")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+    licence = licData as Licence | null;
+  }
+
+  const renewalDate = profile?.subscription_end
+    ? new Date(profile.subscription_end).toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : null;
 
   const createdAt = user.created_at
     ? new Date(user.created_at).toLocaleDateString("en-GB", {
@@ -67,6 +93,64 @@ export default async function AccountPage() {
           </dl>
         </section>
 
+        {/* Business Licence */}
+        <section className="rounded-xl border border-border-default bg-bg-card p-6">
+          <h2 className="text-lg font-semibold text-text-primary mb-4">
+            Business Licence
+          </h2>
+          {profile?.business_licence ? (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center rounded-full bg-success/15 px-2.5 py-0.5 text-xs font-medium text-success">
+                  Active
+                </span>
+              </div>
+              {profile.licence_key && (
+                <div className="flex items-center justify-between">
+                  <dt className="text-sm text-text-secondary">Licence key</dt>
+                  <dd className="flex items-center gap-2 text-sm text-text-primary font-mono">
+                    {profile.licence_key.slice(0, 8)}...
+                    <CopyButton text={profile.licence_key} />
+                  </dd>
+                </div>
+              )}
+              {profile.company_name && (
+                <div className="flex justify-between">
+                  <dt className="text-sm text-text-secondary">Company</dt>
+                  <dd className="text-sm text-text-primary">{profile.company_name}</dd>
+                </div>
+              )}
+              {licence?.seats && (
+                <div className="flex justify-between">
+                  <dt className="text-sm text-text-secondary">Seats</dt>
+                  <dd className="text-sm text-text-primary">{licence.seats}</dd>
+                </div>
+              )}
+              {renewalDate && (
+                <div className="flex justify-between">
+                  <dt className="text-sm text-text-secondary">Renews</dt>
+                  <dd className="text-sm text-text-primary">{renewalDate}</dd>
+                </div>
+              )}
+              <div className="pt-2">
+                <ManageBillingButton />
+              </div>
+            </div>
+          ) : (
+            <div>
+              <p className="text-sm text-text-secondary">
+                No business licence.{" "}
+                <Link
+                  href="/pricing"
+                  className="text-accent-gold hover:text-accent-gold-hover transition-colors"
+                >
+                  Get one for £50/year
+                </Link>
+              </p>
+            </div>
+          )}
+        </section>
+
         {/* InnerZero status */}
         <section className="rounded-xl border border-border-default bg-bg-card p-6">
           <h2 className="text-lg font-semibold text-text-primary mb-4">
@@ -101,9 +185,13 @@ export default async function AccountPage() {
             Quick Links
           </h2>
           <div className="flex flex-col gap-2">
-            <span className="text-sm text-text-muted">
-              Manage Billing — coming soon
-            </span>
+            {profile?.stripe_customer_id ? (
+              <ManageBillingButton />
+            ) : (
+              <span className="text-sm text-text-muted">
+                Manage Billing — available after first purchase
+              </span>
+            )}
             <span className="text-sm text-text-muted">
               Cloud AI Usage — coming soon
             </span>

@@ -9,6 +9,10 @@ export type Database = {
           stripe_customer_id: string | null;
           stripe_subscription_id: string | null;
           subscription_status: "none" | "trial" | "active" | "past_due" | "cancelled" | "expired";
+          business_licence: boolean;
+          licence_key: string | null;
+          supporter: boolean;
+          company_name: string | null;
           trial_end: string | null;
           subscription_end: string | null;
           max_devices: number;
@@ -23,6 +27,10 @@ export type Database = {
           stripe_customer_id?: string | null;
           stripe_subscription_id?: string | null;
           subscription_status?: "none" | "trial" | "active" | "past_due" | "cancelled" | "expired";
+          business_licence?: boolean;
+          licence_key?: string | null;
+          supporter?: boolean;
+          company_name?: string | null;
           trial_end?: string | null;
           subscription_end?: string | null;
           max_devices?: number;
@@ -35,11 +43,50 @@ export type Database = {
           stripe_customer_id?: string | null;
           stripe_subscription_id?: string | null;
           subscription_status?: "none" | "trial" | "active" | "past_due" | "cancelled" | "expired";
+          business_licence?: boolean;
+          licence_key?: string | null;
+          supporter?: boolean;
+          company_name?: string | null;
           trial_end?: string | null;
           subscription_end?: string | null;
           max_devices?: number;
           release_channel?: string;
           updated_at?: string;
+        };
+        Relationships: [];
+      };
+      licences: {
+        Row: {
+          id: string;
+          user_id: string;
+          email: string;
+          licence_key: string;
+          licence_type: string;
+          company_name: string | null;
+          stripe_customer_id: string | null;
+          stripe_subscription_id: string | null;
+          status: string;
+          seats: number;
+          created_at: string;
+          expires_at: string | null;
+        };
+        Insert: {
+          user_id: string;
+          email: string;
+          licence_key: string;
+          licence_type: string;
+          company_name?: string | null;
+          stripe_customer_id?: string | null;
+          stripe_subscription_id?: string | null;
+          status?: string;
+          seats?: number;
+          expires_at?: string | null;
+        };
+        Update: {
+          status?: string;
+          seats?: number;
+          company_name?: string | null;
+          expires_at?: string | null;
         };
         Relationships: [];
       };

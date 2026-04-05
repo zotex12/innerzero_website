@@ -8,11 +8,11 @@ The full product and infrastructure spec is in `innerzero_web_spec.md` — read 
 
 ## Current phase
 
-**Phase 2: Supabase Auth + Database — COMPLETE**
+**Phase 3: Stripe Integration — COMPLETE**
 
-Phase 1 (marketing frontend), Phase 2 (auth + database), pricing pivot, and terms/privacy rewrite are done and deployed to Vercel at innerzero.com.
+Phase 1 (marketing frontend), Phase 2 (auth + database), pricing pivot, terms/privacy rewrite, and Phase 3 (Stripe checkout, webhooks, portal, business licence) are done and deployed to Vercel at innerzero.com.
 
-**Next immediate work:** Phase 3 (Stripe for future cloud plans). Deferred until 50+ active users.
+**Next immediate work:** Phase 3b (cloud AI plan subscriptions, credit balance, usage tracking). Deferred until 50+ active users.
 
 Cloud credit plans (Phase 3b) and cloud API proxy (Phase 4) are deferred until there are 50+ active users.
 
@@ -726,9 +726,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Terms** | Added supported platform/GPU terms to Section 2 — Windows 10/11 64-bit only, NVIDIA CUDA recommended, AMD/Intel unsupported, no macOS/Linux, unsupported usage at own risk | COMPLETE 2026-04-04 |
 | **Social** | Added X/Twitter, Instagram, LinkedIn links to footer (via constants.ts Community section) and contact page (icon row with inline SVGs). About page skipped — no natural fit | COMPLETE 2026-04-04 |
 | **Business** | Business Licence card on pricing page (£50/year per seat, Stripe payment link), commercial use clause in Terms (Section 5), FAQ item, BUSINESS_LICENCE constant in constants.ts; renumbered Terms to 22 sections | COMPLETE 2026-04-05 |
-| **Phase 3** | Stripe integration (supporter + founder + donations) | NOT STARTED |
-| **Phase 3** | Stripe checkout + webhook handlers | NOT STARTED |
-| **Phase 3** | Stripe billing portal | NOT STARTED |
+| **Phase 3** | Stripe integration: checkout API, webhook handler (checkout.session.completed, subscription.updated/deleted, invoice.payment_succeeded/failed), customer portal, account dashboard licence display, dynamic checkout on pricing page, Supabase types updated with licences table + profile columns | COMPLETE 2026-04-05 |
 | **Phase 3** | Founder slot tracking (100 cap) | NOT STARTED |
 | **Phase 3** | Account dashboard: plan + supporter + founder display | NOT STARTED |
 | **Phase 3b** | Cloud plan subscriptions in Stripe | NOT STARTED |
