@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { PRICING_FREE, CLOUD_PLANS, SUPPORTER, FAQ_DATA, type FAQItem } from "@/lib/constants";
+import { PRICING_FREE, CLOUD_PLANS, SUPPORTER, BUSINESS_LICENCE, FAQ_DATA, type FAQItem } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 
@@ -231,8 +231,77 @@ export function PricingSection({ className }: PricingSectionProps) {
         </Container>
       </section>
 
-      {/* FAQ */}
+      {/* Section D — Business Licence */}
       <section className="bg-bg-secondary py-12 md:py-20">
+        <Container>
+          <ScrollReveal>
+            <div className="mx-auto max-w-3xl text-center mb-10">
+              <h2 className="text-2xl font-bold text-text-primary md:text-[2rem]">
+                Business
+              </h2>
+              <p className="mt-4 text-text-secondary">
+                Using InnerZero at work? A commercial licence is required for business, commercial, and revenue-generating use.
+              </p>
+            </div>
+
+            <div className="mx-auto max-w-xl">
+              <div className="rounded-xl border border-border-default bg-bg-card p-8 text-center">
+                <h3 className="text-2xl font-bold text-text-primary">
+                  {BUSINESS_LICENCE.planName}
+                </h3>
+
+                <div className="mt-4">
+                  <span className="text-4xl font-bold text-text-primary">
+                    {BUSINESS_LICENCE.price}
+                  </span>
+                  <span className="text-text-secondary">{BUSINESS_LICENCE.period}</span>
+                </div>
+                <p className="mt-1 text-sm text-text-muted">
+                  {BUSINESS_LICENCE.perSeat}
+                </p>
+
+                <p className="mt-4 text-sm text-text-secondary">
+                  {BUSINESS_LICENCE.description}
+                </p>
+
+                <ul className="mt-6 flex flex-col gap-3 text-left">
+                  {BUSINESS_LICENCE.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex items-center gap-3 text-sm text-text-secondary"
+                    >
+                      <Check className="h-4 w-4 shrink-0 text-success" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-8">
+                  <a
+                    href={BUSINESS_LICENCE.ctaHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-gold px-6 py-3 text-[15px] font-medium text-[#0a0a0f] transition-all duration-150 hover:bg-accent-gold-hover"
+                  >
+                    {BUSINESS_LICENCE.cta}
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <p className="mt-6 text-center text-sm text-text-muted">
+              Need team features, shared memory, or managed cloud AI? Coming soon.{" "}
+              <a href="/waitlist" className="text-text-secondary transition-colors hover:text-accent-gold">
+                Join the waitlist
+              </a>.
+            </p>
+          </ScrollReveal>
+        </Container>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-12 md:py-20">
         <Container>
           <SectionHeader
             title="Frequently Asked Questions"

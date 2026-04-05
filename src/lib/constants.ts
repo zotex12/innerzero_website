@@ -182,6 +182,27 @@ export const SUPPORTER = {
   ctaHref: "https://ko-fi.com/innerzero",
 } as const;
 
+/* ── Pricing: Business Licence ── */
+
+export const BUSINESS_LICENCE = {
+  planName: "Business Licence",
+  price: "£50",
+  period: "/year",
+  perSeat: "per seat",
+  description:
+    "Commercial use licence for InnerZero. Use it at work, in your business, or for any revenue-generating activity. Same free app — just the legal right to use it commercially.",
+  features: [
+    "Full InnerZero desktop app",
+    "All local AI features",
+    "BYO API keys supported",
+    "Commercial & business use rights",
+    "Annual billing, cancel anytime",
+    "Invoice & receipt included",
+  ],
+  cta: "Buy Business Licence",
+  ctaHref: "https://buy.stripe.com/fZu6oH4d619HdlkcaI5ZC00",
+} as const;
+
 /* ── FAQ ── */
 
 export interface FAQItem {
@@ -224,6 +245,11 @@ export const FAQ_DATA: FAQItem[] = [
     question: "When will cloud plans be available?",
     answer:
       "We're building cloud AI plans now. Join the waitlist to be the first to know when they launch.",
+  },
+  {
+    question: "Do I need a licence to use InnerZero at work?",
+    answer:
+      "If you're using InnerZero for business, commercial, or revenue-generating purposes, yes — a Business Licence is required. It's £50/year per seat. The app is identical to the free version — the licence is just permission to use it commercially. Personal use, education, and non-profits are free.",
   },
 ];
 

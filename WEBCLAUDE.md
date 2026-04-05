@@ -725,6 +725,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Terms/Privacy** | Added CC BY-SA 4.0 knowledge pack licensing to Section 10; added Sections 17-19 (Severability, Entire Agreement, No Waiver); renumbered to 21 sections. Privacy: added Section 6 Voice and Microphone (local-only audio processing); renumbered to 14 sections | COMPLETE 2026-04-04 |
 | **Terms** | Added supported platform/GPU terms to Section 2 — Windows 10/11 64-bit only, NVIDIA CUDA recommended, AMD/Intel unsupported, no macOS/Linux, unsupported usage at own risk | COMPLETE 2026-04-04 |
 | **Social** | Added X/Twitter, Instagram, LinkedIn links to footer (via constants.ts Community section) and contact page (icon row with inline SVGs). About page skipped — no natural fit | COMPLETE 2026-04-04 |
+| **Business** | Business Licence card on pricing page (£50/year per seat, Stripe payment link), commercial use clause in Terms (Section 5), FAQ item, BUSINESS_LICENCE constant in constants.ts; renumbered Terms to 22 sections | COMPLETE 2026-04-05 |
 | **Phase 3** | Stripe integration (supporter + founder + donations) | NOT STARTED |
 | **Phase 3** | Stripe checkout + webhook handlers | NOT STARTED |
 | **Phase 3** | Stripe billing portal | NOT STARTED |
