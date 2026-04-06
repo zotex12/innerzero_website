@@ -8,13 +8,13 @@ The full product and infrastructure spec is in `innerzero_web_spec.md` — read 
 
 ## Current phase
 
-**Phase 3: Stripe Integration — COMPLETE**
+**Phase 4: Licence Validation API — COMPLETE**
 
-Phase 1 (marketing frontend), Phase 2 (auth + database), pricing pivot, terms/privacy rewrite, and Phase 3 (Stripe checkout, webhooks, portal, business licence) are done and deployed to Vercel at innerzero.com.
+Phase 1 (marketing frontend), Phase 2 (auth + database), pricing pivot, terms/privacy rewrite, Phase 3 (Stripe checkout, webhooks, portal, business licence), and Phase 4 (licence validation API for desktop app) are done and deployed to Vercel at innerzero.com.
 
-**Next immediate work:** Phase 3b (cloud AI plan subscriptions, credit balance, usage tracking). Deferred until 50+ active users.
+**Next immediate work:** Phase 5 (desktop app integration — account.py module, licence validation calls, cloud routing).
 
-Cloud credit plans (Phase 3b) and cloud API proxy (Phase 4) are deferred until there are 50+ active users.
+Cloud credit plans (Phase 3b) and cloud API proxy are deferred until there are 50+ active users.
 
 ---
 
@@ -220,7 +220,9 @@ innerzero_website/
 │   │       ├── waitlist/route.ts        # POST: email capture
 │   │       ├── stripe/checkout/route.ts # Phase 3
 │   │       ├── stripe/webhook/route.ts  # Phase 3
-│   │       └── stripe/portal/route.ts   # Phase 3
+│   │       ├── stripe/portal/route.ts   # Phase 3
+│   │       ├── licence/validate/route.ts # Phase 4
+│   │       └── licence/status/route.ts   # Phase 4
 │   ├── components/
 │   │   ├── layout/
 │   │   │   ├── Header.tsx           # Fixed header: logo, nav, theme toggle, CTA
@@ -730,12 +732,14 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Terms** | Complete Terms of Service rewrite — 23 production sections replacing old 22-section draft. Added Section 7 Absolute Prohibitions (CSAM/terrorism/serious crime with NCA/IWF cooperation clause), strengthened all sections, added solicitor review banner, company address, age misrepresentation auto-revocation | COMPLETE 2026-04-06 |
 | **Terms** | Section 8 updated: uncensored models not bundled, user-downloaded from Hugging Face via Ollama, Summers Solutions not involved in download. Section 12 bullet updated to note models are optional/user-installed and not distributed by Summers Solutions | COMPLETE 2026-04-06 |
 | **Terms** | Section 15: added Consumer Rights Act 2015 statutory rights preservation clause | COMPLETE 2026-04-06 |
+| **Phase 4** | Licence validation API (`/api/licence/validate` POST, `/api/licence/status` POST), types in `src/types/licence.ts`, in-memory rate limiter (30/min/IP), device registration + revalidation, seat enforcement, licence event logging | COMPLETE 2026-04-06 |
 | **Phase 3** | Founder slot tracking (100 cap) | NOT STARTED |
 | **Phase 3** | Account dashboard: plan + supporter + founder display | NOT STARTED |
 | **Phase 3b** | Cloud plan subscriptions in Stripe | NOT STARTED |
 | **Phase 3b** | Credit balance + usage tracking | NOT STARTED |
 | **Phase 3b** | PAYG credit purchase flow | NOT STARTED |
 | **Phase 3b** | Account usage page | NOT STARTED |
+| **Phase 4** | Licence validation API (validate + status endpoints) | COMPLETE 2026-04-06 |
 | **Phase 4** | Cloud API proxy endpoint | NOT STARTED |
 | **Phase 4** | Credit metering + overage | NOT STARTED |
 | **Phase 4** | Spending caps + usage alerts | NOT STARTED |
