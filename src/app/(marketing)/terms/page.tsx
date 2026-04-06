@@ -185,10 +185,10 @@ export default function TermsPage() {
                 8. Unrestricted Mode
               </h2>
               <p>
-                InnerZero includes an optional Unrestricted Mode that replaces the standard AI models with third-party uncensored AI models. These uncensored models (modified by huihui.ai, based on Qwen3 by Alibaba Cloud and Gemma3 by Google) have had safety filtering removed and may generate content that is sensitive, offensive, harmful, explicit, or otherwise inappropriate.
+                Unrestricted Mode is an optional feature that replaces the standard AI models with third-party uncensored AI models. These uncensored models are not included with InnerZero and are not distributed by Summers Solutions Ltd. They must be downloaded independently by the user directly from Hugging Face (huggingface.co) using Ollama, following instructions provided within the application. By downloading and installing these models, the user enters into a direct relationship with the model providers. Summers Solutions Ltd has no involvement in that download and accepts no liability arising from it.
               </p>
               <p className="mt-2">
-                The uncensored models are third-party software. They were not created, trained, or endorsed by Summers Solutions Ltd. Summers Solutions Ltd exercises no control over the outputs of uncensored models and has no ability to filter, moderate, or review them.
+                The uncensored models available for use with Unrestricted Mode are modified versions of Qwen3 (Alibaba Cloud) and Gemma3 (Google), adapted by huihui.ai and published publicly on Hugging Face. These models have had safety filtering removed and may generate content that is sensitive, offensive, harmful, explicit, or otherwise inappropriate. They are third-party software not created, trained, or endorsed by Summers Solutions Ltd.
               </p>
               <p className="mt-2">
                 Uncensored models may produce factually incorrect, misleading, or dangerous information with false confidence and without any safety warnings. This includes but is not limited to incorrect medical, legal, financial, or safety-critical information. You must not rely on any output from Unrestricted Mode for any decision that could affect your health, safety, finances, legal standing, or the health and safety of others.
@@ -304,7 +304,7 @@ export default function TermsPage() {
                 <li>faster-whisper — SYSTRAN, MIT</li>
                 <li>Silero VAD — MIT</li>
                 <li>PyTorch — BSD-3-Clause</li>
-                <li>Unrestricted models — huihui.ai, Apache 2.0</li>
+                <li>Unrestricted models (optional, user-installed) — huihui.ai, Apache 2.0. These models are not distributed by Summers Solutions Ltd and must be downloaded independently from Hugging Face.</li>
               </ul>
               <p className="mt-2">
                 Full attribution and licence details are available within the desktop application under Settings &gt; General &gt; Third-Party Licences &amp; Notices.
