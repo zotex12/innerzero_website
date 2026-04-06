@@ -377,6 +377,9 @@ export default function TermsPage() {
               <p className="mt-2">
                 Nothing in these terms shall limit or exclude liability for death or personal injury caused by negligence, fraud or fraudulent misrepresentation, or any other liability that cannot be excluded or limited under applicable law.
               </p>
+              <p className="mt-2">
+                Nothing in these terms affects your statutory rights under the Consumer Rights Act 2015 or any other applicable consumer protection legislation.
+              </p>
             </section>
 
             {/* Section 16 */}

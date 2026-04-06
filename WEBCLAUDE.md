@@ -729,6 +729,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Phase 3** | Stripe integration: checkout API, webhook handler (checkout.session.completed, subscription.updated/deleted, invoice.payment_succeeded/failed), customer portal, account dashboard licence display, dynamic checkout on pricing page, Supabase types updated with licences table + profile columns | COMPLETE 2026-04-05 |
 | **Terms** | Complete Terms of Service rewrite — 23 production sections replacing old 22-section draft. Added Section 7 Absolute Prohibitions (CSAM/terrorism/serious crime with NCA/IWF cooperation clause), strengthened all sections, added solicitor review banner, company address, age misrepresentation auto-revocation | COMPLETE 2026-04-06 |
 | **Terms** | Section 8 updated: uncensored models not bundled, user-downloaded from Hugging Face via Ollama, Summers Solutions not involved in download. Section 12 bullet updated to note models are optional/user-installed and not distributed by Summers Solutions | COMPLETE 2026-04-06 |
+| **Terms** | Section 15: added Consumer Rights Act 2015 statutory rights preservation clause | COMPLETE 2026-04-06 |
 | **Phase 3** | Founder slot tracking (100 cap) | NOT STARTED |
 | **Phase 3** | Account dashboard: plan + supporter + founder display | NOT STARTED |
 | **Phase 3b** | Cloud plan subscriptions in Stripe | NOT STARTED |
