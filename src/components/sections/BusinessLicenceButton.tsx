@@ -19,7 +19,7 @@ export function BusinessLicenceButton() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push("/login");
+        router.push("/login?redirect=/pricing");
         return;
       }
 
@@ -36,11 +36,11 @@ export function BusinessLicenceButton() {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        console.error("Checkout error:", data.message);
+        alert(data.message ?? "Something went wrong. Please try again.");
         setLoading(false);
       }
-    } catch {
-      console.error("Failed to start checkout");
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to start checkout. Please try again.");
       setLoading(false);
     }
   }
@@ -51,7 +51,7 @@ export function BusinessLicenceButton() {
       disabled={loading}
       className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-gold px-6 py-3 text-[15px] font-medium text-[#0a0a0f] transition-all duration-150 hover:bg-accent-gold-hover disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
     >
-      {loading ? "Loading..." : "Buy Business Licence"}
+      {loading ? "Processing..." : "Buy Business Licence"}
       {!loading && <ExternalLink className="h-3.5 w-3.5" />}
     </button>
   );

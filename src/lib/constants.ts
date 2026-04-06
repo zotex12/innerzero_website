@@ -200,7 +200,7 @@ export const BUSINESS_LICENCE = {
     "Invoice & receipt included",
   ],
   cta: "Buy Business Licence",
-  ctaHref: "https://buy.stripe.com/fZu6oH4d619HdlkcaI5ZC00",
+  ctaHref: "#",
 } as const;
 
 /* ── FAQ ── */
