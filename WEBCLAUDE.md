@@ -31,7 +31,7 @@ Cloud credit plans (Phase 3b) and cloud API proxy are deferred until there are 5
 | Auth | Supabase Auth (@supabase/ssr) | Cookie-based session management |
 | Database | Supabase (Postgres + RLS) | Row Level Security on all tables |
 | Hosting | Vercel | Deploy from GitHub, auto HTTPS |
-| Analytics | None yet | Plausible or Fathom later (never Google Analytics) |
+| Analytics | @vercel/analytics | Added to root layout; privacy-friendly, no Google Analytics |
 
 ### Not used
 - No UI component library (no shadcn, no Radix, no MUI)
@@ -734,6 +734,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Terms** | Section 15: added Consumer Rights Act 2015 statutory rights preservation clause | COMPLETE 2026-04-06 |
 | **Terms** | Section 6 (AI Output Disclaimer): added scheduled actions clause — covers AI-interpreted timers, alarms, reminders, countdowns; misinterpretation risk; user verification responsibility; no liability for missed/incorrect/unexpected actions; not sole system for critical matters | COMPLETE 2026-04-06 |
 | **Fix** | Mobile nav invisible links — `backdrop-blur-md` on the `<header>` created a containing block that trapped the `fixed inset-0` mobile nav overlay inside the 64px header, clipping all links below the X button. Fix: only apply `backdrop-blur-md` when scrolled AND menu is closed (`scrolled && !mobileMenuOpen`). When menu is open, header uses fully opaque `bg-bg-primary` (no /80 opacity) since the overlay covers everything. Full-screen overlay, opaque bg, increased tap targets, overflow-y-auto from previous fix all retained | COMPLETE 2026-04-06 |
+| **Analytics** | Added @vercel/analytics to root layout — privacy-friendly page view + web vital tracking via Vercel, no Google Analytics | COMPLETE 2026-04-06 |
 | **Phase 4** | Licence validation API (`/api/licence/validate` POST, `/api/licence/status` POST), types in `src/types/licence.ts`, in-memory rate limiter (30/min/IP), device registration + revalidation, seat enforcement, licence event logging | COMPLETE 2026-04-06 |
 | **Phase 3** | Founder slot tracking (100 cap) | NOT STARTED |
 | **Phase 3** | Account dashboard: plan + supporter + founder display | NOT STARTED |
