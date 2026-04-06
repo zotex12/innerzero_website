@@ -1,13 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { NAV_LINKS } from "@/lib/constants";
 import { Button } from "@/components/ui/Button";
 
-export function MobileNav() {
-  const [open, setOpen] = useState(false);
+interface MobileNavProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function MobileNav({ open, onOpenChange: setOpen }: MobileNavProps) {
 
   useEffect(() => {
     if (open) {

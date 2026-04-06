@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     function onScroll() {
@@ -21,11 +22,14 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Header gets solid background when scrolled OR when mobile menu is open
+  const solidBg = scrolled || mobileMenuOpen;
+
   return (
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-30 h-16 transition-colors duration-200",
-        scrolled
+        solidBg
           ? "bg-bg-primary/80 backdrop-blur-md border-b border-border-default"
           : "bg-transparent"
       )}
@@ -49,7 +53,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <HeaderAuth />
-          <MobileNav />
+          <MobileNav open={mobileMenuOpen} onOpenChange={setMobileMenuOpen} />
         </div>
       </div>
     </header>
