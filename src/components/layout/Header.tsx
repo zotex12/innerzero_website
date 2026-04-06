@@ -29,9 +29,15 @@ export function Header() {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-30 h-16 transition-colors duration-200",
-        solidBg
-          ? "bg-bg-primary/80 backdrop-blur-md border-b border-border-default"
-          : "bg-transparent"
+        mobileMenuOpen
+          ? "bg-bg-primary border-b border-border-default"
+          : solidBg
+            ? "bg-bg-primary/80 border-b border-border-default"
+            : "bg-transparent",
+        // backdrop-blur creates a containing block that traps fixed-position
+        // children (the mobile nav overlay) inside the 64px header. Only apply
+        // blur when scrolled and menu is closed.
+        scrolled && !mobileMenuOpen && "backdrop-blur-md"
       )}
     >
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
