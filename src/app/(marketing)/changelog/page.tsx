@@ -5,28 +5,176 @@ import { createMetadata } from "@/lib/metadata";
 export const metadata: Metadata = createMetadata({
   title: "Changelog",
   description:
-    "InnerZero changelog: release notes, new features, improvements, and bug fixes for every version.",
+    "Release notes and updates for InnerZero. See what's new in each version of your private AI assistant.",
   openGraph: {
     title: "Changelog | InnerZero",
-    description: "Release notes and updates for InnerZero.",
+    description:
+      "Release notes and updates for InnerZero.",
     url: "https://innerzero.com/changelog",
   },
 });
 
+interface ChangeEntry {
+  text: string;
+}
+
+interface ChangeGroup {
+  label: "New" | "Improved" | "Fixed";
+  entries: ChangeEntry[];
+}
+
+interface Release {
+  version: string;
+  date: string;
+  latest?: boolean;
+  groups: ChangeGroup[];
+}
+
+const RELEASES: Release[] = [
+  {
+    version: "0.1.1",
+    date: "April 2026",
+    latest: true,
+    groups: [
+      {
+        label: "New",
+        entries: [
+          { text: "Remote Ollama support: connect to Ollama running on another machine on your network" },
+          { text: "Unrestricted Mode with full age verification and consent flow" },
+          { text: "Automated memory backup system (weekly, up to 10 backups)" },
+          { text: "Version update gate: older installs prompted to update on launch" },
+          { text: "Business licence validation for commercial users" },
+          { text: "Star ratings on AI responses (1-5 stars, replaces thumbs up/down)" },
+          { text: "Custom alarm sounds: pick your own audio file for alarms" },
+          { text: "Memory import: paste text or upload files to teach Zero new facts" },
+        ],
+      },
+      {
+        label: "Improved",
+        entries: [
+          { text: "Clock system redesigned: preset timer pills, phone-style AM/PM alarm picker" },
+          { text: "Settings reorganised from 11 tabs to 9 (cleaner, less overwhelming)" },
+          { text: "Memory page replaced by Settings Memory tab (Core Facts, Recent Memories, Archive)" },
+          { text: "Sleep progress estimates are more accurate and never increase during a run" },
+          { text: "Auto-sleep with configurable idle timer (15-60 minutes)" },
+          { text: "Wake buttons in chat and status bar during sleep" },
+        ],
+      },
+      {
+        label: "Fixed",
+        entries: [
+          { text: "Dictionary Unicode crash on Windows (IPA phonetic symbols)" },
+          { text: "Weather API updated (Open-Meteo deprecated old endpoint)" },
+          { text: "Voice name confusion (reordered confidence checks)" },
+          { text: "Voice math shortcuts (\"seven times seven\" now uses calculator, not the AI model)" },
+        ],
+      },
+    ],
+  },
+  {
+    version: "0.1.0",
+    date: "April 2026",
+    groups: [
+      {
+        label: "New",
+        entries: [
+          { text: "First public release of InnerZero" },
+          { text: "AI chat with streaming responses and cancel support" },
+          { text: "Full voice mode: speech recognition, natural TTS, voice shortcuts" },
+          { text: "30+ built-in tools (web search, calculator, timers, notes, file operations, and more)" },
+          { text: "Persistent memory system with local storage" },
+          { text: "Sleep/reflection pipeline for overnight memory processing" },
+          { text: "Knowledge packs (offline Wikipedia)" },
+          { text: "5 themes (Dark Zero, Light Zero, Classic Carbon, Soft Pink, Dark Teal)" },
+          { text: "Cloud mode with BYO API keys (DeepSeek, OpenAI, Anthropic, Google AI, Qwen)" },
+          { text: "Cloud voice (OpenAI Audio with 13 ChatGPT voices)" },
+          { text: "AI personality system (Professional, Friendly, Concise, or custom)" },
+          { text: "Screen automation (read screen, click, type, scroll other apps)" },
+          { text: "Document upload and Q&A (.txt, .md, .pdf, .docx, .xlsx, .csv)" },
+          { text: "Project system for organising work and scoping memory" },
+          { text: "Hardware auto-detection and model selection" },
+          { text: "Setup wizard with guided first-run experience" },
+          { text: "Chat session persistence across restarts" },
+        ],
+      },
+    ],
+  },
+];
+
+const BADGE_COLORS: Record<string, string> = {
+  New: "bg-accent-teal-muted text-accent-teal",
+  Improved: "bg-accent-gold-muted text-accent-gold",
+  Fixed: "bg-[rgba(34,197,94,0.12)] text-success",
+};
+
 export default function ChangelogPage() {
   return (
-    <div className="flex min-h-[60vh] items-center pt-16">
+    <div className="pt-28 pb-12 md:pt-36 md:pb-20">
       <Container>
-        <div className="mx-auto max-w-xl text-center">
-          <h1 className="text-3xl font-bold text-text-primary md:text-[2.5rem] md:leading-[1.2]">
-            Changelog
-          </h1>
-          <p className="mt-4 text-lg text-text-secondary">
-            Check back for release notes. We&apos;ll document every update, new feature, and improvement here.
-          </p>
-          <p className="mt-6 text-sm text-text-muted">
-            InnerZero is currently in development.
-          </p>
+        <div className="mx-auto max-w-3xl">
+          {/* Hero */}
+          <div className="mb-12 md:mb-16">
+            <h1 className="text-3xl font-bold text-text-primary md:text-[2.5rem] md:leading-[1.2]">
+              Changelog
+            </h1>
+            <p className="mt-3 text-lg text-text-secondary">
+              What&apos;s new in InnerZero.
+            </p>
+          </div>
+
+          {/* Releases */}
+          <div className="space-y-16">
+            {RELEASES.map((release) => (
+              <section key={release.version}>
+                {/* Version header */}
+                <div className="flex items-center gap-3 mb-6">
+                  <span
+                    className={`rounded-full px-3.5 py-1 text-sm font-semibold ${
+                      release.latest
+                        ? "bg-accent-gold text-[#111]"
+                        : "border border-border-default text-text-secondary"
+                    }`}
+                  >
+                    v{release.version}
+                  </span>
+                  <span className="text-sm text-text-muted">
+                    {release.date}
+                  </span>
+                  {release.latest && (
+                    <span className="text-xs font-medium text-accent-gold">
+                      Latest
+                    </span>
+                  )}
+                </div>
+
+                {/* Change groups */}
+                <div className="space-y-6 pl-1">
+                  {release.groups.map((group) => (
+                    <div key={group.label}>
+                      <span
+                        className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold mb-3 ${
+                          BADGE_COLORS[group.label] || ""
+                        }`}
+                      >
+                        {group.label}
+                      </span>
+                      <ul className="space-y-2">
+                        {group.entries.map((entry, i) => (
+                          <li
+                            key={i}
+                            className="flex items-start gap-2 text-sm text-text-secondary"
+                          >
+                            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-border-default" />
+                            {entry.text}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
         </div>
       </Container>
     </div>
