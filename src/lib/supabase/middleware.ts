@@ -25,7 +25,7 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // Refresh the auth token — important to call getUser()
+  // Refresh the auth token - important to call getUser()
   await supabase.auth.getUser();
 
   return supabaseResponse;

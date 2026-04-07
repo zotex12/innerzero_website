@@ -11,7 +11,7 @@ export const metadata: Metadata = createMetadata({
   description:
     "Explore InnerZero features: free local AI, private memory, voice interaction, document knowledge, smart tools, BYO API keys, and hardware-aware setup.",
   openGraph: {
-    title: "Features | InnerZero — Free Private AI Assistant",
+    title: "Features | InnerZero. Free Private AI Assistant",
     description:
       "Explore InnerZero features: free local AI, private memory, voice interaction, and more.",
     url: "https://innerzero.com/features",
@@ -28,7 +28,7 @@ export default function FeaturesPage() {
               Everything you need. Nothing you don&apos;t.
             </h1>
             <p className="mt-4 text-lg text-text-secondary">
-              InnerZero is packed with features that put your privacy first — all running locally on your machine. Free forever.
+              InnerZero is packed with features that put your privacy first, all running locally on your machine. Free forever.
             </p>
           </div>
         </Container>

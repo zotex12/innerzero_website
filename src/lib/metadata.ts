@@ -5,8 +5,8 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://innerzero.com";
 export const DEFAULT_METADATA: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "InnerZero — Private AI Assistant That Runs on Your PC",
-    template: "%s | InnerZero — Private AI Assistant",
+    default: "InnerZero: Private AI Assistant That Runs on Your PC",
+    template: "%s | InnerZero: Private AI Assistant",
   },
   description:
     "InnerZero is a free private AI assistant that runs entirely on your PC. No cloud. No tracking. Your AI, your machine, your data.",
@@ -15,7 +15,7 @@ export const DEFAULT_METADATA: Metadata = {
     locale: "en_GB",
     url: SITE_URL,
     siteName: "InnerZero",
-    title: "InnerZero — Private AI Assistant That Runs on Your PC",
+    title: "InnerZero: Private AI Assistant That Runs on Your PC",
     description:
       "InnerZero is a private AI assistant that runs entirely on your PC. No cloud. No tracking. Your AI, your machine, your data.",
     images: [
@@ -23,13 +23,13 @@ export const DEFAULT_METADATA: Metadata = {
         url: "/og-default.png",
         width: 1200,
         height: 630,
-        alt: "InnerZero — Private AI Assistant",
+        alt: "InnerZero: Private AI Assistant",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "InnerZero — Private AI Assistant That Runs on Your PC",
+    title: "InnerZero: Private AI Assistant That Runs on Your PC",
     description:
       "InnerZero is a private AI assistant that runs entirely on your PC. No cloud. No tracking. Your AI, your machine, your data.",
     images: ["/og-default.png"],

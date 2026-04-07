@@ -6,11 +6,11 @@ import { createMetadata } from "@/lib/metadata";
 export const metadata: Metadata = createMetadata({
   title: "Join the Waitlist",
   description:
-    "Be the first to experience InnerZero — a private AI assistant that runs entirely on your PC. Join the waitlist for early access.",
+    "Be the first to experience InnerZero, a private AI assistant that runs entirely on your PC. Join the waitlist for early access.",
   openGraph: {
     title: "Join the Waitlist | InnerZero",
     description:
-      "Be the first to experience InnerZero — a private AI assistant that runs on your PC.",
+      "Be the first to experience InnerZero, a private AI assistant that runs on your PC.",
     url: "https://innerzero.com/waitlist",
   },
 });

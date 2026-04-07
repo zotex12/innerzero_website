@@ -6,11 +6,11 @@ import Link from "next/link";
 import { BlogGrid } from "./BlogGrid";
 
 export const metadata: Metadata = createMetadata({
-  title: "Learn | InnerZero — Private AI Guides & Updates",
+  title: "Learn | InnerZero: Private AI Guides & Updates",
   description:
     "Guides, tutorials, and updates on running AI privately on your PC. Learn about local AI models, memory systems, voice assistants, and more.",
   openGraph: {
-    title: "Learn | InnerZero — Private AI Guides & Updates",
+    title: "Learn | InnerZero: Private AI Guides & Updates",
     description:
       "Guides, tutorials, and updates on running AI privately on your PC.",
     url: "https://innerzero.com/blog",

@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "./types";
 
-// Admin client bypasses RLS — use only in server-side API routes.
+// Admin client bypasses RLS - use only in server-side API routes.
 // NEVER import this file from client components.
 export function createAdminClient() {
   return createClient<Database>(

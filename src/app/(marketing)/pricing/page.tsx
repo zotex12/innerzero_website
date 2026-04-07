@@ -4,11 +4,11 @@ import { createMetadata } from "@/lib/metadata";
 import { FAQ_DATA } from "@/lib/constants";
 
 export const metadata: Metadata = createMetadata({
-  title: "Pricing | InnerZero — Free Private AI Assistant",
+  title: "Pricing | InnerZero. Free Private AI Assistant",
   description:
     "InnerZero is free forever. Run a private AI assistant on your PC with no subscription required. Optional cloud AI plans and supporter tiers available.",
   openGraph: {
-    title: "Pricing | InnerZero — Free Private AI Assistant",
+    title: "Pricing | InnerZero. Free Private AI Assistant",
     description:
       "InnerZero is free forever. Run a private AI assistant on your PC with no subscription required.",
     url: "https://innerzero.com/pricing",
@@ -24,7 +24,7 @@ export default function PricingPage() {
             Free forever. Optional extras when you want them.
           </h1>
           <p className="mt-4 text-lg text-text-secondary">
-            InnerZero is a complete AI assistant that runs on your PC — no subscription required.
+            InnerZero is a complete AI assistant that runs on your PC, no subscription required.
           </p>
         </div>
       </section>

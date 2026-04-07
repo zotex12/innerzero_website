@@ -50,7 +50,7 @@ function FAQAccordionItem({ item }: { item: FAQItem }) {
 export function PricingSection({ className }: PricingSectionProps) {
   return (
     <div className={cn("", className)}>
-      {/* Section A — Free Local */}
+      {/* Section A: Free Local */}
       <section className="py-12 md:py-20">
         <Container>
           <ScrollReveal>
@@ -97,7 +97,7 @@ export function PricingSection({ className }: PricingSectionProps) {
         </Container>
       </section>
 
-      {/* Section B — Cloud AI Boost (Coming Soon) */}
+      {/* Section B: Cloud AI Boost (Coming Soon) */}
       <section className="bg-bg-secondary py-12 md:py-20">
         <Container>
           <ScrollReveal>
@@ -106,10 +106,10 @@ export function PricingSection({ className }: PricingSectionProps) {
                 Want faster reasoning? Premium models? Zero hassle.
               </h2>
               <p className="mt-4 text-text-secondary">
-                Optional cloud plans are coming that give access to models like Claude, GPT, and DeepSeek through InnerZero — with simple monthly credit allowances like a phone plan.
+                Optional cloud plans are coming that give access to models like Claude, GPT, and DeepSeek through InnerZero, with simple monthly credit allowances like a phone plan.
               </p>
               <p className="mt-3 text-sm text-accent-teal">
-                Power users can already add their own API keys for free with zero markup — BYO API keys work today.
+                Power users can already add their own API keys for free with zero markup. BYO API keys work today.
               </p>
             </div>
 
@@ -155,7 +155,7 @@ export function PricingSection({ className }: PricingSectionProps) {
         </Container>
       </section>
 
-      {/* Section C — Support InnerZero */}
+      {/* Section C: Support InnerZero */}
       <section className="py-12 md:py-20">
         <Container>
           <ScrollReveal>
@@ -203,7 +203,7 @@ export function PricingSection({ className }: PricingSectionProps) {
                   </h3>
                 </div>
                 <p className="text-sm text-text-secondary mb-6 mt-3">
-                  Buy us a coffee. Any amount helps fund development and keeps InnerZero free for everyone.
+                  Buy us a coffee! Any amount helps fund development and keeps InnerZero free for everyone.
                 </p>
                 <a
                   href="https://ko-fi.com/innerzero"
@@ -232,7 +232,7 @@ export function PricingSection({ className }: PricingSectionProps) {
         </Container>
       </section>
 
-      {/* Section D — Business Licence */}
+      {/* Section D: Business Licence */}
       <section className="bg-bg-secondary py-12 md:py-20">
         <Container>
           <ScrollReveal>

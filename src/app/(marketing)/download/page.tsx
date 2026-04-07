@@ -7,11 +7,11 @@ import { SYSTEM_REQUIREMENTS } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
-  title: "Download Free | InnerZero — Private AI Assistant",
+  title: "Download Free | InnerZero. Private AI Assistant",
   description:
     "Download InnerZero for free. A private AI assistant that runs on your PC with no subscription, no account, and no cloud required.",
   openGraph: {
-    title: "Download Free | InnerZero — Private AI Assistant",
+    title: "Download Free | InnerZero. Private AI Assistant",
     description:
       "Download InnerZero for free. A private AI assistant that runs on your PC.",
     url: "https://innerzero.com/download",

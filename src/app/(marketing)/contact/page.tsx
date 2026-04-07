@@ -6,9 +6,9 @@ import { createMetadata } from "@/lib/metadata";
 export const metadata: Metadata = createMetadata({
   title: "Contact",
   description:
-    "Get in touch with the InnerZero team. Questions, feedback, or support — we aim to respond within 48 hours.",
+    "Get in touch with the InnerZero team. Questions, feedback, or support. We aim to respond within 48 hours.",
   openGraph: {
-    title: "Contact | InnerZero — Private AI Assistant",
+    title: "Contact | InnerZero. Private AI Assistant",
     description: "Get in touch with the InnerZero team.",
     url: "https://innerzero.com/contact",
   },

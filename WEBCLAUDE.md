@@ -273,22 +273,22 @@ innerzero_website/
 
 | Route | Page | SEO title | Status |
 |-------|------|-----------|--------|
-| `/` | Home | InnerZero — Free Private AI Assistant That Runs on Your PC | NEEDS UPDATE |
-| `/features` | Features | Features \| InnerZero — Private AI Assistant | COMPLETE |
-| `/pricing` | Pricing | Pricing \| InnerZero — Free AI, Optional Cloud | NEEDS REWRITE |
-| `/privacy` | Privacy | Privacy \| InnerZero — Private AI Assistant | NEEDS UPDATE |
-| `/about` | About | About \| InnerZero — Private AI Assistant | COMPLETE |
-| `/contact` | Contact | Contact \| InnerZero — Private AI Assistant | COMPLETE |
+| `/` | Home | InnerZero: Private AI Assistant That Runs on Your PC | COMPLETE |
+| `/features` | Features | Features \| InnerZero: Private AI Assistant | COMPLETE |
+| `/pricing` | Pricing | Pricing \| InnerZero: Free AI, Optional Cloud | COMPLETE |
+| `/privacy` | Privacy | Privacy \| InnerZero: Private AI Assistant | COMPLETE |
+| `/about` | About | About \| InnerZero: Private AI Assistant | COMPLETE |
+| `/contact` | Contact | Contact \| InnerZero: Private AI Assistant | COMPLETE |
 | `/waitlist` | Waitlist | Join the Waitlist \| InnerZero | COMPLETE |
-| `/download` | Download | Download Free \| InnerZero | NEEDS UPDATE |
-| `/blog` | Blog | Blog \| InnerZero | COMPLETE |
+| `/download` | Download | Download Free \| InnerZero | COMPLETE |
+| `/blog` | Learn | Learn \| InnerZero: Private AI Guides & Updates | COMPLETE |
 | `/changelog` | Changelog | Changelog \| InnerZero | COMPLETE |
-| `/terms` | Terms | Terms of Service \| InnerZero | NEEDS UPDATE |
+| `/terms` | Terms | Terms of Service \| InnerZero | COMPLETE |
 | `/login` | Login | Log In \| InnerZero | COMPLETE |
 | `/register` | Register | Sign Up \| InnerZero | COMPLETE |
 | `/forgot-password` | Password Reset | Reset Password \| InnerZero | COMPLETE |
 | `/reset-password` | New Password | Set New Password \| InnerZero | COMPLETE |
-| `/account` | Dashboard | Account \| InnerZero | NEEDS UPDATE |
+| `/account` | Dashboard | Account \| InnerZero | COMPLETE |
 | `/account/settings` | Settings | Settings \| InnerZero | COMPLETE |
 | `/account/billing` | Billing | Billing \| InnerZero | NOT STARTED (Phase 3) |
 | `/account/usage` | Usage | Usage \| InnerZero | NOT STARTED (Phase 3b) |
@@ -735,6 +735,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Terms** | Section 6 (AI Output Disclaimer): added scheduled actions clause — covers AI-interpreted timers, alarms, reminders, countdowns; misinterpretation risk; user verification responsibility; no liability for missed/incorrect/unexpected actions; not sole system for critical matters | COMPLETE 2026-04-06 |
 | **Fix** | Mobile nav invisible links — `backdrop-blur-md` on the `<header>` created a containing block that trapped the `fixed inset-0` mobile nav overlay inside the 64px header, clipping all links below the X button. Fix: only apply `backdrop-blur-md` when scrolled AND menu is closed (`scrolled && !mobileMenuOpen`). When menu is open, header uses fully opaque `bg-bg-primary` (no /80 opacity) since the overlay covers everything. Full-screen overlay, opaque bg, increased tap targets, overflow-y-auto from previous fix all retained | COMPLETE 2026-04-06 |
 | **Analytics** | Added @vercel/analytics to root layout — privacy-friendly page view + web vital tracking via Vercel, no Google Analytics | COMPLETE 2026-04-06 |
+| **Cleanup** | Removed all 86 em dashes across 27 files site-wide (constants.ts, all page files, blog posts, metadata, privacy, terms, pricing section, comments). Replaced with colons, commas, semicolons, or restructured sentences as appropriate. Blog post titles with em dash separators changed to colons. Legal text in terms/privacy carefully preserved with commas and semicolons. Metadata titles use colons. Favicon: verified proper ICO container (16x16 + 32x32), added cache-busting `?v=2` to favicon.ico reference in layout.tsx. Route map statuses updated: Home, Pricing, Privacy, Download, Terms, Account all marked COMPLETE. Blog renamed to Learn in route map. | COMPLETE 2026-04-09 |
 | **Blog/Learn** | Complete blog system. Nav "Blog" renamed to "Learn" (URL stays /blog). MDX blog with gray-matter + next-mdx-remote. `src/lib/blog.ts` (getAllPosts, getPostBySlug, getRelatedPosts, getAllTags). Index: featured card, tag filter bar, 2-col grid. Post page: MDX prose, related posts, CTA, BlogPosting JSON-LD, SSG, canonical URLs. **20 articles total.** Batch 1 (Apr 7): launch announcement (featured), local AI explainer, setup guide, memory benefits, voice mode, ChatGPT comparison. Batch 2 (Apr 8): hardware guide, models explainer, 5 things to do, privacy deep dive, remote Ollama guide, origin story. Batch 3 (Apr 9): offline AI guide, best free AI Windows 2026, AI without subscription, open-source models explained, local vs cloud AI, knowledge packs explained, unrestricted mode explained, customise InnerZero. Prose CSS in globals.css. Sitemap picks up all 21 pages. | COMPLETE 2026-04-09 |
 | **Phase 4** | Licence validation API (`/api/licence/validate` POST, `/api/licence/status` POST), types in `src/types/licence.ts`, in-memory rate limiter (30/min/IP), device registration + revalidation, seat enforcement, licence event logging | COMPLETE 2026-04-06 |
 | **Phase 3** | Founder slot tracking (100 cap) | NOT STARTED |

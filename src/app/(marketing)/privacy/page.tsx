@@ -8,7 +8,7 @@ export const metadata: Metadata = createMetadata({
   description:
     "InnerZero privacy: all AI runs locally on your PC. No cloud processing, no data uploads, no tracking. Read our full privacy policy.",
   openGraph: {
-    title: "Privacy | InnerZero — Private AI Assistant",
+    title: "Privacy | InnerZero. Private AI Assistant",
     description:
       "All AI runs locally on your PC. No cloud processing, no data uploads.",
     url: "https://innerzero.com/privacy",
@@ -41,7 +41,7 @@ export default function PrivacyPage() {
                 </li>
                 <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
                   <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
-                  Memory and conversations are stored locally — never uploaded
+                  Memory and conversations are stored locally, never uploaded
                 </li>
                 <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
                   <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
@@ -49,11 +49,11 @@ export default function PrivacyPage() {
                 </li>
                 <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
                   <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
-                  If you enable optional cloud mode, your prompts are sent to the AI provider (e.g. DeepSeek, Anthropic, OpenAI) and returned — InnerZero never stores or logs them
+                  If you enable optional cloud mode, your prompts are sent to the AI provider (e.g. DeepSeek, Anthropic, OpenAI) and returned. InnerZero never stores or logs them
                 </li>
                 <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
                   <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
-                  If you use BYO API keys, requests go directly to the provider — InnerZero is not involved at all
+                  If you use BYO API keys, requests go directly to the provider. InnerZero is not involved at all
                 </li>
                 <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
                   <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
@@ -100,7 +100,7 @@ export default function PrivacyPage() {
                     3. Cloud Mode
                   </h3>
                   <p>
-                    If you enable the optional Cloud Mode, your prompts are sent to the third-party AI provider you select (such as DeepSeek, OpenAI, Anthropic, Google AI, or Qwen/DashScope) and responses are returned to your device. InnerZero does not store, log, intercept, or read your prompts or responses at any point. Each AI provider has its own privacy policy governing how they handle your data — you should review the relevant provider&apos;s privacy policy before enabling Cloud Mode.
+                    If you enable the optional Cloud Mode, your prompts are sent to the third-party AI provider you select (such as DeepSeek, OpenAI, Anthropic, Google AI, or Qwen/DashScope) and responses are returned to your device. InnerZero does not store, log, intercept, or read your prompts or responses at any point. Each AI provider has its own privacy policy governing how they handle your data; you should review the relevant provider&apos;s privacy policy before enabling Cloud Mode.
                   </p>
                 </div>
 
@@ -127,7 +127,7 @@ export default function PrivacyPage() {
                     6. Voice and Microphone
                   </h3>
                   <p>
-                    If you use InnerZero&apos;s voice features, the application accesses your microphone to capture speech for local speech-to-text processing. All audio is processed locally on your device using offline speech recognition models. No audio recordings are transmitted, stored, or sent to any server. Audio data is processed in real-time and discarded immediately after transcription. If Cloud Voice mode is enabled, your transcribed text (not audio) is sent to OpenAI for response generation — see Section 3 (Cloud Mode) for details.
+                    If you use InnerZero&apos;s voice features, the application accesses your microphone to capture speech for local speech-to-text processing. All audio is processed locally on your device using offline speech recognition models. No audio recordings are transmitted, stored, or sent to any server. Audio data is processed in real-time and discarded immediately after transcription. If Cloud Voice mode is enabled, your transcribed text (not audio) is sent to OpenAI for response generation; see Section 3 (Cloud Mode) for details.
                   </p>
                 </div>
 
@@ -136,7 +136,7 @@ export default function PrivacyPage() {
                     7. What Data the Website Collects
                   </h3>
                   <p>
-                    When you create an account on innerzero.com, we collect your email address. If you join our waitlist, we store your email address. Payment information for supporter memberships and donations is processed by Ko-fi and PayPal — we do not receive or store your payment card details. If future cloud plans are offered via Stripe, Stripe will process payments — we will never store card details directly.
+                    When you create an account on innerzero.com, we collect your email address. If you join our waitlist, we store your email address. Payment information for supporter memberships and donations is processed by Ko-fi and PayPal; we do not receive or store your payment card details. If future cloud plans are offered via Stripe, Stripe will process payments; we will never store card details directly.
                   </p>
                 </div>
 
@@ -157,10 +157,10 @@ export default function PrivacyPage() {
                     We use the following third-party services:
                   </p>
                   <ul className="mt-2 list-disc pl-6 space-y-1">
-                    <li>Supabase — authentication and database hosting (EU region)</li>
-                    <li>Vercel — website hosting and deployment</li>
-                    <li>Ko-fi and PayPal — supporter membership and donation payment processing</li>
-                    <li>Formspree — contact form submissions</li>
+                    <li>Supabase: authentication and database hosting (EU region)</li>
+                    <li>Vercel: website hosting and deployment</li>
+                    <li>Ko-fi and PayPal: supporter membership and donation payment processing</li>
+                    <li>Formspree: contact form submissions</li>
                   </ul>
                   <p className="mt-2">
                     We will add Stripe to this list if and when cloud AI plans launch.

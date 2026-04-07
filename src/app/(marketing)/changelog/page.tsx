@@ -5,7 +5,7 @@ import { createMetadata } from "@/lib/metadata";
 export const metadata: Metadata = createMetadata({
   title: "Changelog",
   description:
-    "InnerZero changelog — release notes, new features, improvements, and bug fixes for every version.",
+    "InnerZero changelog: release notes, new features, improvements, and bug fixes for every version.",
   openGraph: {
     title: "Changelog | InnerZero",
     description: "Release notes and updates for InnerZero.",

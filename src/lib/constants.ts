@@ -70,7 +70,7 @@ export const FEATURE_CARDS: FeatureCardData[] = [
     icon: Mic,
     title: "Voice + Text",
     description:
-      "Talk to Zero or type — your choice. Full voice interaction with speech recognition and natural responses.",
+      "Talk to Zero or type, your choice. Full voice interaction with speech recognition and natural responses.",
   },
   {
     icon: MonitorCog,
@@ -93,7 +93,7 @@ export const HOW_IT_WORKS: HowItWorksStep[] = [
     number: 1,
     title: "Download Free",
     description:
-      "One click. InnerZero handles everything — dependencies, models, configuration. Free, no account required.",
+      "One click. InnerZero handles everything: dependencies, models, configuration. Free, no account required.",
   },
   {
     number: 2,
@@ -115,9 +115,9 @@ export const PRIVACY_STATEMENT = {
   headline: "Zero data leaves your machine.",
   points: [
     "All AI processing happens on your hardware",
-    "Memory stored in a local database — never uploaded",
-    "No account required — no sign-up, no login, no tracking",
-    "Optional cloud mode is your choice — off by default, transparent when on",
+    "Memory stored in a local database, never uploaded",
+    "No account required. No sign-up, no login, no tracking",
+    "Optional cloud mode is your choice, off by default, transparent when on",
   ],
 } as const;
 
@@ -190,7 +190,7 @@ export const BUSINESS_LICENCE = {
   period: "/year",
   perSeat: "per seat",
   description:
-    "Commercial use licence for InnerZero. Use it at work, in your business, or for any revenue-generating activity. Same free app — just the legal right to use it commercially.",
+    "Commercial use licence for InnerZero. Use it at work, in your business, or for any revenue-generating activity. Same free app, just the legal right to use it commercially.",
   features: [
     "Full InnerZero desktop app",
     "All local AI features",
@@ -224,7 +224,7 @@ export const FAQ_DATA: FAQItem[] = [
   {
     question: "Can I use my own API keys?",
     answer:
-      "Yes. Add your own API keys from any supported provider — DeepSeek, OpenAI, Anthropic, and more. Zero markup. We never touch your keys.",
+      "Yes. Add your own API keys from any supported provider: DeepSeek, OpenAI, Anthropic, and more. Zero markup. We never touch your keys.",
   },
   {
     question: "What does the Supporter tier include?",
@@ -234,7 +234,7 @@ export const FAQ_DATA: FAQItem[] = [
   {
     question: "Is my data private?",
     answer:
-      "Yes. All AI processing, memory, and conversations stay on your machine. If you enable cloud mode, your prompts are forwarded to the AI provider and returned — InnerZero never stores or reads them.",
+      "Yes. All AI processing, memory, and conversations stay on your machine. If you enable cloud mode, your prompts are forwarded to the AI provider and returned. InnerZero never stores or reads them.",
   },
   {
     question: "Do I need an account?",
@@ -249,11 +249,11 @@ export const FAQ_DATA: FAQItem[] = [
   {
     question: "Do I need a licence to use InnerZero at work?",
     answer:
-      "If you're using InnerZero for business, commercial, or revenue-generating purposes, yes — a Business Licence is required. It's £50/year per seat. The app is identical to the free version — the licence is just permission to use it commercially. Personal use, education, and non-profits are free.",
+      "If you're using InnerZero for business, commercial, or revenue-generating purposes, yes, a Business Licence is required. It's £50/year per seat. The app is identical to the free version. The licence is just permission to use it commercially. Personal use, education, and non-profits are free.",
   },
 ];
 
-/* ── Features page — detailed features ── */
+/* ── Features page - detailed features ── */
 
 export interface DetailedFeature {
   icon: LucideIcon;
@@ -272,13 +272,13 @@ export const DETAILED_FEATURES: DetailedFeature[] = [
     icon: Brain,
     title: "Private Memory System",
     description:
-      "InnerZero remembers your conversations, preferences, and facts — all stored locally in a secure database on your machine. Over time, Zero learns what matters to you and becomes more helpful. Your memory is yours alone.",
+      "InnerZero remembers your conversations, preferences, and facts, all stored locally in a secure database on your machine. Over time, Zero learns what matters to you and becomes more helpful. Your memory is yours alone.",
   },
   {
     icon: Mic,
     title: "Voice Interaction",
     description:
-      "Speak to Zero and hear responses back. Full speech-to-text and text-to-speech built in. No cloud transcription services — everything is processed locally on your hardware for complete privacy.",
+      "Speak to Zero and hear responses back. Full speech-to-text and text-to-speech built in. No cloud transcription services, everything is processed locally on your hardware for complete privacy.",
   },
   {
     icon: HardDrive,
@@ -290,7 +290,7 @@ export const DETAILED_FEATURES: DetailedFeature[] = [
     icon: Wrench,
     title: "Smart Tools",
     description:
-      "Web search, file management, calculations, URL fetching — Zero comes with built-in tools that extend what it can do. Tools are run locally and results are processed on your machine.",
+      "Web search, file management, calculations, URL fetching and more. Zero comes with built-in tools that extend what it can do. Tools are run locally and results are processed on your machine.",
   },
   {
     icon: MonitorCog,
@@ -308,7 +308,7 @@ export const DETAILED_FEATURES: DetailedFeature[] = [
     icon: Download,
     title: "One-Click Install",
     description:
-      "Download, run the setup wizard, and start chatting. InnerZero handles all the technical complexity — downloading AI models, configuring your system, and setting up dependencies. No terminal required.",
+      "Download, run the setup wizard, and start chatting. InnerZero handles all the technical complexity: downloading AI models, configuring your system, and setting up dependencies. No terminal required.",
   },
   {
     icon: Gift,
@@ -320,7 +320,7 @@ export const DETAILED_FEATURES: DetailedFeature[] = [
     icon: Key,
     title: "BYO API Keys",
     description:
-      "Bring your own API keys from any supported provider — DeepSeek, OpenAI, Anthropic, and more. Zero markup. Full control. Your keys, your usage, no middleman.",
+      "Bring your own API keys from any supported provider: DeepSeek, OpenAI, Anthropic, and more. Zero markup. Full control. Your keys, your usage, no middleman.",
   },
 ];
 
@@ -424,6 +424,6 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
 export const NOT_FOUND = {
   headline: "Looks like you've gone off the grid.",
   description:
-    "The page you're looking for doesn't exist. But don't worry — your data is still safe on your machine.",
+    "The page you're looking for doesn't exist. But don't worry, your data is still safe on your machine.",
   cta: "Back to Home",
 } as const;

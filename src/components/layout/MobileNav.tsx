@@ -34,7 +34,7 @@ export function MobileNav({ open, onOpenChange: setOpen }: MobileNavProps) {
         <Menu className="h-5 w-5" />
       </button>
 
-      {/* Full-screen opaque overlay — no page content visible behind menu */}
+      {/* Full-screen opaque overlay - no page content visible behind menu */}
       <nav
         className={`mobile-nav-enter fixed inset-0 z-50 bg-bg-primary overflow-y-auto ${open ? "open" : ""}`}
         aria-label="Mobile navigation"

@@ -9,7 +9,7 @@ export const metadata: Metadata = createMetadata({
   description:
     "About InnerZero: a private AI assistant built by Summers Solutions. Our mission is AI that is personal and private.",
   openGraph: {
-    title: "About | InnerZero — Private AI Assistant",
+    title: "About | InnerZero. Private AI Assistant",
     description:
       "About InnerZero: a private AI assistant built by Summers Solutions.",
     url: "https://innerzero.com/about",
@@ -32,7 +32,7 @@ export default function AboutPage() {
                   What InnerZero Is
                 </h2>
                 <p>
-                  InnerZero is a private AI assistant that runs entirely on your PC. It uses open-source AI models running locally on your hardware — no cloud, no servers, no data leaving your machine. You talk to it by text or voice, and it remembers your conversations, preferences, and facts in a personal memory system that only exists on your computer.
+                  InnerZero is a private AI assistant that runs entirely on your PC. It uses open-source AI models running locally on your hardware, with no cloud, no servers, no data leaving your machine. You talk to it by text or voice, and it remembers your conversations, preferences, and facts in a personal memory system that only exists on your computer.
                 </p>
                 <p>
                   It&apos;s designed for people who want the power of AI without giving up their privacy. InnerZero is the AI assistant that respects you.
@@ -46,10 +46,10 @@ export default function AboutPage() {
                   Why It Exists
                 </h2>
                 <p>
-                  Most AI assistants send everything you say to the cloud. Your questions, your documents, your personal context — all processed on someone else&apos;s servers, stored in someone else&apos;s database, used to train someone else&apos;s models.
+                  Most AI assistants send everything you say to the cloud. Your questions, your documents, your personal context, all processed on someone else&apos;s servers, stored in someone else&apos;s database, used to train someone else&apos;s models.
                 </p>
                 <p>
-                  We believe AI should be <strong className="text-text-primary">personal and private</strong>. Your AI assistant should work for you, on your machine, with your data staying exactly where it belongs — with you.
+                  We believe AI should be <strong className="text-text-primary">personal and private</strong>. Your AI assistant should work for you, on your machine, with your data staying exactly where it belongs. with you.
                 </p>
                 <p>
                   That&apos;s why we built InnerZero. An AI that runs locally, remembers locally, and never phones home.
@@ -75,7 +75,7 @@ export default function AboutPage() {
                   , a UK-based software company focused on building tools that respect user privacy and put people in control of their technology.
                 </p>
                 <p>
-                  InnerZero is our flagship product — the result of a deep belief that powerful AI and genuine privacy can coexist.
+                  InnerZero is our flagship product, the result of a deep belief that powerful AI and genuine privacy can coexist.
                 </p>
               </section>
             </ScrollReveal>

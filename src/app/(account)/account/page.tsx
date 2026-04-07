@@ -189,11 +189,11 @@ export default async function AccountPage() {
               <ManageBillingButton />
             ) : (
               <span className="text-sm text-text-muted">
-                Manage Billing — available after first purchase
+                Manage Billing: available after first purchase
               </span>
             )}
             <span className="text-sm text-text-muted">
-              Cloud AI Usage — coming soon
+              Cloud AI Usage: coming soon
             </span>
           </div>
         </section>
