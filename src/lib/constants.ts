@@ -29,7 +29,7 @@ export const NAV_LINKS: NavLink[] = [
   { label: "Pricing", href: "/pricing" },
   { label: "Privacy", href: "/privacy" },
   { label: "About", href: "/about" },
-  { label: "Blog", href: "/blog" },
+  { label: "Learn", href: "/blog" },
 ];
 
 /* ── Hero copy ── */
@@ -395,7 +395,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
     title: "Company",
     links: [
       { label: "About", href: "/about" },
-      { label: "Blog", href: "/blog" },
+      { label: "Learn", href: "/blog" },
       { label: "Contact", href: "/contact" },
       { label: "Waitlist", href: "/waitlist" },
     ],
