@@ -4,13 +4,13 @@ import { createMetadata } from "@/lib/metadata";
 import { FAQ_DATA } from "@/lib/constants";
 
 export const metadata: Metadata = createMetadata({
-  title: "Pricing | InnerZero. Free Private AI Assistant",
+  title: "Pricing | InnerZero: Free AI, Business Licence, Optional Cloud",
   description:
-    "InnerZero is free forever. Run a private AI assistant on your PC with no subscription required. Optional cloud AI plans and supporter tiers available.",
+    "InnerZero is free for personal use. Business licence £50/year. Optional cloud AI coming soon. Add your own API keys for free.",
   openGraph: {
-    title: "Pricing | InnerZero. Free Private AI Assistant",
+    title: "Pricing | InnerZero: Free AI, Business Licence, Optional Cloud",
     description:
-      "InnerZero is free forever. Run a private AI assistant on your PC with no subscription required.",
+      "InnerZero is free for personal use. Business licence £50/year. Optional cloud AI coming soon.",
     url: "https://innerzero.com/pricing",
   },
 });

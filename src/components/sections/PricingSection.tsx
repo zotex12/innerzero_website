@@ -97,19 +97,56 @@ export function PricingSection({ className }: PricingSectionProps) {
         </Container>
       </section>
 
-      {/* Section B: Cloud AI Boost (Coming Soon) */}
+      {/* Section B: Business Licence */}
       <section className="bg-bg-secondary py-12 md:py-20">
+        <Container>
+          <ScrollReveal>
+            <div className="mx-auto max-w-xl">
+              <div className="rounded-xl border-2 border-accent-gold bg-bg-card p-8 text-center shadow-[0_0_30px_rgba(212,168,67,0.08)]">
+                <h3 className="text-2xl font-bold text-text-primary">
+                  {BUSINESS_LICENCE.planName}
+                </h3>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold text-text-primary">
+                    {BUSINESS_LICENCE.price}
+                  </span>
+                  <span className="text-text-secondary">{BUSINESS_LICENCE.period} per user</span>
+                </div>
+                <p className="mt-4 text-sm text-text-secondary">
+                  Required for commercial use of InnerZero. One seat per user.
+                </p>
+                <ul className="mt-6 flex flex-col gap-3 text-left">
+                  <li className="flex items-center gap-3 text-sm text-text-secondary"><Check className="h-4 w-4 shrink-0 text-success" />Use InnerZero at work</li>
+                  <li className="flex items-center gap-3 text-sm text-text-secondary"><Check className="h-4 w-4 shrink-0 text-success" />Commercial projects and client work</li>
+                  <li className="flex items-center gap-3 text-sm text-text-secondary"><Check className="h-4 w-4 shrink-0 text-success" />Sole traders, freelancers, and companies</li>
+                  <li className="flex items-center gap-3 text-sm text-text-secondary"><Check className="h-4 w-4 shrink-0 text-success" />Annual licence, cancel anytime</li>
+                  <li className="flex items-center gap-3 text-sm text-text-secondary"><Check className="h-4 w-4 shrink-0 text-success" />Same free app, no extra features</li>
+                </ul>
+                <div className="mt-8">
+                  <BusinessLicenceButton />
+                </div>
+              </div>
+              <p className="mt-4 text-center text-sm text-text-muted">
+                Educational institutions, charities, and non-profits are exempt.
+              </p>
+            </div>
+          </ScrollReveal>
+        </Container>
+      </section>
+
+      {/* Section C: Cloud AI Boost (Coming Soon) */}
+      <section className="py-12 md:py-20">
         <Container>
           <ScrollReveal>
             <div className="mx-auto max-w-3xl text-center mb-10">
               <h2 className="text-2xl font-bold text-text-primary md:text-[2rem]">
-                Want faster reasoning? Premium models? Zero hassle.
+                Want faster reasoning? Premium models?
               </h2>
               <p className="mt-4 text-text-secondary">
-                Optional cloud plans are coming that give access to models like Claude, GPT, and DeepSeek through InnerZero, with simple monthly credit allowances like a phone plan.
+                Optional cloud AI plans are coming soon. In the meantime, add your own API keys for free, with zero markup.
               </p>
-              <p className="mt-3 text-sm text-accent-teal">
-                Power users can already add their own API keys for free with zero markup. BYO API keys work today.
+              <p className="mt-3 text-sm text-text-muted">
+                Supported providers: DeepSeek, OpenAI, Anthropic, Google AI, Qwen.
               </p>
             </div>
 
@@ -228,67 +265,6 @@ export function PricingSection({ className }: PricingSectionProps) {
                 <ExternalLink className="h-3.5 w-3.5" />
               </a>
             </div>
-          </ScrollReveal>
-        </Container>
-      </section>
-
-      {/* Section D: Business Licence */}
-      <section className="bg-bg-secondary py-12 md:py-20">
-        <Container>
-          <ScrollReveal>
-            <div className="mx-auto max-w-3xl text-center mb-10">
-              <h2 className="text-2xl font-bold text-text-primary md:text-[2rem]">
-                Business
-              </h2>
-              <p className="mt-4 text-text-secondary">
-                Using InnerZero at work? A commercial licence is required for business, commercial, and revenue-generating use.
-              </p>
-            </div>
-
-            <div className="mx-auto max-w-xl">
-              <div className="rounded-xl border border-border-default bg-bg-card p-8 text-center">
-                <h3 className="text-2xl font-bold text-text-primary">
-                  {BUSINESS_LICENCE.planName}
-                </h3>
-
-                <div className="mt-4">
-                  <span className="text-4xl font-bold text-text-primary">
-                    {BUSINESS_LICENCE.price}
-                  </span>
-                  <span className="text-text-secondary">{BUSINESS_LICENCE.period}</span>
-                </div>
-                <p className="mt-1 text-sm text-text-muted">
-                  {BUSINESS_LICENCE.perSeat}
-                </p>
-
-                <p className="mt-4 text-sm text-text-secondary">
-                  {BUSINESS_LICENCE.description}
-                </p>
-
-                <ul className="mt-6 flex flex-col gap-3 text-left">
-                  {BUSINESS_LICENCE.features.map((feature) => (
-                    <li
-                      key={feature}
-                      className="flex items-center gap-3 text-sm text-text-secondary"
-                    >
-                      <Check className="h-4 w-4 shrink-0 text-success" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="mt-8">
-                  <BusinessLicenceButton />
-                </div>
-              </div>
-            </div>
-
-            <p className="mt-6 text-center text-sm text-text-muted">
-              Need team features, shared memory, or managed cloud AI? Coming soon.{" "}
-              <a href="/waitlist" className="text-text-secondary transition-colors hover:text-accent-gold">
-                Join the waitlist
-              </a>.
-            </p>
           </ScrollReveal>
         </Container>
       </section>

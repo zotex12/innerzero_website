@@ -58,25 +58,25 @@ export const FEATURE_CARDS: FeatureCardData[] = [
     icon: Cpu,
     title: "Runs 100% Locally",
     description:
-      "Your conversations never leave your machine. No cloud servers. No data uploads. Ever.",
+      "All AI processing happens on your PC. No cloud servers, no uploads, no tracking. Your conversations stay yours.",
   },
   {
     icon: Brain,
-    title: "Learns & Remembers",
+    title: "Learns and Remembers",
     description:
-      "InnerZero builds personal memory from every conversation. It knows you better over time.",
+      "Zero builds memory from every conversation. It learns your name, your projects, your preferences. All stored locally.",
   },
   {
     icon: Mic,
-    title: "Voice + Text",
+    title: "Voice and Text",
     description:
-      "Talk to Zero or type, your choice. Full voice interaction with speech recognition and natural responses.",
+      "Talk to Zero or type. Full voice mode with local speech recognition and natural spoken responses. No audio leaves your machine.",
   },
   {
     icon: MonitorCog,
-    title: "Hardware-Aware",
+    title: "Hardware Aware",
     description:
-      "InnerZero detects your PC's capabilities and automatically configures the best AI model for your system.",
+      "InnerZero detects your PC's specs and picks the right AI model automatically. Or point it at a remote Ollama server on your network.",
   },
 ];
 
@@ -128,14 +128,17 @@ export const PRICING_FREE = {
   price: "Free forever.",
   subtitle: "A complete private AI assistant on your PC. No account. No subscription. No catch.",
   features: [
-    "Local AI chat and voice",
-    "Personal memory system",
+    "AI chat with streaming responses",
+    "Full voice mode (speech + TTS)",
+    "Persistent memory system",
     "30+ built-in tools",
-    "Document knowledge base",
-    "Hardware-aware setup",
-    "Sleep and reflection",
-    "All themes included",
-    "All future updates",
+    "Document upload and Q&A",
+    "Knowledge packs (offline Wikipedia)",
+    "Screen automation",
+    "5 themes and AI personality",
+    "Unrestricted mode (18+)",
+    "Remote Ollama support",
+    "All free. No account required.",
   ],
   cta: "Download Free",
   ctaHref: "/download",
@@ -250,6 +253,11 @@ export const FAQ_DATA: FAQItem[] = [
     question: "Do I need a licence to use InnerZero at work?",
     answer:
       "If you're using InnerZero for business, commercial, or revenue-generating purposes, yes, a Business Licence is required. It's £50/year per seat. The app is identical to the free version. The licence is just permission to use it commercially. Personal use, education, and non-profits are free.",
+  },
+  {
+    question: "Do I need a Business Licence?",
+    answer:
+      "Only if you use InnerZero for commercial purposes, including work for clients, at a company, or as a freelancer. Personal use, education, charities, and non-profits are all free.",
   },
 ];
 
