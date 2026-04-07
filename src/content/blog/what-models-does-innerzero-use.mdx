@@ -1,0 +1,71 @@
+---
+title: "What AI Models Does InnerZero Use?"
+description: "A plain-English guide to the open-source AI models that power InnerZero, from the main chat brain to voice and speech recognition."
+date: "2026-04-08"
+author: "Louie"
+authorRole: "Founder"
+slug: "what-models-does-innerzero-use"
+tags: ["local ai", "innerzero", "guide"]
+readingTime: "5 min read"
+featured: false
+---
+
+People often ask what's actually running when they talk to InnerZero. Fair question. Unlike cloud AI services where the model is hidden behind an API, local AI is transparent. You can see exactly what's on your machine.
+
+Here's what powers InnerZero and why each piece was chosen.
+
+## The main brain: Qwen3
+
+The core AI model that processes your messages, makes decisions, and generates responses is from the Qwen3 family. Qwen3 is developed by Alibaba Cloud and released under the Apache 2.0 open-source licence. That means anyone can download, use, and modify it freely.
+
+Qwen3 comes in several sizes. InnerZero picks the right one based on your [hardware](/blog/hardware-for-local-ai):
+
+- **Qwen3 4B** for basic tier hardware (CPU-only or limited GPU)
+- **Qwen3 8B** for entry tier (budget GPU with 6+ GB VRAM)
+- **Qwen3 30B** for standard and performance tiers (16+ GB VRAM)
+
+The "B" stands for billion parameters. Bigger models are smarter but need more memory. InnerZero's setup wizard handles the selection automatically. You don't need to know which one you're running.
+
+Qwen3 is a strong all-rounder. It handles conversation, reasoning, tool use, coding help, and general knowledge well. It's not GPT-4 level, but for a model running on consumer hardware, it's remarkably capable.
+
+## Voice: Gemma3
+
+When you use [voice mode](/blog/voice-mode-innerzero), InnerZero uses a separate, smaller model for the voice conversation pipeline. This is Gemma3, developed by Google.
+
+Gemma3 is optimised for speed. Voice conversations need fast responses, so you can't wait 10 seconds for the AI to think. Gemma3 in its 1B size responds in about a second on most GPUs. On higher-end hardware, InnerZero uses the 4B version for smarter voice responses.
+
+The voice model runs alongside the main model. It's a specialist: fast, concise, conversational. The main Qwen3 model handles the deeper thinking.
+
+## Speech recognition: faster-whisper
+
+When you speak to InnerZero, your voice needs to be converted to text first. This is done by faster-whisper, a fast implementation of OpenAI's Whisper speech recognition model.
+
+It runs on your GPU and transcribes your speech in near real-time. The accuracy is excellent, even with accents and background noise. Whisper was originally developed by OpenAI but released as open-source. The faster-whisper version is optimised for local hardware.
+
+No audio is sent to any server. Your voice is transcribed on your machine and the audio is discarded immediately after.
+
+## Text-to-speech: Kokoro
+
+When InnerZero responds with voice, the text is converted to spoken audio by Kokoro, a lightweight text-to-speech model. Kokoro produces natural-sounding speech in 14 voice options.
+
+It runs locally and generates audio in real-time. The quality is good for a local model. Not quite as natural as cloud text-to-speech services, but very usable for everyday conversations.
+
+## How Ollama fits in
+
+All the AI models run through [Ollama](https://ollama.com), an open-source tool that manages AI models on your machine. Ollama handles downloading, loading, and running models. InnerZero bundles Ollama and manages it automatically.
+
+You never need to interact with Ollama directly. InnerZero's setup wizard tells Ollama which models to download, and the app communicates with it behind the scenes. But if you're curious, Ollama's model library has hundreds of other models you can try.
+
+## All free, all open source
+
+Every model InnerZero uses is open-source. Qwen3 is Apache 2.0. Gemma3 uses Google's Gemma terms. Whisper and Kokoro are both open-source. Ollama is MIT licensed.
+
+You're not locked into anything. You own the models on your disk. No licence keys, no expiry dates, no usage limits.
+
+## What about cloud models?
+
+InnerZero also supports optional cloud AI if you want more powerful reasoning. You can bring your own API keys for providers like OpenAI, Anthropic, Google, or DeepSeek. Your keys go directly to the provider. InnerZero never touches the API traffic.
+
+But the local models are the default. They're free, private, and getting better with every release. For most everyday tasks, they're more than enough.
+
+Want to see what your hardware can run? [Download InnerZero](/download) and let the setup wizard show you. For more on hardware requirements, read our [hardware guide](/blog/hardware-for-local-ai).

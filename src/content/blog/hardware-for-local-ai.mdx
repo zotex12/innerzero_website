@@ -1,0 +1,67 @@
+---
+title: "What Hardware Do You Need to Run AI Locally?"
+description: "A clear breakdown of the RAM, GPU, CPU, and disk space you need to run a private AI assistant on your own PC."
+date: "2026-04-08"
+author: "Louie"
+authorRole: "Founder"
+slug: "hardware-for-local-ai"
+tags: ["guide", "local ai", "getting started"]
+readingTime: "5 min read"
+featured: false
+---
+
+This is the first question everyone asks. Can my PC run local AI? The short answer: probably yes, if it was made in the last five years. The longer answer depends on how fast you want it to be.
+
+## RAM: 16 GB minimum, 32 GB ideal
+
+AI models need to fit in memory. The models that run locally are compressed versions of the same architectures used by cloud services. They're smaller, but they still need room.
+
+With 16 GB of RAM, you can run capable models comfortably. The AI will work, respond well, and handle everyday tasks. With 32 GB, you get access to larger models that are smarter and more capable. Above 32 GB gives you headroom for the biggest open-source models available.
+
+If your PC has 8 GB of RAM, local AI will struggle. It's technically possible but not a good experience.
+
+## GPU: NVIDIA recommended, VRAM matters most
+
+The GPU is the single biggest factor in how fast your AI responds. Specifically, the amount of VRAM (video memory) on the card. More VRAM means larger, more capable models. Clock speed matters less than memory.
+
+**6 GB VRAM (entry level).** Cards like the RTX 3060 or GTX 1660 Super. Runs smaller models well. Responses in 2 to 5 seconds. Good enough for everyday use.
+
+**10 to 16 GB VRAM (standard).** Cards like the RTX 3080, RTX 4070, or RTX 4070 Ti. This is the sweet spot. Runs mid-size models with fast response times. Most people will be happy here.
+
+**24 GB+ VRAM (performance).** Cards like the RTX 4090 or professional cards like the A6000. Runs the largest consumer models at excellent speeds. Feels as fast as cloud AI.
+
+**No GPU (CPU only).** It works. InnerZero supports CPU-only mode. But responses take longer, maybe 10 to 30 seconds depending on the question. Fine for casual use, not ideal for extended conversations.
+
+AMD GPUs are not currently supported for local AI inference in InnerZero. NVIDIA's CUDA platform is what the AI runtime relies on.
+
+## CPU: modern quad-core with AVX2
+
+Any modern Intel or AMD processor from the last 5 to 7 years will work. The AI doesn't lean heavily on the CPU when a GPU is available. But there's one hard requirement: AVX2 instruction support. Almost every processor since 2015 has this. Very old chips don't.
+
+Core count matters less than you'd think for AI inference. A modern quad-core is fine.
+
+## Disk space: 10 GB minimum
+
+AI models need to be downloaded once and stored on disk. A basic model is about 2 to 5 GB. A mid-range model is 5 to 18 GB. InnerZero itself is around 280 MB.
+
+Plan for at least 10 GB of free space. 30 GB gives you room for multiple models and offline knowledge packs.
+
+## InnerZero tiers explained
+
+When you install InnerZero, it scans your hardware and assigns a tier automatically. You don't need to pick models or configure anything. Here's what the tiers look like:
+
+**Basic** (under 16 GB RAM, no/weak GPU). Smallest models, CPU-only. Works, but slower.
+
+**Entry** (16+ GB RAM, 6 to 16 GB VRAM). Budget GPU tier. Good performance with compact models.
+
+**Standard** (32+ GB RAM, 16 to 24 GB VRAM). The recommended experience. Fast, capable, smooth.
+
+**Performance** (32+ GB RAM, 24+ GB VRAM). Premium tier. Largest models, fastest responses.
+
+InnerZero picks the best model for your hardware, downloads it during setup, and optimises the settings. If you upgrade your GPU later, re-run the setup wizard and it'll detect the new hardware.
+
+## The bottom line
+
+If you have a gaming PC or a workstation from the last few years, you can almost certainly run local AI. The experience scales with your hardware. Better GPU means faster and smarter responses, but even modest hardware gives you a functional private AI assistant.
+
+Ready to find out? [Download InnerZero](/download) and let the setup wizard tell you exactly what your PC can handle. For a full setup walkthrough, check out our guide on [how to run AI on your PC](/blog/run-ai-on-your-pc).
