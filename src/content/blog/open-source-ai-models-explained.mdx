@@ -1,0 +1,82 @@
+---
+title: "Open Source AI Models Explained Simply"
+description: "What open-source AI models are, why companies release them, and how you can run them on your own PC. No jargon."
+date: "2026-04-09"
+author: "Louie"
+authorRole: "Founder"
+slug: "open-source-ai-models-explained"
+tags: ["local ai", "guide"]
+readingTime: "5 min read"
+featured: false
+---
+
+You've probably heard that AI models can be "open source." But what does that actually mean? And why would a company spend millions training a model and then give it away?
+
+Here's the simple version.
+
+## What an AI model is
+
+An AI model is a very large file of numbers. During training, a computer processes enormous amounts of text (books, websites, conversations) and learns patterns in language. The result is a file containing billions of "parameters," which are numerical weights that determine how the model responds to input.
+
+When you ask an AI a question, the model uses these weights to generate a response one word at a time. The bigger the model (more parameters), the smarter it tends to be. But bigger also means more memory and computing power to run.
+
+## What "open source" means for AI
+
+When an AI model is open source, the company releases the model weights publicly. Anyone can download them, run the model on their own hardware, modify it, and build products with it.
+
+This is different from cloud AI like ChatGPT, where the model stays on OpenAI's servers and you can only access it through their website or API. You never see the actual model.
+
+With open-source models, you own the file. It runs on your machine. No internet required. No terms of service governing how you use it.
+
+## Why companies release them
+
+This confuses people. Why spend millions on training and then give it away?
+
+**Ecosystem building.** Meta releases Llama so developers build tools and applications around it. That makes Meta's AI platform more important.
+
+**Research.** Open models attract researchers who improve them and publish findings. Everyone benefits, including the original company.
+
+**Adoption.** If developers and companies adopt your model architecture, your platform becomes the standard. That has long-term business value.
+
+**Competition.** If one company releases an open model, others feel pressure to do the same or risk losing the developer community.
+
+The result for users: access to genuinely capable AI models at zero cost.
+
+## The big names
+
+**Qwen (Alibaba Cloud).** The Qwen3 family. Strong all-rounders available in multiple sizes from 4B to 235B parameters. Apache 2.0 licence. [InnerZero uses Qwen3](/blog/what-models-does-innerzero-use) as its main AI brain.
+
+**Gemma (Google).** The Gemma3 family. Fast and efficient, especially at smaller sizes. InnerZero uses Gemma3 for voice interactions where speed matters.
+
+**Llama (Meta).** One of the most widely used open model families. Llama 3 and 4 are strong across the board. Available in sizes from 8B to 405B parameters.
+
+**Mistral (Mistral AI).** A French company producing efficient open models. Known for good performance at smaller sizes.
+
+## What "parameters" mean
+
+You'll see models described as "8B" or "30B." The B stands for billion parameters. More parameters generally means smarter, but also means more memory needed.
+
+- **1-4B parameters.** Runs on almost any hardware. Good for simple tasks and fast voice responses.
+- **8B parameters.** The sweet spot for entry-level hardware. Handles everyday tasks well.
+- **30B parameters.** Needs a good GPU with 16+ GB VRAM. Noticeably smarter than 8B.
+- **70B+ parameters.** Needs professional hardware (48+ GB VRAM). Approaches cloud model quality.
+
+You don't need to know any of this to use InnerZero. The setup wizard checks your [hardware](/blog/hardware-for-local-ai) and picks the right model size automatically.
+
+## How Ollama fits in
+
+[Ollama](https://ollama.com) is an open-source tool that makes running these models easy. Instead of manually downloading model files, configuring memory, and managing GPU allocation, you just tell Ollama which model you want and it handles the rest.
+
+InnerZero bundles Ollama and manages it behind the scenes. You never need to interact with it directly. But if you're curious, Ollama's model library has hundreds of models you can explore.
+
+## All of this is free
+
+Every model mentioned in this post is free to download and use. No licence fees. No API charges. No subscriptions. They run on your hardware using your electricity.
+
+The models keep getting better with every release. What required a data centre two years ago now runs on a gaming PC. The gap between open-source and cloud-only models shrinks every few months.
+
+## Get started
+
+[Download InnerZero](/download) and it handles everything: picking the right model, downloading it, configuring your hardware. You don't need to understand parameters or model architectures. Just install and start chatting.
+
+For more on the specific models InnerZero uses, read [what models does InnerZero use](/blog/what-models-does-innerzero-use).

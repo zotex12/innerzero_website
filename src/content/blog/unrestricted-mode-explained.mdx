@@ -1,0 +1,80 @@
+---
+title: "Unrestricted Mode — What It Is and Why It Exists"
+description: "InnerZero's Unrestricted Mode removes AI content filtering. Here's what that means, who it's for, and what safeguards remain."
+date: "2026-04-09"
+author: "Louie"
+authorRole: "Founder"
+slug: "unrestricted-mode-explained"
+tags: ["features", "innerzero"]
+readingTime: "5 min read"
+featured: false
+---
+
+Standard AI models have safety filters. They're trained to refuse certain types of requests. Most of the time, this is sensible. You don't want an AI helping with genuinely harmful activities.
+
+But sometimes the filters block legitimate use. A fiction writer working on a thriller. A researcher studying sensitive topics. An adult who simply wants full control over software running on their own machine.
+
+InnerZero's Unrestricted Mode exists for those people.
+
+## What it does
+
+Unrestricted Mode replaces the standard AI models with uncensored versions. These models don't have the safety training that makes them refuse certain prompts. They'll engage with topics that standard models decline.
+
+The uncensored models are community-modified versions hosted on Hugging Face. InnerZero doesn't bundle them. You download them yourself through Ollama as part of the opt-in process.
+
+Everything else about InnerZero stays the same. The tools, the memory, the interface, the privacy. Only the model's willingness to engage changes.
+
+## Who it's for
+
+**Fiction writers.** Writing scenes involving violence, conflict, or mature themes that standard models refuse to help with.
+
+**Researchers.** Studying topics that trigger safety filters. Cybersecurity, historical atrocities, sensitive social issues.
+
+**Adults who want control.** If you own the hardware and the software runs locally, you might reasonably feel that you should decide what the AI can discuss.
+
+Unrestricted Mode is not for everyone. If you're happy with the standard models, there's no reason to enable it. It's a power-user feature for people who specifically need it.
+
+## The consent process
+
+This isn't a toggle you accidentally flip. Enabling Unrestricted Mode requires:
+
+1. Entering your date of birth to verify you're at least 18 years old.
+2. Reading and checking 6 acknowledgement boxes that explain exactly what Unrestricted Mode does and doesn't do.
+3. Typing a confirmation phrase.
+4. Downloading the uncensored models (this happens through Ollama, not through InnerZero's servers).
+
+The consent is recorded locally with a timestamp. If you disable the mode later, you can re-enable it without repeating the full process, but the original consent record is preserved.
+
+Age misrepresentation results in automatic licence revocation per our [terms of service](/terms).
+
+## What safeguards remain
+
+Unrestricted Mode removes model-level content filtering. It does not remove other safety systems.
+
+**CSAM hard block.** Content involving child sexual abuse material is absolutely prohibited and blocked at the system level, regardless of mode. This cannot be bypassed. It's a hard-coded filter that runs before the model generates any output.
+
+**Tool approval.** File operations (write, delete, rename) still require your explicit approval. The AI can't silently modify your files in any mode.
+
+**Screen control gates.** If you've enabled screen automation, the approval workflow still applies. Auto-execute settings are separate from Unrestricted Mode.
+
+**Policy gate.** The tool approval system (which tools require confirmation, which are auto-allowed) is completely unchanged.
+
+**Logging.** All actions are still logged. Unrestricted Mode doesn't disable the audit trail.
+
+The only thing that changes is the AI model's willingness to generate text on topics the standard model would refuse. Everything else stays locked down.
+
+## Being honest about this
+
+We debated whether to include Unrestricted Mode at all. Some companies wouldn't. But InnerZero runs on your machine. You own the hardware. The data is yours. We believe adults should be able to control what software does on their own computer.
+
+The absolute prohibitions (CSAM, terrorism content, serious criminal content) are non-negotiable. Those are hard blocks that exist regardless of any setting. We cooperate fully with law enforcement on those matters.
+
+Everything else is your choice. Your machine. Your AI. Your responsibility.
+
+## How to enable it
+
+Open InnerZero, go to **Settings**, then the **Experimental** tab. You'll find Unrestricted Mode at the bottom. Follow the consent process. The models download through Ollama (typically 3 to 10 GB).
+
+To disable it, flip the toggle back. You can uninstall the models from the same tab.
+
+For more on InnerZero's features, read our [launch announcement](/blog/innerzero-is-live). For details on our privacy approach, see [how InnerZero stays private](/blog/how-innerzero-stays-private).

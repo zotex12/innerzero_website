@@ -1,0 +1,82 @@
+---
+title: "How to Use AI Completely Offline"
+description: "Most AI needs the internet. Local AI doesn't. Here's what works offline, what doesn't, and why it matters."
+date: "2026-04-09"
+author: "Louie"
+authorRole: "Founder"
+slug: "use-ai-offline"
+tags: ["local ai", "privacy", "guide"]
+readingTime: "5 min read"
+featured: false
+---
+
+ChatGPT, Gemini, Copilot, Claude. They all need an internet connection. The moment your Wi-Fi drops, they're gone. That's because the AI runs on servers in a data centre, not on your machine.
+
+Local AI works differently. Once the software is installed and the models are downloaded, you don't need the internet at all.
+
+## What works offline
+
+With InnerZero installed and set up, all of this works with zero internet connection:
+
+**Chat.** Ask questions, get responses, have conversations. The AI model runs on your GPU. No server required.
+
+**Voice.** Full voice interaction. Speech recognition, AI response, and spoken output all run locally. No audio leaves your machine, online or offline.
+
+**Memory.** InnerZero remembers your conversations, your preferences, your projects. The memory database is a local file. It works the same whether you're connected or not.
+
+**Knowledge packs.** If you've downloaded offline Wikipedia databases, Zero can reference real encyclopedia articles when answering factual questions. This is the big one for offline use. Instead of searching the web, Zero searches a local database of 95,000+ articles.
+
+**Tools that don't need the internet:** Calculator, timers, alarms, reminders, file operations (read, write, rename, delete), text transforms (uppercase, word count, sort lines), dictionary (with offline Wiktionary pack), clipboard access, JSON tools, hash generation, system info.
+
+**Documents.** Upload a PDF or text file and ask questions about it. The document is processed and stored locally.
+
+## What needs internet
+
+A few features obviously need a network connection:
+
+**Web search.** Searching the web requires the web. Makes sense.
+
+**URL fetch.** Reading a webpage requires accessing the page.
+
+**Weather.** Current weather data comes from an online API (Open-Meteo).
+
+**Cloud mode.** If you're using optional cloud AI models via BYO API keys, those need internet to reach the provider.
+
+**Knowledge pack downloads.** You need internet to download the packs initially. After that, they're stored locally.
+
+Everything else runs on your hardware. The core AI experience is fully offline.
+
+## Why offline matters
+
+**Travel.** Planes, trains, rural areas with spotty coverage. Your AI keeps working when your connection doesn't.
+
+**Privacy-sensitive work.** If you're working with confidential information, air-gapping your AI from the internet is the ultimate privacy measure. No data can leak if there's no connection to leak through.
+
+**Reliability.** Cloud services go down. OpenAI has outages. Your ISP has outages. Your local AI doesn't care. It runs on your machine, always available.
+
+**Speed.** No network latency. The AI responds based on your GPU speed, not your ping to a data centre. On a good GPU, responses start in under a second.
+
+## Setting up for offline use
+
+The process is simple:
+
+1. [Download InnerZero](/download) while you have internet.
+2. Run the setup wizard. It downloads the AI models (one-time, 2 to 10 GB).
+3. Optionally download knowledge packs in Settings for offline factual answers.
+4. Disconnect. Everything keeps working.
+
+That's it. No special "offline mode" toggle. InnerZero is offline-capable by default. It only reaches out to the internet when you explicitly use features that need it (web search, weather, cloud mode).
+
+## The knowledge pack advantage
+
+This is worth highlighting. Most AI assistants, even local ones, hallucinate facts when they don't know something. They make things up because the model generates text probabilistically.
+
+InnerZero's knowledge packs give the AI a real reference to check against. When you ask "who wrote 1984" or "what's the population of Norway," Zero can look up the answer in a local Wikipedia database instead of guessing.
+
+It's not perfect. The packs are snapshots, so they won't have breaking news. But for established facts, historical information, science, geography, and general knowledge, they're excellent.
+
+## Try it
+
+[Download InnerZero](/download) and set it up while you're online. Then try using it with your internet off. You might be surprised how complete the experience is.
+
+For more on how privacy works in InnerZero, read [how InnerZero stays private](/blog/how-innerzero-stays-private). For the broader picture of local vs cloud AI, check out [what a local AI assistant is](/blog/what-is-a-local-ai-assistant).
