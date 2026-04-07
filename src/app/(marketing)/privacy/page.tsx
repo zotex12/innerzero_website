@@ -172,7 +172,8 @@ export default function PrivacyPage() {
                     10. Data Retention
                   </h3>
                   <p>
-                    Account data (email address) is retained for as long as your account is active. Waitlist data is retained until the waitlist is no longer needed, after which it will be deleted. You may request deletion of your data at any time.
+                    Account data (email address) is retained for as long as your account is active. Waitlist data is retained until the waitlist is no longer needed, after which it will be deleted. You can permanently delete your account and all associated data at any time from your{" "}
+                    <a href="/account/settings" className="text-accent-gold hover:text-accent-gold-hover transition-colors">account settings page</a>.
                   </p>
                 </div>
 

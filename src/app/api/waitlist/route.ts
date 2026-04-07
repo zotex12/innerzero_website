@@ -1,15 +1,19 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: Request) {
+  const rateLimited = checkRateLimit(request, "waitlist");
+  if (rateLimited) return rateLimited;
+
   try {
     const body = await request.json();
     const email =
       typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
 
-    if (!email || !EMAIL_REGEX.test(email)) {
+    if (!email || email.length > 320 || !EMAIL_REGEX.test(email)) {
       return NextResponse.json(
         { success: false, message: "Please enter a valid email." },
         { status: 400 }

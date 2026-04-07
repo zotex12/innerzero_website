@@ -185,6 +185,11 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
 }
 
 export async function POST(request: Request) {
+  // Rate limit webhooks (high limit for Stripe retries)
+  const { checkRateLimit } = await import("@/lib/rate-limit");
+  const rateLimited = checkRateLimit(request, "stripeWebhook");
+  if (rateLimited) return rateLimited;
+
   const body = await request.text();
   const signature = request.headers.get("stripe-signature");
 

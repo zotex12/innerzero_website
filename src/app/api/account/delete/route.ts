@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { checkRateLimit } from "@/lib/rate-limit";
 
-export async function POST() {
+export async function POST(request: Request) {
+  const rateLimited = checkRateLimit(request, "accountDelete");
+  if (rateLimited) return rateLimited;
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -15,16 +19,67 @@ export async function POST() {
     );
   }
 
-  // Use admin client to delete the user (cascades to profile via FK)
   const admin = createAdminClient();
-  const { error } = await admin.auth.admin.deleteUser(user.id);
+  const errors: string[] = [];
 
-  if (error) {
+  // 1. Delete licences
+  try {
+    await admin.from("licences").delete().eq("user_id", user.id);
+  } catch (e) {
+    errors.push(`licences: ${e instanceof Error ? e.message : "failed"}`);
+  }
+
+  // 2. Delete devices
+  try {
+    await admin.from("devices").delete().eq("user_id", user.id);
+  } catch (e) {
+    errors.push(`devices: ${e instanceof Error ? e.message : "failed"}`);
+  }
+
+  // 3. Delete licence events
+  try {
+    await admin.from("licence_events").delete().eq("user_id", user.id);
+  } catch (e) {
+    errors.push(`licence_events: ${e instanceof Error ? e.message : "failed"}`);
+  }
+
+  // 4. Delete profile
+  try {
+    await admin.from("profiles").delete().eq("id", user.id);
+  } catch (e) {
+    errors.push(`profiles: ${e instanceof Error ? e.message : "failed"}`);
+  }
+
+  // 5. Delete waitlist entry (by email)
+  try {
+    if (user.email) {
+      await admin.from("waitlist").delete().eq("email", user.email);
+    }
+  } catch (e) {
+    errors.push(`waitlist: ${e instanceof Error ? e.message : "failed"}`);
+  }
+
+  // 6. Delete auth user
+  const { error: authError } = await admin.auth.admin.deleteUser(user.id);
+  if (authError) {
+    errors.push(`auth: ${authError.message}`);
+  }
+
+  if (errors.length > 0 && authError) {
+    // Auth deletion failed, which is critical
     return NextResponse.json(
-      { message: "Failed to delete account. Please contact support." },
+      {
+        success: false,
+        message: "Failed to fully delete account. Please contact support.",
+        errors,
+      },
       { status: 500 }
     );
   }
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({
+    success: true,
+    message: "Your account and all associated data have been permanently deleted.",
+    ...(errors.length > 0 ? { partial_errors: errors } : {}),
+  });
 }

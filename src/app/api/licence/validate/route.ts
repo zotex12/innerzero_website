@@ -1,38 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import type { ValidateRequest, ValidateResponse, ValidateErrorResponse } from "@/types/licence";
 
-// In-memory rate limiter: IP -> timestamps
-const rateLimitMap = new Map<string, number[]>();
-const RATE_LIMIT_WINDOW = 60_000; // 1 minute
-const RATE_LIMIT_MAX = 30;
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const timestamps = rateLimitMap.get(ip) ?? [];
-  const recent = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW);
-  recent.push(now);
-  rateLimitMap.set(ip, recent);
-  return recent.length > RATE_LIMIT_MAX;
-}
-
 export async function POST(request: NextRequest) {
+  const rateLimited = checkRateLimit(request, "licence");
+  if (rateLimited) return rateLimited;
+
   try {
-    const ip =
-      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-      request.headers.get("x-real-ip") ??
-      "unknown";
-
-    if (isRateLimited(ip)) {
-      return NextResponse.json(
-        { valid: false, error: "rate_limited" },
-        { status: 429 }
-      );
-    }
-
+    const ip = getClientIp(request);
     const body = (await request.json()) as Partial<ValidateRequest>;
 
-    if (!body.licence_key || !body.device_fingerprint) {
+    if (!body.licence_key || !body.device_fingerprint
+        || typeof body.licence_key !== "string" || body.licence_key.length > 100
+        || typeof body.device_fingerprint !== "string" || body.device_fingerprint.length > 200) {
       return NextResponse.json(
         { valid: false, error: "missing_fields" },
         { status: 400 }

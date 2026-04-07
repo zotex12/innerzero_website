@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { stripe } from "@/lib/stripe";
+import { checkRateLimit } from "@/lib/rate-limit";
 
-export async function POST() {
+export async function POST(request: Request) {
+  const rateLimited = checkRateLimit(request, "stripePortal");
+  if (rateLimited) return rateLimited;
   try {
     const supabase = await createClient();
     const {
