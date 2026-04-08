@@ -3,21 +3,23 @@ import Link from "next/link";
 import {
   MessageSquare, Mic, Brain, Search, FileText, Wrench,
   BookOpen, Palette, Shield, Monitor, Cloud, Volume2,
+  ChevronDown,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SYSTEM_REQUIREMENTS } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
+import { DownloadCards } from "./DownloadCards";
 
 export const metadata: Metadata = createMetadata({
   title: "Download Free | InnerZero: Private AI Assistant",
   description:
-    "Download InnerZero for free. A private AI assistant that runs on your PC with no subscription, no account, and no cloud required.",
+    "Download InnerZero for free on Windows, macOS, and Linux. A private AI assistant that runs on your machine with no subscription, no account, and no cloud required.",
   openGraph: {
     title: "Download Free | InnerZero: Private AI Assistant",
     description:
-      "Download InnerZero for free. A private AI assistant that runs on your PC.",
+      "Download InnerZero for free on Windows, macOS, and Linux.",
     url: "https://innerzero.com/download",
   },
 });
@@ -50,24 +52,20 @@ export default function DownloadPage() {
             Free. Private. Yours.
           </p>
           <p className="mt-4 text-lg text-text-secondary">
-            InnerZero runs entirely on your PC. No account required. No subscription. Download and start chatting in minutes.
+            InnerZero runs entirely on your machine. No account required. No subscription. Download and start chatting in minutes.
           </p>
-
-          <div className="mt-8">
-            <Button href="https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.1.exe">Download for Windows</Button>
-            <p className="mt-3 text-sm text-text-muted">
-              v0.1.1 · ~265 MB · Windows 10/11 64-bit
-            </p>
-            <p className="mt-1">
-              <Link
-                href="/changelog"
-                className="text-xs text-text-muted transition-colors hover:text-accent-gold"
-              >
-                See what&apos;s new in v0.1.1
-              </Link>
-            </p>
-          </div>
+          <p className="mt-2">
+            <Link
+              href="/changelog"
+              className="text-xs text-text-muted transition-colors hover:text-accent-gold"
+            >
+              See what&apos;s new in v0.1.2
+            </Link>
+          </p>
         </div>
+
+        {/* Platform downloads */}
+        <DownloadCards />
 
         {/* Requirements */}
         <ScrollReveal>
@@ -108,13 +106,6 @@ export default function DownloadPage() {
           </div>
         </ScrollReveal>
 
-        {/* SmartScreen notice */}
-        <div className="mx-auto mt-6 max-w-2xl text-center">
-          <p className="text-xs text-text-muted">
-            Windows may show a SmartScreen warning on first install. Click &quot;More info&quot; then &quot;Run anyway&quot;. Code signing is coming soon.
-          </p>
-        </div>
-
         {/* What's Included */}
         <ScrollReveal>
           <div className="mx-auto mt-16 max-w-4xl">
@@ -152,9 +143,6 @@ export default function DownloadPage() {
 
         {/* Bottom links */}
         <div className="mx-auto mt-12 max-w-2xl text-center">
-          <p className="text-sm text-text-muted">
-            macOS and Linux versions are planned for the future.
-          </p>
           <p className="mt-4">
             <Link
               href="/pricing"

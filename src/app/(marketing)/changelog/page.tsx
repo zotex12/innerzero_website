@@ -32,9 +32,54 @@ interface Release {
 
 const RELEASES: Release[] = [
   {
-    version: "0.1.1",
+    version: "0.1.2",
     date: "April 2026",
     latest: true,
+    groups: [
+      {
+        label: "New",
+        entries: [
+          { text: "macOS support: .dmg installer with .app bundle (Intel and Apple Silicon)" },
+          { text: "Linux support: AppImage for x86_64 with bundled Python runtime" },
+          { text: "Auto-updater: checks for new versions on startup, one-click update with SHA256 verification" },
+          { text: "GPU detection for NVIDIA, AMD (ROCm + HSA override), Intel Arc (oneAPI), and Apple Silicon (Metal)" },
+          { text: "Vulkan toggle for GPU acceleration on non-NVIDIA hardware (experimental, manual only)" },
+          { text: "Ollama mode persistence: bundled or system Ollama config saved from first setup, prevents model-not-found errors" },
+          { text: "Discord community link in the sidebar" },
+          { text: "System dependency notices for macOS and Linux on first launch" },
+          { text: "GPU acceleration section in Settings with detected backend display" },
+          { text: "Model location info in Settings for debugging" },
+          { text: "CI/CD pipeline: GitHub Actions builds all three platforms in parallel on tag push" },
+        ],
+      },
+      {
+        label: "Improved",
+        entries: [
+          { text: "Linux AppImage reduced from 2.7 GB to 356 MB (torch CPU-only install in CI)" },
+          { text: "Setup wizard shows retry and skip buttons with troubleshooting guidance when model downloads fail" },
+          { text: "Settings shows \"No compatible GPU detected, CPU mode will be used\" with manual tier override note" },
+          { text: "Sleep subprocess uses python.exe instead of pythonw.exe for reliable .pyc execution" },
+          { text: "Auto-sleep defaults to off on new installs" },
+          { text: "Consent modal checkbox text alignment improved" },
+        ],
+      },
+      {
+        label: "Fixed",
+        entries: [
+          { text: "Model not found (404) error when using system Ollama alongside InnerZero" },
+          { text: "Sleep pipeline crash in installed app (load_dotenv .pyc incompatibility)" },
+          { text: "Sleep subprocess failing silently (pythonw.exe, missing PYTHONPATH)" },
+          { text: "Version display showing \"?\" in Settings before background check completes" },
+          { text: "Discord sidebar showing raw template literal instead of icon" },
+          { text: "fetch_url Unicode crash on Windows (arrow character in print statement)" },
+          { text: "Auto-sleep toggle snapping back to off when dropdown closes on click" },
+        ],
+      },
+    ],
+  },
+  {
+    version: "0.1.1",
+    date: "April 2026",
     groups: [
       {
         label: "New",
