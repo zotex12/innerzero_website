@@ -752,6 +752,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Phase 4** | Cloud API proxy endpoint | NOT STARTED |
 | **Phase 4** | Credit metering + overage | NOT STARTED |
 | **Phase 4** | Spending caps + usage alerts | NOT STARTED |
+| **Features** | Features page: removed "for Windows" from metadata title (now cross-platform after v0.1.2). Coming Soon: replaced shipped "Linux support" with "Mac code signing" and "Windows code signing" (in progress). Swapped icon assignments accordingly | COMPLETE 2026-04-09 |
 | **Phase 5** | Desktop app account.py module | NOT STARTED |
 | **Phase 5** | Desktop app cloud routing integration | NOT STARTED |
 | **Phase 5** | Desktop app BYO API key UI | NOT STARTED |

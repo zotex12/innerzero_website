@@ -18,11 +18,11 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
-  title: "Features | InnerZero: Private AI Assistant for Windows",
+  title: "Features | InnerZero: Private AI Assistant",
   description:
     "Explore everything InnerZero can do. AI chat, voice, memory, 30+ tools, knowledge packs, screen automation, cloud AI, and more. All free, all private, all on your PC.",
   openGraph: {
-    title: "Features | InnerZero: Private AI Assistant for Windows",
+    title: "Features | InnerZero: Private AI Assistant",
     description:
       "AI chat, voice, memory, 30+ tools, knowledge packs, screen automation, and more. All free and private.",
     url: "https://innerzero.com/features",
@@ -150,9 +150,9 @@ const SECTIONS: FeatureSection[] = [
     subtitle: "What's next.",
     bg: "secondary",
     items: [
-      { icon: Rocket, title: "Linux support", desc: "The most requested feature. In development." },
+      { icon: Code, title: "Mac code signing", desc: "Signed and notarised macOS installer. Currently unsigned." },
       { icon: Cog, title: "LM Studio backend", desc: "Alternative to Ollama for running local models." },
-      { icon: Code, title: "Code signing", desc: "Signed installer so Windows SmartScreen stops warning." },
+      { icon: Rocket, title: "Windows code signing", desc: "Signed Windows installer to remove SmartScreen warnings. In progress." },
       { icon: BookOpen, title: "More knowledge packs", desc: "Science, history, and specialised reference databases." },
       { icon: PenTool, title: "Background task execution", desc: "Let Zero work on tasks while you do other things." },
     ],
