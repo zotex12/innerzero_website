@@ -13,6 +13,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico, robots.txt, sitemap files, og images
      */
-    "/((?!_next/static|_next/image|favicon.ico|robots\\.txt|sitemap.*\\.xml|og-.*\\.png|images/).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots\\.txt|sitemap.*\\.xml|og-.*\\.png|banner\\.png|images/).*)",
   ],
 };

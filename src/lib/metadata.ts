@@ -20,9 +20,9 @@ export const DEFAULT_METADATA: Metadata = {
       "InnerZero is a private AI assistant that runs entirely on your PC. No cloud. No tracking. Your AI, your machine, your data.",
     images: [
       {
-        url: "/og-default.png",
-        width: 1200,
-        height: 630,
+        url: "/banner.png",
+        width: 1536,
+        height: 1024,
         alt: "InnerZero: Private AI Assistant",
       },
     ],
@@ -32,7 +32,7 @@ export const DEFAULT_METADATA: Metadata = {
     title: "InnerZero: Private AI Assistant That Runs on Your PC",
     description:
       "InnerZero is a private AI assistant that runs entirely on your PC. No cloud. No tracking. Your AI, your machine, your data.",
-    images: ["/og-default.png"],
+    images: ["/banner.png"],
   },
   robots: {
     index: true,
