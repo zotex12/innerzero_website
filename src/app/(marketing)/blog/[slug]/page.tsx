@@ -36,9 +36,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url,
       images: [
         {
-          url: post.ogImage || "/banner.png",
-          width: 1200,
-          height: 630,
+          url: post.ogImage || "https://innerzero.com/banner.png",
+          width: 1536,
+          height: 1024,
           alt: post.title,
         },
       ],
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
-      images: [post.ogImage || "/banner.png"],
+      images: [post.ogImage || "https://innerzero.com/banner.png"],
     },
   };
 }

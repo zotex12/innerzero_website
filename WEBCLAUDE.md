@@ -754,6 +754,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Phase 4** | Spending caps + usage alerts | NOT STARTED |
 | **Features** | Features page: removed "for Windows" from metadata title (now cross-platform after v0.1.2). Coming Soon: replaced shipped "Linux support" with "Mac code signing" and "Windows code signing" (in progress). Swapped icon assignments accordingly | COMPLETE 2026-04-09 |
 | **SEO** | Set `public/banner.png` (1536x1024) as site-wide Open Graph and Twitter Card image. Updated `metadata.ts` defaults, blog post fallback in `[slug]/page.tsx`, and middleware matcher to exclude `banner.png` from auth. Replaces previous `og-default.png` references | COMPLETE 2026-04-09 |
+| **Fix** | OG image URLs changed from relative (`/banner.png`) to absolute (`https://innerzero.com/banner.png`) in `metadata.ts` and blog `[slug]/page.tsx`. Facebook debugger requires explicit absolute URLs. Blog fallback dimensions corrected to 1536x1024 | COMPLETE 2026-04-09 |
 | **Phase 5** | Desktop app account.py module | NOT STARTED |
 | **Phase 5** | Desktop app cloud routing integration | NOT STARTED |
 | **Phase 5** | Desktop app BYO API key UI | NOT STARTED |
