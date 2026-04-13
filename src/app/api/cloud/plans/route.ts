@@ -14,12 +14,17 @@ export async function GET() {
       .order("sort_order", { ascending: true }),
     admin
       .from("model_tiers")
-      .select(
-        "id, name, display_name, usage_multiplier, cost_per_request, models, sort_order"
-      )
+      .select("id, name, usage_multiplier, models, sort_order")
       .eq("active", true)
       .order("sort_order", { ascending: true }),
   ]);
+
+  if (plansResult.error) {
+    console.error("[cloud/plans] cloud_plans query error:", plansResult.error.message);
+  }
+  if (tiersResult.error) {
+    console.error("[cloud/plans] model_tiers query error:", tiersResult.error.message);
+  }
 
   return NextResponse.json({
     plans: plansResult.data ?? [],
