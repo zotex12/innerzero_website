@@ -17,6 +17,13 @@ export type Database = {
           subscription_end: string | null;
           max_devices: number;
           release_channel: string;
+          plan: string;
+          usage_balance: number;
+          usage_monthly_allowance: number;
+          founder: boolean;
+          billing_cycle_end: string | null;
+          overage_enabled: boolean;
+          spending_cap_pence: number | null;
           created_at: string;
           updated_at: string;
         };
@@ -35,6 +42,13 @@ export type Database = {
           subscription_end?: string | null;
           max_devices?: number;
           release_channel?: string;
+          plan?: string;
+          usage_balance?: number;
+          usage_monthly_allowance?: number;
+          founder?: boolean;
+          billing_cycle_end?: string | null;
+          overage_enabled?: boolean;
+          spending_cap_pence?: number | null;
         };
         Update: {
           id?: string;
@@ -51,6 +65,13 @@ export type Database = {
           subscription_end?: string | null;
           max_devices?: number;
           release_channel?: string;
+          plan?: string;
+          usage_balance?: number;
+          usage_monthly_allowance?: number;
+          founder?: boolean;
+          billing_cycle_end?: string | null;
+          overage_enabled?: boolean;
+          spending_cap_pence?: number | null;
           updated_at?: string;
         };
         Relationships: [];
@@ -153,6 +174,116 @@ export type Database = {
         Update: {
           event_type?: string;
           metadata?: Record<string, unknown>;
+        };
+        Relationships: [];
+      };
+      cloud_plans: {
+        Row: {
+          id: string;
+          name: string;
+          plan_type: "subscription" | "payg";
+          stripe_product_id: string;
+          stripe_price_id: string;
+          usage_amount: number;
+          price_pence: number;
+          tier_access: string[];
+          active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          plan_type: "subscription" | "payg";
+          stripe_product_id: string;
+          stripe_price_id: string;
+          usage_amount: number;
+          price_pence: number;
+          tier_access?: string[];
+          active?: boolean;
+        };
+        Update: {
+          name?: string;
+          plan_type?: "subscription" | "payg";
+          stripe_product_id?: string;
+          stripe_price_id?: string;
+          usage_amount?: number;
+          price_pence?: number;
+          tier_access?: string[];
+          active?: boolean;
+        };
+        Relationships: [];
+      };
+      model_tiers: {
+        Row: {
+          id: string;
+          name: string;
+          display_name: string;
+          cost_per_request: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          display_name: string;
+          cost_per_request: number;
+        };
+        Update: {
+          name?: string;
+          display_name?: string;
+          cost_per_request?: number;
+        };
+        Relationships: [];
+      };
+      usage_transactions: {
+        Row: {
+          id: string;
+          user_id: string;
+          type: string;
+          amount: number;
+          balance_after: number;
+          description: string | null;
+          stripe_session_id: string | null;
+          model_tier: string | null;
+          provider: string | null;
+          model_id: string | null;
+          created_at: string;
+        };
+        Insert: {
+          user_id: string;
+          type: string;
+          amount: number;
+          balance_after: number;
+          description?: string | null;
+          stripe_session_id?: string | null;
+          model_tier?: string | null;
+          provider?: string | null;
+          model_id?: string | null;
+        };
+        Update: {
+          type?: string;
+          amount?: number;
+          balance_after?: number;
+          description?: string | null;
+        };
+        Relationships: [];
+      };
+      usage_packs: {
+        Row: {
+          id: string;
+          user_id: string;
+          plan_id: string;
+          usage_granted: number;
+          usage_remaining: number;
+          created_at: string;
+        };
+        Insert: {
+          user_id: string;
+          plan_id: string;
+          usage_granted: number;
+          usage_remaining: number;
+        };
+        Update: {
+          usage_remaining?: number;
         };
         Relationships: [];
       };

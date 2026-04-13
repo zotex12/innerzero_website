@@ -744,9 +744,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Phase 4** | Licence validation API (`/api/licence/validate` POST, `/api/licence/status` POST), types in `src/types/licence.ts`, in-memory rate limiter (30/min/IP), device registration + revalidation, seat enforcement, licence event logging | COMPLETE 2026-04-06 |
 | **Phase 3** | Founder slot tracking (100 cap) | NOT STARTED |
 | **Phase 3** | Account dashboard: plan + supporter + founder display | NOT STARTED |
-| **Phase 3b** | Cloud plan subscriptions in Stripe | NOT STARTED |
-| **Phase 3b** | Credit balance + usage tracking | NOT STARTED |
-| **Phase 3b** | PAYG credit purchase flow | NOT STARTED |
+| **Phase 3b** | Cloud subscription + PAYG webhook handling: cloud_plans table lookup, checkout.session.completed (subscription + payg), subscription.updated (upgrade/downgrade mid-cycle), subscription.deleted (cancel with balance retention), invoice.payment_succeeded (renewal reset), invoice.payment_failed (past_due). Helper module `src/lib/cloud-plans.ts` (getCloudPlanByPriceId, getCloudPlanByProductId, grantUsage, deductUsage). Supabase types updated with cloud_plans, model_tiers, usage_transactions, usage_packs tables + new profile columns (plan, usage_balance, usage_monthly_allowance, founder, billing_cycle_end, overage_enabled, spending_cap_pence). All plan resolution via DB lookup, no hardcoded IDs. Existing business licence webhook handling preserved | COMPLETE 2026-04-13 |
 | **Phase 3b** | Account usage page | NOT STARTED |
 | **Phase 4** | Licence validation API (validate + status endpoints) | COMPLETE 2026-04-06 |
 | **Phase 4** | Cloud API proxy endpoint | NOT STARTED |
