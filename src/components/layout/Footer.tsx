@@ -53,17 +53,24 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-center gap-2 border-t border-border-default pt-8 text-center text-sm text-text-muted md:flex-row md:justify-between">
           <p>&copy; {year} InnerZero. All rights reserved.</p>
-          <p>
-            Built by{" "}
-            <a
-              href="https://summerssolutions.co.uk"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-text-secondary transition-colors hover:text-text-primary"
-            >
-              Summers Solutions
-            </a>
-          </p>
+          <div className="flex flex-col items-center gap-1 md:items-end">
+            <p>
+              Built by{" "}
+              <a
+                href="https://summerssolutions.co.uk"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-text-secondary transition-colors hover:text-text-primary"
+              >
+                Summers Solutions
+              </a>
+            </p>
+            {process.env.NEXT_PUBLIC_ICO_REGISTRATION_NUMBER && (
+              <p className="text-xs">
+                ICO Registration: {process.env.NEXT_PUBLIC_ICO_REGISTRATION_NUMBER}
+              </p>
+            )}
+          </div>
         </div>
       </Container>
     </footer>

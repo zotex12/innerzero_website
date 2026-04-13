@@ -79,7 +79,11 @@ export default function PrivacyPage() {
                     1. Who We Are
                   </h3>
                   <p>
-                    InnerZero is provided by Summers Solutions Ltd (Company No. 16448945), registered in England and Wales at Mclaren Building, 46 The Priory Queensway, Birmingham, B4 7LR. For privacy enquiries:{" "}
+                    InnerZero is provided by Summers Solutions Ltd (Company No. 16448945), registered in England and Wales at Mclaren Building, 46 The Priory Queensway, Birmingham, B4 7LR.
+                    {process.env.NEXT_PUBLIC_ICO_REGISTRATION_NUMBER && (
+                      <> Summers Solutions Ltd is registered with the Information Commissioner&apos;s Office (ICO). Registration number: {process.env.NEXT_PUBLIC_ICO_REGISTRATION_NUMBER}.</>
+                    )}
+                    {" "}For privacy enquiries:{" "}
                     <a href="mailto:help@innerzero.com" className="text-accent-gold hover:text-accent-gold-hover transition-colors">
                       help@innerzero.com
                     </a>.
@@ -106,7 +110,41 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    4. BYO API Keys
+                    4. Cloud AI Service (Managed Subscription)
+                  </h3>
+                  <p>
+                    When you use InnerZero&apos;s managed Cloud AI service (optional paid subscription), the following data is sent to our proxy server:
+                  </p>
+                  <ul className="mt-2 list-disc pl-6 space-y-1">
+                    <li>Your message text and a short recent conversation window (last 4 exchanges)</li>
+                    <li>Your model preference</li>
+                  </ul>
+                  <p className="mt-2 font-semibold text-text-primary">What is NOT sent:</p>
+                  <ul className="mt-1 list-disc pl-6 space-y-1">
+                    <li>Your memory database, full conversation history, personal profile facts, file contents, or your IP address (stripped at our proxy before forwarding to the AI provider)</li>
+                  </ul>
+                  <p className="mt-2">
+                    Your prompts are forwarded to the selected AI provider and the response is returned to you. InnerZero does not store, read, or log the content of your prompts or AI responses.
+                  </p>
+                  <p className="mt-2">
+                    Proxy logs are limited to: timestamp, plan tier, model used, and usage count deducted. These are retained for 30 days for billing dispute resolution only, then automatically deleted.
+                  </p>
+                  <p className="mt-2">
+                    AI providers process your data under their own privacy policies and our Data Processing Agreements (DPAs):
+                  </p>
+                  <ul className="mt-2 list-disc pl-6 space-y-1">
+                    <li>Microsoft Azure (DeepSeek): EU West Europe region, covered by Microsoft DPA</li>
+                    <li>Google: covered by Google Cloud Data Processing Addendum</li>
+                    <li>Anthropic: covered by Anthropic DPA</li>
+                  </ul>
+                  <p className="mt-2">
+                    When using BYO (Bring Your Own) API keys, your prompts are sent directly to the provider from your device. InnerZero&apos;s servers are not involved.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-2">
+                    5. BYO API Keys
                   </h3>
                   <p>
                     If you use the BYO (Bring Your Own) API key feature, your API keys are encrypted and stored locally on your device only. Keys are never transmitted to Summers Solutions Ltd or any InnerZero server. Requests using BYO keys go directly from your machine to the provider.
@@ -115,7 +153,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    5. Unrestricted Mode
+                    6. Unrestricted Mode
                   </h3>
                   <p>
                     Enabling Unrestricted Mode does not cause any additional data to be collected or transmitted. The uncensored models run locally on your device, and all generated content remains on your machine.
@@ -124,7 +162,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    6. Voice and Microphone
+                    7. Voice and Microphone
                   </h3>
                   <p>
                     If you use InnerZero&apos;s voice features, the application accesses your microphone to capture speech for local speech-to-text processing. All audio is processed locally on your device using offline speech recognition models. No audio recordings are transmitted, stored, or sent to any server. Audio data is processed in real-time and discarded immediately after transcription. If Cloud Voice mode is enabled, your transcribed text (not audio) is sent to OpenAI for response generation; see Section 3 (Cloud Mode) for details.
@@ -133,7 +171,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    7. What Data the Website Collects
+                    8. What Data the Website Collects
                   </h3>
                   <p>
                     When you create an account on innerzero.com, we collect your email address. If you join our waitlist, we store your email address. Payment information for supporter memberships and donations is processed by Ko-fi and PayPal; we do not receive or store your payment card details. If future cloud plans are offered via Stripe, Stripe will process payments; we will never store card details directly.
@@ -142,7 +180,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    8. Cookies
+                    9. Cookies
                   </h3>
                   <p>
                     The InnerZero website uses only essential cookies for functionality (such as authentication session cookies and theme preference stored in localStorage). We do not use advertising, marketing, or third-party tracking cookies. If we add privacy-respecting analytics in the future (such as Plausible), we will update this policy accordingly.
@@ -151,7 +189,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    9. Data Processors
+                    10. Data Processors
                   </h3>
                   <p>
                     We use the following third-party services:
@@ -160,16 +198,14 @@ export default function PrivacyPage() {
                     <li>Supabase: authentication and database hosting (EU region)</li>
                     <li>Vercel: website hosting and deployment</li>
                     <li>Ko-fi and PayPal: supporter membership and donation payment processing</li>
+                    <li>Stripe: cloud AI subscription and credit pack payment processing</li>
                     <li>Formspree: contact form submissions</li>
                   </ul>
-                  <p className="mt-2">
-                    We will add Stripe to this list if and when cloud AI plans launch.
-                  </p>
                 </div>
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    10. Data Retention
+                    11. Data Retention
                   </h3>
                   <p>
                     Account data (email address) is retained for as long as your account is active. Waitlist data is retained until the waitlist is no longer needed, after which it will be deleted. You can permanently delete your account and all associated data at any time from your{" "}
@@ -179,7 +215,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    11. Your Rights (UK GDPR)
+                    12. Your Rights (UK GDPR)
                   </h3>
                   <p>
                     Under UK GDPR, you have the right to: access your personal data; correct inaccurate data; request deletion of your data; object to processing; request data portability; and withdraw consent at any time. To exercise any of these rights, contact{" "}
@@ -191,7 +227,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    12. Children
+                    13. Children
                   </h3>
                   <p>
                     InnerZero is not intended for children under 13. We do not knowingly collect personal data from children under 13. If you believe a child under 13 has provided us with personal data, contact us and we will delete it promptly.
@@ -200,7 +236,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    13. Changes to This Policy
+                    14. Changes to This Policy
                   </h3>
                   <p>
                     We may update this privacy policy from time to time. Changes will be reflected on this page with an updated date.
@@ -209,7 +245,7 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    14. Contact
+                    15. Contact
                   </h3>
                   <p>
                     For any privacy-related questions or data requests:{" "}
