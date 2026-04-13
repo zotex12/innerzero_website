@@ -153,6 +153,62 @@ export default function DownloadPage() {
           </p>
         </div>
       </Container>
+
+      {/* JSON-LD: SoftwareApplication with per-platform offers */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "@id": "https://innerzero.com/#software",
+            name: "InnerZero",
+            applicationCategory: "UtilitiesApplication",
+            applicationSubCategory: "AI Assistant",
+            operatingSystem: "Windows, macOS, Linux",
+            softwareVersion: "0.1.2",
+            description:
+              "A free private AI assistant that runs entirely on your PC. No cloud. No tracking. No subscription.",
+            url: "https://innerzero.com",
+            downloadUrl: "https://innerzero.com/download",
+            publisher: {
+              "@type": "Organization",
+              "@id": "https://innerzero.com/#organization",
+              name: "InnerZero",
+              url: "https://innerzero.com",
+            },
+            offers: [
+              {
+                "@type": "Offer",
+                name: "InnerZero for Windows",
+                price: "0",
+                priceCurrency: "GBP",
+                availability: "https://schema.org/InStock",
+                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.2.exe",
+                operatingSystem: "Windows 10, Windows 11",
+              },
+              {
+                "@type": "Offer",
+                name: "InnerZero for macOS",
+                price: "0",
+                priceCurrency: "GBP",
+                availability: "https://schema.org/InStock",
+                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.2-mac.dmg",
+                operatingSystem: "macOS 12 or later",
+              },
+              {
+                "@type": "Offer",
+                name: "InnerZero for Linux",
+                price: "0",
+                priceCurrency: "GBP",
+                availability: "https://schema.org/InStock",
+                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.2-x86_64.AppImage",
+                operatingSystem: "Linux x86_64",
+              },
+            ],
+          }),
+        }}
+      />
     </div>
   );
 }

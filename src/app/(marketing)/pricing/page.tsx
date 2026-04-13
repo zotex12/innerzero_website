@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PricingSection } from "@/components/sections/PricingSection";
 import { createMetadata } from "@/lib/metadata";
-import { FAQ_DATA } from "@/lib/constants";
+import { FAQ_DATA, CLOUD_FAQ } from "@/lib/constants";
 
 export const metadata: Metadata = createMetadata({
   title: "Pricing | InnerZero: Free AI, Business Licence, Optional Cloud",
@@ -54,7 +54,7 @@ export default function PricingPage() {
             {
               "@context": "https://schema.org",
               "@type": "FAQPage",
-              mainEntity: FAQ_DATA.map((item) => ({
+              mainEntity: [...FAQ_DATA, ...CLOUD_FAQ].map((item) => ({
                 "@type": "Question",
                 name: item.question,
                 acceptedAnswer: {

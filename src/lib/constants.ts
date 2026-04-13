@@ -261,6 +261,19 @@ export const FAQ_DATA: FAQItem[] = [
   },
 ];
 
+export const CLOUD_FAQ: FAQItem[] = [
+  {
+    question: "What is usage?",
+    answer:
+      "Each cloud AI response uses a set amount from your monthly or purchased usage. Budget models use 1 per response, premium models use more. Auto mode picks the best model and uses just 1.",
+  },
+  {
+    question: "What happens when usage runs out?",
+    answer:
+      "Your local AI keeps working normally. Cloud responses pause until your usage resets next month or you top up with a credit pack. No surprise charges.",
+  },
+];
+
 /* ── Features page - detailed features ── */
 
 export interface DetailedFeature {

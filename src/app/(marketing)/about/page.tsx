@@ -84,6 +84,44 @@ export default function AboutPage() {
       </div>
 
       <CTABanner />
+
+      {/* JSON-LD: Organization */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "@id": "https://innerzero.com/#organization",
+            name: "InnerZero",
+            url: "https://innerzero.com",
+            description:
+              "InnerZero is a free private AI assistant that runs entirely on your PC. Built by Summers Solutions, a UK-based software company focused on privacy-respecting tools.",
+            foundingDate: "2025",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Birmingham",
+              addressCountry: "GB",
+            },
+            logo: {
+              "@type": "ImageObject",
+              url: "https://innerzero.com/images/logo.png",
+            },
+            sameAs: [
+              "https://x.com/InnerZero_ai",
+              "https://www.instagram.com/innerzero_ai",
+              "https://www.linkedin.com/company/innerzero",
+              "https://discord.gg/rn9SPXgThT",
+              "https://github.com/zotex12/innerzero-releases",
+            ],
+            parentOrganization: {
+              "@type": "Organization",
+              name: "Summers Solutions",
+              url: "https://summerssolutions.co.uk",
+            },
+          }),
+        }}
+      />
     </>
   );
 }

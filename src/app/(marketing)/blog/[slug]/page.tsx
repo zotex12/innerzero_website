@@ -152,7 +152,7 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         </article>
 
-        {/* JSON-LD */}
+        {/* JSON-LD: BlogPosting */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -163,13 +163,27 @@ export default async function BlogPostPage({ params }: Props) {
               description: post.description,
               datePublished: post.date,
               dateModified: post.updated || post.date,
-              author: { "@type": "Person", name: post.author },
-              publisher: {
+              image: post.ogImage || "https://innerzero.com/banner.png",
+              author: {
                 "@type": "Organization",
+                "@id": "https://innerzero.com/#organization",
                 name: "InnerZero",
                 url: "https://innerzero.com",
               },
-              mainEntityOfPage: `https://innerzero.com/blog/${post.slug}`,
+              publisher: {
+                "@type": "Organization",
+                "@id": "https://innerzero.com/#organization",
+                name: "InnerZero",
+                url: "https://innerzero.com",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://innerzero.com/images/logo.png",
+                },
+              },
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": `https://innerzero.com/blog/${post.slug}`,
+              },
             }),
           }}
         />
