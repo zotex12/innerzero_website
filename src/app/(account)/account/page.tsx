@@ -7,6 +7,7 @@ import type { Database } from "@/lib/supabase/types";
 import { LogoutButton } from "./LogoutButton";
 import { ManageBillingButton } from "./ManageBillingButton";
 import { CopyButton } from "./CopyButton";
+import { CloudUsageCard } from "./CloudUsageCard";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 type Licence = Database["public"]["Tables"]["licences"]["Row"];
@@ -151,15 +152,22 @@ export default async function AccountPage() {
           )}
         </section>
 
-        {/* InnerZero status */}
+        {/* Cloud AI Usage */}
+        <CloudUsageCard
+          userId={user.id}
+          plan={profile?.plan ?? "free"}
+          usageBalance={profile?.usage_balance ?? 0}
+          usageMonthlyAllowance={profile?.usage_monthly_allowance ?? 0}
+          billingCycleEnd={profile?.billing_cycle_end ?? null}
+          stripeCustomerId={profile?.stripe_customer_id ?? null}
+        />
+
+        {/* InnerZero links */}
         <section className="rounded-xl border border-border-default bg-bg-card p-6">
           <h2 className="text-lg font-semibold text-text-primary mb-4">
-            InnerZero
+            Community
           </h2>
-          <p className="text-sm text-text-secondary">
-            InnerZero is free to use locally. Connect your account in the desktop app for cloud features and supporter perks when they become available.
-          </p>
-          <div className="mt-4 flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <a
               href="https://ko-fi.com/innerzero"
               target="_blank"
@@ -176,25 +184,6 @@ export default async function AccountPage() {
             >
               Join the Discord community
             </a>
-          </div>
-        </section>
-
-        {/* Quick links */}
-        <section className="rounded-xl border border-border-default bg-bg-card p-6">
-          <h2 className="text-lg font-semibold text-text-primary mb-4">
-            Quick Links
-          </h2>
-          <div className="flex flex-col gap-2">
-            {profile?.stripe_customer_id ? (
-              <ManageBillingButton />
-            ) : (
-              <span className="text-sm text-text-muted">
-                Manage Billing: available after first purchase
-              </span>
-            )}
-            <span className="text-sm text-text-muted">
-              Cloud AI Usage: coming soon
-            </span>
           </div>
         </section>
       </div>
