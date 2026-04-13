@@ -300,7 +300,7 @@ export function PricingSection({ className }: PricingSectionProps) {
       </section>
 
       {/* Section C: Cloud AI Subscriptions */}
-      <section className="py-12 md:py-20">
+      <section id="cloud-ai" className="py-12 md:py-20">
         <Container>
           <ScrollReveal>
             <div className="mx-auto max-w-3xl text-center mb-10">
@@ -408,7 +408,7 @@ export function PricingSection({ className }: PricingSectionProps) {
 
       {/* Section D: Pay As You Go */}
       {paygPlans.length > 0 && (
-        <section className="bg-bg-secondary py-12 md:py-20">
+        <section id="pay-as-you-go" className="bg-bg-secondary py-12 md:py-20">
           <Container>
             <ScrollReveal>
               <div className="mx-auto max-w-3xl text-center mb-10">
