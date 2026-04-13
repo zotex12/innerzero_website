@@ -3,16 +3,18 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { stripe } from "@/lib/stripe";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { getCloudPlanById } from "@/lib/cloud-plans";
 
-// Whitelist of allowed Stripe price IDs from environment
+// Whitelist of allowed Stripe price IDs for business licence
 const ALLOWED_PRICES = new Set(
   [process.env.STRIPE_PRICE_BUSINESS_LICENCE, process.env.NEXT_PUBLIC_STRIPE_PRICE_BUSINESS_LICENCE]
     .filter(Boolean)
 );
 
 interface CheckoutBody {
-  priceId: string;
+  priceId?: string;
   quantity?: number;
+  plan_id?: string;
 }
 
 export async function POST(request: Request) {
@@ -30,12 +32,6 @@ export async function POST(request: Request) {
     }
 
     const body = (await request.json()) as CheckoutBody;
-    const { priceId, quantity } = body;
-
-    if (!priceId || !ALLOWED_PRICES.has(priceId)) {
-      return NextResponse.json({ message: "Invalid price." }, { status: 400 });
-    }
-
     const admin = createAdminClient();
 
     // Get or create Stripe customer
@@ -61,6 +57,49 @@ export async function POST(request: Request) {
     }
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://innerzero.com";
+
+    // Cloud plan checkout (plan_id provided)
+    if (body.plan_id) {
+      const cloudPlan = await getCloudPlanById(body.plan_id);
+
+      if (!cloudPlan) {
+        return NextResponse.json({ message: "Plan not found or inactive." }, { status: 400 });
+      }
+
+      const mode = cloudPlan.plan_type === "subscription" ? "subscription" : "payment";
+
+      const sessionParams: Parameters<typeof stripe.checkout.sessions.create>[0] = {
+        mode,
+        customer: customerId,
+        line_items: [{ price: cloudPlan.stripe_price_id, quantity: 1 }],
+        success_url: `${siteUrl}/account?checkout=success`,
+        cancel_url: `${siteUrl}/pricing`,
+        metadata: {
+          plan_id: cloudPlan.id,
+          user_id: user.id,
+          plan_type: cloudPlan.plan_type,
+        },
+      };
+
+      if (mode === "subscription") {
+        sessionParams.subscription_data = {
+          metadata: {
+            plan_id: cloudPlan.id,
+            user_id: user.id,
+          },
+        };
+      }
+
+      const session = await stripe.checkout.sessions.create(sessionParams);
+      return NextResponse.json({ url: session.url });
+    }
+
+    // Business licence checkout (existing flow, priceId provided)
+    const { priceId, quantity } = body;
+
+    if (!priceId || !ALLOWED_PRICES.has(priceId)) {
+      return NextResponse.json({ message: "Invalid price." }, { status: 400 });
+    }
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",

@@ -12,6 +12,19 @@ type CloudPlanRow = {
   active: boolean;
 };
 
+export async function getCloudPlanById(
+  planId: string
+): Promise<CloudPlanRow | null> {
+  const admin = createAdminClient();
+  const { data } = await admin
+    .from("cloud_plans")
+    .select("*")
+    .eq("id", planId)
+    .eq("active", true)
+    .single();
+  return data;
+}
+
 export async function getCloudPlanByPriceId(
   priceId: string
 ): Promise<CloudPlanRow | null> {
