@@ -187,6 +187,7 @@ export type Database = {
           usage_amount: number;
           price_pence: number;
           tier_access: string[];
+          sort_order: number;
           active: boolean;
           created_at: string;
         };
@@ -199,6 +200,7 @@ export type Database = {
           usage_amount: number;
           price_pence: number;
           tier_access?: string[];
+          sort_order?: number;
           active?: boolean;
         };
         Update: {
@@ -209,6 +211,7 @@ export type Database = {
           usage_amount?: number;
           price_pence?: number;
           tier_access?: string[];
+          sort_order?: number;
           active?: boolean;
         };
         Relationships: [];
@@ -219,6 +222,10 @@ export type Database = {
           name: string;
           display_name: string;
           cost_per_request: number;
+          usage_multiplier: number;
+          models: string[];
+          sort_order: number;
+          active: boolean;
           created_at: string;
         };
         Insert: {
@@ -226,11 +233,19 @@ export type Database = {
           name: string;
           display_name: string;
           cost_per_request: number;
+          usage_multiplier?: number;
+          models?: string[];
+          sort_order?: number;
+          active?: boolean;
         };
         Update: {
           name?: string;
           display_name?: string;
           cost_per_request?: number;
+          usage_multiplier?: number;
+          models?: string[];
+          sort_order?: number;
+          active?: boolean;
         };
         Relationships: [];
       };
@@ -274,6 +289,7 @@ export type Database = {
           plan_id: string;
           usage_granted: number;
           usage_remaining: number;
+          expires_at: string | null;
           created_at: string;
         };
         Insert: {
@@ -281,9 +297,11 @@ export type Database = {
           plan_id: string;
           usage_granted: number;
           usage_remaining: number;
+          expires_at?: string | null;
         };
         Update: {
           usage_remaining?: number;
+          expires_at?: string | null;
         };
         Relationships: [];
       };
