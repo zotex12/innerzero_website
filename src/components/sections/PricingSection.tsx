@@ -329,7 +329,7 @@ export function PricingSection({ className }: PricingSectionProps) {
                     <div
                       key={plan.id}
                       className={cn(
-                        "relative rounded-xl border bg-bg-card p-6 text-center transition-all duration-150 hover:-translate-y-[2px]",
+                        "relative flex flex-col rounded-xl border bg-bg-card p-6 text-center transition-all duration-150 hover:-translate-y-[2px]",
                         isBestValue
                           ? "border-2 border-accent-gold shadow-[0_0_20px_rgba(212,168,67,0.08)]"
                           : "border-border-default hover:border-border-hover"
@@ -379,7 +379,7 @@ export function PricingSection({ className }: PricingSectionProps) {
                         })}
                       </ul>
 
-                      <div className="mt-6">
+                      <div className="mt-auto pt-6">
                         {isCurrentPlan ? (
                           <span className="inline-flex w-full items-center justify-center rounded-lg border border-accent-teal px-6 py-3 text-[15px] font-medium text-accent-teal">
                             Current Plan
