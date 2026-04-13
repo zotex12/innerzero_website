@@ -77,6 +77,7 @@ export const LIMITS = {
   licence:         { limit: 30,  windowMs: 60_000, store: "licence" },
   accountDelete:   { limit: 3,   windowMs: 60_000, store: "account-delete" },
   cloudDeduct:     { limit: 10,  windowMs: 60_000, store: "cloud-deduct" },
+  cloudProxy:      { limit: 10,  windowMs: 60_000, store: "cloud-proxy" },
 } as const;
 
 /** Check rate limit and return 429 response if exceeded, or null if OK. */

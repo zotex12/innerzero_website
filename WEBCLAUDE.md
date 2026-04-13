@@ -541,6 +541,13 @@ STRIPE_PRICE_PAYG_500=           # £22 one-time (Phase 3b)
 RESEND_API_KEY=
 ```
 
+### Phase 3b (cloud AI proxy)
+```
+AZURE_DEEPSEEK_API_KEY=          # Azure OpenAI key for DeepSeek deployment
+GOOGLE_AI_API_KEY=               # Google AI Studio API key
+ANTHROPIC_API_KEY=               # Anthropic API key
+```
+
 ---
 
 ## Responsive breakpoints
@@ -749,7 +756,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Phase 3b** | Cloud API endpoints for desktop app: `/api/cloud/balance` GET (returns plan, usage_balance, allowance, billing_cycle_end, overage, spending_cap, tier_access from cloud_plans join, active PAYG packs, all model_tiers), `/api/cloud/deduct` POST (looks up model_tiers.usage_multiplier, deducts from subscription balance first then oldest PAYG pack, rate limited 10/min), `/api/cloud/plans` GET (public, returns all active cloud_plans + model_tiers ordered by sort_order). Shared `src/lib/auth-desktop.ts` helper for bearer token auth. Supabase types updated: model_tiers +sort_order/active/usage_multiplier/models, cloud_plans +sort_order, usage_packs +expires_at. Rate limit preset `cloudDeduct` added | COMPLETE 2026-04-13 |
 | **Phase 3b** | Account usage page | NOT STARTED |
 | **Phase 4** | Licence validation API (validate + status endpoints) | COMPLETE 2026-04-06 |
-| **Phase 4** | Cloud API proxy endpoint | NOT STARTED |
+| **Phase 4** | Cloud API proxy endpoint (`/api/cloud/proxy` POST): bearer auth, accepts messages + model_tier + system_prompt. Checks plan/PAYG access, tier permission via cloud_plans.tier_access, usage balance. Selects model from model_tiers.models array (provider/model_id format). Routes to DeepSeek (Azure), Google Gemini, or Anthropic Claude via `src/lib/cloud-providers.ts` (format transformation per provider). 30s timeout, no usage deduction on failure (502). Privacy-preserving console logs (no content/IPs). Returns X-Usage-Remaining header. Rate limited 10/min. Input limits: system_prompt 2000 chars, messages last 10. Env vars: AZURE_DEEPSEEK_API_KEY, GOOGLE_AI_API_KEY, ANTHROPIC_API_KEY | COMPLETE 2026-04-13 |
 | **Phase 4** | Credit metering + overage | NOT STARTED |
 | **Phase 4** | Spending caps + usage alerts | NOT STARTED |
 | **Features** | Features page: removed "for Windows" from metadata title (now cross-platform after v0.1.2). Coming Soon: replaced shipped "Linux support" with "Mac code signing" and "Windows code signing" (in progress). Swapped icon assignments accordingly | COMPLETE 2026-04-09 |
