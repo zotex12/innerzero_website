@@ -8,15 +8,15 @@ The full product and infrastructure spec is in `innerzero_web_spec.md` — read 
 
 ## Current state
 
-Phase 1 (marketing frontend), Phase 2 (auth + database), pricing pivot, terms/privacy rewrite, Phase 3 (Stripe checkout, webhooks, portal, business licence), Phase 3b (cloud subscription infrastructure, proxy, checkout, usage tracking, PAYG, pricing page, account cloud usage, cron jobs), Phase 4 (licence validation API, cloud API proxy endpoint), SEO (JSON-LD, blog metadata, comparison posts), and Phase 6 rate limiting are all done and deployed to Vercel at innerzero.com.
+Phase 1 (marketing frontend), Phase 2 (auth + database), pricing pivot, terms/privacy rewrite, Phase 3 (Stripe checkout, webhooks, portal, business licence), Phase 3b (cloud subscription infrastructure, proxy, checkout, usage tracking, PAYG, pricing page, account cloud usage, cron jobs), Phase 4 (licence validation API, cloud API proxy endpoint, spending caps, usage alerts, cost logging), SEO (JSON-LD, blog metadata, comparison posts), and Phase 6 (rate limiting, GDPR deletion, CORS hardening, security audit partial) are all done and deployed to Vercel at innerzero.com.
 
 Phase 5 desktop app integration (account.py, cloud routing, BYO API key UI) is complete in the desktop codebase. The website API routes that support it were built in Phase 3b.
 
 **Remaining website work:**
 - Phase 3: Founder slot tracking (100 cap), account dashboard plan/supporter/founder display
-- Phase 4: Credit metering + overage, spending caps + usage alerts
+- Phase 4: Credit metering (done: spending caps, usage alerts, cost logging). Overage billing deferred by design (overage_enabled defaults to false)
 - Phase 5: Update check API
-- Phase 6: Error monitoring, GDPR account deletion, analytics (Plausible/Fathom), security audit
+- Phase 6: Error monitoring, analytics (Plausible/Fathom). Rate limiting, GDPR account deletion, CORS hardening, security headers, and partial security audit are all complete
 
 ---
 
@@ -789,8 +789,8 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Fix** | Pricing page: added `id="cloud-ai"` and `id="pay-as-you-go"` anchor IDs to section elements for desktop app deep-linking (`innerzero.com/pricing#cloud-ai`, `innerzero.com/pricing#pay-as-you-go`) | COMPLETE 2026-04-13 |
 | **SEO** | JSON-LD structured data added across all key pages. Home: Organization (foundingDate 2025, Birmingham GB, logo, sameAs: X/Instagram/LinkedIn/Discord/GitHub, parentOrg Summers Solutions) + SoftwareApplication (v0.1.2, Windows/macOS/Linux, featureList, downloadUrl) + WebSite (SearchAction). Pricing: FAQPage now includes CLOUD_FAQ items (moved to constants.ts, imported in both PricingSection and pricing/page.tsx). Download: SoftwareApplication with 3 per-platform Offers (Windows EXE, macOS DMG, Linux AppImage, each with direct download URL + OS). About: full Organization schema. Blog [slug]: BlogPosting fixed: author changed to Organization (@id reference), publisher with logo ImageObject, mainEntityOfPage typed as WebPage. Shared JsonLd.tsx helper component created. | COMPLETE 2026-04-13 |
 | **SEO** | Blog post metadata updated for search intent. 4 existing posts updated (frontmatter title + description only, slugs and body unchanged): innerzero-is-live (now targets "Free Private AI Assistant for Windows Mac Linux"), customise-innerzero (now targets "How to Customise Your Local AI Assistant"), knowledge-packs-explained (now targets "How to Give Your AI Offline Access to Wikipedia"), unrestricted-mode-explained (now targets "Uncensored Local AI"). 5 new comparison/search-intent posts added: innerzero-vs-gpt4all (honest GPT4All comparison with table), innerzero-vs-lm-studio (model playground vs full assistant, notes LM Studio backend compatibility), innerzero-vs-jan (Jan comparison with table), ollama-desktop-app (Ollama GUI comparison: Open WebUI, Chatbox, Msty, Jan, InnerZero), ai-that-remembers (local memory vs cloud memory, sleep pipeline, privacy). All posts: no em dashes, casual tone, 600-800 words, internal links to /download and other posts, fair to competitors. | COMPLETE 2026-04-13 |
-| **Phase 4** | Credit metering + overage | NOT STARTED |
-| **Phase 4** | Spending caps + usage alerts | NOT STARTED |
+| **Phase 4** | Credit metering + overage: spending caps enforced (spending-cap.ts, /api/cloud/spending-cap), usage threshold alerts (usage-alerts.ts via Resend), server-side cost logging (proxy_cost_log, PROVIDER_COSTS). Overage billing deferred by design (overage_enabled defaults to false) | COMPLETE 2026-04-14 |
+| **Phase 4** | Spending caps + usage alerts (see above) | COMPLETE 2026-04-14 |
 | **Features** | Features page: removed "for Windows" from metadata title (now cross-platform after v0.1.2). Coming Soon: replaced shipped "Linux support" with "Mac code signing" and "Windows code signing" (in progress). Swapped icon assignments accordingly | COMPLETE 2026-04-09 |
 | **SEO** | Set `public/banner.png` (1536x1024) as site-wide Open Graph and Twitter Card image. Updated `metadata.ts` defaults, blog post fallback in `[slug]/page.tsx`, and middleware matcher to exclude `banner.png` from auth. Replaces previous `og-default.png` references | COMPLETE 2026-04-09 |
 | **Fix** | OG image URLs changed from relative (`/banner.png`) to absolute (`https://innerzero.com/banner.png`) in `metadata.ts` and blog `[slug]/page.tsx`. Facebook debugger requires explicit absolute URLs. Blog fallback dimensions corrected to 1536x1024 | COMPLETE 2026-04-09 |
@@ -798,11 +798,11 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Phase 5** | Desktop app cloud routing integration | COMPLETE (built in desktop app codebase, Phase 5) |
 | **Phase 5** | Desktop app BYO API key UI | COMPLETE (built in desktop app codebase, Phase 5) |
 | **Phase 5** | Update check API | NOT STARTED |
-| **Phase 6** | Rate limiting | NOT STARTED |
+| **Phase 6** | Rate limiting: shared rate limiter applied to all API routes (see Phase 6 entry above) | COMPLETE 2026-04-09 |
 | **Phase 6** | Error monitoring | NOT STARTED |
-| **Phase 6** | GDPR: account deletion | NOT STARTED |
+| **Phase 6** | GDPR: account deletion route with full cleanup (see Phase 6 entry above) | COMPLETE 2026-04-09 |
 | **Phase 6** | Analytics (Plausible/Fathom) | NOT STARTED |
-| **Phase 6** | Security audit | NOT STARTED |
+| **Phase 6** | Security audit (partial): CORS headers + Origin check on cloud API routes, RLS on proxy_cost_log, idempotency protection, provider fallback, output token caps, spending caps, security headers (X-Content-Type-Options, X-Frame-Options, Referrer-Policy) | COMPLETE 2026-04-14 |
 | **Housekeeping** | WEBCLAUDE.md sync: updated current state, brand identity, file structure (added cloud/cron API routes, lib modules, JsonLd, DownloadCards, blog content dir, vercel.json), route map (removed non-existent billing/usage subpages), pricing/blog/changelog/terms/account page specs to reflect what was built, cloud AI copy block, dependencies to match package.json, Phase 5 desktop items to COMPLETE, fixed filename reference | COMPLETE 2026-04-14 |
 | **Phase 6** | CORS protection for cloud API routes: `next.config.ts` CORS headers on `/api/cloud/:path*` (Access-Control-Allow-Origin: https://innerzero.com, Allow-Methods: POST/GET/OPTIONS, Allow-Headers: Authorization/Content-Type). Defence-in-depth Origin check in `src/lib/auth-desktop.ts` — rejects requests with non-innerzero.com Origin header (403), passes desktop requests (no Origin header) and same-origin browser requests. CloudUsageCard verified: fetches `/api/cloud/plans` and `/api/cloud/usage-history` same-origin, unaffected by CORS config | COMPLETE 2026-04-14 |
 | **Phase 6** | Idempotent cloud usage deduction: optional `request_id` field (1-64 alphanumeric/hyphens) in `/api/cloud/proxy` and `/api/cloud/deduct` request bodies. Before deducting, checks `usage_transactions` for existing `request_id` — if found, returns cached result without double-deducting. `deductUsage` in `cloud-plans.ts` passes `request_id` through to insert. Supabase types updated with `request_id` column. **Requires DB migration**: `ALTER TABLE usage_transactions ADD COLUMN request_id TEXT; CREATE UNIQUE INDEX idx_usage_transactions_request_id ON usage_transactions (request_id) WHERE request_id IS NOT NULL;` Backwards-compatible: old clients without `request_id` work unchanged | COMPLETE 2026-04-14 |
