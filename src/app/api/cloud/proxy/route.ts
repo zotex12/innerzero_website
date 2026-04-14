@@ -9,6 +9,7 @@ import {
 } from "@/lib/cloud-providers";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
+import { checkSpendingCap } from "@/lib/spending-cap";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -91,7 +92,7 @@ export async function POST(request: Request) {
   // Get profile with plan info
   const { data: profile } = await admin
     .from("profiles")
-    .select("plan, usage_balance, usage_monthly_allowance, usage_alerts_sent")
+    .select("plan, usage_balance, usage_monthly_allowance, usage_alerts_sent, spending_cap_pence, billing_cycle_end")
     .eq("id", userId)
     .single();
 
@@ -157,6 +158,19 @@ export async function POST(request: Request) {
   }
 
   const cost = tier.usage_multiplier;
+
+  // Spending cap check (subscription users only, cap > 0)
+  if (hasPlan && (profile.spending_cap_pence ?? 0) > 0) {
+    const capError = await checkSpendingCap(
+      admin, userId, profile.spending_cap_pence!, profile.billing_cycle_end ?? null, cost
+    );
+    if (capError) {
+      return NextResponse.json(
+        { error: "spending_cap_exceeded", message: capError },
+        { status: 402 }
+      );
+    }
+  }
 
   // Check sufficient usage (subscription or PAYG)
   let deductSource: "subscription" | "payg" = "subscription";

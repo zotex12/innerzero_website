@@ -4,6 +4,7 @@ import { getDesktopUser } from "@/lib/auth-desktop";
 import { deductUsage } from "@/lib/cloud-plans";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
+import { checkSpendingCap } from "@/lib/spending-cap";
 
 const REQUEST_ID_PATTERN = /^[a-zA-Z0-9-]{1,64}$/;
 
@@ -92,7 +93,7 @@ export async function POST(request: Request) {
   // Get current subscription balance
   const { data: profile } = await admin
     .from("profiles")
-    .select("usage_balance, usage_monthly_allowance, usage_alerts_sent")
+    .select("usage_balance, usage_monthly_allowance, usage_alerts_sent, spending_cap_pence, billing_cycle_end, plan")
     .eq("id", auth.user.id)
     .single();
 
@@ -103,6 +104,20 @@ export async function POST(request: Request) {
   const subscriptionBalance = profile.usage_balance ?? 0;
   const monthlyAllowance = profile.usage_monthly_allowance ?? 0;
   const alertsSent = (profile.usage_alerts_sent as string[] | null) ?? [];
+
+  // Spending cap check (subscription users only, cap > 0)
+  const hasPlan = profile.plan && profile.plan !== "free";
+  if (hasPlan && (profile.spending_cap_pence ?? 0) > 0) {
+    const capError = await checkSpendingCap(
+      admin, auth.user.id, profile.spending_cap_pence!, profile.billing_cycle_end ?? null, cost
+    );
+    if (capError) {
+      return NextResponse.json(
+        { error: "spending_cap_exceeded", message: capError },
+        { status: 402 }
+      );
+    }
+  }
 
   // Try subscription balance first
   if (subscriptionBalance >= cost) {
