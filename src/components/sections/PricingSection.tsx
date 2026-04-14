@@ -389,6 +389,15 @@ export function PricingSection({ className }: PricingSectionProps) {
                 <p className="text-text-muted text-sm">Loading cloud plans...</p>
               </div>
             )}
+
+            <div className="mx-auto max-w-3xl mt-8 text-center space-y-2">
+              <p className="text-sm text-text-secondary">
+                Managed plans include DeepSeek, Google Gemini, and Anthropic Claude. Model selection is automatic based on your chosen tier.
+              </p>
+              <p className="text-sm text-text-muted">
+                Want more providers? Add your own API keys for free. Supports OpenAI, xAI Grok, Qwen, Kimi, and all managed providers. Zero markup.
+              </p>
+            </div>
           </ScrollReveal>
         </Container>
       </section>
@@ -452,6 +461,10 @@ export function PricingSection({ className }: PricingSectionProps) {
                   );
                 })}
               </div>
+
+              <p className="mx-auto max-w-3xl mt-6 text-center text-sm text-text-muted">
+                PAYG credits use the same managed providers as subscription plans.
+              </p>
             </ScrollReveal>
           </Container>
         </section>
