@@ -4,10 +4,13 @@ import { getDesktopUser } from "@/lib/auth-desktop";
 import { deductUsage } from "@/lib/cloud-plans";
 import { checkRateLimit } from "@/lib/rate-limit";
 
+const REQUEST_ID_PATTERN = /^[a-zA-Z0-9-]{1,64}$/;
+
 interface DeductBody {
   model_tier: string;
   provider: string;
   model_id: string;
+  request_id?: string;
 }
 
 export async function POST(request: Request) {
@@ -38,7 +41,35 @@ export async function POST(request: Request) {
     );
   }
 
+  const requestId = body.request_id;
+  if (requestId !== undefined) {
+    if (typeof requestId !== "string" || !REQUEST_ID_PATTERN.test(requestId)) {
+      return NextResponse.json(
+        { error: "request_id must be 1-64 alphanumeric/hyphen characters." },
+        { status: 400 }
+      );
+    }
+  }
+
   const admin = createAdminClient();
+
+  // Idempotency: if request_id was already processed, return the cached result
+  if (requestId) {
+    const { data: existing } = await admin
+      .from("usage_transactions")
+      .select("amount, balance_after")
+      .eq("request_id", requestId)
+      .single();
+
+    if (existing) {
+      return NextResponse.json({
+        success: true,
+        usage_deducted: Math.abs(existing.amount),
+        usage_remaining: existing.balance_after,
+        idempotent: true,
+      });
+    }
+  }
 
   // Look up model tier to get usage_multiplier
   const { data: tier } = await admin
@@ -77,7 +108,8 @@ export async function POST(request: Request) {
       cost,
       body.model_tier,
       body.provider,
-      body.model_id
+      body.model_id,
+      requestId
     );
 
     return NextResponse.json({
@@ -123,6 +155,7 @@ export async function POST(request: Request) {
     model_tier: body.model_tier,
     provider: body.provider,
     model_id: body.model_id,
+    ...(requestId ? { request_id: requestId } : {}),
   });
 
   return NextResponse.json({

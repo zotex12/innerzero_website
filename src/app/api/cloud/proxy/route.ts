@@ -10,6 +10,7 @@ export const maxDuration = 30;
 
 const MAX_SYSTEM_PROMPT_CHARS = 2000;
 const MAX_MESSAGE_EXCHANGES = 10; // 5 exchanges = 10 messages (user + assistant)
+const REQUEST_ID_PATTERN = /^[a-zA-Z0-9-]{1,64}$/;
 
 interface ProxyMessage {
   role: "user" | "assistant";
@@ -20,6 +21,7 @@ interface ProxyBody {
   messages: ProxyMessage[];
   model_tier?: string;
   system_prompt?: string;
+  request_id?: string;
 }
 
 export async function POST(request: Request) {
@@ -34,6 +36,17 @@ export async function POST(request: Request) {
     body = (await request.json()) as ProxyBody;
   } catch {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+  }
+
+  // Validate request_id if provided
+  const requestId = body.request_id;
+  if (requestId !== undefined) {
+    if (typeof requestId !== "string" || !REQUEST_ID_PATTERN.test(requestId)) {
+      return NextResponse.json(
+        { error: "request_id must be 1-64 alphanumeric/hyphen characters." },
+        { status: 400 }
+      );
+    }
   }
 
   // Validate messages
@@ -209,34 +222,48 @@ export async function POST(request: Request) {
       })
     );
 
-    // Deduct usage after successful response
-    if (deductSource === "subscription") {
-      await deductUsage(userId, cost, requestedTier, provider, modelId);
-    } else if (paygPackId) {
-      // Deduct from PAYG pack
-      const { data: pack } = await admin
-        .from("usage_packs")
-        .select("usage_remaining")
-        .eq("id", paygPackId)
+    // Idempotency: skip deduction if this request_id was already processed
+    let alreadyDeducted = false;
+    if (requestId) {
+      const { data: existing } = await admin
+        .from("usage_transactions")
+        .select("id")
+        .eq("request_id", requestId)
         .single();
+      if (existing) alreadyDeducted = true;
+    }
 
-      if (pack) {
-        await admin
+    // Deduct usage after successful response
+    if (!alreadyDeducted) {
+      if (deductSource === "subscription") {
+        await deductUsage(userId, cost, requestedTier, provider, modelId, requestId);
+      } else if (paygPackId) {
+        // Deduct from PAYG pack
+        const { data: pack } = await admin
           .from("usage_packs")
-          .update({ usage_remaining: pack.usage_remaining - cost })
-          .eq("id", paygPackId);
-      }
+          .select("usage_remaining")
+          .eq("id", paygPackId)
+          .single();
 
-      await admin.from("usage_transactions").insert({
-        user_id: userId,
-        type: "usage",
-        amount: -cost,
-        balance_after: subscriptionBalance,
-        description: `${provider}/${modelId} (PAYG pack)`,
-        model_tier: requestedTier,
-        provider,
-        model_id: modelId,
-      });
+        if (pack) {
+          await admin
+            .from("usage_packs")
+            .update({ usage_remaining: pack.usage_remaining - cost })
+            .eq("id", paygPackId);
+        }
+
+        await admin.from("usage_transactions").insert({
+          user_id: userId,
+          type: "usage",
+          amount: -cost,
+          balance_after: subscriptionBalance,
+          description: `${provider}/${modelId} (PAYG pack)`,
+          model_tier: requestedTier,
+          provider,
+          model_id: modelId,
+          ...(requestId ? { request_id: requestId } : {}),
+        });
+      }
     }
 
     // Get updated balance for header

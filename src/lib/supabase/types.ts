@@ -261,6 +261,7 @@ export type Database = {
           model_tier: string | null;
           provider: string | null;
           model_id: string | null;
+          request_id: string | null;
           created_at: string;
         };
         Insert: {
@@ -273,6 +274,7 @@ export type Database = {
           model_tier?: string | null;
           provider?: string | null;
           model_id?: string | null;
+          request_id?: string | null;
         };
         Update: {
           type?: string;

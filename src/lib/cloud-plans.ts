@@ -92,7 +92,8 @@ export async function deductUsage(
   amount: number,
   modelTier: string,
   provider: string,
-  modelId: string
+  modelId: string,
+  requestId?: string
 ): Promise<void> {
   const admin = createAdminClient();
 
@@ -114,6 +115,7 @@ export async function deductUsage(
     model_tier: modelTier,
     provider,
     model_id: modelId,
+    ...(requestId ? { request_id: requestId } : {}),
   });
 
   await admin
