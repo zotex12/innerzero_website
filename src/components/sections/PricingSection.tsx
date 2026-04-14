@@ -298,7 +298,7 @@ export function PricingSection({ className }: PricingSectionProps) {
                 </h2>
               </div>
               <p className="text-text-secondary">
-                Optional cloud AI for faster responses and premium models. Your data stays private.
+                Optional cloud AI for faster responses and premium models, with built-in privacy controls.
               </p>
               <p className="mt-2 text-sm text-text-muted">
                 Or add your own API keys for free, with zero markup.

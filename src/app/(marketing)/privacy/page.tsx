@@ -121,7 +121,8 @@ export default function PrivacyPage() {
                   </ul>
                   <p className="mt-2 font-semibold text-text-primary">What is NOT sent:</p>
                   <ul className="mt-1 list-disc pl-6 space-y-1">
-                    <li>Your memory database, full conversation history, personal profile facts, file contents, or your IP address (stripped at our proxy before forwarding to the AI provider)</li>
+                    <li>Your memory database, full conversation history, personal profile facts, or file contents</li>
+                    <li>Your IP address is not included in the data sent to AI providers and is not stored in InnerZero application logs</li>
                   </ul>
                   <p className="mt-2">
                     Your prompts are forwarded to the selected AI provider and the response is returned to you. InnerZero does not store, read, or log the content of your prompts or AI responses.
