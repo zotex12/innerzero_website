@@ -102,7 +102,10 @@ async function callGoogle(
     });
   }
 
-  const body: Record<string, unknown> = { contents };
+  const body: Record<string, unknown> = {
+    contents,
+    generationConfig: { maxOutputTokens: 2048 },
+  };
   if (systemPrompt) {
     body.systemInstruction = { parts: [{ text: systemPrompt }] };
   }
@@ -207,26 +210,35 @@ async function callAnthropic(
 }
 
 // ── Provider cost rates (pence per 1K tokens) ────────────────────────
+// Converted from USD per 1M tokens at $1 = £0.79, rounded UP for margin.
 
 export const PROVIDER_COSTS: Record<
   string,
   { input_per_1k: number; output_per_1k: number }
 > = {
-  // Azure DeepSeek V3.2: $0.27/1M input, $1.10/1M output → pence at ~£0.79/$1
-  "DeepSeek-V3-2": { input_per_1k: 0.0213, output_per_1k: 0.0866 },
-  // Google Gemini 2.5 Flash: $0.15/1M input, $0.60/1M output
-  "gemini-2.5-flash": { input_per_1k: 0.0118, output_per_1k: 0.0472 },
-  // Anthropic Claude Sonnet 4.6: $3/1M input, $15/1M output
-  "claude-sonnet-4-6": { input_per_1k: 0.2362, output_per_1k: 1.1811 },
+  // Azure DeepSeek V3.2: $0.58/1M input, $1.68/1M output
+  "DeepSeek-V3-2": { input_per_1k: 0.0459, output_per_1k: 0.1328 },
+  // Google Gemini 2.5 Flash: $0.30/1M input, $2.50/1M output
+  "gemini-2.5-flash": { input_per_1k: 0.0237, output_per_1k: 0.1975 },
+  // Google Gemini 2.5 Flash-Lite: $0.10/1M input, $0.40/1M output
+  "gemini-2.5-flash-lite": { input_per_1k: 0.0079, output_per_1k: 0.0316 },
+  // Anthropic Claude Haiku 4.5: $1.00/1M input, $5.00/1M output
+  "claude-haiku-4-5-20251001": { input_per_1k: 0.0790, output_per_1k: 0.3950 },
+  // Anthropic Claude Sonnet 4.6: $3.00/1M input, $15.00/1M output
+  "claude-sonnet-4-6": { input_per_1k: 0.2370, output_per_1k: 1.1850 },
+  // Anthropic Claude Opus 4.6: $5.00/1M input, $25.00/1M output
+  "claude-opus-4-6": { input_per_1k: 0.3950, output_per_1k: 1.9750 },
 };
+
+// Fallback: most expensive rate (Claude Opus) for unknown models
+const FALLBACK_COST = PROVIDER_COSTS["claude-opus-4-6"];
 
 export function estimateCostPence(
   modelId: string,
   inputTokens: number,
   outputTokens: number
 ): number {
-  const rates = PROVIDER_COSTS[modelId];
-  if (!rates) return 0;
+  const rates = PROVIDER_COSTS[modelId] ?? FALLBACK_COST;
   return (
     (inputTokens / 1000) * rates.input_per_1k +
     (outputTokens / 1000) * rates.output_per_1k
