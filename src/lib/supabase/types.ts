@@ -336,6 +336,48 @@ export type Database = {
         Update: Record<string, never>;
         Relationships: [];
       };
+      theme_codes: {
+        Row: {
+          id: string;
+          code_hash: string;
+          theme_id: string;
+          label: string;
+          max_uses: number;
+          uses: number;
+          expires_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          code_hash: string;
+          theme_id: string;
+          label: string;
+          max_uses?: number;
+          uses?: number;
+          expires_at?: string | null;
+        };
+        Update: {
+          uses?: number;
+          max_uses?: number;
+          expires_at?: string | null;
+        };
+        Relationships: [];
+      };
+      theme_redemptions: {
+        Row: {
+          id: string;
+          code_id: string;
+          user_id: string | null;
+          device_fingerprint: string;
+          redeemed_at: string;
+        };
+        Insert: {
+          code_id: string;
+          user_id?: string | null;
+          device_fingerprint: string;
+        };
+        Update: Record<string, never>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
