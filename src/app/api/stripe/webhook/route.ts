@@ -293,6 +293,7 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
           usage_balance: cloudPlan.usage_amount,
           billing_cycle_end: periodEnd,
           subscription_status: "active",
+          usage_alerts_sent: [],
         })
         .eq("id", profile.id);
 

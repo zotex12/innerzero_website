@@ -24,6 +24,7 @@ export type Database = {
           billing_cycle_end: string | null;
           overage_enabled: boolean;
           spending_cap_pence: number | null;
+          usage_alerts_sent: string[];
           created_at: string;
           updated_at: string;
         };
@@ -49,6 +50,7 @@ export type Database = {
           billing_cycle_end?: string | null;
           overage_enabled?: boolean;
           spending_cap_pence?: number | null;
+          usage_alerts_sent?: string[];
         };
         Update: {
           id?: string;
@@ -72,6 +74,7 @@ export type Database = {
           billing_cycle_end?: string | null;
           overage_enabled?: boolean;
           spending_cap_pence?: number | null;
+          usage_alerts_sent?: string[];
           updated_at?: string;
         };
         Relationships: [];

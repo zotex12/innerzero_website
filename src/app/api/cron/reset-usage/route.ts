@@ -31,12 +31,13 @@ export async function GET(request: Request) {
     const newEnd = new Date(oldEnd);
     newEnd.setMonth(newEnd.getMonth() + 1);
 
-    // Reset usage balance and advance billing cycle
+    // Reset usage balance, advance billing cycle, clear alert flags
     await admin
       .from("profiles")
       .update({
         usage_balance: profile.usage_monthly_allowance,
         billing_cycle_end: newEnd.toISOString(),
+        usage_alerts_sent: [],
       })
       .eq("id", profile.id);
 

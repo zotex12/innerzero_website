@@ -8,6 +8,7 @@ import {
   ProviderUnavailableError,
 } from "@/lib/cloud-providers";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -90,7 +91,7 @@ export async function POST(request: Request) {
   // Get profile with plan info
   const { data: profile } = await admin
     .from("profiles")
-    .select("plan, usage_balance")
+    .select("plan, usage_balance, usage_monthly_allowance, usage_alerts_sent")
     .eq("id", userId)
     .single();
 
@@ -99,6 +100,8 @@ export async function POST(request: Request) {
   }
 
   const subscriptionBalance = profile.usage_balance ?? 0;
+  const monthlyAllowance = profile.usage_monthly_allowance ?? 0;
+  const alertsSent = (profile.usage_alerts_sent as string[] | null) ?? [];
 
   // Check user has active plan or PAYG packs
   let hasPlan = profile.plan && profile.plan !== "free";
@@ -303,6 +306,13 @@ export async function POST(request: Request) {
         .then(({ error: costErr }) => {
           if (costErr) console.error("[proxy_cost_log] insert failed:", costErr.message);
         });
+
+      // Fire-and-forget usage threshold alert (subscription users only)
+      if (!alreadyDeducted && deductSource === "subscription" && monthlyAllowance > 0) {
+        const newBalance = subscriptionBalance - cost;
+        checkAndSendUsageAlert(userId, newBalance, monthlyAllowance, alertsSent)
+          .catch((err) => console.error("[usage-alerts] check failed:", err instanceof Error ? err.message : "unknown"));
+      }
 
       // Get updated balance for header
       const { data: updatedProfile } = await admin

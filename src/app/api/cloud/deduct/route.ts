@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getDesktopUser } from "@/lib/auth-desktop";
 import { deductUsage } from "@/lib/cloud-plans";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
 
 const REQUEST_ID_PATTERN = /^[a-zA-Z0-9-]{1,64}$/;
 
@@ -91,7 +92,7 @@ export async function POST(request: Request) {
   // Get current subscription balance
   const { data: profile } = await admin
     .from("profiles")
-    .select("usage_balance")
+    .select("usage_balance, usage_monthly_allowance, usage_alerts_sent")
     .eq("id", auth.user.id)
     .single();
 
@@ -100,6 +101,8 @@ export async function POST(request: Request) {
   }
 
   const subscriptionBalance = profile.usage_balance ?? 0;
+  const monthlyAllowance = profile.usage_monthly_allowance ?? 0;
+  const alertsSent = (profile.usage_alerts_sent as string[] | null) ?? [];
 
   // Try subscription balance first
   if (subscriptionBalance >= cost) {
@@ -111,6 +114,12 @@ export async function POST(request: Request) {
       body.model_id,
       requestId
     );
+
+    // Fire-and-forget usage threshold alert
+    if (monthlyAllowance > 0) {
+      checkAndSendUsageAlert(auth.user.id, subscriptionBalance - cost, monthlyAllowance, alertsSent)
+        .catch((err) => console.error("[usage-alerts] check failed:", err instanceof Error ? err.message : "unknown"));
+    }
 
     return NextResponse.json({
       success: true,
