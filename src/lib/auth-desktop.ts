@@ -10,6 +10,18 @@ import type { User } from "@supabase/supabase-js";
 export async function getDesktopUser(
   request: Request
 ): Promise<{ user: User } | { error: NextResponse }> {
+  // Defence-in-depth: reject cross-origin browser requests.
+  // Desktop app (Python requests) never sends an Origin header.
+  const origin = request.headers.get("origin");
+  if (origin && origin !== "https://innerzero.com") {
+    return {
+      error: NextResponse.json(
+        { error: "Forbidden origin." },
+        { status: 403 }
+      ),
+    };
+  }
+
   const authHeader = request.headers.get("authorization");
 
   if (!authHeader?.startsWith("Bearer ")) {

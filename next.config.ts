@@ -12,6 +12,23 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        source: "/api/cloud/:path*",
+        headers: [
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "https://innerzero.com",
+          },
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "POST, GET, OPTIONS",
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value: "Authorization, Content-Type",
+          },
+        ],
+      },
+      {
         source: "/favicon.ico",
         headers: [
           { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },

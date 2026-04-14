@@ -804,6 +804,7 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Phase 6** | Analytics (Plausible/Fathom) | NOT STARTED |
 | **Phase 6** | Security audit | NOT STARTED |
 | **Housekeeping** | WEBCLAUDE.md sync: updated current state, brand identity, file structure (added cloud/cron API routes, lib modules, JsonLd, DownloadCards, blog content dir, vercel.json), route map (removed non-existent billing/usage subpages), pricing/blog/changelog/terms/account page specs to reflect what was built, cloud AI copy block, dependencies to match package.json, Phase 5 desktop items to COMPLETE, fixed filename reference | COMPLETE 2026-04-14 |
+| **Phase 6** | CORS protection for cloud API routes: `next.config.ts` CORS headers on `/api/cloud/:path*` (Access-Control-Allow-Origin: https://innerzero.com, Allow-Methods: POST/GET/OPTIONS, Allow-Headers: Authorization/Content-Type). Defence-in-depth Origin check in `src/lib/auth-desktop.ts` — rejects requests with non-innerzero.com Origin header (403), passes desktop requests (no Origin header) and same-origin browser requests. CloudUsageCard verified: fetches `/api/cloud/plans` and `/api/cloud/usage-history` same-origin, unaffected by CORS config | COMPLETE 2026-04-14 |
 
 ---
 
