@@ -6,15 +6,17 @@ Marketing website and account portal for InnerZero (innerzero.com), a local-firs
 
 The full product and infrastructure spec is in `innerzero_web_spec.md` — read it before making any architectural decisions.
 
-## Current phase
+## Current state
 
-**Phase 4: Licence Validation API — COMPLETE**
+Phase 1 (marketing frontend), Phase 2 (auth + database), pricing pivot, terms/privacy rewrite, Phase 3 (Stripe checkout, webhooks, portal, business licence), Phase 3b (cloud subscription infrastructure, proxy, checkout, usage tracking, PAYG, pricing page, account cloud usage, cron jobs), Phase 4 (licence validation API, cloud API proxy endpoint), SEO (JSON-LD, blog metadata, comparison posts), and Phase 6 rate limiting are all done and deployed to Vercel at innerzero.com.
 
-Phase 1 (marketing frontend), Phase 2 (auth + database), pricing pivot, terms/privacy rewrite, Phase 3 (Stripe checkout, webhooks, portal, business licence), and Phase 4 (licence validation API for desktop app) are done and deployed to Vercel at innerzero.com.
+Phase 5 desktop app integration (account.py, cloud routing, BYO API key UI) is complete in the desktop codebase. The website API routes that support it were built in Phase 3b.
 
-**Next immediate work:** Phase 5 (desktop app integration — account.py module, licence validation calls, cloud routing).
-
-Cloud credit plans (Phase 3b) and cloud API proxy are deferred until there are 50+ active users.
+**Remaining website work:**
+- Phase 3: Founder slot tracking (100 cap), account dashboard plan/supporter/founder display
+- Phase 4: Credit metering + overage, spending caps + usage alerts
+- Phase 5: Update check API
+- Phase 6: Error monitoring, GDPR account deletion, analytics (Plausible/Fathom), security audit
 
 ---
 
@@ -53,7 +55,7 @@ Cloud credit plans (Phase 3b) and cloud API proxy are deferred until there are 5
 | Supporting line | Your AI. Your machine. Your data. |
 | Company | Summers Solutions |
 | Local app | Free forever — no subscription, no trial, no account required |
-| Cloud plans | Optional — £9.99/£19.99/£39.99/month (Phase 3b, after users exist) |
+| Cloud plans | Optional — Starter £9.99/mo, Plus £19.99/mo, Pro £39.99/mo (live) |
 | BYO API keys | Free — user adds their own, zero markup |
 | Supporter | £4.99/month — donation, not compute |
 | Founder | £79 one-time — first 100 only |
@@ -203,6 +205,7 @@ innerzero_website/
 │   │   ├── contact/page.tsx
 │   │   ├── waitlist/page.tsx
 │   │   ├── download/page.tsx
+│   │   ├── download/DownloadCards.tsx # Client component — OS detection, platform cards
 │   │   ├── blog/page.tsx
 │   │   ├── blog/[slug]/page.tsx
 │   │   ├── changelog/page.tsx
@@ -217,13 +220,22 @@ innerzero_website/
 │   │   ├── account/billing/page.tsx     # Phase 3
 │   │   ├── account/usage/page.tsx       # Phase 3b
 │   │   └── api/
-│   │       ├── waitlist/route.ts        # POST: email capture
-│   │       ├── stripe/checkout/route.ts # Phase 3
-│   │       ├── stripe/webhook/route.ts  # Phase 3
-│   │       ├── stripe/portal/route.ts   # Phase 3
-│   │       ├── licence/validate/route.ts # Phase 4
-│   │       └── licence/status/route.ts   # Phase 4
+│   │       ├── waitlist/route.ts           # POST: email capture
+│   │       ├── account/delete/route.ts     # POST: GDPR account deletion
+│   │       ├── stripe/checkout/route.ts    # Phase 3
+│   │       ├── stripe/webhook/route.ts     # Phase 3
+│   │       ├── stripe/portal/route.ts      # Phase 3
+│   │       ├── cloud/balance/route.ts      # Phase 3b — desktop app balance check
+│   │       ├── cloud/deduct/route.ts       # Phase 3b — usage deduction
+│   │       ├── cloud/plans/route.ts        # Phase 3b — public plan listing
+│   │       ├── cloud/proxy/route.ts        # Phase 3b/4 — cloud AI proxy for desktop
+│   │       ├── cloud/usage-history/route.ts # Phase 3b — transaction history
+│   │       ├── cron/reset-usage/route.ts   # Phase 3b — monthly usage reset
+│   │       ├── cron/expire-packs/route.ts  # Phase 3b — PAYG pack expiry
+│   │       ├── licence/validate/route.ts   # Phase 4
+│   │       └── licence/status/route.ts     # Phase 4
 │   ├── components/
+│   │   ├── JsonLd.tsx               # Shared JSON-LD structured data helper
 │   │   ├── layout/
 │   │   │   ├── Header.tsx           # Fixed header: logo, nav, theme toggle, CTA
 │   │   │   ├── Footer.tsx           # Links, branding, legal, social
@@ -249,10 +261,18 @@ innerzero_website/
 │   │   └── icons/
 │   │       └── Logo.tsx             # InnerZero text logo component
 │   ├── lib/
+│   │   ├── auth-desktop.ts         # Phase 3b — bearer token auth for desktop app
+│   │   ├── blog.ts                 # Blog system — post loading, tags, related posts
+│   │   ├── cloud-plans.ts          # Phase 3b — plan lookup helpers
+│   │   ├── cloud-providers.ts      # Phase 3b — DeepSeek/Gemini/Claude routing
 │   │   ├── constants.ts            # Brand copy, nav links, feature lists, pricing data
 │   │   ├── metadata.ts             # SEO helpers: generateMetadata defaults
+│   │   ├── rate-limit.ts           # Phase 6 — shared rate limiter
+│   │   ├── stripe.ts               # Stripe client helper
 │   │   ├── utils.ts                # cn() classname merger, etc.
 │   │   └── supabase/               # Supabase client + middleware
+│   ├── content/
+│   │   └── blog/                   # MDX blog posts (25 articles)
 │   └── styles/
 │       └── globals.css             # @tailwind directives + CSS custom properties + base styles
 ├── next.config.ts
@@ -261,9 +281,10 @@ innerzero_website/
 ├── package.json
 ├── next-sitemap.config.js
 ├── .gitignore
+├── vercel.json                     # Cron schedule config
 ├── .env.local                      # Environment variables (not committed)
 ├── innerzero_web_spec.md           # Full product + infrastructure spec
-├── CLAUDE.md                       # This file
+├── WEBCLAUDE.md                    # This file (website project guide)
 └── README.md
 ```
 
@@ -290,8 +311,8 @@ innerzero_website/
 | `/reset-password` | New Password | Set New Password \| InnerZero | COMPLETE |
 | `/account` | Dashboard | Account \| InnerZero | COMPLETE |
 | `/account/settings` | Settings | Settings \| InnerZero | COMPLETE |
-| `/account/billing` | Billing | Billing \| InnerZero | NOT STARTED (Phase 3) |
-| `/account/usage` | Usage | Usage \| InnerZero | NOT STARTED (Phase 3b) |
+
+Billing and usage are integrated into the main `/account` page (CloudUsageCard, Manage Billing portal link, usage history). No separate `/account/billing` or `/account/usage` pages.
 
 ---
 
@@ -309,15 +330,15 @@ Sections in order:
 Full feature breakdown — each feature gets a section with heading + paragraph + optional icon/illustration placeholder. Alternate alignment (left/right) for visual rhythm. Include "Coming Soon" section at bottom for future features (cloud AI boost, multi-device, team, email, mobile). Mention BYO API keys as a feature.
 
 ### Pricing (`/pricing`)
-**Three sections, vertically stacked:**
+Three sections, vertically stacked:
 
-1. **Free Local** — prominent card, highlighted as primary. "Free forever. No account required." Full feature list of local capabilities. "Download Free" CTA.
+1. **Free Local** — prominent card, highlighted as primary. "Free forever. No account required." Full feature list. "Download Free" CTA.
 
-2. **Cloud AI** (Phase 3b — show as "Coming Soon" for now) — three plan cards side by side (Starter £9.99, Plus £19.99, Pro £39.99). Credit allowances, model tiers, overage rates. Also mention BYO API keys as the free alternative. "Join Waitlist" CTA until cloud plans are live.
+2. **Cloud AI** — live. Three subscription cards (Starter/Plus/Pro) rendered from /api/cloud/plans (not hardcoded). Dynamic price, usage amounts, tier access badges. Gold CTA on best-value plan. Current Plan/Upgrade/Downgrade badges for logged-in users. PAYG credit pack cards with per-unit pricing. Collapsible usage multiplier info box from model_tiers. Business Licence card (£50/year per seat) with gold border.
 
-3. **Support InnerZero** — Supporter card (£4.99/month) + Founder card (£79 one-time, "X of 100 remaining"). Perks listed. Clear messaging: "This supports development, not compute."
+3. **Support InnerZero** — Supporter card (£4.99/month via Ko-fi) + Donation option. Perks listed.
 
-Below all cards: FAQ section with expandable items. Updated questions for the new model.
+Below all cards: FAQ section with expandable items including cloud usage questions.
 
 ### Privacy (`/privacy`)
 Two distinct sections: (1) plain-language privacy explainer (how InnerZero works, what stays local, what cloud mode sends, what BYO key mode does, that InnerZero never stores prompts), (2) formal privacy policy text.
@@ -335,16 +356,16 @@ Simple form: name, email, subject, message. Submits to Formspree (or similar). S
 Hero-style page with email capture form. Submits to `/api/waitlist` (POST). Stores to Supabase. Shows success message. Validates email format client-side and server-side.
 
 ### Blog (`/blog`)
-Empty index page with "Coming soon" message. Route exists for SEO. Blog posts will be MDX files added over time. Each post gets `/blog/[slug]`.
+Full MDX blog system with 25 articles. Nav shows "Learn". Featured card, tag filter bar, 2-column grid. Post pages with related posts, CTA, BlogPosting JSON-LD, SSG. Each post is an MDX file in `src/content/blog/` with gray-matter frontmatter.
 
 ### Changelog (`/changelog`)
-Empty page with "Check back soon" message. Will show release notes grouped by version.
+Timeline layout with version badges, grouped changes with colour-coded category badges (New/Improved/Fixed). Currently showing v0.1.0, v0.1.1, and v0.1.2 releases.
 
 ### Terms (`/terms`)
-Terms of Service covering: free local software, optional paid cloud services, supporter/founder terms, AI output disclaimer. Can be placeholder text initially with a note to replace with real legal copy.
+Production Terms of Service with 23 sections. Covers free local software, optional paid cloud services, supporter/founder terms, AI output disclaimer, unrestricted mode liability, screen automation, BYO API keys, absolute prohibitions, hardware/data damage exclusion, scheduled actions. Solicitor review banner. Company address.
 
 ### Account (`/account`)
-Dashboard showing: supporter/founder status (if any), cloud plan status (if any — "No cloud plan" for free users), credit balance (if applicable), quick links to billing/settings. Free users see a clean page with upgrade options, not an empty/broken state.
+Dashboard with CloudUsageCard (usage progress bar with green/amber/red thresholds, plan badge, reset date, PAYG balance), Manage Billing portal link, Change Plan link, Quick Top Up PAYG buttons, collapsible Usage History (last 20 transactions). No-plan state with CTA to pricing. Profile section, Business Licence status, Community links. Settings page at `/account/settings` with account deletion.
 
 ### 404 (`not-found.tsx`)
 Branded 404 page. "Looks like you've gone off the grid." Link back to home.
@@ -773,15 +794,16 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 | **Features** | Features page: removed "for Windows" from metadata title (now cross-platform after v0.1.2). Coming Soon: replaced shipped "Linux support" with "Mac code signing" and "Windows code signing" (in progress). Swapped icon assignments accordingly | COMPLETE 2026-04-09 |
 | **SEO** | Set `public/banner.png` (1536x1024) as site-wide Open Graph and Twitter Card image. Updated `metadata.ts` defaults, blog post fallback in `[slug]/page.tsx`, and middleware matcher to exclude `banner.png` from auth. Replaces previous `og-default.png` references | COMPLETE 2026-04-09 |
 | **Fix** | OG image URLs changed from relative (`/banner.png`) to absolute (`https://innerzero.com/banner.png`) in `metadata.ts` and blog `[slug]/page.tsx`. Facebook debugger requires explicit absolute URLs. Blog fallback dimensions corrected to 1536x1024 | COMPLETE 2026-04-09 |
-| **Phase 5** | Desktop app account.py module | NOT STARTED |
-| **Phase 5** | Desktop app cloud routing integration | NOT STARTED |
-| **Phase 5** | Desktop app BYO API key UI | NOT STARTED |
+| **Phase 5** | Desktop app account.py module | COMPLETE (built in desktop app codebase, Phase 5/3b) |
+| **Phase 5** | Desktop app cloud routing integration | COMPLETE (built in desktop app codebase, Phase 5) |
+| **Phase 5** | Desktop app BYO API key UI | COMPLETE (built in desktop app codebase, Phase 5) |
 | **Phase 5** | Update check API | NOT STARTED |
 | **Phase 6** | Rate limiting | NOT STARTED |
 | **Phase 6** | Error monitoring | NOT STARTED |
 | **Phase 6** | GDPR: account deletion | NOT STARTED |
 | **Phase 6** | Analytics (Plausible/Fathom) | NOT STARTED |
 | **Phase 6** | Security audit | NOT STARTED |
+| **Housekeeping** | WEBCLAUDE.md sync: updated current state, brand identity, file structure (added cloud/cron API routes, lib modules, JsonLd, DownloadCards, blog content dir, vercel.json), route map (removed non-existent billing/usage subpages), pricing/blog/changelog/terms/account page specs to reflect what was built, cloud AI copy block, dependencies to match package.json, Phase 5 desktop items to COMPLETE, fixed filename reference | COMPLETE 2026-04-14 |
 
 ---
 
@@ -880,10 +902,10 @@ When reduced motion is preferred: no movement, no fades, instant state changes. 
 **Features:** Local AI chat, voice, memory, 30+ tools, document knowledge, sleep/reflection, all themes
 **CTA:** Download Free
 
-**Cloud AI section (coming soon):**
-**Title:** Cloud AI Boost
+**Cloud AI section:**
+**Title:** Cloud AI
 **Subtitle:** Optional. Faster reasoning, premium models, zero hassle.
-**Note:** Coming soon. Or add your own API keys now — free, zero markup.
+**Note:** From £9.99/month. Or add your own API keys, free, zero markup.
 
 **Supporter card:**
 **Title:** Support InnerZero
@@ -932,28 +954,31 @@ No. The local app works without any account. You only need an account if you wan
 ```json
 {
   "dependencies": {
-    "next": "^14.0.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "clsx": "^2.0.0",
-    "tailwind-merge": "^2.0.0",
-    "lucide-react": "^0.300.0",
-    "next-sitemap": "^4.0.0",
-    "@supabase/ssr": "^0.1.0",
-    "@supabase/supabase-js": "^2.0.0"
+    "@supabase/ssr": "^0.9.0",
+    "@supabase/supabase-js": "^2.100.1",
+    "@vercel/analytics": "^2.0.1",
+    "clsx": "^2.1.1",
+    "gray-matter": "^4.0.3",
+    "lucide-react": "^1.7.0",
+    "next": "16.2.1",
+    "next-mdx-remote": "^6.0.0",
+    "next-sitemap": "^4.2.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "stripe": "^22.0.0",
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
-    "@types/node": "^20.0.0",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "tailwindcss": "^3.4.0",
-    "postcss": "^8.0.0",
-    "autoprefixer": "^10.0.0"
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
 ```
 
-Phase 3 will add: `stripe` (Stripe Node.js SDK). Do not add until Phase 3 begins.
-
-Do not add any other packages without explicit instruction.
+Stripe, gray-matter, and next-mdx-remote are already installed. Do not add any other packages without explicit instruction.
