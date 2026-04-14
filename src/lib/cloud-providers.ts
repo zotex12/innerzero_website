@@ -9,6 +9,13 @@ interface ChatMessage {
   content: string;
 }
 
+export class ProviderUnavailableError extends Error {
+  constructor(provider: string, reason: string) {
+    super(`${provider} unavailable: ${reason}`);
+    this.name = "ProviderUnavailableError";
+  }
+}
+
 export interface ProviderResponse {
   content: string;
   provider: string;
@@ -22,7 +29,8 @@ export interface ProviderResponse {
 async function callDeepSeek(
   modelId: string,
   messages: ChatMessage[],
-  systemPrompt?: string
+  systemPrompt?: string,
+  timeoutMs: number = 30_000
 ): Promise<ProviderResponse> {
   const apiKey = process.env.AZURE_DEEPSEEK_API_KEY;
   if (!apiKey) throw new Error("AZURE_DEEPSEEK_API_KEY not configured");
@@ -38,19 +46,27 @@ async function callDeepSeek(
   const url =
     "https://innerzero-resource.openai.azure.com/openai/deployments/DeepSeek-V3-2/chat/completions?api-version=2024-12-01-preview";
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "api-key": apiKey,
-    },
-    body: JSON.stringify({
-      messages: openaiMessages,
-      max_tokens: 2048,
-    }),
-    signal: AbortSignal.timeout(30_000),
-  });
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "api-key": apiKey,
+      },
+      body: JSON.stringify({
+        messages: openaiMessages,
+        max_tokens: 2048,
+      }),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+  } catch {
+    throw new ProviderUnavailableError("deepseek", "timeout or connection error");
+  }
 
+  if (res.status >= 500) {
+    throw new ProviderUnavailableError("deepseek", `${res.status}`);
+  }
   if (!res.ok) {
     throw new Error(`DeepSeek API error: ${res.status}`);
   }
@@ -72,7 +88,8 @@ async function callDeepSeek(
 async function callGoogle(
   modelId: string,
   messages: ChatMessage[],
-  systemPrompt?: string
+  systemPrompt?: string,
+  timeoutMs: number = 30_000
 ): Promise<ProviderResponse> {
   const apiKey = process.env.GOOGLE_AI_API_KEY;
   if (!apiKey) throw new Error("GOOGLE_AI_API_KEY not configured");
@@ -92,13 +109,21 @@ async function callGoogle(
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-    signal: AbortSignal.timeout(30_000),
-  });
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+  } catch {
+    throw new ProviderUnavailableError("google", "timeout or connection error");
+  }
 
+  if (res.status >= 500) {
+    throw new ProviderUnavailableError("google", `${res.status}`);
+  }
   if (!res.ok) {
     throw new Error(`Google AI error: ${res.status}`);
   }
@@ -122,7 +147,8 @@ async function callGoogle(
 async function callAnthropic(
   modelId: string,
   messages: ChatMessage[],
-  systemPrompt?: string
+  systemPrompt?: string,
+  timeoutMs: number = 30_000
 ): Promise<ProviderResponse> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) throw new Error("ANTHROPIC_API_KEY not configured");
@@ -141,17 +167,25 @@ async function callAnthropic(
     body.system = systemPrompt;
   }
 
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify(body),
-    signal: AbortSignal.timeout(30_000),
-  });
+  let res: Response;
+  try {
+    res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+  } catch {
+    throw new ProviderUnavailableError("anthropic", "timeout or connection error");
+  }
 
+  if (res.status >= 500) {
+    throw new ProviderUnavailableError("anthropic", `${res.status}`);
+  }
   if (!res.ok) {
     throw new Error(`Anthropic API error: ${res.status}`);
   }
@@ -206,7 +240,8 @@ const PROVIDER_MAP: Record<
   (
     modelId: string,
     messages: ChatMessage[],
-    systemPrompt?: string
+    systemPrompt?: string,
+    timeoutMs?: number
   ) => Promise<ProviderResponse>
 > = {
   deepseek: callDeepSeek,
@@ -218,11 +253,12 @@ export async function routeToProvider(
   provider: string,
   modelId: string,
   messages: ChatMessage[],
-  systemPrompt?: string
+  systemPrompt?: string,
+  timeoutMs?: number
 ): Promise<ProviderResponse> {
   const handler = PROVIDER_MAP[provider];
   if (!handler) {
     throw new Error(`Unsupported provider: ${provider}`);
   }
-  return handler(modelId, messages, systemPrompt);
+  return handler(modelId, messages, systemPrompt, timeoutMs);
 }

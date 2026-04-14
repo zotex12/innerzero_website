@@ -2,7 +2,11 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDesktopUser } from "@/lib/auth-desktop";
 import { deductUsage } from "@/lib/cloud-plans";
-import { routeToProvider, estimateCostPence } from "@/lib/cloud-providers";
+import {
+  routeToProvider,
+  estimateCostPence,
+  ProviderUnavailableError,
+} from "@/lib/cloud-providers";
 import { checkRateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -180,7 +184,7 @@ export async function POST(request: Request) {
     }
   }
 
-  // Select model from tier config
+  // Select models from tier config
   const models = tier.models as string[] | null;
   if (!models || models.length === 0) {
     return NextResponse.json(
@@ -189,149 +193,187 @@ export async function POST(request: Request) {
     );
   }
 
-  // Models array format: ["provider/model_id", ...] — first is highest priority
-  const modelEntry = models[0];
-  const slashIdx = modelEntry.indexOf("/");
-  if (slashIdx === -1) {
+  // Parse model entries: ["provider/model_id", ...]
+  const MAX_ATTEMPTS = 2;
+  const candidates = models.slice(0, MAX_ATTEMPTS).map((entry) => {
+    const idx = entry.indexOf("/");
+    if (idx === -1) return null;
+    return { provider: entry.slice(0, idx), modelId: entry.slice(idx + 1) };
+  }).filter((c): c is { provider: string; modelId: string } => c !== null);
+
+  if (candidates.length === 0) {
     return NextResponse.json(
       { error: "Invalid model configuration." },
       { status: 500 }
     );
   }
 
-  const provider = modelEntry.slice(0, slashIdx);
-  const modelId = modelEntry.slice(slashIdx + 1);
+  // Use shorter timeout when fallback is available
+  const timeoutMs = candidates.length > 1 ? 15_000 : 30_000;
 
-  // Call provider
-  try {
-    const result = await routeToProvider(provider, modelId, messages, systemPrompt);
+  // Provider fallback loop
+  let lastError: unknown = null;
 
-    const responseTimeMs = Date.now() - startTime;
+  for (const candidate of candidates) {
+    const { provider, modelId } = candidate;
 
-    // Privacy-preserving log (no content, no IPs)
-    console.log(
-      JSON.stringify({
-        event: "cloud_proxy",
-        ts: new Date().toISOString(),
-        user_id: userId,
-        model_tier: requestedTier,
-        provider,
-        model_id: modelId,
-        response_time_ms: responseTimeMs,
-        success: true,
-      })
-    );
+    try {
+      const result = await routeToProvider(
+        provider, modelId, messages, systemPrompt, timeoutMs
+      );
 
-    // Idempotency: skip deduction if this request_id was already processed
-    let alreadyDeducted = false;
-    if (requestId) {
-      const { data: existing } = await admin
-        .from("usage_transactions")
-        .select("id")
-        .eq("request_id", requestId)
-        .single();
-      if (existing) alreadyDeducted = true;
-    }
+      const responseTimeMs = Date.now() - startTime;
 
-    // Deduct usage after successful response
-    if (!alreadyDeducted) {
-      if (deductSource === "subscription") {
-        await deductUsage(userId, cost, requestedTier, provider, modelId, requestId);
-      } else if (paygPackId) {
-        // Deduct from PAYG pack
-        const { data: pack } = await admin
-          .from("usage_packs")
-          .select("usage_remaining")
-          .eq("id", paygPackId)
-          .single();
-
-        if (pack) {
-          await admin
-            .from("usage_packs")
-            .update({ usage_remaining: pack.usage_remaining - cost })
-            .eq("id", paygPackId);
-        }
-
-        await admin.from("usage_transactions").insert({
+      // Privacy-preserving log (no content, no IPs)
+      console.log(
+        JSON.stringify({
+          event: "cloud_proxy",
+          ts: new Date().toISOString(),
           user_id: userId,
-          type: "usage",
-          amount: -cost,
-          balance_after: subscriptionBalance,
-          description: `${provider}/${modelId} (PAYG pack)`,
           model_tier: requestedTier,
           provider,
           model_id: modelId,
-          ...(requestId ? { request_id: requestId } : {}),
+          response_time_ms: responseTimeMs,
+          success: true,
+          attempt: candidates.indexOf(candidate) + 1,
+        })
+      );
+
+      // Idempotency: skip deduction if this request_id was already processed
+      let alreadyDeducted = false;
+      if (requestId) {
+        const { data: existing } = await admin
+          .from("usage_transactions")
+          .select("id")
+          .eq("request_id", requestId)
+          .single();
+        if (existing) alreadyDeducted = true;
+      }
+
+      // Deduct usage after successful response
+      if (!alreadyDeducted) {
+        if (deductSource === "subscription") {
+          await deductUsage(userId, cost, requestedTier, provider, modelId, requestId);
+        } else if (paygPackId) {
+          // Deduct from PAYG pack
+          const { data: pack } = await admin
+            .from("usage_packs")
+            .select("usage_remaining")
+            .eq("id", paygPackId)
+            .single();
+
+          if (pack) {
+            await admin
+              .from("usage_packs")
+              .update({ usage_remaining: pack.usage_remaining - cost })
+              .eq("id", paygPackId);
+          }
+
+          await admin.from("usage_transactions").insert({
+            user_id: userId,
+            type: "usage",
+            amount: -cost,
+            balance_after: subscriptionBalance,
+            description: `${provider}/${modelId} (PAYG pack)`,
+            model_tier: requestedTier,
+            provider,
+            model_id: modelId,
+            ...(requestId ? { request_id: requestId } : {}),
+          });
+        }
+      }
+
+      // Fire-and-forget cost log (internal analytics)
+      const inputTokens = result.input_tokens ?? 0;
+      const outputTokens = result.output_tokens ?? 0;
+      const estimatedCost = estimateCostPence(modelId, inputTokens, outputTokens);
+
+      admin
+        .from("proxy_cost_log")
+        .insert({
+          user_id: userId,
+          request_id: requestId ?? null,
+          provider,
+          model_id: modelId,
+          input_tokens: inputTokens,
+          output_tokens: outputTokens,
+          estimated_cost_pence: estimatedCost,
+          usage_deducted: alreadyDeducted ? 0 : cost,
+        })
+        .then(({ error: costErr }) => {
+          if (costErr) console.error("[proxy_cost_log] insert failed:", costErr.message);
         });
-      }
-    }
 
-    // Fire-and-forget cost log (internal analytics)
-    const inputTokens = result.input_tokens ?? 0;
-    const outputTokens = result.output_tokens ?? 0;
-    const estimatedCost = estimateCostPence(modelId, inputTokens, outputTokens);
+      // Get updated balance for header
+      const { data: updatedProfile } = await admin
+        .from("profiles")
+        .select("usage_balance")
+        .eq("id", userId)
+        .single();
 
-    admin
-      .from("proxy_cost_log")
-      .insert({
-        user_id: userId,
-        request_id: requestId ?? null,
-        provider,
-        model_id: modelId,
-        input_tokens: inputTokens,
-        output_tokens: outputTokens,
-        estimated_cost_pence: estimatedCost,
-        usage_deducted: alreadyDeducted ? 0 : cost,
-      })
-      .then(({ error: costErr }) => {
-        if (costErr) console.error("[proxy_cost_log] insert failed:", costErr.message);
-      });
+      const remainingBalance = updatedProfile?.usage_balance ?? 0;
 
-    // Get updated balance for header
-    const { data: updatedProfile } = await admin
-      .from("profiles")
-      .select("usage_balance")
-      .eq("id", userId)
-      .single();
-
-    const remainingBalance = updatedProfile?.usage_balance ?? 0;
-
-    return NextResponse.json(
-      {
-        content: result.content,
-        provider: result.provider,
-        model: result.model,
-        input_tokens: result.input_tokens,
-        output_tokens: result.output_tokens,
-      },
-      {
-        headers: {
-          "X-Usage-Remaining": String(remainingBalance),
+      return NextResponse.json(
+        {
+          content: result.content,
+          provider: result.provider,
+          model: result.model,
+          input_tokens: result.input_tokens,
+          output_tokens: result.output_tokens,
         },
+        {
+          headers: {
+            "X-Usage-Remaining": String(remainingBalance),
+            "X-Provider": provider,
+          },
+        }
+      );
+    } catch (err) {
+      lastError = err;
+
+      // Only retry on provider-side errors (timeout, 5xx, connection)
+      if (err instanceof ProviderUnavailableError) {
+        console.log(
+          JSON.stringify({
+            event: "cloud_proxy_fallback",
+            ts: new Date().toISOString(),
+            user_id: userId,
+            model_tier: requestedTier,
+            provider,
+            model_id: modelId,
+            error: err.message.slice(0, 80),
+            attempt: candidates.indexOf(candidate) + 1,
+          })
+        );
+        continue; // try next provider
       }
-    );
-  } catch (err) {
-    const responseTimeMs = Date.now() - startTime;
 
-    // Privacy-preserving error log
-    console.log(
-      JSON.stringify({
-        event: "cloud_proxy",
-        ts: new Date().toISOString(),
-        user_id: userId,
-        model_tier: requestedTier,
-        provider,
-        model_id: modelId,
-        response_time_ms: responseTimeMs,
-        success: false,
-        error_type: err instanceof Error ? err.message.slice(0, 80) : "unknown",
-      })
-    );
-
-    // Do NOT deduct usage on failure
-    return NextResponse.json(
-      { error: "provider_error", message: "Cloud AI temporarily unavailable." },
-      { status: 502 }
-    );
+      // Non-provider errors (config, 4xx) — do not retry
+      break;
+    }
   }
+
+  // All attempts failed
+  const responseTimeMs = Date.now() - startTime;
+  const lastCandidate = candidates[candidates.length - 1];
+
+  console.log(
+    JSON.stringify({
+      event: "cloud_proxy",
+      ts: new Date().toISOString(),
+      user_id: userId,
+      model_tier: requestedTier,
+      provider: lastCandidate.provider,
+      model_id: lastCandidate.modelId,
+      response_time_ms: responseTimeMs,
+      success: false,
+      error_type: lastError instanceof Error ? lastError.message.slice(0, 80) : "unknown",
+    })
+  );
+
+  // Do NOT deduct usage on failure
+  return NextResponse.json(
+    { error: "provider_error", message: "Cloud AI temporarily unavailable." },
+    { status: 502 }
+  );
 }
