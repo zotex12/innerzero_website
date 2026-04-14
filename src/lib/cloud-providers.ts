@@ -172,6 +172,33 @@ async function callAnthropic(
   };
 }
 
+// ── Provider cost rates (pence per 1K tokens) ────────────────────────
+
+export const PROVIDER_COSTS: Record<
+  string,
+  { input_per_1k: number; output_per_1k: number }
+> = {
+  // Azure DeepSeek V3.2: $0.27/1M input, $1.10/1M output → pence at ~£0.79/$1
+  "DeepSeek-V3-2": { input_per_1k: 0.0213, output_per_1k: 0.0866 },
+  // Google Gemini 2.5 Flash: $0.15/1M input, $0.60/1M output
+  "gemini-2.5-flash": { input_per_1k: 0.0118, output_per_1k: 0.0472 },
+  // Anthropic Claude Sonnet 4.6: $3/1M input, $15/1M output
+  "claude-sonnet-4-6": { input_per_1k: 0.2362, output_per_1k: 1.1811 },
+};
+
+export function estimateCostPence(
+  modelId: string,
+  inputTokens: number,
+  outputTokens: number
+): number {
+  const rates = PROVIDER_COSTS[modelId];
+  if (!rates) return 0;
+  return (
+    (inputTokens / 1000) * rates.input_per_1k +
+    (outputTokens / 1000) * rates.output_per_1k
+  );
+}
+
 // ── Router ─────────────────────────────────────────────────────────────
 
 const PROVIDER_MAP: Record<

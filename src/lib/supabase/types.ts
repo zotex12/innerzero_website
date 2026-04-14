@@ -307,6 +307,32 @@ export type Database = {
         };
         Relationships: [];
       };
+      proxy_cost_log: {
+        Row: {
+          id: string;
+          user_id: string;
+          request_id: string | null;
+          provider: string;
+          model_id: string;
+          input_tokens: number;
+          output_tokens: number;
+          estimated_cost_pence: number;
+          usage_deducted: number;
+          created_at: string;
+        };
+        Insert: {
+          user_id: string;
+          request_id?: string | null;
+          provider: string;
+          model_id: string;
+          input_tokens: number;
+          output_tokens: number;
+          estimated_cost_pence: number;
+          usage_deducted: number;
+        };
+        Update: Record<string, never>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

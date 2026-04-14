@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDesktopUser } from "@/lib/auth-desktop";
 import { deductUsage } from "@/lib/cloud-plans";
-import { routeToProvider } from "@/lib/cloud-providers";
+import { routeToProvider, estimateCostPence } from "@/lib/cloud-providers";
 import { checkRateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -265,6 +265,27 @@ export async function POST(request: Request) {
         });
       }
     }
+
+    // Fire-and-forget cost log (internal analytics)
+    const inputTokens = result.input_tokens ?? 0;
+    const outputTokens = result.output_tokens ?? 0;
+    const estimatedCost = estimateCostPence(modelId, inputTokens, outputTokens);
+
+    admin
+      .from("proxy_cost_log")
+      .insert({
+        user_id: userId,
+        request_id: requestId ?? null,
+        provider,
+        model_id: modelId,
+        input_tokens: inputTokens,
+        output_tokens: outputTokens,
+        estimated_cost_pence: estimatedCost,
+        usage_deducted: alreadyDeducted ? 0 : cost,
+      })
+      .then(({ error: costErr }) => {
+        if (costErr) console.error("[proxy_cost_log] insert failed:", costErr.message);
+      });
 
     // Get updated balance for header
     const { data: updatedProfile } = await admin
