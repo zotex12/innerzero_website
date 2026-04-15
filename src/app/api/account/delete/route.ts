@@ -22,35 +22,63 @@ export async function POST(request: Request) {
   const admin = createAdminClient();
   const errors: string[] = [];
 
-  // 1. Delete licences
+  // 1. Delete proxy cost log (no FKs to other public tables)
   try {
-    await admin.from("licences").delete().eq("user_id", user.id);
+    await admin.from("proxy_cost_log").delete().eq("user_id", user.id);
   } catch (e) {
-    errors.push(`licences: ${e instanceof Error ? e.message : "failed"}`);
+    errors.push(`proxy_cost_log: ${e instanceof Error ? e.message : "failed"}`);
   }
 
-  // 2. Delete devices
+  // 2. Delete usage transactions
   try {
-    await admin.from("devices").delete().eq("user_id", user.id);
+    await admin.from("usage_transactions").delete().eq("user_id", user.id);
   } catch (e) {
-    errors.push(`devices: ${e instanceof Error ? e.message : "failed"}`);
+    errors.push(`usage_transactions: ${e instanceof Error ? e.message : "failed"}`);
   }
 
-  // 3. Delete licence events
+  // 3. Delete usage packs
+  try {
+    await admin.from("usage_packs").delete().eq("user_id", user.id);
+  } catch (e) {
+    errors.push(`usage_packs: ${e instanceof Error ? e.message : "failed"}`);
+  }
+
+  // 4. Delete theme redemptions
+  try {
+    await admin.from("theme_redemptions").delete().eq("user_id", user.id);
+  } catch (e) {
+    errors.push(`theme_redemptions: ${e instanceof Error ? e.message : "failed"}`);
+  }
+
+  // 5. Delete licence events
   try {
     await admin.from("licence_events").delete().eq("user_id", user.id);
   } catch (e) {
     errors.push(`licence_events: ${e instanceof Error ? e.message : "failed"}`);
   }
 
-  // 4. Delete profile
+  // 6. Delete devices
+  try {
+    await admin.from("devices").delete().eq("user_id", user.id);
+  } catch (e) {
+    errors.push(`devices: ${e instanceof Error ? e.message : "failed"}`);
+  }
+
+  // 7. Delete licences
+  try {
+    await admin.from("licences").delete().eq("user_id", user.id);
+  } catch (e) {
+    errors.push(`licences: ${e instanceof Error ? e.message : "failed"}`);
+  }
+
+  // 8. Delete profile
   try {
     await admin.from("profiles").delete().eq("id", user.id);
   } catch (e) {
     errors.push(`profiles: ${e instanceof Error ? e.message : "failed"}`);
   }
 
-  // 5. Delete waitlist entry (by email)
+  // 9. Delete waitlist entry (by email)
   try {
     if (user.email) {
       await admin.from("waitlist").delete().eq("email", user.email);
@@ -59,7 +87,7 @@ export async function POST(request: Request) {
     errors.push(`waitlist: ${e instanceof Error ? e.message : "failed"}`);
   }
 
-  // 6. Delete auth user
+  // 10. Delete auth user
   const { error: authError } = await admin.auth.admin.deleteUser(user.id);
   if (authError) {
     errors.push(`auth: ${authError.message}`);
