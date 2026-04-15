@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useRef, type FormEvent } from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { Turnstile } from "@/components/ui/Turnstile";
+import { Turnstile, type TurnstileRef } from "@/components/ui/Turnstile";
 import { createClient } from "@/lib/supabase/client";
 
 export function ForgotPasswordForm() {
@@ -12,6 +12,7 @@ export function ForgotPasswordForm() {
   const [submitted, setSubmitted] = useState(false);
   const [captchaToken, setCaptchaToken] = useState("");
   const [error, setError] = useState("");
+  const turnstileRef = useRef<TurnstileRef>(null);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -78,6 +79,7 @@ export function ForgotPasswordForm() {
         />
 
         <Turnstile
+          ref={turnstileRef}
           onVerify={setCaptchaToken}
           onExpire={() => setCaptchaToken("")}
           onError={() => setCaptchaToken("")}

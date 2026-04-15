@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useRef, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button } from "@/components/ui/Button";
-import { Turnstile } from "@/components/ui/Turnstile";
+import { Turnstile, type TurnstileRef } from "@/components/ui/Turnstile";
 import { createClient } from "@/lib/supabase/client";
 
 export function LoginForm() {
@@ -18,6 +18,7 @@ export function LoginForm() {
   const [desktopToken, setDesktopToken] = useState("");
   const [copied, setCopied] = useState(false);
   const [captchaToken, setCaptchaToken] = useState("");
+  const turnstileRef = useRef<TurnstileRef>(null);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -43,6 +44,8 @@ export function LoginForm() {
 
     if (authError) {
       setError(authError.message);
+      setCaptchaToken("");
+      turnstileRef.current?.reset();
       setLoading(false);
       return;
     }
@@ -135,6 +138,7 @@ export function LoginForm() {
         </div>
 
         <Turnstile
+          ref={turnstileRef}
           onVerify={setCaptchaToken}
           onExpire={() => setCaptchaToken("")}
           onError={() => setCaptchaToken("")}
