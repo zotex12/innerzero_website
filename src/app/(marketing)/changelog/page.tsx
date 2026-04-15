@@ -32,9 +32,44 @@ interface Release {
 
 const RELEASES: Release[] = [
   {
-    version: "0.1.2",
+    version: "0.1.3",
     date: "April 2026",
     latest: true,
+    groups: [
+      {
+        label: "New",
+        entries: [
+          { text: "AI Specialists: delegate coding tasks to a specialist AI agent. Full file review and approve/reject before any changes are applied." },
+          { text: "LM Studio support: use LM Studio as an alternative local AI backend alongside Ollama. Switch instantly in Settings." },
+          { text: "Offline mode: completely block all outbound network requests with a single toggle. Nothing leaves your machine." },
+          { text: "Connection log: see every outbound request Zero makes, with destination, timing, and status." },
+          { text: "Privacy blacklist: define sensitive terms that are automatically scrubbed from all cloud messages before they leave your machine." },
+          { text: "My Privacy page: centralised privacy dashboard with mode selector, blacklist management, connection log, and data controls." },
+          { text: "Telegram remote access: control Zero from your phone via a Telegram bot. Encrypted token storage, chat ID whitelisting, and desktop chat mirroring." },
+          { text: "xAI Grok and Kimi (Moonshot) cloud providers. 7 cloud AI providers now supported." },
+          { text: "Neon Tokyo exclusive theme: cyberpunk purple and cyan with animated synthwave perspective grid. Unlock with a founder code from Discord." },
+          { text: "Theme unlock system: redeem exclusive codes for special themes." },
+          { text: "Costs page with currency selector (7 currencies), period filters, and per-request cost breakdown." },
+          { text: "Windows installer now signed by Summers Solutions Ltd via Azure Trusted Signing." },
+        ],
+      },
+      {
+        label: "Improved",
+        entries: [
+          { text: "Cloud voice now offers Standard mode (split reasoning and TTS), roughly 15x cheaper than Premium mode." },
+          { text: "Cloud token usage reduced by approximately 80% for chat messages through context optimisation." },
+          { text: "Choose different cloud models for Director and Specialist roles independently." },
+          { text: "Specialist agent memories are now processed separately during sleep, with dedicated fact extraction and cleanup." },
+          { text: "Cloud billing is now idempotent. Retried requests after timeouts will not be double-charged." },
+          { text: "Account tokens refresh automatically on expiry. No more manual re-login after sessions expire." },
+          { text: "Settings page loads significantly faster with lazy tab loading." },
+        ],
+      },
+    ],
+  },
+  {
+    version: "0.1.2",
+    date: "April 2026",
     groups: [
       {
         label: "New",

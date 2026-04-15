@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, Monitor, Apple, Terminal } from "lucide-react";
 
-const VERSION = "0.1.2";
+const VERSION = "0.1.3";
 
 const PLATFORMS = [
   {
@@ -14,7 +14,7 @@ const PLATFORMS = [
     size: "239 MB",
     url: `https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-${VERSION}.exe`,
     reqs: "64-bit, 8 GB+ RAM",
-    note: 'Windows may show a SmartScreen warning on first install. Click "More info" then "Run anyway". This disappears once we complete code signing.',
+    note: 'Windows may show a SmartScreen warning on first install. Click "More info" then "Run anyway". The installer is signed by Summers Solutions Ltd.',
     cli: `curl -L -o InnerZero-Setup.exe https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-${VERSION}.exe && start InnerZero-Setup.exe`,
   },
   {

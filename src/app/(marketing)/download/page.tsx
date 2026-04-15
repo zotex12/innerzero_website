@@ -32,7 +32,7 @@ const INCLUDED_FEATURES = [
   { icon: FileText, title: "Document Q&A", desc: "Upload documents and ask questions about them." },
   { icon: Wrench, title: "30+ Built-in Tools", desc: "Calculator, timers, notes, file tools, text transforms, and more." },
   { icon: BookOpen, title: "Knowledge Packs", desc: "Offline Wikipedia for factual answers without internet." },
-  { icon: Palette, title: "5 Themes", desc: "Dark Zero, Light, Classic Carbon, Soft Pink, and Dark Teal." },
+  { icon: Palette, title: "6 Themes", desc: "Dark Zero, Light, Classic Carbon, Soft Pink, Dark Teal, and Neon Tokyo." },
   { icon: Shield, title: "100% Private", desc: "No account, no telemetry, no data collection. Ever." },
   { icon: Monitor, title: "Screen Automation", desc: "Read your screen, click, type, and scroll other apps." },
   { icon: Cloud, title: "Optional Cloud AI", desc: "Add your own API keys for GPT-4, Claude, Gemini, and more." },
@@ -59,7 +59,7 @@ export default function DownloadPage() {
               href="/changelog"
               className="text-xs text-text-muted transition-colors hover:text-accent-gold"
             >
-              See what&apos;s new in v0.1.2
+              See what&apos;s new in v0.1.3
             </Link>
           </p>
         </div>
@@ -166,7 +166,7 @@ export default function DownloadPage() {
             applicationCategory: "UtilitiesApplication",
             applicationSubCategory: "AI Assistant",
             operatingSystem: "Windows, macOS, Linux",
-            softwareVersion: "0.1.2",
+            softwareVersion: "0.1.3",
             description:
               "A free private AI assistant that runs entirely on your PC. No cloud. No tracking. No subscription.",
             url: "https://innerzero.com",
@@ -184,7 +184,7 @@ export default function DownloadPage() {
                 price: "0",
                 priceCurrency: "GBP",
                 availability: "https://schema.org/InStock",
-                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.2.exe",
+                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.3.exe",
                 operatingSystem: "Windows 10, Windows 11",
               },
               {
@@ -193,7 +193,7 @@ export default function DownloadPage() {
                 price: "0",
                 priceCurrency: "GBP",
                 availability: "https://schema.org/InStock",
-                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.2-mac.dmg",
+                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.3-mac.dmg",
                 operatingSystem: "macOS 12 or later",
               },
               {
@@ -202,7 +202,7 @@ export default function DownloadPage() {
                 price: "0",
                 priceCurrency: "GBP",
                 availability: "https://schema.org/InStock",
-                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.2-x86_64.AppImage",
+                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.3-x86_64.AppImage",
                 operatingSystem: "Linux x86_64",
               },
             ],
