@@ -5,12 +5,14 @@ import Link from "next/link";
 import { Input } from "@/components/ui/Input";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button } from "@/components/ui/Button";
+import { Turnstile } from "@/components/ui/Turnstile";
 import { createClient } from "@/lib/supabase/client";
 
 export function RegisterForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -35,11 +37,18 @@ export function RegisterForm() {
       return;
     }
 
+    if (!captchaToken) {
+      setError("Complete the verification above.");
+      setLoading(false);
+      return;
+    }
+
     const supabase = createClient();
     const { error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
+        captchaToken,
         data: { full_name: fullName },
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
@@ -119,13 +128,19 @@ export function RegisterForm() {
           Password must be at least 8 characters.
         </p>
 
+        <Turnstile
+          onVerify={setCaptchaToken}
+          onExpire={() => setCaptchaToken("")}
+          onError={() => setCaptchaToken("")}
+        />
+
         {error && (
           <p className="text-sm text-error" role="alert">
             {error}
           </p>
         )}
 
-        <Button type="submit" disabled={loading} className="w-full">
+        <Button type="submit" disabled={loading || !captchaToken} className="w-full">
           {loading ? "Creating account..." : "Sign Up"}
         </Button>
       </form>

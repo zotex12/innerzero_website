@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Button } from "@/components/ui/Button";
+import { Turnstile } from "@/components/ui/Turnstile";
 import { createClient } from "@/lib/supabase/client";
 
 export function LoginForm() {
@@ -16,6 +17,7 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [desktopToken, setDesktopToken] = useState("");
   const [copied, setCopied] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -26,10 +28,17 @@ export function LoginForm() {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
+    if (!captchaToken) {
+      setError("Complete the verification above.");
+      setLoading(false);
+      return;
+    }
+
     const supabase = createClient();
     const { data, error: authError } = await supabase.auth.signInWithPassword({
       email,
       password,
+      options: { captchaToken },
     });
 
     if (authError) {
@@ -125,13 +134,19 @@ export function LoginForm() {
           </Link>
         </div>
 
+        <Turnstile
+          onVerify={setCaptchaToken}
+          onExpire={() => setCaptchaToken("")}
+          onError={() => setCaptchaToken("")}
+        />
+
         {error && (
           <p className="text-sm text-error" role="alert">
             {error}
           </p>
         )}
 
-        <Button type="submit" disabled={loading} className="w-full">
+        <Button type="submit" disabled={loading || !captchaToken} className="w-full">
           {loading ? "Logging in..." : "Log In"}
         </Button>
       </form>

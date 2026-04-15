@@ -4,15 +4,25 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { Turnstile } from "@/components/ui/Turnstile";
 import { createClient } from "@/lib/supabase/client";
 
 export function ForgotPasswordForm() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [error, setError] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError("");
     setLoading(true);
+
+    if (!captchaToken) {
+      setError("Complete the verification above.");
+      setLoading(false);
+      return;
+    }
 
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
@@ -20,6 +30,7 @@ export function ForgotPasswordForm() {
     const supabase = createClient();
     await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+      captchaToken,
     });
 
     setSubmitted(true);
@@ -66,7 +77,19 @@ export function ForgotPasswordForm() {
           autoComplete="email"
         />
 
-        <Button type="submit" disabled={loading} className="w-full">
+        <Turnstile
+          onVerify={setCaptchaToken}
+          onExpire={() => setCaptchaToken("")}
+          onError={() => setCaptchaToken("")}
+        />
+
+        {error && (
+          <p className="text-sm text-error" role="alert">
+            {error}
+          </p>
+        )}
+
+        <Button type="submit" disabled={loading || !captchaToken} className="w-full">
           {loading ? "Sending..." : "Send Reset Link"}
         </Button>
       </form>
