@@ -10,6 +10,7 @@ import {
   Palette, Sparkles, ToggleLeft, FolderOpen, Cpu,
   ShieldAlert, ShieldCheck, UserCheck, User,
   Rocket, Code, PenTool, Package, Cog,
+  Shield, List, LayoutDashboard,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -117,10 +118,14 @@ const SECTIONS: FeatureSection[] = [
     title: "Cloud AI (Optional)",
     subtitle: "Add cloud power when you need it.",
     items: [
-      { icon: Key, title: "BYO API keys", desc: "Add your own keys for DeepSeek, OpenAI, Anthropic, Google AI, and Qwen. Zero markup." },
+      { icon: Key, title: "BYO API keys", desc: "Add your own keys for 7 providers: DeepSeek, OpenAI, Anthropic, Google AI, xAI Grok, Qwen, and Kimi. Zero markup." },
       { icon: Eye, title: "Private by default", desc: "Cloud mode is off until you turn it on. Clearly labelled when active." },
       { icon: Router, title: "Smart routing", desc: "Auto-routes to the best engine based on task complexity." },
       { icon: Send, title: "Only the prompt is sent", desc: "Your memory database, files, and history stay local. Only the current message goes to the provider." },
+      { icon: Volume2, title: "Cloud voice Standard mode", desc: "Split reasoning and TTS for roughly 15x lower cost than Premium bundled mode." },
+      { icon: Shield, title: "Privacy blacklist", desc: "Scrub sensitive terms (names, addresses, company info) from cloud messages before they leave your machine. Reversed on response." },
+      { icon: List, title: "Connection log", desc: "See every outbound connection InnerZero makes. Filterable inline log with daily rotation." },
+      { icon: LayoutDashboard, title: "My Privacy page", desc: "Centralised privacy dashboard. Toggle Offline, Private, or Cloud mode. Manage blacklist, view connections, see privacy stats." },
     ],
   },
   {
@@ -128,7 +133,7 @@ const SECTIONS: FeatureSection[] = [
     subtitle: "Make it yours.",
     bg: "secondary",
     items: [
-      { icon: Palette, title: "5 themes", desc: "Dark Zero, Light Zero, Classic Carbon, Soft Pink, Dark Teal." },
+      { icon: Palette, title: "6 themes", desc: "Dark Zero, Light Zero, Classic Carbon, Soft Pink, Dark Teal, and Neon Tokyo (exclusive)." },
       { icon: Sparkles, title: "AI personality", desc: "Professional, Friendly, Concise, or create your own custom personality." },
       { icon: ToggleLeft, title: "Tool preferences", desc: "Enable or disable individual tools." },
       { icon: FolderOpen, title: "Configurable output folder", desc: "Choose where Zero saves files." },
@@ -151,8 +156,6 @@ const SECTIONS: FeatureSection[] = [
     bg: "secondary",
     items: [
       { icon: Code, title: "Mac code signing", desc: "Signed and notarised macOS installer. Currently unsigned." },
-      { icon: Cog, title: "LM Studio backend", desc: "Alternative to Ollama for running local models." },
-      { icon: Rocket, title: "Windows code signing", desc: "Signed Windows installer to remove SmartScreen warnings. In progress." },
       { icon: BookOpen, title: "More knowledge packs", desc: "Science, history, and specialised reference databases." },
       { icon: PenTool, title: "Background task execution", desc: "Let Zero work on tasks while you do other things." },
     ],
@@ -248,7 +251,7 @@ export default function FeaturesPage() {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
             name: "InnerZero",
-            operatingSystem: "Windows 10, Windows 11",
+            operatingSystem: "Windows 10, Windows 11, macOS 12+, Linux x86_64",
             applicationCategory: "DesktopApplication",
             offers: { "@type": "Offer", price: "0", priceCurrency: "GBP" },
             description:
