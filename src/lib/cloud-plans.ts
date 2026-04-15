@@ -56,9 +56,25 @@ export async function grantUsage(
   amount: number,
   type: string,
   description: string,
-  stripeSessionId?: string
+  stripeSessionId?: string,
+  requestId?: string
 ): Promise<void> {
   const admin = createAdminClient();
+
+  // If a request_id is provided, check for duplicate (idempotency)
+  if (requestId) {
+    const { data: existing } = await admin
+      .from("usage_transactions")
+      .select("id")
+      .eq("request_id", requestId)
+      .limit(1)
+      .maybeSingle();
+
+    if (existing) {
+      // Already processed, skip silently
+      return;
+    }
+  }
 
   // Get current balance to calculate balance_after
   const { data: profile } = await admin
@@ -71,14 +87,20 @@ export async function grantUsage(
   const balanceAfter = currentBalance + amount;
 
   // Insert transaction
-  await admin.from("usage_transactions").insert({
+  const { error: insertError } = await admin.from("usage_transactions").insert({
     user_id: userId,
     type,
     amount,
     balance_after: balanceAfter,
     description,
     stripe_session_id: stripeSessionId ?? null,
+    ...(requestId ? { request_id: requestId } : {}),
   });
+
+  // If insert fails due to unique constraint on request_id, treat as no-op
+  if (insertError?.code === "23505" && requestId) {
+    return;
+  }
 
   // Update profile balance
   await admin

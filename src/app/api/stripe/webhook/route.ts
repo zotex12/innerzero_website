@@ -31,7 +31,7 @@ function mapStripeStatus(
   }
 }
 
-async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId: string) {
   const admin = createAdminClient();
   const customerId = session.customer as string;
 
@@ -121,7 +121,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
       cloudPlan.usage_amount,
       "monthly_grant",
       `${cloudPlan.name} subscription started`,
-      session.id
+      session.id,
+      eventId
     );
   } else if (cloudPlan.plan_type === "payg") {
     await admin.from("usage_packs").insert({
@@ -136,7 +137,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
       cloudPlan.usage_amount,
       "payg_purchase",
       `${cloudPlan.name} credit pack purchased`,
-      session.id
+      session.id,
+      eventId
     );
   }
 }
@@ -154,11 +156,20 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     // Cloud subscription update
     const { data: profile } = await admin
       .from("profiles")
-      .select("id, plan, usage_balance, usage_monthly_allowance")
+      .select("id, plan, usage_balance, usage_monthly_allowance, subscription_status")
       .eq("stripe_customer_id", customerId)
       .single();
 
     if (!profile) return;
+
+    // Idempotency: skip if state already matches (same plan, same status)
+    if (
+      profile.plan === cloudPlan.id &&
+      profile.subscription_status === status &&
+      profile.usage_monthly_allowance === cloudPlan.usage_amount
+    ) {
+      return;
+    }
 
     const updates: Record<string, unknown> = {
       plan: cloudPlan.id,
@@ -213,11 +224,17 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   if (cloudPlan && cloudPlan.plan_type === "subscription") {
     const { data: profile } = await admin
       .from("profiles")
-      .select("id")
+      .select("id, plan, subscription_status")
       .eq("stripe_customer_id", customerId)
       .single();
 
     if (!profile) return;
+
+    // Idempotency: skip if already cancelled (prevents corruption on replay
+    // if the user has since resubscribed)
+    if (profile.plan === "free" && profile.subscription_status === "cancelled") {
+      return;
+    }
 
     // Set plan to free, zero allowance, but keep usage_balance
     await admin
@@ -240,6 +257,15 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   }
 
   // Business licence cancellation (existing behaviour)
+  // Idempotency: only update if not already cancelled
+  const { data: bizProfile } = await admin
+    .from("profiles")
+    .select("subscription_status")
+    .eq("stripe_customer_id", customerId)
+    .single();
+
+  if (bizProfile?.subscription_status === "cancelled") return;
+
   await admin
     .from("profiles")
     .update({
@@ -261,7 +287,7 @@ function getSubscriptionIdFromInvoice(invoice: Stripe.Invoice): string | null {
   return typeof sub === "string" ? sub : sub.id;
 }
 
-async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
+async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice, eventId: string) {
   const admin = createAdminClient();
   const customerId = invoice.customer as string;
   const subscriptionId = getSubscriptionIdFromInvoice(invoice);
@@ -301,7 +327,9 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
         profile.id,
         cloudPlan.usage_amount,
         "monthly_grant",
-        `${cloudPlan.name} monthly renewal`
+        `${cloudPlan.name} monthly renewal`,
+        undefined,
+        eventId
       );
 
       return;
@@ -335,6 +363,15 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
   const admin = createAdminClient();
   const customerId = invoice.customer as string;
+
+  // Idempotency: skip if already past_due
+  const { data: profile } = await admin
+    .from("profiles")
+    .select("subscription_status")
+    .eq("stripe_customer_id", customerId)
+    .single();
+
+  if (profile?.subscription_status === "past_due") return;
 
   // Set profile to past_due (applies to both cloud and business)
   // Do NOT remove plan or usage immediately (Stripe retries)
@@ -382,9 +419,27 @@ export async function POST(request: Request) {
     );
   }
 
+  // Idempotency: check if this event has already been processed.
+  // Events that grant usage credits use request_id in usage_transactions.
+  // Check the existing unique index on request_id for deduplication.
+  const admin = createAdminClient();
+  const { data: existingTx } = await admin
+    .from("usage_transactions")
+    .select("id")
+    .eq("request_id", event.id)
+    .limit(1)
+    .maybeSingle();
+
+  if (existingTx) {
+    return NextResponse.json({ received: true, duplicate: true });
+  }
+
   switch (event.type) {
     case "checkout.session.completed":
-      await handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session);
+      await handleCheckoutCompleted(
+        event.data.object as Stripe.Checkout.Session,
+        event.id
+      );
       break;
     case "customer.subscription.updated":
       await handleSubscriptionUpdated(event.data.object as Stripe.Subscription);
@@ -393,7 +448,7 @@ export async function POST(request: Request) {
       await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
       break;
     case "invoice.payment_succeeded":
-      await handleInvoicePaymentSucceeded(event.data.object as Stripe.Invoice);
+      await handleInvoicePaymentSucceeded(event.data.object as Stripe.Invoice, event.id);
       break;
     case "invoice.payment_failed":
       await handleInvoicePaymentFailed(event.data.object as Stripe.Invoice);
