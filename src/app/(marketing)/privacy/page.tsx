@@ -1,19 +1,53 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
-  title: "Privacy",
+  title: "Privacy Policy | InnerZero: Private AI Assistant",
   description:
-    "InnerZero privacy: all AI runs locally on your PC. No cloud processing, no data uploads, no tracking. Read our full privacy policy.",
+    "InnerZero keeps your data on your machine. No accounts, no tracking, no data collection. ICO registered (ZC122497). Read our full privacy policy.",
   openGraph: {
-    title: "Privacy | InnerZero. Private AI Assistant",
+    title: "Privacy Policy | InnerZero: Private AI Assistant",
     description:
-      "All AI runs locally on your PC. No cloud processing, no data uploads.",
+      "Your data stays on your machine. No accounts, no tracking, no data collection.",
     url: "https://innerzero.com/privacy",
   },
 });
+
+const FAQ_ITEMS = [
+  {
+    question: "Does InnerZero collect my data?",
+    answer:
+      "No. The InnerZero desktop application does not collect or transmit any personal data by default. All AI processing, conversations, memory, and documents remain on your local machine. No telemetry, analytics, or crash reporting is included.",
+  },
+  {
+    question: "Where is my data stored with InnerZero?",
+    answer:
+      "All your conversations, memories, files, and settings are stored locally on your machine in a local database. Nothing is uploaded to any server unless you choose to enable optional cloud mode.",
+  },
+  {
+    question: "Does InnerZero send data to the cloud?",
+    answer:
+      "Not by default. Cloud mode is optional and off by default. If you enable it, only your current prompt and a short conversation window are sent to the AI provider. Your full memory, files, and profile are never sent.",
+  },
+  {
+    question: "Is InnerZero GDPR compliant?",
+    answer:
+      "Yes. Summers Solutions Ltd is registered with the UK Information Commissioner's Office (ICO), registration reference ZC122497. You have full rights to access, correct, delete, and export your data under UK GDPR.",
+  },
+  {
+    question: "Who is the data controller for InnerZero?",
+    answer:
+      "Summers Solutions Ltd (Company No. 16448945), registered in England and Wales. For privacy enquiries, contact help@innerzero.com.",
+  },
+  {
+    question: "Can I delete my InnerZero data?",
+    answer:
+      "Yes. All desktop data is stored locally on your machine and can be deleted at any time. If you have a website account, you can permanently delete it and all associated data from your account settings page.",
+  },
+];
 
 export default function PrivacyPage() {
   return (
@@ -25,6 +59,7 @@ export default function PrivacyPage() {
           </h1>
           <p className="mt-4 text-lg text-text-secondary">
             InnerZero is built from the ground up to keep your data private.
+            All conversations, memories, and files stay on your machine.
           </p>
 
           {/* Section 1: Plain-language explainer */}
@@ -34,32 +69,52 @@ export default function PrivacyPage() {
                 How InnerZero Protects Your Privacy
               </h2>
 
-              <ul className="mt-6 space-y-4">
-                <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
-                  All AI processing happens on your hardware
-                </li>
-                <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
-                  Memory and conversations are stored locally, never uploaded
-                </li>
-                <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
-                  No account required to use InnerZero
-                </li>
-                <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
-                  If you enable optional cloud mode, your prompts are sent to the AI provider (e.g. DeepSeek, Anthropic, OpenAI) and returned. InnerZero never stores or logs them
-                </li>
-                <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
-                  If you use BYO API keys, requests go directly to the provider. InnerZero is not involved at all
-                </li>
-                <li className="flex items-start gap-3 text-text-secondary leading-relaxed">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent-teal" />
-                  No telemetry, no tracking, no analytics on your usage
-                </li>
-              </ul>
+              <div className="mt-6 space-y-4">
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-1">
+                    Everything stays local
+                  </h3>
+                  <p className="text-text-secondary leading-relaxed">
+                    All your conversations, memories, files, and settings are stored locally on your machine. All AI processing happens on your hardware. Nothing is uploaded unless you choose otherwise.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-1">
+                    No account required
+                  </h3>
+                  <p className="text-text-secondary leading-relaxed">
+                    You can use InnerZero without creating an account. No email, no sign-up, no personal information needed.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-1">
+                    No tracking or telemetry
+                  </h3>
+                  <p className="text-text-secondary leading-relaxed">
+                    InnerZero does not include telemetry, analytics, usage tracking, or crash reporting. Your usage is completely private.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-1">
+                    Cloud mode is optional
+                  </h3>
+                  <p className="text-text-secondary leading-relaxed">
+                    If you enable optional cloud mode, only your current prompt and a short conversation window are sent to the AI provider you select (such as DeepSeek, Anthropic, or OpenAI). Your full memory, files, and profile are never sent. InnerZero never stores or logs cloud prompts or responses.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-1">
+                    BYO API keys stay on your machine
+                  </h3>
+                  <p className="text-text-secondary leading-relaxed">
+                    If you use BYO (Bring Your Own) API keys, requests go directly from your machine to the provider. InnerZero is not involved at all. Keys are encrypted and stored locally.
+                  </p>
+                </div>
+              </div>
             </section>
           </ScrollReveal>
 
@@ -80,10 +135,20 @@ export default function PrivacyPage() {
                   </h3>
                   <p>
                     InnerZero is provided by Summers Solutions Ltd (Company No. 16448945), registered in England and Wales at Mclaren Building, 46 The Priory Queensway, Birmingham, B4 7LR.
-                    {process.env.NEXT_PUBLIC_ICO_REGISTRATION_NUMBER && (
-                      <> Summers Solutions Ltd is registered with the Information Commissioner&apos;s Office (ICO). Registration number: {process.env.NEXT_PUBLIC_ICO_REGISTRATION_NUMBER}.</>
-                    )}
-                    {" "}For privacy enquiries:{" "}
+                  </p>
+                  <p className="mt-2">
+                    Summers Solutions Ltd is registered with the UK Information Commissioner&apos;s Office (ICO) as a data controller. Registration reference: ZC122497. You can verify this on the{" "}
+                    <a
+                      href="https://ico.org.uk/ESDWebPages/Entry/ZC122497"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-accent-gold hover:text-accent-gold-hover transition-colors"
+                    >
+                      ICO register
+                    </a>.
+                  </p>
+                  <p className="mt-2">
+                    For privacy enquiries:{" "}
                     <a href="mailto:help@innerzero.com" className="text-accent-gold hover:text-accent-gold-hover transition-colors">
                       help@innerzero.com
                     </a>.
@@ -206,11 +271,11 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
-                    11. Data Retention
+                    11. Data Retention and Deletion
                   </h3>
                   <p>
-                    Account data (email address) is retained for as long as your account is active. Waitlist data is retained until the waitlist is no longer needed, after which it will be deleted. You can permanently delete your account and all associated data at any time from your{" "}
-                    <a href="/account/settings" className="text-accent-gold hover:text-accent-gold-hover transition-colors">account settings page</a>.
+                    All desktop data is stored locally on your machine and can be deleted at any time by you. Account data (email address) is retained for as long as your account is active. Waitlist data is retained until the waitlist is no longer needed, after which it will be deleted. You can permanently delete your account and all associated data at any time from your{" "}
+                    <Link href="/account/settings" className="text-accent-gold hover:text-accent-gold-hover transition-colors">account settings page</Link>.
                   </p>
                 </div>
 
@@ -258,8 +323,65 @@ export default function PrivacyPage() {
               </div>
             </section>
           </ScrollReveal>
+
+          {/* Trust and compliance */}
+          <ScrollReveal>
+            <section className="mt-12 rounded-xl border border-border-default bg-bg-card p-6">
+              <h2 className="text-lg font-semibold text-text-primary mb-4">
+                Trust and Compliance
+              </h2>
+              <ul className="space-y-2 text-sm text-text-secondary">
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-teal" />
+                  ICO registered:{" "}
+                  <a
+                    href="https://ico.org.uk/ESDWebPages/Entry/ZC122497"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent-gold hover:text-accent-gold-hover transition-colors"
+                  >
+                    ZC122497
+                  </a>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-teal" />
+                  Company: Summers Solutions Ltd (Company No. 16448945)
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-teal" />
+                  Jurisdiction: England and Wales
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-teal" />
+                  Contact:{" "}
+                  <a href="mailto:help@innerzero.com" className="text-accent-gold hover:text-accent-gold-hover transition-colors">
+                    help@innerzero.com
+                  </a>
+                </li>
+              </ul>
+            </section>
+          </ScrollReveal>
         </div>
       </Container>
+
+      {/* JSON-LD: FAQPage */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: FAQ_ITEMS.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: item.answer,
+              },
+            })),
+          }),
+        }}
+      />
     </div>
   );
 }
