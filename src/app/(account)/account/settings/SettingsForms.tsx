@@ -17,7 +17,7 @@ export function SettingsForms({ userId, currentName, email }: SettingsFormsProps
   return (
     <div className="mt-8 space-y-10">
       <ChangeNameForm userId={userId} currentName={currentName} />
-      <ChangePasswordForm />
+      <ChangePasswordForm email={email} />
       <DeleteAccountSection email={email} />
     </div>
   );
@@ -86,7 +86,7 @@ function ChangeNameForm({
   );
 }
 
-function ChangePasswordForm() {
+function ChangePasswordForm({ email }: { email: string }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -98,6 +98,7 @@ function ChangePasswordForm() {
     setError("");
 
     const formData = new FormData(e.currentTarget);
+    const currentPassword = formData.get("current_password") as string;
     const password = formData.get("new_password") as string;
     const confirmPassword = formData.get("confirm_password") as string;
 
@@ -114,6 +115,19 @@ function ChangePasswordForm() {
     }
 
     const supabase = createClient();
+
+    // Verify current password before allowing change
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password: currentPassword,
+    });
+
+    if (signInError) {
+      setError("Current password is incorrect.");
+      setLoading(false);
+      return;
+    }
+
     const { error: updateError } = await supabase.auth.updateUser({
       password,
     });
@@ -133,6 +147,14 @@ function ChangePasswordForm() {
         Change Password
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
+        <PasswordInput
+          label="Current password"
+          name="current_password"
+          placeholder="Enter your current password"
+          required
+          minLength={1}
+          autoComplete="current-password"
+        />
         <PasswordInput
           label="New password"
           name="new_password"
