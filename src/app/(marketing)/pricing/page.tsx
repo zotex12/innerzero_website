@@ -4,6 +4,7 @@ import { createMetadata } from "@/lib/metadata";
 import { FAQ_DATA, CLOUD_FAQ } from "@/lib/constants";
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/pricing" },
   title: "Pricing | InnerZero: Free AI, Business Licence, Optional Cloud",
   description:
     "InnerZero is free for personal use. Business licence £50/year. Optional cloud AI coming soon. Add your own API keys for free.",

@@ -3,6 +3,7 @@ import { Container } from "@/components/ui/Container";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/terms" },
   title: "Terms of Service",
   description:
     "InnerZero Terms of Service: free desktop software, optional paid services, AI output disclaimer, unrestricted mode, commercial use, liability, and governing law.",

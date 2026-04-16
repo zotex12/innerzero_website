@@ -19,6 +19,7 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/features" },
   title: "Features | InnerZero: Private AI Assistant",
   description:
     "Explore everything InnerZero can do. AI chat, voice, memory, 30+ tools, knowledge packs, screen automation, cloud AI, and more. All free, all private, all on your PC.",

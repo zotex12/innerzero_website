@@ -3,6 +3,7 @@ import { Container } from "@/components/ui/Container";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/changelog" },
   title: "Changelog",
   description:
     "Release notes and updates for InnerZero. See what's new in each version of your private AI assistant.",

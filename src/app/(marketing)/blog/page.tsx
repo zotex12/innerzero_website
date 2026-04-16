@@ -6,6 +6,7 @@ import Link from "next/link";
 import { BlogGrid } from "./BlogGrid";
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/blog" },
   title: "Learn | InnerZero: Private AI Guides & Updates",
   description:
     "Guides, tutorials, and updates on running AI privately on your PC. Learn about local AI models, memory systems, voice assistants, and more.",

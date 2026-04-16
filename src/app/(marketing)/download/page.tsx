@@ -13,6 +13,7 @@ import { createMetadata } from "@/lib/metadata";
 import { DownloadCards } from "./DownloadCards";
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/download" },
   title: "Download Free | InnerZero: Private AI Assistant",
   description:
     "Download InnerZero for free on Windows, macOS, and Linux. A private AI assistant that runs on your machine with no subscription, no account, and no cloud required.",

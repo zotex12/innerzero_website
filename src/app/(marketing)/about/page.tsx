@@ -5,6 +5,7 @@ import { CTABanner } from "@/components/sections/CTABanner";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/about" },
   title: "About",
   description:
     "About InnerZero: a private AI assistant built by Summers Solutions. Our mission is AI that is personal and private.",

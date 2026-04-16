@@ -13,6 +13,7 @@ type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 type Licence = Database["public"]["Tables"]["licences"]["Row"];
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/account" },
   title: "Account",
   description: "Manage your InnerZero account.",
   robots: { index: false, follow: false },

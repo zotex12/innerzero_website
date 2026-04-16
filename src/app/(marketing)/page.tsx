@@ -7,6 +7,7 @@ import { CTABanner } from "@/components/sections/CTABanner";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/" },
   title: "InnerZero. Free Private AI Assistant That Runs on Your PC",
   description:
     "InnerZero is a free private AI assistant that runs entirely on your PC. No cloud. No tracking. Just you and your AI.",

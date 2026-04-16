@@ -5,6 +5,7 @@ import { createMetadata } from "@/lib/metadata";
 import { SettingsForms } from "./SettingsForms";
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/account/settings" },
   title: "Settings",
   description: "Manage your InnerZero account settings.",
   robots: { index: false, follow: false },

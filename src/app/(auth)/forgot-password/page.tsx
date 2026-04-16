@@ -3,6 +3,7 @@ import { createMetadata } from "@/lib/metadata";
 import { ForgotPasswordForm } from "@/components/auth/ForgotPasswordForm";
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/forgot-password" },
   title: "Reset Password",
   description: "Reset your InnerZero account password.",
   robots: { index: false, follow: false },

@@ -4,6 +4,7 @@ import { WaitlistForm } from "@/components/sections/WaitlistForm";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/waitlist" },
   title: "Join the Waitlist",
   description:
     "Be the first to experience InnerZero, a private AI assistant that runs entirely on your PC. Join the waitlist for early access.",

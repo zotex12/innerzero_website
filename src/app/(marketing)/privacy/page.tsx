@@ -5,6 +5,7 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/privacy" },
   title: "Privacy Policy | InnerZero: Private AI Assistant",
   description:
     "InnerZero keeps your data on your machine. No accounts, no tracking, no data collection. ICO registered (ZC122497). Read our full privacy policy.",

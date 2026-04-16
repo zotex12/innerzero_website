@@ -4,6 +4,7 @@ import { ContactForm } from "@/components/sections/ContactForm";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
+  alternates: { canonical: "/contact" },
   title: "Contact",
   description:
     "Get in touch with the InnerZero team. Questions, feedback, or support. We aim to respond within 48 hours.",
