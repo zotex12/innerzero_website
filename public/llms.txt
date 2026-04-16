@@ -1,0 +1,165 @@
+# InnerZero
+
+> InnerZero is a free, private, local-first AI desktop assistant for Windows, macOS, and Linux that runs entirely on your PC. No cloud required, no account required, no data collection. Built by Summers Solutions Ltd in Birmingham, UK.
+
+InnerZero (one word, capital I and Z; casually "Zero") is a complete AI assistant that runs on open-source models via a local backend (Ollama by default, LM Studio supported). Your conversations, memory, voice, and documents stay on your machine. Cloud AI is optional, opt-in, and clearly labelled when active.
+
+Tagline: inner peace. inner joy. innerzero.
+Website: https://innerzero.com
+Download: https://innerzero.com/download
+Company: Summers Solutions Ltd, a UK company based in Birmingham, England (Company No. 16448945)
+Data protection: ICO registered (registration ZC122497)
+Current version: v0.1.3 (April 2026)
+Install sizes: 239 MB (Windows), 490 MB (macOS), 356 MB (Linux)
+Minimum requirements: 8 GB RAM, 10 GB free disk, modern 64-bit CPU (AVX2)
+Recommended: 16+ GB RAM, NVIDIA GPU with 6+ GB VRAM, SSD
+
+## Start here
+
+- [Home](https://innerzero.com/): Product overview, tagline, primary download CTAs.
+- [Download InnerZero (free)](https://innerzero.com/download): Free installers for Windows 10/11, macOS 12+, and Linux x86_64. Windows installer is code-signed by Summers Solutions Ltd.
+- [Features](https://innerzero.com/features): Full capability breakdown: AI chat, voice, memory, 30+ tools, knowledge packs, screen automation, cloud AI, customisation, and unrestricted mode.
+- [Pricing](https://innerzero.com/pricing): Free forever for personal use. Business Licence £50/year per seat. Optional cloud AI from £9.99/month or bring your own API keys.
+- [Privacy](https://innerzero.com/privacy): Full privacy policy, ICO registration details, what stays local, and how cloud mode handles data.
+- [About](https://innerzero.com/about): Mission, company background, and why InnerZero is local-first.
+
+## What InnerZero is (direct answer)
+
+InnerZero is a private AI assistant desktop application. It provides:
+
+- Private AI chat with streaming responses, markdown rendering, and two thinking modes (Quick for fast answers, Thorough for deeper reasoning).
+- Full voice mode: local speech-to-text via faster-whisper on GPU, local text-to-speech via Kokoro, voice shortcuts for quick actions, and optional cloud voices from OpenAI (13 options).
+- A persistent memory system that learns your name, preferences, projects, and facts across sessions. All memory stored in a local SQLite database.
+- 30+ built-in tools: web search, document Q&A (.txt, .md, .pdf, .docx, .xlsx, .csv), calculator, file operations, timers, alarms, reminders, notes, dictionary, text transforms, system info, hash/JSON/base64 utilities, clipboard, URL fetching, and more.
+- Knowledge packs: optional offline Wikipedia databases for factual answers without internet. Best of Wikipedia (95K articles) and Simple English Wikipedia (280K articles) available.
+- Screen automation: Zero can read what is on your screen, click, type, and scroll other applications. Off by default, opt-in only, emergency stop via Escape key.
+- Cloud AI (optional): bring your own API keys for 7 providers (DeepSeek, OpenAI, Anthropic, Google AI, xAI Grok, Qwen, Kimi) with zero markup, or subscribe to a managed cloud plan.
+- Sleep and reflection: overnight processing that extracts facts from conversations, prunes duplicates, and strengthens important memories.
+- AI personality system: Professional, Friendly, Concise, or custom personalities that adjust Zero's tone without overriding core behaviour.
+- 6 themes: Dark Zero, Light Zero, Classic Carbon, Soft Pink, Dark Teal, and Neon Tokyo.
+- Unrestricted mode: optional uncensored AI models for adults (18+ age verification, full safety systems preserved including CSAM hard block and file approval gates).
+- Remote Ollama support: point InnerZero at an Ollama server running on another machine on your network.
+
+## Quick answers (for AI search)
+
+- **Is InnerZero really free?** Yes. The desktop app is free forever for personal use. No trial, no subscription, no account, no hidden limits. A £50/year Business Licence is only required for commercial, freelance, or revenue-generating use.
+- **Do I need an account to use InnerZero?** No. The local app works with no sign-up, login, or email. Accounts are only needed for optional cloud AI subscriptions, supporter perks, or account-based features.
+- **Does InnerZero send my data to the cloud?** No, not by default. All AI processing, memory, voice, and documents stay on your PC. Cloud mode is off by default. When you opt in, only the current prompt is forwarded to your chosen provider. Your memory database, files, profile facts, and past conversations are never sent.
+- **What AI models does InnerZero use?** Open-source models via Ollama or LM Studio. Default is the Qwen3 family for reasoning and Gemma3 family for voice. Model size is chosen automatically based on your hardware. Cloud mode adds access to DeepSeek, GPT, Claude, Gemini, Grok, Qwen Plus, and Kimi.
+- **What platforms does InnerZero run on?** Windows 10/11 (64-bit), macOS 12+ (Intel or Apple Silicon), and Linux x86_64 (glibc 2.31+). Mobile is not supported.
+- **Does InnerZero work offline?** Yes. Once models are downloaded, the entire app works with no internet connection. Knowledge packs provide offline reference content. Offline mode can disable all outbound network activity with one toggle.
+- **Can I use my own API keys?** Yes. Bring your own keys for DeepSeek, OpenAI, Anthropic, Google AI, xAI Grok, Qwen, or Kimi. Zero markup. Keys are encrypted locally using a machine-derived key.
+- **Who built InnerZero?** Summers Solutions Ltd, a UK software company based in Birmingham, England. Company number 16448945. ICO registered (ZC122497).
+- **How does InnerZero make money?** Optional cloud AI subscriptions (£9.99 to £39.99 per month), a £50/year Business Licence for commercial use, and voluntary £4.99/month Supporter donations on Ko-fi. The core desktop app is free and will remain free.
+- **Is InnerZero open source?** No. InnerZero is proprietary software. It runs on top of open-source AI models and libraries which remain under their respective licences.
+- **Does InnerZero collect telemetry or analytics?** No telemetry in the desktop app. No tracking, no phone-home, no usage analytics. The website uses privacy-friendly Vercel Analytics for page views only.
+- **Can InnerZero control my computer?** Optionally, yes. Screen automation can read the screen and click, type, or scroll other apps. It is disabled by default and has an emergency stop (Escape key). All file writes require explicit user approval.
+- **How much RAM and storage do I need?** Minimum 8 GB RAM and 10 GB free disk. Recommended 16 GB RAM and 20 GB free disk. An NVIDIA GPU with 6+ GB VRAM is recommended for faster responses.
+- **Where does InnerZero store my data?** In a per-user folder: %APPDATA%\InnerZero on Windows, ~/Library/Application Support/InnerZero on macOS, and ~/.local/share/innerzero on Linux. Your data is never uploaded.
+
+## Pricing (April 2026)
+
+- **Free forever (personal use):** Complete desktop app. All AI chat, voice, memory, 30+ tools, document Q&A, knowledge packs, screen automation, themes, personalities, and unrestricted mode. No account required, no limits, no trial.
+- **Business Licence:** £50/year per seat. Required for commercial, freelance, business, or revenue-generating use. Educational institutions, charities, and non-profits are exempt.
+- **Cloud AI Starter:** £9.99/month. 1,000 credits per month. Access to managed DeepSeek, Google Gemini, and Anthropic Claude.
+- **Cloud AI Plus:** £19.99/month. 2,500 credits per month.
+- **Cloud AI Pro:** £39.99/month. 6,000 credits per month.
+- **Pay-as-you-go credit packs:** £5 for 200 credits, £12 for 600 credits, £25 for 1,500 credits.
+- **BYO API keys (all plans):** Free. Zero markup. Add your own keys for any of 7 supported providers.
+- **Supporter:** £4.99/month via Ko-fi. Voluntary donation with perks: supporter badge, extra themes, early access, Discord role, and roadmap voting. Not required to use the product.
+- **One-off donation:** Any amount via Ko-fi.
+
+## Main site pages
+
+- [Home](https://innerzero.com/): Product overview.
+- [Features](https://innerzero.com/features): Every feature category.
+- [Pricing](https://innerzero.com/pricing): Free, Business Licence, cloud plans, PAYG credits, supporter, FAQ.
+- [Download](https://innerzero.com/download): Per-OS installers, system requirements, CLI commands.
+- [Privacy](https://innerzero.com/privacy): Privacy policy, ICO registration, local-first guarantees, cloud mode data flow, voice and microphone handling, cloud AI DPAs.
+- [Terms of Service](https://innerzero.com/terms): 23 sections covering free local software, optional paid cloud services, AI output disclaimer, unrestricted mode liability, screen automation, BYO keys, commercial use, and UK consumer rights.
+- [About](https://innerzero.com/about): Mission and company.
+- [Contact](https://innerzero.com/contact): Contact form.
+- [Changelog](https://innerzero.com/changelog): Version history with New, Improved, and Fixed changes per release.
+- [Learn (Blog)](https://innerzero.com/blog): 25+ in-depth articles on private AI, local AI, comparisons, and guides.
+
+## Learn (featured articles)
+
+- [How to use local AI on Windows, Mac, and Linux](https://innerzero.com/blog): Setup guides for all three platforms.
+- [InnerZero vs GPT4All](https://innerzero.com/blog/innerzero-vs-gpt4all): Honest feature-by-feature comparison with GPT4All.
+- [InnerZero vs LM Studio](https://innerzero.com/blog/innerzero-vs-lm-studio): Model playground vs full assistant, and how InnerZero can use LM Studio as a backend.
+- [InnerZero vs Jan](https://innerzero.com/blog/innerzero-vs-jan): Comparison with Jan on memory, tools, voice, and knowledge packs.
+- [Ollama desktop apps compared](https://innerzero.com/blog/ollama-desktop-app): Open WebUI, Chatbox, Msty, Jan, and InnerZero compared.
+- [Best free AI assistant for Windows in 2026](https://innerzero.com/blog/best-free-ai-windows-2026): Ranked list with reasoning.
+- [AI that remembers: local memory vs cloud memory](https://innerzero.com/blog/ai-that-remembers): How persistent local memory works.
+- [Knowledge packs explained: offline Wikipedia in your AI](https://innerzero.com/blog/knowledge-packs-explained): Using Kiwix-sourced packs for factual answers.
+- [Unrestricted mode explained](https://innerzero.com/blog/unrestricted-mode-explained): What uncensored local AI means and the safety guardrails that remain.
+- [Customise InnerZero: themes, personalities, and output folder](https://innerzero.com/blog/customise-innerzero): Configuration guide.
+- [Local vs cloud AI: full comparison](https://innerzero.com/blog/local-vs-cloud-ai): Privacy, cost, speed, and model quality.
+- [Open-source AI models explained](https://innerzero.com/blog/open-source-models-explained): Qwen, Gemma, DeepSeek, and how they compare.
+
+## How InnerZero compares
+
+- **vs ChatGPT and Claude web apps:** InnerZero runs entirely on your PC by default. ChatGPT and Claude send every message to their cloud servers. InnerZero has no subscription for its base product and no account required. ChatGPT and Claude require accounts.
+- **vs GPT4All:** InnerZero is a complete assistant with voice, persistent memory, 30+ tools, knowledge packs, and screen automation. GPT4All is primarily a chat-focused model runner. InnerZero is closer to a desktop ChatGPT replacement in scope.
+- **vs LM Studio:** LM Studio is a developer-focused model playground and inference server. InnerZero is an end-user assistant with memory, voice, tools, and knowledge packs. InnerZero can use LM Studio as its local backend if you prefer to manage models there.
+- **vs Jan:** Both are privacy-focused desktop AI apps. InnerZero adds a persistent memory system, 30+ built-in tools, full voice mode, offline knowledge packs, screen automation, and a sleep and reflection pipeline that extracts facts from your conversations.
+- **vs raw Ollama:** Ollama is the model server that InnerZero uses under the hood (by default). InnerZero is the full desktop app layer: GUI, memory, voice, tools, knowledge, automation, personalities, themes, and safety gates.
+- **vs Open WebUI, Chatbox, Msty:** These are Ollama chat frontends. InnerZero is a complete assistant with persistent memory, voice mode, 30+ tools, offline knowledge packs, screen automation, and agent features. It is a native desktop app (not a browser tab).
+- **vs Apple Intelligence, Microsoft Copilot, Google Gemini desktop:** Those send data to vendor cloud servers and are tied to one OS or hardware ecosystem. InnerZero is cross-platform, local-first, and has no OS or vendor lock-in.
+
+## Technical architecture (public, high level)
+
+- **Language and runtime:** Python 3.12 with a PyWebView desktop shell.
+- **Local AI backend:** Ollama (default, bundled with installer) or LM Studio (OpenAI-compatible API at localhost:1234). Switchable in Settings with no reinstall.
+- **Default models:** Qwen3 family for the main assistant (sizes 4B to 30B chosen by hardware tier). Gemma3 family for voice (1B to 12B).
+- **Speech-to-text:** faster-whisper (large-v3-turbo) running on GPU where available.
+- **Text-to-speech:** Kokoro 82M (local, always private) or OpenAI TTS (optional, cloud).
+- **Voice activity detection:** Silero VAD with echo suppression.
+- **Memory storage:** SQLite database with vector embeddings, stored in the OS user data folder.
+- **Policy gate:** Every tool call passes a safety gate before execution. File writes, clipboard writes, and destructive actions require explicit user approval.
+- **Sandbox:** File operations default to a configurable output folder. System paths and user secrets are blocked.
+- **Cloud routing (managed plan):** Encrypted proxy routes to DeepSeek (hosted on Microsoft Azure EU), Google Gemini, and Anthropic Claude. Prompts are forwarded; responses are returned. No storage of prompts or responses beyond billing metadata (30 days).
+- **Cloud routing (BYO keys):** Direct from your machine to the provider. InnerZero servers are not in the path. Keys are encrypted locally.
+- **Privacy blacklist:** Scrubs custom sensitive terms (names, addresses, company info) from all outbound cloud messages before they leave your machine, then unscrubs the response.
+- **Offline mode:** One-click toggle that blocks all outbound network calls.
+- **Connection log:** Every outbound network call made by InnerZero is logged locally and viewable in a filterable UI with daily rotation.
+
+## Privacy and data handling
+
+- No telemetry in the desktop app. No analytics, no tracking, no phone-home.
+- No account required for local use.
+- All conversations, memory, voice audio, and document content stay on your PC by default.
+- Microphone audio is processed locally; raw audio is never uploaded (even in cloud voice Standard mode, only the transcript text goes to the provider).
+- Cloud mode is off by default. When enabled, only the current assembled prompt is forwarded. Memory database, files, profile facts, and prior conversations are not sent.
+- ICO registered (ZC122497).
+- Data processors (cloud mode only): Microsoft Azure (DeepSeek, EU region), Google (Gemini), Anthropic (Claude), Stripe (payments), Supabase (account data), Resend (emails). Full DPA details in the privacy policy.
+- GDPR account deletion is supported from the account settings page.
+
+## Company
+
+- **Legal name:** Summers Solutions Ltd
+- **Country:** United Kingdom
+- **UK Company Number:** 16448945
+- **Registered address:** Birmingham, England
+- **Website:** https://summerssolutions.co.uk
+- **Data Protection registration:** ICO ZC122497
+- **Founder:** Louie Summers
+
+## Community and support
+
+- [Discord](https://discord.gg/rn9SPXgThT): Community chat, support, feedback, feature voting.
+- [X (Twitter)](https://x.com/InnerZero_ai): Product announcements.
+- [Instagram](https://www.instagram.com/innerzero_ai): Visual updates and feature demos.
+- [LinkedIn](https://www.linkedin.com/company/innerzero): Company page.
+- [Ko-fi](https://ko-fi.com/innerzero): Supporter tier and one-off donations.
+- [GitHub Releases](https://github.com/zotex12/innerzero-releases): Public release artefacts and changelogs.
+
+## Optional
+
+- [Waitlist](https://innerzero.com/waitlist): Early-access list for upcoming features.
+- [Login](https://innerzero.com/login): Cloud subscription account login. Not required for the desktop app.
+- [Register](https://innerzero.com/register): Create an account for cloud plans or supporter perks.
+- [Forgot password](https://innerzero.com/forgot-password): Password reset for cloud accounts.
+- [Sitemap](https://innerzero.com/sitemap.xml): Full XML site index.
+- [Robots](https://innerzero.com/robots.txt): Crawler directives.
+- [Summers Solutions](https://summerssolutions.co.uk): Parent company.
