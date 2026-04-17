@@ -3,6 +3,10 @@ import { createClient } from "@/lib/supabase/server";
 import { stripe } from "@/lib/stripe";
 import { checkRateLimit } from "@/lib/rate-limit";
 
+function generateCorrelationId(): string {
+  return Math.random().toString(36).slice(2, 8);
+}
+
 export async function POST(request: Request) {
   const rateLimited = checkRateLimit(request, "stripePortal");
   if (rateLimited) return rateLimited;
@@ -38,7 +42,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Internal server error";
-    return NextResponse.json({ message }, { status: 500 });
+    const ref = generateCorrelationId();
+    console.error(`[portal] ${ref}:`, error);
+    return NextResponse.json(
+      { message: "Something went wrong. Please try again.", ref },
+      { status: 500 }
+    );
   }
 }

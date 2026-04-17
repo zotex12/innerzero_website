@@ -8,7 +8,7 @@ interface SpendingCapBody {
 }
 
 export async function POST(request: Request) {
-  const rateLimited = checkRateLimit(request, "cloudDeduct");
+  const rateLimited = checkRateLimit(request, "spendingCap");
   if (rateLimited) return rateLimited;
 
   const auth = await getDesktopUser(request);

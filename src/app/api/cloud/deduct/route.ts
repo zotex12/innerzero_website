@@ -6,7 +6,7 @@ import { checkRateLimit } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
 import { checkSpendingCap } from "@/lib/spending-cap";
 
-const REQUEST_ID_PATTERN = /^[a-zA-Z0-9-]{1,64}$/;
+const REQUEST_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 
 interface DeductBody {
   model_tier: string;
@@ -176,10 +176,15 @@ export async function POST(request: Request) {
   }
 
   if (deductedPackId === null || deductedPackRemaining === null) {
-    return NextResponse.json({
-      error: "insufficient_usage",
-      usage_balance: subscriptionBalance,
-    });
+    // 402 sub-codes: "insufficient_usage" and "spending_cap_exceeded".
+    // Keep both aligned — desktop branches on the body `error` field.
+    return NextResponse.json(
+      {
+        error: "insufficient_usage",
+        usage_balance: subscriptionBalance,
+      },
+      { status: 402 }
+    );
   }
 
   // Record the transaction (PAYG is tracked per-pack; profiles.usage_balance unchanged)

@@ -17,6 +17,10 @@ interface CheckoutBody {
   plan_id?: string;
 }
 
+function generateCorrelationId(): string {
+  return Math.random().toString(36).slice(2, 8);
+}
+
 export async function POST(request: Request) {
   const rateLimited = checkRateLimit(request, "stripeCheckout");
   if (rateLimited) return rateLimited;
@@ -41,19 +45,55 @@ export async function POST(request: Request) {
       .eq("id", user.id)
       .single();
 
-    let customerId = profile?.stripe_customer_id;
+    let customerId = profile?.stripe_customer_id ?? null;
 
     if (!customerId) {
+      // Create then claim atomically: conditional UPDATE only sets the id if
+      // the profile column is still null. If a concurrent request won the
+      // claim, delete the orphan customer we just created and re-read.
       const customer = await stripe.customers.create({
         email: user.email,
         metadata: { supabase_user_id: user.id },
       });
-      customerId = customer.id;
 
-      await admin
+      const { data: claimed } = await admin
         .from("profiles")
-        .update({ stripe_customer_id: customerId })
-        .eq("id", user.id);
+        .update({ stripe_customer_id: customer.id })
+        .eq("id", user.id)
+        .is("stripe_customer_id", null)
+        .select("stripe_customer_id");
+
+      if (claimed && claimed.length > 0) {
+        customerId = customer.id;
+      } else {
+        try {
+          await stripe.customers.del(customer.id);
+        } catch (delErr) {
+          console.error(
+            "[checkout] failed to delete orphan Stripe customer:",
+            delErr instanceof Error ? delErr.message : "unknown"
+          );
+        }
+
+        const { data: reread } = await admin
+          .from("profiles")
+          .select("stripe_customer_id")
+          .eq("id", user.id)
+          .single();
+
+        customerId = reread?.stripe_customer_id ?? null;
+
+        if (!customerId) {
+          const ref = generateCorrelationId();
+          console.error(
+            `[checkout] ${ref}: customer race re-read failed for user ${user.id}`
+          );
+          return NextResponse.json(
+            { message: "Something went wrong. Please try again.", ref },
+            { status: 500 }
+          );
+        }
+      }
     }
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://innerzero.com";
@@ -71,6 +111,7 @@ export async function POST(request: Request) {
       const sessionParams: Parameters<typeof stripe.checkout.sessions.create>[0] = {
         mode,
         customer: customerId,
+        client_reference_id: user.id,
         line_items: [{ price: cloudPlan.stripe_price_id, quantity: 1 }],
         success_url: `${siteUrl}/account?checkout=success`,
         cancel_url: `${siteUrl}/pricing`,
@@ -104,6 +145,7 @@ export async function POST(request: Request) {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       customer: customerId,
+      client_reference_id: user.id,
       line_items: [{ price: priceId, quantity: quantity || 1 }],
       success_url: `${siteUrl}/account?checkout=success`,
       cancel_url: `${siteUrl}/pricing`,
@@ -115,7 +157,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Internal server error";
-    return NextResponse.json({ message }, { status: 500 });
+    const ref = generateCorrelationId();
+    console.error(`[checkout] ${ref}:`, error);
+    return NextResponse.json(
+      { message: "Something went wrong. Please try again.", ref },
+      { status: 500 }
+    );
   }
 }

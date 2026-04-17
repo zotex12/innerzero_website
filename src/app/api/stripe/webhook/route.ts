@@ -34,13 +34,31 @@ function mapStripeStatus(
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId: string) {
   const admin = createAdminClient();
   const customerId = session.customer as string;
+  const clientReferenceId = session.client_reference_id;
 
-  // Find user profile by stripe_customer_id
-  const { data: profile } = await admin
-    .from("profiles")
-    .select("id, email")
-    .eq("stripe_customer_id", customerId)
-    .single();
+  // Prefer client_reference_id (set by our checkout route) — this avoids the
+  // dependency on the stripe_customer_id lookup when a concurrent checkout
+  // race may have created an orphan customer. Fall back to the legacy lookup
+  // for sessions created before this change.
+  let profile: { id: string; email: string } | null = null;
+
+  if (clientReferenceId) {
+    const { data } = await admin
+      .from("profiles")
+      .select("id, email")
+      .eq("id", clientReferenceId)
+      .single();
+    profile = data;
+  }
+
+  if (!profile) {
+    const { data } = await admin
+      .from("profiles")
+      .select("id, email")
+      .eq("stripe_customer_id", customerId)
+      .single();
+    profile = data;
+  }
 
   if (!profile) return;
 
@@ -444,11 +462,9 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
 }
 
 export async function POST(request: Request) {
-  // Rate limit webhooks (high limit for Stripe retries)
-  const { checkRateLimit } = await import("@/lib/rate-limit");
-  const rateLimited = checkRateLimit(request, "stripeWebhook");
-  if (rateLimited) return rateLimited;
-
+  // Signature verification runs FIRST, before rate limiting. A rate limiter
+  // that runs before verification can be flooded by hostile senders to 429
+  // legitimate Stripe retries.
   const body = await request.text();
   const signature = request.headers.get("stripe-signature");
 
@@ -469,8 +485,30 @@ export async function POST(request: Request) {
     );
   } catch {
     return NextResponse.json(
-      { message: "Webhook signature verification failed." },
+      { message: "Webhook signature verification failed" },
       { status: 400 }
+    );
+  }
+
+  // Now that the sender is verified, rate-limit keyed by event.type so a
+  // single event category being retried in bulk does not crowd out other
+  // event types. Stripe signs, so this is a courtesy throttle, not a gate.
+  const { rateLimit, LIMITS } = await import("@/lib/rate-limit");
+  const { limit, windowMs, store } = LIMITS.stripeWebhook;
+  const rl = rateLimit(event.type, limit, windowMs, store);
+  if (!rl.success) {
+    return new Response(
+      JSON.stringify({
+        error: "Too many requests. Please try again later.",
+        retryAfter: rl.retryAfter,
+      }),
+      {
+        status: 429,
+        headers: {
+          "Content-Type": "application/json",
+          "Retry-After": String(rl.retryAfter),
+        },
+      }
     );
   }
 

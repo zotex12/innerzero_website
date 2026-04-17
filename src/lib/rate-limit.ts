@@ -78,6 +78,7 @@ export const LIMITS = {
   accountDelete:   { limit: 3,   windowMs: 60_000, store: "account-delete" },
   cloudDeduct:     { limit: 10,  windowMs: 60_000, store: "cloud-deduct" },
   cloudProxy:      { limit: 10,  windowMs: 60_000, store: "cloud-proxy" },
+  spendingCap:     { limit: 5,   windowMs: 60_000, store: "spending-cap" },
   themeRedeem:     { limit: 5,   windowMs: 60_000, store: "theme-redeem" },
 } as const;
 

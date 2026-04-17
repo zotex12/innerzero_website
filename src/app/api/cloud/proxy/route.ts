@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDesktopUser } from "@/lib/auth-desktop";
 import { deductUsage } from "@/lib/cloud-plans";
@@ -11,12 +11,21 @@ import { checkRateLimit } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
 import { checkSpendingCap } from "@/lib/spending-cap";
 
+// Known limitation: the idempotency check for request_id runs BEFORE the
+// provider call, so two concurrent retries of the same request_id can each
+// reach the provider (both get billed by the upstream AI vendor). The
+// deduct step is race-safe (unique index on request_id + atomic RPC), so
+// only one deduction lands — the second concurrent call will see 23505 on
+// the transaction insert or insufficient_usage at deduct time. Closing this
+// duplicate-provider-call window requires caching the provider response in
+// usage_transactions, which is a schema change deferred to a future batch.
+
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
 const MAX_SYSTEM_PROMPT_CHARS = 2000;
 const MAX_MESSAGE_EXCHANGES = 10; // 5 exchanges = 10 messages (user + assistant)
-const REQUEST_ID_PATTERN = /^[a-zA-Z0-9-]{1,64}$/;
+const REQUEST_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 
 interface ProxyMessage {
   role: "user" | "assistant";
@@ -188,10 +197,15 @@ export async function POST(request: Request) {
 
     const hasEligiblePack = (paygPacks ?? []).some((p) => p.usage_remaining >= cost);
     if (!hasEligiblePack) {
-      return NextResponse.json({
-        error: "insufficient_usage",
-        usage_balance: subscriptionBalance,
-      });
+      // 402 sub-codes: "insufficient_usage" and "spending_cap_exceeded".
+      // Keep both aligned — desktop branches on the body `error` field.
+      return NextResponse.json(
+        {
+          error: "insufficient_usage",
+          usage_balance: subscriptionBalance,
+        },
+        { status: 402 }
+      );
     }
     deductSource = "payg";
   }
@@ -331,27 +345,45 @@ export async function POST(request: Request) {
       const outputTokens = result.output_tokens ?? 0;
       const estimatedCost = estimateCostPence(modelId, inputTokens, outputTokens);
 
-      admin
-        .from("proxy_cost_log")
-        .insert({
-          user_id: userId,
-          request_id: requestId ?? null,
-          provider,
-          model_id: modelId,
-          input_tokens: inputTokens,
-          output_tokens: outputTokens,
-          estimated_cost_pence: estimatedCost,
-          usage_deducted: alreadyDeducted ? 0 : cost,
-        })
-        .then(({ error: costErr }) => {
+      // after() keeps the runtime alive until background work completes, so
+      // serverless cold-stops don't drop audit inserts. The response still
+      // returns synchronously below — user-visible latency is unchanged.
+      after(async () => {
+        try {
+          const { error: costErr } = await admin
+            .from("proxy_cost_log")
+            .insert({
+              user_id: userId,
+              request_id: requestId ?? null,
+              provider,
+              model_id: modelId,
+              input_tokens: inputTokens,
+              output_tokens: outputTokens,
+              estimated_cost_pence: estimatedCost,
+              usage_deducted: alreadyDeducted ? 0 : cost,
+            });
           if (costErr) console.error("[proxy_cost_log] insert failed:", costErr.message);
-        });
+        } catch (err) {
+          console.error(
+            "[proxy_cost_log] insert threw:",
+            err instanceof Error ? err.message : "unknown"
+          );
+        }
+      });
 
-      // Fire-and-forget usage threshold alert (subscription users only)
+      // Usage threshold alert (subscription users only) — also deferred.
       if (!alreadyDeducted && deductSource === "subscription" && monthlyAllowance > 0) {
         const newBalance = subscriptionBalance - cost;
-        checkAndSendUsageAlert(userId, newBalance, monthlyAllowance, alertsSent)
-          .catch((err) => console.error("[usage-alerts] check failed:", err instanceof Error ? err.message : "unknown"));
+        after(async () => {
+          try {
+            await checkAndSendUsageAlert(userId, newBalance, monthlyAllowance, alertsSent);
+          } catch (err) {
+            console.error(
+              "[usage-alerts] check failed:",
+              err instanceof Error ? err.message : "unknown"
+            );
+          }
+        });
       }
 
       // Get updated balance for header
