@@ -174,31 +174,26 @@ export async function POST(request: Request) {
 
   // Check sufficient usage (subscription or PAYG)
   let deductSource: "subscription" | "payg" = "subscription";
-  let paygPackId: string | null = null;
 
-  if (subscriptionBalance >= cost) {
-    deductSource = "subscription";
-  } else {
-    // Try PAYG packs
+  if (subscriptionBalance < cost) {
+    // Verify at least one PAYG pack has enough balance before calling the provider.
+    // The actual deduction happens after the provider response below.
     const { data: paygPacks } = await admin
       .from("usage_packs")
       .select("id, usage_remaining")
       .eq("user_id", userId)
       .gt("usage_remaining", 0)
       .or("expires_at.is.null,expires_at.gt." + new Date().toISOString())
-      .order("created_at", { ascending: true })
-      .limit(1);
+      .order("created_at", { ascending: true });
 
-    const pack = paygPacks?.[0];
-    if (pack && pack.usage_remaining >= cost) {
-      deductSource = "payg";
-      paygPackId = pack.id;
-    } else {
+    const hasEligiblePack = (paygPacks ?? []).some((p) => p.usage_remaining >= cost);
+    if (!hasEligiblePack) {
       return NextResponse.json({
         error: "insufficient_usage",
         usage_balance: subscriptionBalance,
       });
     }
+    deductSource = "payg";
   }
 
   // Select models from tier config
@@ -270,33 +265,64 @@ export async function POST(request: Request) {
       // Deduct usage after successful response
       if (!alreadyDeducted) {
         if (deductSource === "subscription") {
-          await deductUsage(userId, cost, requestedTier, provider, modelId, requestId);
-        } else if (paygPackId) {
-          // Deduct from PAYG pack
-          const { data: pack } = await admin
-            .from("usage_packs")
-            .select("usage_remaining")
-            .eq("id", paygPackId)
-            .single();
+          const newBalance = await deductUsage(userId, cost, requestedTier, provider, modelId, requestId);
+          if (newBalance === null) {
+            // Subscription drained by a concurrent request between the pre-check and
+            // the atomic deduct. Fall through to PAYG packs if any.
+            deductSource = "payg";
+          }
+        }
 
-          if (pack) {
-            await admin
-              .from("usage_packs")
-              .update({ usage_remaining: pack.usage_remaining - cost })
-              .eq("id", paygPackId);
+        if (deductSource === "payg") {
+          // Atomic PAYG deduction with fall-through to the next eligible pack.
+          const { data: eligiblePacks } = await admin
+            .from("usage_packs")
+            .select("id, usage_remaining")
+            .eq("user_id", userId)
+            .gt("usage_remaining", 0)
+            .or("expires_at.is.null,expires_at.gt." + new Date().toISOString())
+            .order("created_at", { ascending: true });
+
+          let packDeducted = false;
+          for (const pack of eligiblePacks ?? []) {
+            if (pack.usage_remaining < cost) continue;
+            const { data: remaining, error: rpcError } = await admin.rpc(
+              "atomic_deduct_pack",
+              { p_pack_id: pack.id, p_amount: cost }
+            );
+            if (rpcError) {
+              console.error("[cloud/proxy] atomic_deduct_pack error:", rpcError.message);
+              continue;
+            }
+            if (remaining !== null) {
+              packDeducted = true;
+              break;
+            }
           }
 
-          await admin.from("usage_transactions").insert({
-            user_id: userId,
-            type: "usage",
-            amount: -cost,
-            balance_after: subscriptionBalance,
-            description: `${provider}/${modelId} (PAYG pack)`,
-            model_tier: requestedTier,
-            provider,
-            model_id: modelId,
-            ...(requestId ? { request_id: requestId } : {}),
-          });
+          if (packDeducted) {
+            await admin.from("usage_transactions").insert({
+              user_id: userId,
+              type: "usage",
+              amount: -cost,
+              balance_after: subscriptionBalance,
+              description: `${provider}/${modelId} (PAYG pack)`,
+              model_tier: requestedTier,
+              provider,
+              model_id: modelId,
+              ...(requestId ? { request_id: requestId } : {}),
+            });
+          } else {
+            console.error(
+              JSON.stringify({
+                event: "cloud_proxy_deduct_miss",
+                ts: new Date().toISOString(),
+                user_id: userId,
+                cost,
+                reason: "no_pack_deducted_after_provider",
+              })
+            );
+          }
         }
       }
 

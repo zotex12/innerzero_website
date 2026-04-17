@@ -121,7 +121,7 @@ export async function POST(request: Request) {
 
   // Try subscription balance first
   if (subscriptionBalance >= cost) {
-    await deductUsage(
+    const newBalance = await deductUsage(
       auth.user.id,
       cost,
       body.model_tier,
@@ -130,17 +130,20 @@ export async function POST(request: Request) {
       requestId
     );
 
-    // Fire-and-forget usage threshold alert
-    if (monthlyAllowance > 0) {
-      checkAndSendUsageAlert(auth.user.id, subscriptionBalance - cost, monthlyAllowance, alertsSent)
-        .catch((err) => console.error("[usage-alerts] check failed:", err instanceof Error ? err.message : "unknown"));
-    }
+    if (newBalance !== null) {
+      // Fire-and-forget usage threshold alert
+      if (monthlyAllowance > 0) {
+        checkAndSendUsageAlert(auth.user.id, newBalance, monthlyAllowance, alertsSent)
+          .catch((err) => console.error("[usage-alerts] check failed:", err instanceof Error ? err.message : "unknown"));
+      }
 
-    return NextResponse.json({
-      success: true,
-      usage_deducted: cost,
-      usage_remaining: subscriptionBalance - cost,
-    });
+      return NextResponse.json({
+        success: true,
+        usage_deducted: cost,
+        usage_remaining: newBalance,
+      });
+    }
+    // RPC returned null: concurrent deduction drained the balance. Fall through to PAYG.
   }
 
   // Subscription balance insufficient, try PAYG packs (oldest first, skip expired)
@@ -152,24 +155,34 @@ export async function POST(request: Request) {
     .or("expires_at.is.null,expires_at.gt." + new Date().toISOString())
     .order("created_at", { ascending: true });
 
-  const eligiblePack = paygPacks?.find((p) => p.usage_remaining >= cost);
+  let deductedPackId: string | null = null;
+  let deductedPackRemaining: number | null = null;
 
-  if (!eligiblePack) {
+  for (const pack of paygPacks ?? []) {
+    if (pack.usage_remaining < cost) continue;
+    const { data: remaining, error: rpcError } = await admin.rpc(
+      "atomic_deduct_pack",
+      { p_pack_id: pack.id, p_amount: cost }
+    );
+    if (rpcError) {
+      console.error("[cloud/deduct] atomic_deduct_pack error:", rpcError.message);
+      continue;
+    }
+    if (remaining !== null) {
+      deductedPackId = pack.id;
+      deductedPackRemaining = remaining;
+      break;
+    }
+  }
+
+  if (deductedPackId === null || deductedPackRemaining === null) {
     return NextResponse.json({
       error: "insufficient_usage",
       usage_balance: subscriptionBalance,
     });
   }
 
-  // Deduct from PAYG pack
-  const newPackRemaining = eligiblePack.usage_remaining - cost;
-  await admin
-    .from("usage_packs")
-    .update({ usage_remaining: newPackRemaining })
-    .eq("id", eligiblePack.id);
-
-  // Record the transaction (deductUsage updates profiles.usage_balance,
-  // but for PAYG we track via the pack; record the transaction for audit)
+  // Record the transaction (PAYG is tracked per-pack; profiles.usage_balance unchanged)
   await admin.from("usage_transactions").insert({
     user_id: auth.user.id,
     type: "usage",
@@ -186,6 +199,6 @@ export async function POST(request: Request) {
     success: true,
     usage_deducted: cost,
     usage_remaining: subscriptionBalance,
-    payg_pack_remaining: newPackRemaining,
+    payg_pack_remaining: deductedPackRemaining,
   });
 }

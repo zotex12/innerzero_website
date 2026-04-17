@@ -58,55 +58,61 @@ export async function grantUsage(
   description: string,
   stripeSessionId?: string,
   requestId?: string
-): Promise<void> {
+): Promise<number | null> {
   const admin = createAdminClient();
 
-  // If a request_id is provided, check for duplicate (idempotency)
+  // Dedup path: insert the transaction row first so the UNIQUE index on
+  // request_id is the primitive that blocks replays. If the insert fails with
+  // 23505, another concurrent handler already processed this event — no-op.
+  // balance_after is filled in after the atomic grant returns the true value.
+  let insertedId: string | null = null;
   if (requestId) {
-    const { data: existing } = await admin
+    const { data: inserted, error: insertError } = await admin
       .from("usage_transactions")
+      .insert({
+        user_id: userId,
+        type,
+        amount,
+        balance_after: 0,
+        description,
+        stripe_session_id: stripeSessionId ?? null,
+        request_id: requestId,
+      })
       .select("id")
-      .eq("request_id", requestId)
-      .limit(1)
-      .maybeSingle();
+      .single();
 
-    if (existing) {
-      // Already processed, skip silently
-      return;
+    if (insertError) {
+      if (insertError.code === "23505") return null;
+      throw insertError;
     }
+    insertedId = inserted?.id ?? null;
   }
 
-  // Get current balance to calculate balance_after
-  const { data: profile } = await admin
-    .from("profiles")
-    .select("usage_balance")
-    .eq("id", userId)
-    .single();
+  // Atomic balance update — DB-side UPDATE ... SET usage_balance = usage_balance + $amount.
+  const { data: newBalance, error: rpcError } = await admin.rpc(
+    "atomic_grant_subscription",
+    { p_user_id: userId, p_amount: amount }
+  );
+  if (rpcError) throw rpcError;
+  if (newBalance === null) return null;
 
-  const currentBalance = profile?.usage_balance ?? 0;
-  const balanceAfter = currentBalance + amount;
-
-  // Insert transaction
-  const { error: insertError } = await admin.from("usage_transactions").insert({
-    user_id: userId,
-    type,
-    amount,
-    balance_after: balanceAfter,
-    description,
-    stripe_session_id: stripeSessionId ?? null,
-    ...(requestId ? { request_id: requestId } : {}),
-  });
-
-  // If insert fails due to unique constraint on request_id, treat as no-op
-  if (insertError?.code === "23505" && requestId) {
-    return;
+  if (insertedId) {
+    await admin
+      .from("usage_transactions")
+      .update({ balance_after: newBalance })
+      .eq("id", insertedId);
+  } else {
+    await admin.from("usage_transactions").insert({
+      user_id: userId,
+      type,
+      amount,
+      balance_after: newBalance,
+      description,
+      stripe_session_id: stripeSessionId ?? null,
+    });
   }
 
-  // Update profile balance
-  await admin
-    .from("profiles")
-    .update({ usage_balance: balanceAfter })
-    .eq("id", userId);
+  return newBalance;
 }
 
 export async function deductUsage(
@@ -116,23 +122,22 @@ export async function deductUsage(
   provider: string,
   modelId: string,
   requestId?: string
-): Promise<void> {
+): Promise<number | null> {
   const admin = createAdminClient();
 
-  const { data: profile } = await admin
-    .from("profiles")
-    .select("usage_balance")
-    .eq("id", userId)
-    .single();
-
-  const currentBalance = profile?.usage_balance ?? 0;
-  const balanceAfter = currentBalance - amount;
+  // Atomic conditional decrement: returns new balance, or null if insufficient.
+  const { data: newBalance, error: rpcError } = await admin.rpc(
+    "atomic_deduct_subscription",
+    { p_user_id: userId, p_amount: amount }
+  );
+  if (rpcError) throw rpcError;
+  if (newBalance === null) return null;
 
   await admin.from("usage_transactions").insert({
     user_id: userId,
     type: "usage",
     amount: -amount,
-    balance_after: balanceAfter,
+    balance_after: newBalance,
     description: `${provider}/${modelId}`,
     model_tier: modelTier,
     provider,
@@ -140,8 +145,5 @@ export async function deductUsage(
     ...(requestId ? { request_id: requestId } : {}),
   });
 
-  await admin
-    .from("profiles")
-    .update({ usage_balance: balanceAfter })
-    .eq("id", userId);
+  return newBalance;
 }

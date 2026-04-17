@@ -380,7 +380,20 @@ export type Database = {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      atomic_deduct_subscription: {
+        Args: { p_user_id: string; p_amount: number };
+        Returns: number | null;
+      };
+      atomic_deduct_pack: {
+        Args: { p_pack_id: string; p_amount: number };
+        Returns: number | null;
+      };
+      atomic_grant_subscription: {
+        Args: { p_user_id: string; p_amount: number };
+        Returns: number;
+      };
+    };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };
