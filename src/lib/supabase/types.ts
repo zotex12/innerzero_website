@@ -393,6 +393,29 @@ export type Database = {
         Args: { p_user_id: string; p_amount: number };
         Returns: number;
       };
+      atomic_cycle_reset: {
+        Args: {
+          p_user_id: string;
+          p_allowance: number;
+          p_new_cycle_end: string;
+          p_request_id: string;
+        };
+        Returns: { new_balance: number; applied: boolean }[];
+      };
+      atomic_upgrade_grant: {
+        Args: {
+          p_user_id: string;
+          p_added_amount: number;
+          p_new_allowance: number;
+          p_new_plan: string | null;
+          p_request_id: string;
+        };
+        Returns: { new_balance: number; applied: boolean }[];
+      };
+      atomic_pack_expire: {
+        Args: { p_pack_id: string };
+        Returns: number;
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;

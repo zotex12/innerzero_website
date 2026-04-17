@@ -105,25 +105,39 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId
       subscription.items.data[0].current_period_end * 1000
     ).toISOString();
 
+    // Non-reset fields (plan, allowance, status) go in a separate UPDATE.
+    // The RPC owns usage_balance / billing_cycle_end / usage_alerts_sent.
     await admin
       .from("profiles")
       .update({
         plan: cloudPlan.id,
-        usage_balance: cloudPlan.usage_amount,
         usage_monthly_allowance: cloudPlan.usage_amount,
-        billing_cycle_end: periodEnd,
         subscription_status: "active",
       })
       .eq("id", profile.id);
 
-    await grantUsage(
-      profile.id,
-      cloudPlan.usage_amount,
-      "monthly_grant",
-      `${cloudPlan.name} subscription started`,
-      session.id,
-      eventId
+    const resetRequestId = `reset_${profile.id}_${periodEnd.slice(0, 10)}`;
+    const { data: resetResult, error: resetError } = await admin.rpc(
+      "atomic_cycle_reset",
+      {
+        p_user_id: profile.id,
+        p_allowance: cloudPlan.usage_amount,
+        p_new_cycle_end: periodEnd,
+        p_request_id: resetRequestId,
+      }
     );
+    if (resetError) throw resetError;
+    const resetRow = resetResult?.[0];
+    if (resetRow && !resetRow.applied) {
+      console.log(
+        JSON.stringify({
+          event: "cycle_reset_dedup_skip",
+          source: "checkout.session.completed",
+          user_id: profile.id,
+          request_id: resetRequestId,
+        })
+      );
+    }
   } else if (cloudPlan.plan_type === "payg") {
     await admin.from("usage_packs").insert({
       user_id: profile.id,
@@ -143,7 +157,10 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId
   }
 }
 
-async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
+async function handleSubscriptionUpdated(
+  subscription: Stripe.Subscription,
+  eventId: string
+) {
   const admin = createAdminClient();
   const customerId = subscription.customer as string;
   const status = mapStripeStatus(subscription.status);
@@ -156,7 +173,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     // Cloud subscription update
     const { data: profile } = await admin
       .from("profiles")
-      .select("id, plan, usage_balance, usage_monthly_allowance, subscription_status")
+      .select("id, plan, usage_monthly_allowance, subscription_status")
       .eq("stripe_customer_id", customerId)
       .single();
 
@@ -171,24 +188,53 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
       return;
     }
 
-    const updates: Record<string, unknown> = {
-      plan: cloudPlan.id,
-      usage_monthly_allowance: cloudPlan.usage_amount,
-      subscription_status: status,
-    };
+    const isUpgrade = cloudPlan.usage_amount > (profile.usage_monthly_allowance ?? 0);
 
-    // If upgrade mid-cycle: add the difference in usage_amount
-    // If downgrade mid-cycle: do NOT reduce usage_balance
-    if (cloudPlan.usage_amount > (profile.usage_monthly_allowance ?? 0)) {
+    if (isUpgrade) {
+      // Mid-cycle upgrade: atomic delta grant preserves concurrent deductions.
+      // RPC bumps usage_balance by difference, sets allowance + plan, clears
+      // usage_alerts_sent, inserts upgrade_grant transaction. Idempotent via request_id.
       const difference =
         cloudPlan.usage_amount - (profile.usage_monthly_allowance ?? 0);
-      updates.usage_balance = (profile.usage_balance ?? 0) + difference;
-    }
+      const upgradeRequestId = `upgrade_${subscription.id}_${eventId}`;
+      const { data: upgradeResult, error: upgradeError } = await admin.rpc(
+        "atomic_upgrade_grant",
+        {
+          p_user_id: profile.id,
+          p_added_amount: difference,
+          p_new_allowance: cloudPlan.usage_amount,
+          p_new_plan: cloudPlan.id,
+          p_request_id: upgradeRequestId,
+        }
+      );
+      if (upgradeError) throw upgradeError;
+      const upgradeRow = upgradeResult?.[0];
+      if (upgradeRow && !upgradeRow.applied) {
+        console.log(
+          JSON.stringify({
+            event: "upgrade_grant_dedup_skip",
+            user_id: profile.id,
+            request_id: upgradeRequestId,
+          })
+        );
+      }
 
-    await admin
-      .from("profiles")
-      .update(updates)
-      .eq("id", profile.id);
+      // subscription_status is outside the RPC's scope.
+      await admin
+        .from("profiles")
+        .update({ subscription_status: status })
+        .eq("id", profile.id);
+    } else {
+      // Downgrade or same-size change: no balance grant. Absolute writes are safe here.
+      await admin
+        .from("profiles")
+        .update({
+          plan: cloudPlan.id,
+          usage_monthly_allowance: cloudPlan.usage_amount,
+          subscription_status: status,
+        })
+        .eq("id", profile.id);
+    }
 
     return;
   }
@@ -312,25 +358,34 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice, eventId: s
         sub.items.data[0].current_period_end * 1000
       ).toISOString();
 
-      // Reset balance to plan amount and update cycle end
+      // subscription_status is outside the RPC's scope.
       await admin
         .from("profiles")
-        .update({
-          usage_balance: cloudPlan.usage_amount,
-          billing_cycle_end: periodEnd,
-          subscription_status: "active",
-          usage_alerts_sent: [],
-        })
+        .update({ subscription_status: "active" })
         .eq("id", profile.id);
 
-      await grantUsage(
-        profile.id,
-        cloudPlan.usage_amount,
-        "monthly_grant",
-        `${cloudPlan.name} monthly renewal`,
-        undefined,
-        eventId
+      const resetRequestId = `reset_${profile.id}_${periodEnd.slice(0, 10)}`;
+      const { data: resetResult, error: resetError } = await admin.rpc(
+        "atomic_cycle_reset",
+        {
+          p_user_id: profile.id,
+          p_allowance: cloudPlan.usage_amount,
+          p_new_cycle_end: periodEnd,
+          p_request_id: resetRequestId,
+        }
       );
+      if (resetError) throw resetError;
+      const resetRow = resetResult?.[0];
+      if (resetRow && !resetRow.applied) {
+        console.log(
+          JSON.stringify({
+            event: "cycle_reset_dedup_skip",
+            source: "invoice.payment_succeeded",
+            user_id: profile.id,
+            request_id: resetRequestId,
+          })
+        );
+      }
 
       return;
     }
@@ -442,7 +497,7 @@ export async function POST(request: Request) {
       );
       break;
     case "customer.subscription.updated":
-      await handleSubscriptionUpdated(event.data.object as Stripe.Subscription);
+      await handleSubscriptionUpdated(event.data.object as Stripe.Subscription, event.id);
       break;
     case "customer.subscription.deleted":
       await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);

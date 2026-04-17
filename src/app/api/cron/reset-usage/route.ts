@@ -19,40 +19,60 @@ export async function GET(request: Request) {
     .lt("billing_cycle_end", now);
 
   if (!profiles || profiles.length === 0) {
-    console.log(JSON.stringify({ event: "cron_reset_usage", resets: 0 }));
+    console.log(JSON.stringify({ event: "cron_reset_usage", resets: 0, dedup_skips: 0 }));
     return NextResponse.json({ resets: 0 });
   }
 
   let resets = 0;
+  let dedupSkips = 0;
 
   for (const profile of profiles) {
     // Calculate next billing cycle end (add 1 month)
     const oldEnd = new Date(profile.billing_cycle_end!);
     const newEnd = new Date(oldEnd);
     newEnd.setMonth(newEnd.getMonth() + 1);
+    const newEndIso = newEnd.toISOString();
 
-    // Reset usage balance, advance billing cycle, clear alert flags
-    await admin
-      .from("profiles")
-      .update({
-        usage_balance: profile.usage_monthly_allowance,
-        billing_cycle_end: newEnd.toISOString(),
-        usage_alerts_sent: [],
-      })
-      .eq("id", profile.id);
+    // Deterministic request_id shared with the webhook reset path.
+    // If the Stripe webhook fired first with the same key, the RPC returns
+    // applied=false and we log a dedup skip.
+    const resetRequestId = `reset_${profile.id}_${newEndIso.slice(0, 10)}`;
+    const { data: resetResult, error: resetError } = await admin.rpc(
+      "atomic_cycle_reset",
+      {
+        p_user_id: profile.id,
+        p_allowance: profile.usage_monthly_allowance,
+        p_new_cycle_end: newEndIso,
+        p_request_id: resetRequestId,
+      }
+    );
+    if (resetError) {
+      console.error(
+        JSON.stringify({
+          event: "cron_reset_usage_error",
+          user_id: profile.id,
+          error: resetError.message,
+        })
+      );
+      continue;
+    }
 
-    // Record the grant
-    await admin.from("usage_transactions").insert({
-      user_id: profile.id,
-      type: "monthly_grant",
-      amount: profile.usage_monthly_allowance,
-      balance_after: profile.usage_monthly_allowance,
-      description: "Monthly usage reset (cron safety net)",
-    });
-
-    resets++;
+    const row = resetResult?.[0];
+    if (row && row.applied) {
+      resets++;
+    } else {
+      dedupSkips++;
+      console.log(
+        JSON.stringify({
+          event: "cycle_reset_dedup_skip",
+          source: "cron.reset-usage",
+          user_id: profile.id,
+          request_id: resetRequestId,
+        })
+      );
+    }
   }
 
-  console.log(JSON.stringify({ event: "cron_reset_usage", resets }));
+  console.log(JSON.stringify({ event: "cron_reset_usage", resets, dedup_skips: dedupSkips }));
   return NextResponse.json({ resets });
 }

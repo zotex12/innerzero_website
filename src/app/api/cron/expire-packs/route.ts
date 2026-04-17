@@ -19,46 +19,59 @@ export async function GET(request: Request) {
     .gt("usage_remaining", 0);
 
   if (!packs || packs.length === 0) {
-    console.log(JSON.stringify({ event: "cron_expire_packs", expired: 0 }));
+    console.log(JSON.stringify({ event: "cron_expire_packs", expired: 0, already_zero: 0 }));
     return NextResponse.json({ expired: 0 });
   }
 
   let expired = 0;
+  let alreadyZero = 0;
 
   for (const pack of packs) {
-    // Zero out the pack
-    await admin
-      .from("usage_packs")
-      .update({ usage_remaining: 0 })
-      .eq("id", pack.id);
+    // atomic_pack_expire uses SELECT FOR UPDATE to serialise concurrent
+    // expire + deduct. Returns the amount zeroed (0 if a racing deduction
+    // already drained the pack). Does NOT touch profiles.usage_balance —
+    // PAYG balances live on usage_packs.
+    const { data: zeroedAmount, error: expireError } = await admin.rpc(
+      "atomic_pack_expire",
+      { p_pack_id: pack.id }
+    );
 
-    // Subtract expired amount from profile balance
-    const { data: profile } = await admin
-      .from("profiles")
-      .select("usage_balance")
-      .eq("id", pack.user_id)
-      .single();
+    if (expireError) {
+      console.error(
+        JSON.stringify({
+          event: "cron_expire_packs_error",
+          pack_id: pack.id,
+          user_id: pack.user_id,
+          error: expireError.message,
+        })
+      );
+      continue;
+    }
 
-    const currentBalance = profile?.usage_balance ?? 0;
-    const newBalance = Math.max(0, currentBalance - pack.usage_remaining);
+    const amount = zeroedAmount ?? 0;
+    if (amount === 0) {
+      alreadyZero++;
+      console.log(
+        JSON.stringify({
+          event: "expire_pack_already_zero",
+          pack_id: pack.id,
+          user_id: pack.user_id,
+        })
+      );
+      continue;
+    }
 
-    await admin
-      .from("profiles")
-      .update({ usage_balance: newBalance })
-      .eq("id", pack.user_id);
-
-    // Record the expiry transaction
     await admin.from("usage_transactions").insert({
       user_id: pack.user_id,
       type: "expiry",
-      amount: -pack.usage_remaining,
-      balance_after: newBalance,
+      amount: -amount,
+      balance_after: 0,
       description: "Credit pack expired",
     });
 
     expired++;
   }
 
-  console.log(JSON.stringify({ event: "cron_expire_packs", expired }));
+  console.log(JSON.stringify({ event: "cron_expire_packs", expired, already_zero: alreadyZero }));
   return NextResponse.json({ expired });
 }
