@@ -25,6 +25,7 @@ export const maxDuration = 30;
 
 const MAX_SYSTEM_PROMPT_CHARS = 2000;
 const MAX_MESSAGE_EXCHANGES = 10; // 5 exchanges = 10 messages (user + assistant)
+const MAX_MESSAGE_CONTENT_CHARS = 50_000;
 const REQUEST_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 
 interface ProxyMessage {
@@ -74,9 +75,23 @@ export async function POST(request: Request) {
 
   // Enforce limits
   const messages = body.messages.slice(-MAX_MESSAGE_EXCHANGES);
-  const systemPrompt = body.system_prompt
-    ? body.system_prompt.slice(0, MAX_SYSTEM_PROMPT_CHARS)
-    : undefined;
+
+  // Reject oversized system_prompt explicitly — never silently truncate.
+  if (
+    body.system_prompt !== undefined &&
+    typeof body.system_prompt === "string" &&
+    body.system_prompt.length > MAX_SYSTEM_PROMPT_CHARS
+  ) {
+    return NextResponse.json(
+      {
+        error: "system_prompt_too_long",
+        detail: "system_prompt must be 2000 characters or less.",
+      },
+      { status: 400 }
+    );
+  }
+  const systemPrompt =
+    typeof body.system_prompt === "string" ? body.system_prompt : undefined;
   const requestedTier = body.model_tier || "auto";
 
   // Validate message format
@@ -89,6 +104,15 @@ export async function POST(request: Request) {
     ) {
       return NextResponse.json(
         { error: "Each message must have role (user|assistant) and content (string)." },
+        { status: 400 }
+      );
+    }
+    if (msg.content.length > MAX_MESSAGE_CONTENT_CHARS) {
+      return NextResponse.json(
+        {
+          error: "message_too_long",
+          detail: "Each message must be 50000 characters or less.",
+        },
         { status: 400 }
       );
     }
@@ -219,12 +243,18 @@ export async function POST(request: Request) {
     );
   }
 
-  // Parse model entries: ["provider/model_id", ...]
+  // Parse model entries: ["provider/model_id", ...]. Require exactly one
+  // forward slash — skip malformed entries so future model ids containing
+  // a slash cannot be silently mis-routed. Do not log user id or request
+  // content; only the offending entry string.
   const MAX_ATTEMPTS = 2;
   const candidates = models.slice(0, MAX_ATTEMPTS).map((entry) => {
-    const idx = entry.indexOf("/");
-    if (idx === -1) return null;
-    return { provider: entry.slice(0, idx), modelId: entry.slice(idx + 1) };
+    const parts = entry.split("/");
+    if (parts.length !== 2 || !parts[0] || !parts[1]) {
+      console.warn(`[cloud/proxy] malformed model entry, skipping: ${entry}`);
+      return null;
+    }
+    return { provider: parts[0], modelId: parts[1] };
   }).filter((c): c is { provider: string; modelId: string } => c !== null);
 
   if (candidates.length === 0) {

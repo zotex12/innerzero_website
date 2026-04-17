@@ -76,7 +76,28 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId
     const quantity = subscription.items.data[0]?.quantity || 1;
 
     const licenceKey = generateLicenceKey();
-    const email = session.customer_details?.email || profile.email;
+
+    // Prefer Stripe's checkout email first. If that's missing, fetch the
+    // current email directly from auth.users (source of truth) so the licence
+    // goes to the user's live login address even if profiles.email is stale.
+    // Fall back to profile.email last so licence creation never blocks on a
+    // transient admin read.
+    let email: string | null = session.customer_details?.email ?? null;
+    if (!email) {
+      try {
+        const { data: authUser } = await admin.auth.admin.getUserById(profile.id);
+        email = authUser?.user?.email ?? null;
+      } catch (err) {
+        console.error(
+          "[webhook] auth.admin.getUserById failed:",
+          err instanceof Error ? err.message : "unknown"
+        );
+      }
+    }
+    if (!email) {
+      email = profile.email;
+    }
+
     const companyName =
       (session.metadata?.company_name as string | undefined) || null;
 
