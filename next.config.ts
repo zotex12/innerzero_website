@@ -1,5 +1,14 @@
 import type { NextConfig } from "next";
 
+// Resolved at build time. On preview deploys we allow the preview URL so
+// browser testing works; production always uses the canonical domain.
+// Desktop clients send no Origin header and are unaffected by CORS at the
+// browser layer.
+const CLOUD_API_ALLOW_ORIGIN =
+  process.env.VERCEL_ENV === "preview" && process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "https://innerzero.com";
+
 const nextConfig: NextConfig = {
   async headers() {
     return [
@@ -16,7 +25,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://innerzero.com",
+            value: CLOUD_API_ALLOW_ORIGIN,
           },
           {
             key: "Access-Control-Allow-Methods",

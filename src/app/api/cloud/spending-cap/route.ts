@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDesktopUser } from "@/lib/auth-desktop";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimit, getRateLimitKey } from "@/lib/rate-limit";
 
 interface SpendingCapBody {
   spending_cap_pence: number;
 }
 
 export async function POST(request: Request) {
-  const rateLimited = checkRateLimit(request, "spendingCap");
+  const rateLimited = checkRateLimit(request, "spendingCap", getRateLimitKey(request));
   if (rateLimited) return rateLimited;
 
   const auth = await getDesktopUser(request);

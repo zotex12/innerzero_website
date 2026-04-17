@@ -6,6 +6,12 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
+
+if (process.env.NODE_ENV === "production" && !RESEND_API_KEY) {
+  console.error(
+    "[startup] RESEND_API_KEY missing in production — usage threshold alerts will silently skip"
+  );
+}
 const FROM_EMAIL = "InnerZero <noreply@innerzero.com>";
 const ACCOUNT_URL = "https://innerzero.com/account";
 const PRICING_URL = "https://innerzero.com/pricing";

@@ -17,15 +17,23 @@ export async function getDesktopUser(
   request: Request
 ): Promise<{ user: User } | { error: NextResponse }> {
   // Defence-in-depth: reject cross-origin browser requests.
-  // Desktop app (Python requests) never sends an Origin header.
+  // Desktop app (Python requests) never sends an Origin header, so this
+  // only rejects browser traffic. Accepts the canonical domain and, on
+  // Vercel preview deploys, the preview URL as well.
   const origin = request.headers.get("origin");
-  if (origin && origin !== "https://innerzero.com") {
-    return {
-      error: NextResponse.json(
-        { error: "Forbidden origin." },
-        { status: 403 }
-      ),
-    };
+  if (origin) {
+    const allowedOrigins = new Set<string>(["https://innerzero.com"]);
+    if (process.env.VERCEL_ENV === "preview" && process.env.VERCEL_URL) {
+      allowedOrigins.add(`https://${process.env.VERCEL_URL}`);
+    }
+    if (!allowedOrigins.has(origin)) {
+      return {
+        error: NextResponse.json(
+          { error: "Forbidden origin." },
+          { status: 403 }
+        ),
+      };
+    }
   }
 
   const authHeader = request.headers.get("authorization");

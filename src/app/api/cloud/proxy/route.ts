@@ -7,7 +7,7 @@ import {
   estimateCostPence,
   ProviderUnavailableError,
 } from "@/lib/cloud-providers";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimit, getRateLimitKey } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
 import { checkSpendingCap } from "@/lib/spending-cap";
 
@@ -41,7 +41,7 @@ interface ProxyBody {
 }
 
 export async function POST(request: Request) {
-  const rateLimited = checkRateLimit(request, "cloudProxy");
+  const rateLimited = checkRateLimit(request, "cloudProxy", getRateLimitKey(request));
   if (rateLimited) return rateLimited;
 
   const auth = await getDesktopUser(request);
@@ -306,7 +306,13 @@ export async function POST(request: Request) {
         if (existing) alreadyDeducted = true;
       }
 
-      // Deduct usage after successful response
+      // Deduct usage after successful response.
+      // Transaction log semantics: model_tier is the tier the USER REQUESTED
+      // (stable across provider fallback — a tier is a conceptual grouping
+      // with its own fallback list). provider and model_id reflect the ACTUAL
+      // executed provider chosen by the fallback loop. When reconciling
+      // analytics, join transactions to model_tiers on model_tier and
+      // remember that a single tier can map to rows with different providers.
       if (!alreadyDeducted) {
         if (deductSource === "subscription") {
           const newBalance = await deductUsage(userId, cost, requestedTier, provider, modelId, requestId);

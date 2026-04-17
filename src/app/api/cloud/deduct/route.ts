@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDesktopUser } from "@/lib/auth-desktop";
 import { deductUsage } from "@/lib/cloud-plans";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimit, getRateLimitKey } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
 import { checkSpendingCap } from "@/lib/spending-cap";
 
@@ -16,7 +16,7 @@ interface DeductBody {
 }
 
 export async function POST(request: Request) {
-  const rateLimited = checkRateLimit(request, "cloudDeduct");
+  const rateLimited = checkRateLimit(request, "cloudDeduct", getRateLimitKey(request));
   if (rateLimited) return rateLimited;
 
   const auth = await getDesktopUser(request);

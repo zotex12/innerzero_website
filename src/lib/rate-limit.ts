@@ -68,6 +68,37 @@ export function getClientIp(request: Request): string {
   return "unknown";
 }
 
+/**
+ * Preferred rate-limit identifier.
+ * If the request carries an Authorization: Bearer <jwt> header whose middle
+ * segment decodes to JSON with a string `sub` claim, return "user:<sub>".
+ * Otherwise fall back to "ip:<ip>". Signature is NOT verified here — Supabase
+ * verifies later in auth-desktop. Any parse failure silently falls through.
+ */
+export function getRateLimitKey(request: Request): string {
+  try {
+    const authHeader = request.headers.get("authorization");
+    if (authHeader?.startsWith("Bearer ")) {
+      const token = authHeader.slice(7);
+      const parts = token.split(".");
+      if (parts.length === 3) {
+        // Base64url → base64
+        const b64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+        const padded = b64 + "=".repeat((4 - (b64.length % 4)) % 4);
+        const payload = JSON.parse(
+          Buffer.from(padded, "base64").toString("utf8")
+        );
+        if (payload && typeof payload.sub === "string" && payload.sub.length > 0) {
+          return `user:${payload.sub}`;
+        }
+      }
+    }
+  } catch {
+    // fall through to IP
+  }
+  return `ip:${getClientIp(request)}`;
+}
+
 /** Preset rate limiters for common endpoint types. */
 export const LIMITS = {
   waitlist:        { limit: 5,   windowMs: 60_000, store: "waitlist" },
@@ -82,14 +113,17 @@ export const LIMITS = {
   themeRedeem:     { limit: 5,   windowMs: 60_000, store: "theme-redeem" },
 } as const;
 
-/** Check rate limit and return 429 response if exceeded, or null if OK. */
+/** Check rate limit and return 429 response if exceeded, or null if OK.
+ *  Pass an explicit `identifier` to key the bucket on user_id (preferred for
+ *  authenticated cloud routes via getRateLimitKey); omit to fall back to IP. */
 export function checkRateLimit(
   request: Request,
-  preset: keyof typeof LIMITS
+  preset: keyof typeof LIMITS,
+  identifier?: string
 ): Response | null {
-  const ip = getClientIp(request);
+  const id = identifier ?? `ip:${getClientIp(request)}`;
   const { limit, windowMs, store } = LIMITS[preset];
-  const result = rateLimit(ip, limit, windowMs, store);
+  const result = rateLimit(id, limit, windowMs, store);
   if (!result.success) {
     return new Response(
       JSON.stringify({

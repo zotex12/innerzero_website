@@ -62,17 +62,25 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId
 
   if (!profile) return;
 
-  // Retrieve line items to get the price ID
-  const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
-    limit: 1,
+  // Single Stripe round-trip: expand line_items and subscription on the
+  // session so we avoid two extra listLineItems + subscriptions.retrieve
+  // calls later in this handler.
+  const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
+    expand: ["line_items", "subscription"],
   });
-  const priceId = lineItems.data[0]?.price?.id;
+  const priceId = fullSession.line_items?.data[0]?.price?.id;
   if (!priceId) return;
+
+  const expandedSubscription =
+    fullSession.subscription && typeof fullSession.subscription !== "string"
+      ? fullSession.subscription
+      : null;
 
   // Check if this is a business licence purchase
   if (priceId === BUSINESS_PRICE) {
     const subscriptionId = session.subscription as string;
-    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    if (!expandedSubscription) return;
+    const subscription = expandedSubscription;
     const quantity = subscription.items.data[0]?.quantity || 1;
 
     const licenceKey = generateLicenceKey();
@@ -138,8 +146,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId
   if (!cloudPlan) return;
 
   if (cloudPlan.plan_type === "subscription") {
-    const subscriptionId = session.subscription as string;
-    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    if (!expandedSubscription) return;
+    const subscription = expandedSubscription;
     const periodEnd = new Date(
       subscription.items.data[0].current_period_end * 1000
     ).toISOString();
