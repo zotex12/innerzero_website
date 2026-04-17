@@ -115,29 +115,55 @@ export async function grantUsage(
   return newBalance;
 }
 
+/**
+ * Result of a subscription-path deduction attempt.
+ *   - number                    → success; new usage balance
+ *   - null                      → subscription balance insufficient (routes fall through to PAYG)
+ *   - "spending_cap_exceeded"   → cap would be breached; caller returns HTTP 402
+ */
+export type DeductResult = number | null | "spending_cap_exceeded";
+
 export async function deductUsage(
   userId: string,
   amount: number,
   modelTier: string,
   provider: string,
   modelId: string,
-  requestId?: string
-): Promise<number | null> {
+  requestId: string | undefined,
+  costPence: number
+): Promise<DeductResult> {
   const admin = createAdminClient();
 
-  // Atomic conditional decrement: returns new balance, or null if insufficient.
-  const { data: newBalance, error: rpcError } = await admin.rpc(
-    "atomic_deduct_subscription",
-    { p_user_id: userId, p_amount: amount }
+  // Atomic conditional decrement + cap enforcement + cycle-spend increment
+  // under the profile row's update lock. RPC returns one row with
+  // (new_balance, new_spend_pence, rejected_reason). rejected_reason is
+  // null on success and 'insufficient_usage' / 'spending_cap_exceeded' /
+  // 'profile_not_found' on failure.
+  const { data, error: rpcError } = await admin.rpc(
+    "atomic_deduct_sub_with_cap",
+    { p_user_id: userId, p_amount: amount, p_cost_pence: costPence }
   );
   if (rpcError) throw rpcError;
-  if (newBalance === null) return null;
+
+  const row = data?.[0];
+  if (!row) return null;
+
+  if (row.rejected_reason === "spending_cap_exceeded") {
+    return "spending_cap_exceeded";
+  }
+  if (row.rejected_reason === "insufficient_usage") {
+    return null;
+  }
+  if (row.rejected_reason === "profile_not_found") {
+    return null;
+  }
+  if (row.new_balance === null) return null;
 
   await admin.from("usage_transactions").insert({
     user_id: userId,
     type: "usage",
     amount: -amount,
-    balance_after: newBalance,
+    balance_after: row.new_balance,
     description: `${provider}/${modelId}`,
     model_tier: modelTier,
     provider,
@@ -145,5 +171,5 @@ export async function deductUsage(
     ...(requestId ? { request_id: requestId } : {}),
   });
 
-  return newBalance;
+  return row.new_balance;
 }

@@ -24,6 +24,7 @@ export type Database = {
           billing_cycle_end: string | null;
           overage_enabled: boolean;
           spending_cap_pence: number | null;
+          spending_this_cycle_pence: number;
           usage_alerts_sent: string[];
           created_at: string;
           updated_at: string;
@@ -50,6 +51,7 @@ export type Database = {
           billing_cycle_end?: string | null;
           overage_enabled?: boolean;
           spending_cap_pence?: number | null;
+          spending_this_cycle_pence?: number;
           usage_alerts_sent?: string[];
         };
         Update: {
@@ -74,6 +76,7 @@ export type Database = {
           billing_cycle_end?: string | null;
           overage_enabled?: boolean;
           spending_cap_pence?: number | null;
+          spending_this_cycle_pence?: number;
           usage_alerts_sent?: string[];
           updated_at?: string;
         };
@@ -384,6 +387,18 @@ export type Database = {
       atomic_deduct_subscription: {
         Args: { p_user_id: string; p_amount: number };
         Returns: number | null;
+      };
+      atomic_deduct_sub_with_cap: {
+        Args: {
+          p_user_id: string;
+          p_amount: number;
+          p_cost_pence: number;
+        };
+        Returns: {
+          new_balance: number | null;
+          new_spend_pence: number | null;
+          rejected_reason: string | null;
+        }[];
       };
       atomic_deduct_pack: {
         Args: { p_pack_id: string; p_amount: number };

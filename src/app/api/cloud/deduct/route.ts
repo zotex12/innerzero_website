@@ -4,7 +4,7 @@ import { getDesktopUser } from "@/lib/auth-desktop";
 import { deductUsage } from "@/lib/cloud-plans";
 import { checkRateLimit, getRateLimitKey } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
-import { checkSpendingCap } from "@/lib/spending-cap";
+import { PENCE_PER_USAGE_UNIT } from "@/lib/spending-cap";
 
 const REQUEST_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
   // Get current subscription balance
   const { data: profile } = await admin
     .from("profiles")
-    .select("usage_balance, usage_monthly_allowance, usage_alerts_sent, spending_cap_pence, billing_cycle_end, plan")
+    .select("usage_balance, usage_monthly_allowance, usage_alerts_sent, plan")
     .eq("id", auth.user.id)
     .single();
 
@@ -105,19 +105,12 @@ export async function POST(request: Request) {
   const monthlyAllowance = profile.usage_monthly_allowance ?? 0;
   const alertsSent = (profile.usage_alerts_sent as string[] | null) ?? [];
 
-  // Spending cap check (subscription users only, cap > 0)
-  const hasPlan = profile.plan && profile.plan !== "free";
-  if (hasPlan && (profile.spending_cap_pence ?? 0) > 0) {
-    const capError = await checkSpendingCap(
-      admin, auth.user.id, profile.spending_cap_pence!, profile.billing_cycle_end ?? null, cost
-    );
-    if (capError) {
-      return NextResponse.json(
-        { error: "spending_cap_exceeded", message: capError },
-        { status: 402 }
-      );
-    }
-  }
+  // Cap-currency estimate in integer pence. This endpoint has no token
+  // counts (it books a tier-cost deduction without a provider call), so we
+  // use the legacy cap mapping — conservative ceil over `cost * 0.5p`.
+  // The spending cap itself is enforced atomically inside deductUsage via
+  // atomic_deduct_sub_with_cap; no pre-check here to avoid TOCTOU.
+  const costPence = Math.max(0, Math.ceil(cost * PENCE_PER_USAGE_UNIT));
 
   // Try subscription balance first
   if (subscriptionBalance >= cost) {
@@ -127,8 +120,16 @@ export async function POST(request: Request) {
       body.model_tier,
       body.provider,
       body.model_id,
-      requestId
+      requestId,
+      costPence
     );
+
+    if (newBalance === "spending_cap_exceeded") {
+      return NextResponse.json(
+        { error: "spending_cap_exceeded" },
+        { status: 402 }
+      );
+    }
 
     if (newBalance !== null) {
       // Fire-and-forget usage threshold alert

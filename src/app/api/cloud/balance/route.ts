@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDesktopUser } from "@/lib/auth-desktop";
-import { getSpendingThisCyclePence } from "@/lib/spending-cap";
 
 export async function GET(request: Request) {
   const auth = await getDesktopUser(request);
@@ -12,7 +11,7 @@ export async function GET(request: Request) {
   const { data: profile } = await admin
     .from("profiles")
     .select(
-      "plan, usage_balance, usage_monthly_allowance, billing_cycle_end, overage_enabled, spending_cap_pence"
+      "plan, usage_balance, usage_monthly_allowance, billing_cycle_end, overage_enabled, spending_cap_pence, spending_this_cycle_pence"
     )
     .eq("id", auth.user.id)
     .single();
@@ -50,11 +49,9 @@ export async function GET(request: Request) {
     .eq("active", true)
     .order("sort_order", { ascending: true });
 
-  // Calculate estimated spend this billing cycle
-  const spendingThisCyclePence = await getSpendingThisCyclePence(
-    admin, auth.user.id, profile.billing_cycle_end ?? null
-  );
-
+  // Cycle spend is now a column on profiles — single-row read, maintained
+  // atomically by atomic_deduct_sub_with_cap. `spending_cap_pence` is
+  // number | null (null means "no cap", 0 means "hard stop").
   return NextResponse.json({
     plan: profile.plan,
     usage_balance: profile.usage_balance,
@@ -62,7 +59,7 @@ export async function GET(request: Request) {
     billing_cycle_end: profile.billing_cycle_end,
     overage_enabled: profile.overage_enabled,
     spending_cap_pence: profile.spending_cap_pence,
-    spending_this_cycle_pence: Math.round(spendingThisCyclePence * 100) / 100,
+    spending_this_cycle_pence: profile.spending_this_cycle_pence ?? 0,
     tier_access: tierAccess,
     payg_packs: paygPacks ?? [],
     model_tiers: modelTiers ?? [],

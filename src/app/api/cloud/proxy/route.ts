@@ -9,7 +9,6 @@ import {
 } from "@/lib/cloud-providers";
 import { checkRateLimit, getRateLimitKey } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
-import { checkSpendingCap } from "@/lib/spending-cap";
 
 // Known limitation: the idempotency check for request_id runs BEFORE the
 // provider call, so two concurrent retries of the same request_id can each
@@ -125,7 +124,7 @@ export async function POST(request: Request) {
   // Get profile with plan info
   const { data: profile } = await admin
     .from("profiles")
-    .select("plan, usage_balance, usage_monthly_allowance, usage_alerts_sent, spending_cap_pence, billing_cycle_end")
+    .select("plan, usage_balance, usage_monthly_allowance, usage_alerts_sent")
     .eq("id", userId)
     .single();
 
@@ -192,18 +191,10 @@ export async function POST(request: Request) {
 
   const cost = tier.usage_multiplier;
 
-  // Spending cap check (subscription users only, cap > 0)
-  if (hasPlan && (profile.spending_cap_pence ?? 0) > 0) {
-    const capError = await checkSpendingCap(
-      admin, userId, profile.spending_cap_pence!, profile.billing_cycle_end ?? null, cost
-    );
-    if (capError) {
-      return NextResponse.json(
-        { error: "spending_cap_exceeded", message: capError },
-        { status: 402 }
-      );
-    }
-  }
+  // Spending cap enforcement is now folded into atomic_deduct_sub_with_cap
+  // (Phase 90 Batch 6) — the pre-check here was removed to close the TOCTOU
+  // race. The RPC runs the balance and cap check in the same statement
+  // under the profile row's lock.
 
   // Check sufficient usage (subscription or PAYG)
   let deductSource: "subscription" | "payg" = "subscription";
@@ -306,6 +297,13 @@ export async function POST(request: Request) {
         if (existing) alreadyDeducted = true;
       }
 
+      // Cap-currency cost in integer pence — token-based provider estimate
+      // rounded up conservatively (under-charge is worse than over-charge).
+      const inputTokens = result.input_tokens ?? 0;
+      const outputTokens = result.output_tokens ?? 0;
+      const estimatedCostPence = estimateCostPence(modelId, inputTokens, outputTokens);
+      const costPence = Math.max(0, Math.ceil(estimatedCostPence));
+
       // Deduct usage after successful response.
       // Transaction log semantics: model_tier is the tier the USER REQUESTED
       // (stable across provider fallback — a tier is a conceptual grouping
@@ -315,7 +313,15 @@ export async function POST(request: Request) {
       // remember that a single tier can map to rows with different providers.
       if (!alreadyDeducted) {
         if (deductSource === "subscription") {
-          const newBalance = await deductUsage(userId, cost, requestedTier, provider, modelId, requestId);
+          const newBalance = await deductUsage(
+            userId, cost, requestedTier, provider, modelId, requestId, costPence
+          );
+          if (newBalance === "spending_cap_exceeded") {
+            return NextResponse.json(
+              { error: "spending_cap_exceeded" },
+              { status: 402 }
+            );
+          }
           if (newBalance === null) {
             // Subscription drained by a concurrent request between the pre-check and
             // the atomic deduct. Fall through to PAYG packs if any.
@@ -376,10 +382,8 @@ export async function POST(request: Request) {
         }
       }
 
-      // Fire-and-forget cost log (internal analytics)
-      const inputTokens = result.input_tokens ?? 0;
-      const outputTokens = result.output_tokens ?? 0;
-      const estimatedCost = estimateCostPence(modelId, inputTokens, outputTokens);
+      // Fire-and-forget cost log (internal analytics). `estimatedCostPence`
+      // was already computed above for the cap-enforced deduction.
 
       // after() keeps the runtime alive until background work completes, so
       // serverless cold-stops don't drop audit inserts. The response still
@@ -395,7 +399,7 @@ export async function POST(request: Request) {
               model_id: modelId,
               input_tokens: inputTokens,
               output_tokens: outputTokens,
-              estimated_cost_pence: estimatedCost,
+              estimated_cost_pence: estimatedCostPence,
               usage_deducted: alreadyDeducted ? 0 : cost,
             });
           if (costErr) console.error("[proxy_cost_log] insert failed:", costErr.message);

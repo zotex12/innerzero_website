@@ -1,58 +1,65 @@
 /**
- * Spending cap enforcement for cloud usage.
- * Conservative estimate: 0.5p per usage unit.
+ * Spending cap — read-only helpers.
+ *
+ * Mutations go through `atomic_deduct_sub_with_cap` (Phase 90 Batch 6).
+ * That RPC maintains `profiles.spending_this_cycle_pence` atomically on
+ * every deduction and enforces the cap in the same statement, so there is
+ * no separate write path in this module.
+ *
+ * Cap semantics after Batch 6:
+ *   - spending_cap_pence IS NULL  → no cap (deduct freely)
+ *   - spending_cap_pence = 0      → hard stop (reject every deduction)
+ *   - spending_cap_pence > 0      → reject when cycle spend + request > cap
  */
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-const PENCE_PER_USAGE_UNIT = 0.5;
+/** Conservative cost-per-usage-unit for paths without real token counts
+ *  (e.g. /api/cloud/deduct). The proxy route uses real provider estimates. */
+export const PENCE_PER_USAGE_UNIT = 0.5;
 
 /**
- * Calculate estimated spend this billing cycle in pence.
- * Uses usage_transactions SUM since billing cycle start.
+ * Read the denormalised cycle spend directly from the profile row.
+ * Signature kept so existing callers do not change, but `billingCycleEnd`
+ * is no longer used — the cycle-spend column is reset by the RPCs on
+ * cycle renewal / upgrade.
  */
 export async function getSpendingThisCyclePence(
   admin: SupabaseClient,
   userId: string,
-  billingCycleEnd: string | null
+  _billingCycleEnd: string | null
 ): Promise<number> {
-  if (!billingCycleEnd) return 0;
-
-  // Derive cycle start: billing_cycle_end minus 1 month
-  const end = new Date(billingCycleEnd);
-  const start = new Date(end);
-  start.setMonth(start.getMonth() - 1);
-
   const { data } = await admin
-    .from("usage_transactions")
-    .select("amount")
-    .eq("user_id", userId)
-    .eq("type", "usage")
-    .gte("created_at", start.toISOString());
+    .from("profiles")
+    .select("spending_this_cycle_pence")
+    .eq("id", userId)
+    .single();
 
-  if (!data || data.length === 0) return 0;
-
-  const totalUsageDeducted = data.reduce(
-    (sum, row) => sum + Math.abs(row.amount),
-    0
-  );
-
-  return totalUsageDeducted * PENCE_PER_USAGE_UNIT;
+  return data?.spending_this_cycle_pence ?? 0;
 }
 
 /**
- * Check if this request would exceed the spending cap.
- * Returns null if OK, or an error message if cap exceeded.
- * Skips check if spending_cap_pence is 0 (no cap).
+ * Read-only cap check. Post-Batch 6 the deduct + proxy routes do NOT call
+ * this — they rely on `atomic_deduct_sub_with_cap` instead. Retained for
+ * any future read-side use; no mutation happens here.
+ *
+ * Returns null when the request is within the cap (or no cap set); returns
+ * an error message string when the request would breach the cap.
  */
 export async function checkSpendingCap(
   admin: SupabaseClient,
   userId: string,
-  spendingCapPence: number,
+  spendingCapPence: number | null,
   billingCycleEnd: string | null,
   requestCost: number
 ): Promise<string | null> {
-  if (spendingCapPence <= 0) return null;
+  // No cap configured — skip.
+  if (spendingCapPence === null) return null;
+
+  // Hard stop — cap explicitly set to 0 rejects every deduction.
+  if (spendingCapPence === 0) {
+    return "Monthly spending cap reached. Increase your cap in account settings or wait for your next billing cycle.";
+  }
 
   const currentSpend = await getSpendingThisCyclePence(
     admin, userId, billingCycleEnd
