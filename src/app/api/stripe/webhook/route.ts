@@ -152,14 +152,17 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId
       subscription.items.data[0].current_period_end * 1000
     ).toISOString();
 
-    // Non-reset fields (plan, allowance, status) go in a separate UPDATE.
-    // The RPC owns usage_balance / billing_cycle_end / usage_alerts_sent.
+    // Non-reset fields (plan, allowance, status, stripe_subscription_id) go
+    // in a separate UPDATE. The RPC owns usage_balance / billing_cycle_end /
+    // usage_alerts_sent. `subscription` is the expanded Stripe.Subscription
+    // object (not a string) — we narrowed at the start of this branch.
     await admin
       .from("profiles")
       .update({
         plan: cloudPlan.id,
         usage_monthly_allowance: cloudPlan.usage_amount,
         subscription_status: "active",
+        stripe_subscription_id: subscription.id,
       })
       .eq("id", profile.id);
 
