@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   const { data: profile } = await admin
     .from("profiles")
     .select(
-      "plan, usage_balance, usage_monthly_allowance, billing_cycle_end, overage_enabled, spending_cap_pence, spending_this_cycle_pence, cancel_at_period_end"
+      "plan, usage_balance, usage_monthly_allowance, billing_cycle_end, overage_enabled, spending_cap_pence, spending_this_cycle_pence, cancel_at_period_end, subscription_end"
     )
     .eq("id", auth.user.id)
     .single();
@@ -72,6 +72,7 @@ export async function GET(request: Request) {
     spending_cap_pence: profile.spending_cap_pence,
     spending_this_cycle_pence: profile.spending_this_cycle_pence ?? 0,
     cancel_at_period_end: profile.cancel_at_period_end ?? false,
+    subscription_end: profile.subscription_end ?? null,
     tier_access: tierAccess,
     // null (not []) when the query actually failed, so clients can
     // distinguish a read error from a genuinely empty pack list.
