@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Check, Heart, Coffee, ExternalLink, ChevronDown, Zap, Info } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -144,6 +144,9 @@ export function PricingSection({ className }: PricingSectionProps) {
   const [modelTiers, setModelTiers] = useState<ModelTier[]>([]);
   const [userPlan, setUserPlan] = useState<string | null>(null);
   const [usageInfoOpen, setUsageInfoOpen] = useState(false);
+  // One-shot guard: once we've resolved the initial hash (or decided there
+  // isn't one), don't re-scroll on later re-renders.
+  const hashScrollDone = useRef(false);
 
   useEffect(() => {
     fetch("/api/cloud/plans")
@@ -171,6 +174,30 @@ export function PricingSection({ className }: PricingSectionProps) {
       }
     });
   }, []);
+
+  // Hash-anchor scroll. The PAYG section is conditionally rendered after the
+  // cloud plans fetch resolves, so /pricing#pay-as-you-go on hard refresh
+  // hits a DOM that doesn't have the target yet — the browser's native hash
+  // scroll is a no-op and the user lands at the top. We re-run scrollIntoView
+  // one frame after plans land so the element exists by then.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (hashScrollDone.current) return;
+    if (plans.length === 0) return;
+
+    const hash = window.location.hash;
+    if (!hash) {
+      hashScrollDone.current = true;
+      return;
+    }
+
+    const id = hash.slice(1);
+    requestAnimationFrame(() => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      hashScrollDone.current = true;
+    });
+  }, [plans.length]);
 
   const subscriptionPlans = plans.filter((p) => p.plan_type === "subscription");
   const paygPlans = plans.filter((p) => p.plan_type === "payg");
@@ -287,7 +314,9 @@ export function PricingSection({ className }: PricingSectionProps) {
       </section>
 
       {/* Section C: Cloud AI Subscriptions */}
-      <section id="cloud-ai" className="py-12 md:py-20">
+      {/* scroll-mt-20 offsets the fixed h-16 header + a little breathing room
+          so deep-link hash anchors don't land under the nav. */}
+      <section id="cloud-ai" className="scroll-mt-20 py-12 md:py-20">
         <Container>
           <ScrollReveal>
             <div className="mx-auto max-w-3xl text-center mb-10">
@@ -404,7 +433,7 @@ export function PricingSection({ className }: PricingSectionProps) {
 
       {/* Section D: Pay As You Go */}
       {paygPlans.length > 0 && (
-        <section id="pay-as-you-go" className="bg-bg-secondary py-12 md:py-20">
+        <section id="pay-as-you-go" className="scroll-mt-20 bg-bg-secondary py-12 md:py-20">
           <Container>
             <ScrollReveal>
               <div className="mx-auto max-w-3xl text-center mb-10">
