@@ -64,11 +64,17 @@ async function callDeepSeek(
     throw new ProviderUnavailableError("deepseek", "timeout or connection error");
   }
 
-  if (res.status >= 500) {
-    throw new ProviderUnavailableError("deepseek", `${res.status}`);
-  }
   if (!res.ok) {
-    throw new Error(`DeepSeek API error: ${res.status}`);
+    // Cascade on all non-2xx (4xx and 5xx). A 4xx from one provider does not
+    // mean the user's request is bad — it means THIS provider failed right
+    // now (misconfigured endpoint, upstream quota, deployment removed, etc.),
+    // so the tier's next candidate deserves a try. Body text is the
+    // provider's own error response (truncated) — NOT user content.
+    const bodyText = await res.text().catch(() => "");
+    throw new ProviderUnavailableError(
+      "deepseek",
+      `${res.status}: ${bodyText.slice(0, 200)}`
+    );
   }
 
   const data = await res.json();
@@ -124,11 +130,13 @@ async function callGoogle(
     throw new ProviderUnavailableError("google", "timeout or connection error");
   }
 
-  if (res.status >= 500) {
-    throw new ProviderUnavailableError("google", `${res.status}`);
-  }
   if (!res.ok) {
-    throw new Error(`Google AI error: ${res.status}`);
+    // Cascade on all non-2xx — see rationale in callDeepSeek.
+    const bodyText = await res.text().catch(() => "");
+    throw new ProviderUnavailableError(
+      "google",
+      `${res.status}: ${bodyText.slice(0, 200)}`
+    );
   }
 
   const data = await res.json();
@@ -186,11 +194,13 @@ async function callAnthropic(
     throw new ProviderUnavailableError("anthropic", "timeout or connection error");
   }
 
-  if (res.status >= 500) {
-    throw new ProviderUnavailableError("anthropic", `${res.status}`);
-  }
   if (!res.ok) {
-    throw new Error(`Anthropic API error: ${res.status}`);
+    // Cascade on all non-2xx — see rationale in callDeepSeek.
+    const bodyText = await res.text().catch(() => "");
+    throw new ProviderUnavailableError(
+      "anthropic",
+      `${res.status}: ${bodyText.slice(0, 200)}`
+    );
   }
 
   const data = await res.json();

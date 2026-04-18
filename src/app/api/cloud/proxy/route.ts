@@ -327,9 +327,13 @@ export async function POST(request: Request) {
 
   // Provider fallback loop
   let lastError: unknown = null;
+  // Tracks every provider/model we actually attempted so the "all failed"
+  // log below reports the real offenders (not just the last tier entry).
+  const attempted: { provider: string; modelId: string }[] = [];
 
   for (const candidate of candidates) {
     const { provider, modelId } = candidate;
+    attempted.push({ provider, modelId });
 
     try {
       const result = await routeToProvider(
@@ -549,7 +553,9 @@ export async function POST(request: Request) {
 
   // All attempts failed
   const responseTimeMs = Date.now() - startTime;
-  const lastCandidate = candidates[candidates.length - 1];
+  const lastAttempted = attempted[attempted.length - 1];
+  const errorType =
+    lastError instanceof Error ? lastError.message.slice(0, 200) : "unknown";
 
   console.log(
     JSON.stringify({
@@ -557,17 +563,28 @@ export async function POST(request: Request) {
       ts: new Date().toISOString(),
       user_id: userId,
       model_tier: requestedTier,
-      provider: lastCandidate.provider,
-      model_id: lastCandidate.modelId,
+      provider: lastAttempted?.provider ?? null,
+      model_id: lastAttempted?.modelId ?? null,
+      attempted,
       response_time_ms: responseTimeMs,
       success: false,
-      error_type: lastError instanceof Error ? lastError.message.slice(0, 80) : "unknown",
+      error_type: errorType,
     })
   );
 
-  // Do NOT deduct usage on failure
+  // Do NOT deduct usage on failure.
+  // Non-production envs (dev + Vercel preview) include the truncated error
+  // message so local/preview clients can diagnose without Vercel log access.
+  // Production responses stay clean.
+  const includeDebug =
+    process.env.NODE_ENV !== "production" ||
+    process.env.VERCEL_ENV === "preview";
   return NextResponse.json(
-    { error: "provider_error", message: "Cloud AI temporarily unavailable." },
+    {
+      error: "provider_error",
+      message: "Cloud AI temporarily unavailable.",
+      ...(includeDebug ? { debug_error_type: errorType } : {}),
+    },
     { status: 502 }
   );
 }
