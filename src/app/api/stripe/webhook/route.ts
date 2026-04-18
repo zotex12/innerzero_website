@@ -383,9 +383,12 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
       return;
     }
 
-    // Set plan to free, zero allowance, keep usage_balance, and clear the
-    // cancel_at_period_end flag — the countdown is over, the flag would be
-    // stale on a now-free account.
+    // Set plan to free, zero allowance, keep usage_balance (retention contract),
+    // clear the cancel countdown, and NULL the active-subscription pointers.
+    // stripe_subscription_id and billing_cycle_end both point at a Stripe
+    // object / cycle that no longer exists — leaving them populated invites
+    // stale-reference bugs in future features that check for presence as a
+    // proxy for "sub is active". subscription_end stays (audit field).
     await admin
       .from("profiles")
       .update({
@@ -393,6 +396,8 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
         usage_monthly_allowance: 0,
         subscription_status: "cancelled",
         cancel_at_period_end: false,
+        stripe_subscription_id: null,
+        billing_cycle_end: null,
       })
       .eq("id", profile.id);
 
