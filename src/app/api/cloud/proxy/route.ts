@@ -175,9 +175,15 @@ export async function POST(request: Request) {
     hasPayg = (count ?? 0) > 0;
   }
 
-  if (!hasPlan && !hasPayg) {
+  // Cancelled users retain their usage_balance per the cancel contract — a
+  // plan=free + usage_balance>0 state is a valid paying customer whose
+  // credits must remain spendable. Desktop already treats this as eligible
+  // via has_spendable_cloud_credits (InnerZero c03e0a8); mirror here.
+  const hasRetainedBalance = (profile.usage_balance ?? 0) > 0;
+
+  if (!hasPlan && !hasPayg && !hasRetainedBalance) {
     return NextResponse.json(
-      { error: "No active plan or credit packs. Subscribe or purchase credits." },
+      { error: "no_managed_credits", message: "No active plan, PAYG packs, or retained credits." },
       { status: 403 }
     );
   }
@@ -242,7 +248,23 @@ export async function POST(request: Request) {
         user_id: userId,
         code: packsError.code,
         message: packsError.message,
+        request_id: requestId ?? null,
       });
+      // If the user has NO retained sub balance to pivot to either, we
+      // can't distinguish "legitimately out of credits" from "DB query
+      // failed" — returning 402 would mislead them into a false top-up.
+      // Return 500 with a correlation id so they retry. If sub balance
+      // could serve, fall through to let the deduction path below try.
+      if (subscriptionBalance <= 0) {
+        return NextResponse.json(
+          {
+            error: "pack_query_failed",
+            message: "Temporary error checking credits. Please retry.",
+            request_id: requestId ?? null,
+          },
+          { status: 500 }
+        );
+      }
     }
 
     const hasEligiblePack = (paygPacks ?? []).some((p) => p.usage_remaining >= cost);
@@ -390,6 +412,11 @@ export async function POST(request: Request) {
       // executed provider chosen by the fallback loop. When reconciling
       // analytics, join transactions to model_tiers on model_tier and
       // remember that a single tier can map to rows with different providers.
+      // Tracks whether we landed a deduction on either path. Used below to
+      // hard-fail with 500 rather than silently return a free provider
+      // response when nothing could be deducted post-hoc (audit finding B2).
+      let anyDeduction = false;
+
       if (!alreadyDeducted) {
         if (deductSource === "subscription") {
           const newBalance = await deductUsage(
@@ -410,6 +437,8 @@ export async function POST(request: Request) {
             // Subscription drained by a concurrent request between the pre-check and
             // the atomic deduct. Fall through to PAYG packs if any.
             deductSource = "payg";
+          } else {
+            anyDeduction = true;
           }
         }
 
@@ -460,6 +489,7 @@ export async function POST(request: Request) {
               model_id: modelId,
               ...(requestId ? { request_id: requestId } : {}),
             });
+            anyDeduction = true;
           } else {
             console.error(
               JSON.stringify({
@@ -471,6 +501,36 @@ export async function POST(request: Request) {
               })
             );
           }
+        }
+
+        // Silent-freebie guard: provider was called successfully but neither
+        // sub nor pack deduction landed. Do NOT return the content to the
+        // user — that would be free compute at InnerZero's expense. Log for
+        // manual reconciliation and fail 500. No provider refund attempt
+        // (out of scope; provider-specific). Retries with the same
+        // request_id will hit the `alreadyDeducted` branch and skip this
+        // check, which is correct (the original attempt will have landed
+        // its deduction before ever reaching this path).
+        if (!anyDeduction) {
+          console.error(
+            JSON.stringify({
+              event: "cloud_proxy_deduction_failed_after_provider_call",
+              ts: new Date().toISOString(),
+              user_id: userId,
+              request_id: requestId ?? null,
+              provider,
+              model_id: modelId,
+              cost,
+              reason: "no_eligible_pack_remaining",
+            })
+          );
+          return NextResponse.json(
+            {
+              error: "deduction_failed",
+              message: "Cloud response was generated but internal accounting failed. Please contact support if this persists.",
+            },
+            { status: 500 }
+          );
         }
       }
 

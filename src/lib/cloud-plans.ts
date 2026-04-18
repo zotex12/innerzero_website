@@ -159,17 +159,35 @@ export async function deductUsage(
   }
   if (row.new_balance === null) return null;
 
-  await admin.from("usage_transactions").insert({
-    user_id: userId,
-    type: "usage",
-    amount: -amount,
-    balance_after: row.new_balance,
-    description: `${provider}/${modelId}`,
-    model_tier: modelTier,
-    provider,
-    model_id: modelId,
-    ...(requestId ? { request_id: requestId } : {}),
-  });
+  // atomic_deduct_sub_with_cap has already decremented usage_balance and
+  // bumped spending_this_cycle_pence atomically at this point. The audit
+  // row here is secondary — but a silent insert failure (e.g. 23505 on a
+  // duplicate request_id from a partially-failed prior call) would leave
+  // us deducted without a matching tx row, and the next retry's
+  // idempotency pre-check would miss → double-deduct window. Capture and
+  // log so ops can reconcile; do NOT retry and do NOT rollback the RPC.
+  const { error: txInsertError } = await admin
+    .from("usage_transactions")
+    .insert({
+      user_id: userId,
+      type: "usage",
+      amount: -amount,
+      balance_after: row.new_balance,
+      description: `${provider}/${modelId}`,
+      model_tier: modelTier,
+      provider,
+      model_id: modelId,
+      ...(requestId ? { request_id: requestId } : {}),
+    });
+  if (txInsertError) {
+    console.error("[cloud-plans] usage_transactions insert failed after atomic_deduct_sub_with_cap", {
+      user_id: userId,
+      request_id: requestId ?? null,
+      new_balance: row.new_balance,
+      code: txInsertError.code,
+      message: txInsertError.message,
+    });
+  }
 
   return row.new_balance;
 }

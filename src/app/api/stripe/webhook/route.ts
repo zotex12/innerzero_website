@@ -204,14 +204,41 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId
     const expiresAt = new Date(purchasedAt);
     expiresAt.setFullYear(expiresAt.getFullYear() + 1);
 
-    await admin.from("usage_packs").insert({
-      user_id: profile.id,
-      plan_id: cloudPlan.id,
-      usage_granted: cloudPlan.usage_amount,
-      usage_remaining: cloudPlan.usage_amount,
-      purchased_at: purchasedAt.toISOString(),
-      expires_at: expiresAt.toISOString(),
-    });
+    // stripe_session_id carries the UNIQUE partial index (migration
+    // add_usage_packs_stripe_session_id_unique) so concurrent webhook
+    // retries — which can race past the event-id dedup window in rare
+    // cases — cannot double-insert packs. 23505 on conflict is a benign
+    // "already processed, duplicate suppressed" signal; log it and
+    // continue so Stripe stops retrying.
+    const { error: packInsertError } = await admin
+      .from("usage_packs")
+      .insert({
+        user_id: profile.id,
+        plan_id: cloudPlan.id,
+        usage_granted: cloudPlan.usage_amount,
+        usage_remaining: cloudPlan.usage_amount,
+        purchased_at: purchasedAt.toISOString(),
+        expires_at: expiresAt.toISOString(),
+        stripe_session_id: session.id,
+      });
+    if (packInsertError) {
+      if (packInsertError.code === "23505") {
+        console.log(
+          JSON.stringify({
+            event: "duplicate_payg_webhook_suppressed",
+            ts: new Date().toISOString(),
+            user_id: profile.id,
+            stripe_session_id: session.id,
+            event_id: eventId,
+          })
+        );
+        // Fall through — the first invocation already inserted the pack
+        // AND the usage_transactions audit row. The tx insert below will
+        // also hit 23505 on its request_id UNIQUE and no-op.
+      } else {
+        throw packInsertError;
+      }
+    }
 
     // Read the current balance for an accurate (unchanged) balance_after on
     // the audit row. This is not a RMW — we never write usage_balance here.
