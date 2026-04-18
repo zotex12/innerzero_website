@@ -476,7 +476,7 @@ export function PricingSection({ className }: PricingSectionProps) {
                       </p>
 
                       <p className="mt-3 text-xs text-text-muted">
-                        No subscription required. Never expires.
+                        No subscription required. Credits expire 1 year after purchase.
                       </p>
 
                       <div className="mt-6">

@@ -289,13 +289,31 @@ export function CloudUsageCard({
       </div>
 
       {/* PAYG top-up balance */}
-      {paygTotal > 0 && (
-        <div className="mt-3 pt-3 border-t border-border-default">
-          <span className="text-sm text-text-secondary">
-            Top Up Balance: {paygTotal.toLocaleString("en-GB")} remaining
-          </span>
-        </div>
-      )}
+      {paygTotal > 0 ? (() => {
+        // Earliest expiry across eligible packs; ISO sort is correct for
+        // timestamptz strings. Older pre-policy packs with null expires_at
+        // are shown as indefinite until the cron-side backfill migrates them.
+        const expiries = paygPacks
+          .map((p) => p.expires_at)
+          .filter((e): e is string => !!e)
+          .sort();
+        const earliest = expiries[0];
+        const hasIndefinite = paygPacks.some((p) => !p.expires_at);
+        return (
+          <div className="mt-3 pt-3 border-t border-border-default">
+            <span className="text-sm text-text-secondary">
+              Top Up Balance: {paygTotal.toLocaleString("en-GB")} remaining
+            </span>
+            <div className="mt-1 text-xs text-text-muted">
+              {earliest
+                ? `Earliest expiry ${formatDate(earliest)}`
+                : null}
+              {earliest && hasIndefinite ? " · " : ""}
+              {hasIndefinite ? "Some legacy credits have no expiry date set" : ""}
+            </div>
+          </div>
+        );
+      })() : null}
 
       {/* Action buttons */}
       <div className="mt-4 flex flex-wrap gap-3">

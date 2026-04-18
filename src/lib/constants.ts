@@ -272,6 +272,11 @@ export const CLOUD_FAQ: FAQItem[] = [
     answer:
       "Your local AI keeps working normally. Cloud responses pause until your usage resets next month or you top up with a credit pack. No surprise charges.",
   },
+  {
+    question: "Do top-up credits expire?",
+    answer:
+      "Yes. Top-up credits expire 1 year after purchase, matching industry standard. You'll see the expiry date in your account and desktop app. Unused credits past that date are forfeited.",
+  },
 ];
 
 /* ── Features page - detailed features ── */

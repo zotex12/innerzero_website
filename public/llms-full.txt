@@ -341,7 +341,7 @@ Managed plans include DeepSeek, Google Gemini, and Anthropic Claude. Model selec
 - 600 credits for £12
 - 1,500 credits for £25
 
-PAYG credits use the same managed providers as subscription plans. Packs do not expire immediately; they stack on top of any subscription balance.
+PAYG credits use the same managed providers as subscription plans. Credits stack on top of any subscription balance and expire 1 year after purchase (industry standard).
 
 ### Credit usage multipliers
 
@@ -380,6 +380,8 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 **What is usage?** Each cloud AI response uses a set amount from your monthly or purchased usage. Budget models use 1 per response, premium models use more. Auto mode picks the best model and uses just 1.
 
 **What happens when usage runs out?** Your local AI keeps working normally. Cloud responses pause until your usage resets next month or you top up with a credit pack. No surprise charges.
+
+**Do top-up credits expire?** Yes. Top-up credits expire 1 year after purchase, matching industry standard. You'll see the expiry date in your account and desktop app. Unused credits past that date are forfeited.
 
 ===============================================================================
 # SECTION 6: DOWNLOAD AND SYSTEM REQUIREMENTS

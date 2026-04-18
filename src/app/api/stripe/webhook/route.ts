@@ -195,11 +195,22 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId
     // is insufficient. Historical bug: this branch used grantUsage() which
     // also incremented usage_balance via atomic_grant_subscription, giving
     // every PAYG buyer 2x the credits they paid for.
+    // PAYG credits expire 12 months after purchase (industry standard —
+    // OpenAI, Anthropic, Google). Set both timestamps explicitly so they
+    // stay in lockstep regardless of any future column-default change.
+    // setFullYear(+1) preserves calendar semantics across leap years —
+    // don't swap for a ms-arithmetic shortcut.
+    const purchasedAt = new Date();
+    const expiresAt = new Date(purchasedAt);
+    expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+
     await admin.from("usage_packs").insert({
       user_id: profile.id,
       plan_id: cloudPlan.id,
       usage_granted: cloudPlan.usage_amount,
       usage_remaining: cloudPlan.usage_amount,
+      purchased_at: purchasedAt.toISOString(),
+      expires_at: expiresAt.toISOString(),
     });
 
     // Read the current balance for an accurate (unchanged) balance_after on

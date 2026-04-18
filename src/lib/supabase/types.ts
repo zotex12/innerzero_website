@@ -312,6 +312,7 @@ export type Database = {
           usage_granted: number;
           usage_remaining: number;
           stripe_session_id?: string | null;
+          purchased_at?: string;
           expires_at?: string | null;
         };
         Update: {

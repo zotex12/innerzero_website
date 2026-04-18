@@ -78,6 +78,9 @@ export default function TermsPage() {
               <p className="mt-2">
                 Paid services auto-renew where applicable unless cancelled before the next billing date. You may cancel at any time.
               </p>
+              <p className="mt-2">
+                Top-up credits purchased on a one-off basis expire 12 months after the purchase date. Unused credits after expiry are forfeited and are not refundable. The expiry date is shown in your account dashboard.
+              </p>
             </section>
 
             {/* Section 4 */}
