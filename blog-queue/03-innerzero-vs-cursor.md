@@ -1,0 +1,147 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale (Cursor's current pricing, feature set, model options)
+- [ ] Check Cursor's current Pro plan price on cursor.com/pricing
+- [ ] Update any specific Cursor feature references if their UI has changed
+- [ ] Confirm InnerZero's local coding model list still matches what ships
+- [ ] Refresh the comparison table if either product has added or removed a major feature
+-->
+---
+title: "InnerZero vs Cursor: Where Each One Wins"
+description: "Cursor is a cloud-powered code editor. InnerZero is a local AI assistant with a coding agent. Honest comparison of what each does best and why."
+date: "PUBLISH_DATE_PLACEHOLDER"
+author: "Louie"
+authorRole: "Founder"
+slug: "innerzero-vs-cursor"
+tags: ["comparison", "coding agent", "local ai"]
+readingTime: "8 min read"
+featured: false
+---
+
+**InnerZero and Cursor** come up in the same conversation surprisingly often. They shouldn't, really. Cursor is a code editor. InnerZero is a general-purpose AI assistant with a coding agent bolted in. But because both can help you write code with AI, people end up asking which one to use, so here's an honest side-by-side.
+
+Fair warning. I built InnerZero. I use Cursor sometimes. I'll try to be fair to both.
+
+> **Quick summary**
+> - Cursor: cloud-backed code editor, best-in-class frontier-model integration inside the editor, requires Cursor subscription or BYO cloud key
+> - InnerZero: local-first AI assistant with a coding agent that runs in any editor-adjacent workflow, free, no subscription
+> - Different problems. Cursor replaces your editor. InnerZero complements it
+> - Pick Cursor if you want the smoothest frontier-model-in-editor experience. Pick InnerZero if local-first matters or you already have an editor you love
+
+## What is Cursor?
+
+**Cursor is a VS Code fork with frontier AI models wired deeply into the editor.** You write code. The AI suggests completions, edits multi-file projects, and explains existing code. Under the hood it uses Claude, GPT, and other cloud models, routed through Cursor's own infrastructure with their own prompt engineering on top.
+
+Cursor's big advantages are (1) the UX is excellent, (2) the model access is already wired up, and (3) the team has genuinely good product taste. It feels like an editor built around AI rather than an editor with AI stapled on. Their Composer feature for multi-file edits is genuinely impressive. If you want the smoothest AI-in-editor experience right now, Cursor is the benchmark.
+
+The tradeoff is that Cursor requires the cloud. Your code, selections, and context get sent to Cursor's servers to reach the underlying models. They offer a "privacy mode" that doesn't retain your prompts for training, but the code still has to leave your machine to get a response. For many developers that's fine. For some, it isn't.
+
+## What is InnerZero?
+
+**InnerZero is a local-first AI assistant that runs on your PC and includes a coding agent.** Default install uses [Ollama](https://ollama.com) or LM Studio, so your models run on your GPU or CPU and your data never leaves the machine. You can optionally wire up cloud providers with your own API keys if you want frontier reasoning for specific tasks.
+
+InnerZero isn't an editor. It runs alongside whatever editor you already use. You tell the coding agent "refactor this module" or "add tests for these files", it plans the work, shows you a diff, and applies changes only after you approve. You keep your editor, your keybindings, your extensions, your workflow. The agent is a layer next to it, not a replacement for it.
+
+InnerZero also does a lot of things Cursor doesn't try to do. Voice interaction. Persistent memory across sessions. Document Q&A for PDFs and docx files. Screen automation. Offline knowledge packs. It's an AI assistant that happens to have a coding agent, not a coding tool that happens to chat.
+
+## How do their AI models differ?
+
+**Cursor routes through frontier cloud models (Claude, GPT, Gemini) by default. InnerZero runs local open-source models by default and adds optional cloud via BYO keys.** Both can reach Claude Opus 4.7 or GPT-5.4. The path to get there is different.
+
+With Cursor:
+- You pay Cursor's Pro subscription for bundled cloud access
+- Or you add your own API key and pay the provider directly
+- The editor handles all routing, context packaging, and prompt engineering
+
+With InnerZero:
+- Default local models are free and run on your hardware
+- You add your own API keys for any of 7 supported providers (Anthropic, OpenAI, Google, DeepSeek, Qwen, xAI, Kimi)
+- Or subscribe to InnerZero's managed cloud plans starting at £9.99/month
+- Your key stays encrypted on your machine; calls go direct to the provider
+
+The architectural difference matters. In Cursor, your code always goes through Cursor's infrastructure before reaching the model. In InnerZero with BYO, your code goes directly from your machine to the AI provider, no intermediate server.
+
+## Who should pick Cursor?
+
+**Anyone who wants frontier-model AI inside their editor with zero setup, doesn't mind the subscription, and is fine with cloud-based code processing.** Cursor nails that workflow. If you're already paying for it and it works for you, there's no reason to switch.
+
+Specifically:
+
+- Developers who want inline AI completions that feel invisible
+- People starting greenfield projects where frontier-model help shortens time-to-ship
+- Anyone who primarily works in codebases where the cloud isn't a constraint
+- Teams that standardise on one editor and want the same AI experience everywhere
+
+Cursor's Composer-style multi-file editing is a real differentiator. If that's the core of your workflow, neither InnerZero nor any other tool I've tried fully matches it yet.
+
+## Who should pick InnerZero?
+
+**Anyone who works in a codebase that can't leave their machine, or who wants an AI assistant that does more than just code.** If "offline-capable" or "keep my existing editor" is a requirement, InnerZero fits better.
+
+Specifically:
+
+- Developers under IP restrictions (employers, NDAs, regulated industries)
+- People who want AI for work beyond coding: writing, research, voice interaction, document Q&A
+- Anyone running on hardware good enough to host a serious local model (16GB+ RAM, 6GB+ VRAM)
+- People who don't want another editor subscription on top of the ones they already pay for
+- Teams that want to give members AI tools without routing every keystroke through a third party
+
+You can also use both. Cursor for frontier-model greenfield work, InnerZero for sensitive codebases and everything non-coding. They don't conflict.
+
+## Comparison table: InnerZero vs Cursor
+
+| Aspect | InnerZero | Cursor |
+|--------|-----------|--------|
+| Type | AI assistant with coding agent | Code editor with AI |
+| Default AI | Local models (Ollama/LM Studio) | Frontier cloud models |
+| Runs offline | Yes (except optional cloud) | No |
+| Replaces your editor | No, runs alongside | Yes, VS Code fork |
+| Voice interaction | Yes, local | No |
+| Persistent memory | Yes | Limited |
+| Document Q&A | Yes (PDF, docx, xlsx, csv) | Code only |
+| Coding agent | Yes, sandboxed with approval gates | Yes, Composer |
+| Multi-file refactors | Yes | Yes, excellent UX |
+| Free tier | Full app, free forever | Limited free, then Pro |
+| Subscription | Optional managed cloud, £9.99+/mo | Required for full features |
+| Platforms | Windows, macOS, Linux | Windows, macOS, Linux |
+| Privacy mode | Default (local) | Opt-in |
+| Frontier model access | Via BYO API keys | Via Cursor Pro or BYO |
+
+## Can I use both together?
+
+**Yes, and a lot of people probably should.** They solve different problems. Cursor lives in your editor and handles AI-assisted code writing. InnerZero lives next to your editor and handles the broader workflow: research, voice, document handling, and coding agent tasks for sensitive projects.
+
+Practical setup:
+
+- Cursor in your greenfield repo where you want frontier-model help
+- InnerZero running in the background for voice, memory, research
+- InnerZero's coding agent for refactors and test generation in private codebases
+- Both tools with BYO keys if you're already paying Anthropic or OpenAI directly
+
+The only friction is remembering which tool to reach for. After a week it's automatic.
+
+## Frequently asked questions
+
+### Does InnerZero have inline editor completions like Cursor?
+
+No. InnerZero's coding agent is task-based, not inline-completion based. You ask it to do a unit of work and it produces changes. If you want tab-to-complete suggestions as you type, Cursor or GitHub Copilot are the right tools for that workflow. They're solving a different problem.
+
+### Can Cursor run offline?
+
+No. Cursor requires an internet connection to reach the underlying models and Cursor's own services. Even with BYO keys, the routing still goes through Cursor infrastructure. For genuinely offline AI coding assistance, you need a tool built for local execution.
+
+### Which one is better for Python, JavaScript, or Rust specifically?
+
+Both handle mainstream languages well because both can reach the same frontier cloud models when you want that. For local-only coding with InnerZero, the Qwen coder models are strong on Python and JavaScript, decent on Rust, and less strong on very niche languages. Cursor's frontier models are better on niche languages, but you're paying per token or per subscription for that.
+
+### Is InnerZero free forever?
+
+The desktop application is free and will stay free. Cloud features are optional: either BYO your own API keys (free from InnerZero's side) or subscribe to managed cloud plans (from £9.99/month). The local-only experience is fully featured and requires no account.
+
+### How does pricing compare long-term?
+
+Cursor Pro is currently around $20/month last I checked, and includes bundled frontier-model access up to usage caps. InnerZero with local-only is £0. InnerZero with BYO Anthropic keys is whatever you spend with Anthropic (typically a few dollars a month for light use). If you want frontier access without key management, InnerZero's managed plans are £9.99+/month. Long term, InnerZero is cheaper for most people, but Cursor's in-editor UX justifies the cost for many.
+
+## Try InnerZero
+
+[Download InnerZero](/download) for free on Windows, macOS, or Linux. Cursor is worth trying too if you haven't. They're solving different problems, and most serious developers will probably use both for different things. For the broader local AI landscape, [best free AI assistant for Windows in 2026](/blog/best-free-ai-windows-2026) covers the full field, and [local AI vs cloud AI](/blog/local-ai-vs-cloud-ai) is a good starting point if you're still weighing the tradeoff.

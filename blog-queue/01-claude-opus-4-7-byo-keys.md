@@ -1,0 +1,117 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale (Anthropic pricing, Opus model list, availability)
+- [ ] Confirm claude-opus-4-7 still tops the Anthropic model list in InnerZero Settings
+- [ ] Double-check the $5/$25 per 1M input/output pricing on Anthropic's page
+- [ ] Refresh setup steps if InnerZero's Settings UI has changed since v0.1.4
+- [ ] Add any new Opus variants or Anthropic release news from the week of publish
+-->
+---
+title: "Claude Opus 4.7 via Bring Your Own Keys: The Local AI Setup Guide"
+description: "Add your own Anthropic key to InnerZero and use Claude Opus 4.7 for chat or the coding agent. Setup, cost, and how it compares to local models."
+date: "PUBLISH_DATE_PLACEHOLDER"
+author: "Louie"
+authorRole: "Founder"
+slug: "claude-opus-4-7-byo-keys"
+tags: ["cloud ai", "features", "innerzero", "claude"]
+readingTime: "7 min read"
+featured: false
+---
+
+**Claude Opus 4.7** released on 15 April 2026. It's Anthropic's strongest reasoning model to date, and InnerZero's v0.1.4 release added it as a selectable model for anyone using **bring your own keys** with their own Anthropic account. This guide walks through the setup, what it costs, and when you'd actually pick it over a model running on your own machine.
+
+I'm not going to pretend Opus 4.7 is the right choice for every task. Most of what I ask my AI assistant is better handled locally. But when I'm debugging something at the edge of a language I don't know well, or drafting something where I want the quality to be high on the first pass, Opus is where I reach.
+
+> **Quick summary**
+> - Opus 4.7 works in InnerZero via your own Anthropic API key, direct from your machine to Anthropic, no middleman
+> - Costs $5 per million input tokens and $25 per million output tokens, same as Opus 4.6
+> - Works for both the main chat and the coding specialist agent
+> - You can mix and match: local model for casual, Opus for hard problems
+
+## What is Claude Opus 4.7 and why use it with InnerZero?
+
+**Claude Opus 4.7 is Anthropic's most capable model in the Claude 4 family**, released 15 April 2026. It's the one you pick when reasoning quality matters more than speed or cost. Anthropic tuned it hard for long-context work, extended thinking, and coding. If you've tried Opus 4.6 and wanted the same behaviour but sharper, that's the upgrade.
+
+InnerZero is a local-first AI assistant. The default setup runs entirely on your machine using [Ollama](https://ollama.com) or LM Studio. Everything is free, stays on your hardware, and needs no internet connection once the model is downloaded. That's the normal mode.
+
+BYO keys are an optional layer on top. If you have an Anthropic account with API credit, you plug that key into InnerZero's Settings and use Claude models directly. The key stays encrypted on your machine. Your messages go straight to Anthropic's API, not through any InnerZero server. There's no markup, no middleman, no account required on our side.
+
+## How do I add my Anthropic API key to InnerZero?
+
+**Open Settings, switch to Cloud mode, then paste your Anthropic key under API Keys.** InnerZero validates it with a tiny test call, encrypts it, and stores it on your machine. The key never leaves your computer except to talk directly to Anthropic.
+
+Step by step:
+
+1. Download InnerZero from [the download page](/download) if you haven't already
+2. Open Settings and switch to Cloud mode. Accept the warning (it explains exactly what leaves your machine)
+3. Under API Keys, paste your key from your Anthropic console
+4. Click Validate. If the key is active, it turns green
+5. Open the engine dropdown in the chat input and pick `claude-opus-4-7`
+
+That's it. Your next message goes to Opus 4.7 instead of your local model. Switch back to local any time with the same dropdown.
+
+The Settings UI shows you which provider will handle the next request before you send it. There's no silent cloud routing unless you opt into a managed subscription, which is a separate thing from BYO.
+
+## What does Claude Opus 4.7 cost per message?
+
+**Anthropic charges $5 per million input tokens and $25 per million output tokens for Opus 4.7**, same pricing as Opus 4.6. A typical back-and-forth in InnerZero sends roughly 500 to 1,500 input tokens and gets 200 to 600 output tokens back, so most individual messages land between roughly $0.01 and $0.02.
+
+Tokens aren't characters. They're roughly word-fragments. The exact cost per message depends on how long your conversation history is, how big your memory pack is, and how verbose the reply needs to be. InnerZero's Costs page logs every cloud API call with the actual token counts returned by Anthropic, so you can see what you've spent this month without guessing.
+
+One thing worth noting. Opus 4.7 uses a different tokenizer than Opus 4.6, so the same prompt can tokenise slightly differently between the two. InnerZero reads the real token count back from each API response and bills you exactly that, rather than estimating ahead of time. Billing stays accurate regardless of tokenizer changes.
+
+## Can I use Opus 4.7 with the coding agent?
+
+**Yes. Pick Anthropic as your Specialist cloud provider and choose claude-opus-4-7 as the model.** The coding agent then routes its reasoning through Opus instead of a local coding model. Useful for hard tasks like refactoring legacy code or debugging multi-file issues.
+
+I use the local coding model (a 14b or 32b Qwen variant depending on the machine) for most work. It's fast, free, and handles maybe 80% of what I throw at it. For the other 20%, Opus 4.7 earns its keep.
+
+The agent has the same safety model either way. Sandboxed file access, a diff review screen, approval gates before any write touches disk. Cloud-backed specialists use the same two-gate approval flow as local ones, so nothing changes about how much control you have over what gets written.
+
+## When should I use Opus 4.7 versus a local model?
+
+**Opus 4.7 wins on reasoning quality and long-context accuracy. Local models win on latency, cost, and privacy.** If the task is routine or you're on a slow connection, local is better. If the task is novel or high-stakes, a few cents per message is nothing.
+
+Honest opinion. I default to local. The open-source models you can run on a mid-range gaming PC in 2026 are genuinely good. They handle most coding, most writing, most research. The Opus 4.7 card gets pulled when I hit something I can tell the local model is going to fumble, and the cost of me re-prompting three times exceeds the cost of one Opus call.
+
+### Comparison table: Opus 4.7 vs local qwen3:8b
+
+| Aspect | Claude Opus 4.7 | qwen3:8b (local) |
+|--------|-----------------|------------------|
+| Runs on | Anthropic's servers | Your hardware |
+| Cost per message | ~$0.01 to $0.02 | Free after hardware |
+| Privacy | Sent to Anthropic | Never leaves your PC |
+| Setup | Anthropic account + API key | Auto-configured on first launch |
+| Internet required | Yes | No, after model download |
+| Reasoning quality | Frontier tier | Good for most tasks |
+| Coding agent support | Yes | Yes |
+
+## Can I switch back to local mid-conversation?
+
+**Yes. The engine dropdown in the chat input changes the active engine for the next message, not retroactively.** You can start a conversation on Opus for the hard questions, flip to local for follow-ups, and everything stays in the same session and memory context.
+
+## Frequently asked questions
+
+### Does InnerZero store my Anthropic API key?
+
+InnerZero encrypts your API key and stores it on your machine using a key derived from your hardware ID. It never gets uploaded anywhere. If you uninstall InnerZero, the encrypted blob stays in your user data directory until you delete it yourself.
+
+### Will my Opus messages be used to train Claude?
+
+Per Anthropic's current policy, API calls are not used for training by default. That's different from the consumer Claude.ai interface. If you want the detailed comparison across all major cloud providers, a dedicated rundown is coming in this series.
+
+### Can I use Opus 4.7 without a paid Anthropic plan?
+
+You need an Anthropic account with API credit. There's a small free credit balance for testing, then pay-as-you-go after that. No subscription is required from InnerZero's side.
+
+### What happens if my Anthropic key runs out of credit?
+
+The API call fails with a credits-exhausted error. InnerZero catches this and falls back to local AI for that message so the conversation doesn't dead-end. You'll see a small notice in the chat explaining what happened.
+
+### Is there a simpler way to use Claude without managing my own key?
+
+InnerZero offers optional managed cloud plans starting at £9.99/month that bundle cloud API access without you having to set up keys. That's a separate feature from BYO. The [pricing page](/pricing) has the details.
+
+## Try it yourself
+
+[Download InnerZero](/download) for Windows, macOS, or Linux. It's free. You only pay Anthropic if you choose to use BYO with Opus, and the keys stay on your machine. New to the idea of a local AI assistant? [What is a local AI assistant](/blog/what-is-a-local-ai-assistant) is the right starting point. Curious about mixing local and cloud? [Local AI vs cloud AI](/blog/local-ai-vs-cloud-ai) covers the tradeoff.
