@@ -9,7 +9,7 @@ Website: https://innerzero.com
 Download: https://innerzero.com/download
 Company: Summers Solutions Ltd, a UK company based in Birmingham, England (Company No. 16448945)
 Data protection: ICO registered (registration ZC122497)
-Current version: v0.1.3 (April 2026)
+Current version: v0.1.4 (April 2026)
 Install sizes: 239 MB (Windows), 490 MB (macOS), 356 MB (Linux)
 Minimum requirements: 8 GB RAM, 10 GB free disk, modern 64-bit CPU (AVX2)
 Recommended: 16+ GB RAM, NVIDIA GPU with 6+ GB VRAM, SSD

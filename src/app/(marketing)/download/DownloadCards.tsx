@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, Monitor, Apple, Terminal } from "lucide-react";
 
-const VERSION = "0.1.3";
+const VERSION = "0.1.4";
 
 const PLATFORMS = [
   {

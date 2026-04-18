@@ -60,7 +60,7 @@ export default function DownloadPage() {
               href="/changelog"
               className="text-xs text-text-muted transition-colors hover:text-accent-gold"
             >
-              See what&apos;s new in v0.1.3
+              See what&apos;s new in v0.1.4
             </Link>
           </p>
         </div>
@@ -167,7 +167,7 @@ export default function DownloadPage() {
             applicationCategory: "UtilitiesApplication",
             applicationSubCategory: "AI Assistant",
             operatingSystem: "Windows, macOS, Linux",
-            softwareVersion: "0.1.3",
+            softwareVersion: "0.1.4",
             description:
               "A free private AI assistant that runs entirely on your PC. No cloud. No tracking. No subscription.",
             url: "https://innerzero.com",
@@ -185,7 +185,7 @@ export default function DownloadPage() {
                 price: "0",
                 priceCurrency: "GBP",
                 availability: "https://schema.org/InStock",
-                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.3.exe",
+                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.4.exe",
                 operatingSystem: "Windows 10, Windows 11",
               },
               {
@@ -194,7 +194,7 @@ export default function DownloadPage() {
                 price: "0",
                 priceCurrency: "GBP",
                 availability: "https://schema.org/InStock",
-                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.3-mac.dmg",
+                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.4-mac.dmg",
                 operatingSystem: "macOS 12 or later",
               },
               {
@@ -203,7 +203,7 @@ export default function DownloadPage() {
                 price: "0",
                 priceCurrency: "GBP",
                 availability: "https://schema.org/InStock",
-                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.3-x86_64.AppImage",
+                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.4-x86_64.AppImage",
                 operatingSystem: "Linux x86_64",
               },
             ],

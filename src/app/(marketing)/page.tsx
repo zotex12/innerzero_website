@@ -72,7 +72,7 @@ export default function Home() {
               applicationCategory: "UtilitiesApplication",
               applicationSubCategory: "AI Assistant",
               operatingSystem: "Windows, macOS, Linux",
-              softwareVersion: "0.1.2",
+              softwareVersion: "0.1.4",
               description:
                 "A free private AI assistant that runs entirely on your PC. No cloud. No tracking. No subscription.",
               url: "https://innerzero.com",

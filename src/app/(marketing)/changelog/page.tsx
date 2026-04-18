@@ -33,9 +33,50 @@ interface Release {
 
 const RELEASES: Release[] = [
   {
-    version: "0.1.3",
+    version: "0.1.4",
     date: "April 2026",
     latest: true,
+    groups: [
+      {
+        label: "New",
+        entries: [
+          { text: "Claude Opus 4.7 support. Use it with your own Anthropic API key in chat or with the coding specialist." },
+          { text: "Frontier model tier for datacenter-class hardware (256 GB+ RAM, 120 GB+ VRAM)." },
+          { text: "Enthusiast coding model tier for high-end workstations." },
+          { text: "Four new coding models: Qwen3 Coder Next, DeepSeek Coder V2, Codestral, and CodeGemma." },
+          { text: "Tier switch preview shows disk space required before you commit to the change." },
+          { text: "Uninstall downloaded models individually, with protection on any model currently assigned to an active role." },
+          { text: "Theme redeem codes now work reliably end to end." },
+        ],
+      },
+      {
+        label: "Improved",
+        entries: [
+          { text: "Coding agent reliability on long-running tasks." },
+          { text: "Model downloads auto-resume if your connection drops mid-way." },
+          { text: "LM Studio voice model picker now has feature parity with the Ollama picker." },
+          { text: "Cloud account connection has better error handling and retry behaviour." },
+          { text: "Memory system correctness across projects and specialists." },
+        ],
+      },
+      {
+        label: "Fixed",
+        entries: [
+          { text: "Specialist now connects correctly to remote Ollama servers on your network." },
+          { text: "Coding model dropdown shows all installed compatible models." },
+          { text: "Coding agent parser no longer strips code fences when writing markdown files." },
+          { text: "Coding agent can read files it wrote earlier in the same run." },
+          { text: "Removed duplicate strategy content in cloud prompts." },
+          { text: "Preference memories reach the assistant again." },
+          { text: "Working state no longer leaks between sessions." },
+          { text: "Fact verification works on the LM Studio backend." },
+        ],
+      },
+    ],
+  },
+  {
+    version: "0.1.3",
+    date: "April 2026",
     groups: [
       {
         label: "New",

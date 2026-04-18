@@ -11,7 +11,7 @@ Product type: Desktop AI assistant application
 Category: Local-first AI, private AI, offline AI, on-device AI
 Website: https://innerzero.com
 Download: https://innerzero.com/download
-Current version: v0.1.3 (released April 2026)
+Current version: v0.1.4 (released April 2026)
 Platforms: Windows 10/11 (64-bit), macOS 12+, Linux x86_64
 Company: Summers Solutions Ltd, Birmingham, England, UK
 UK company number: 16448945
@@ -389,24 +389,24 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 
 ## Windows 10/11
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.3.exe
-- Version: 0.1.3
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.4.exe
+- Version: 0.1.4
 - Size: 239 MB
 - Requirements: 64-bit, 8 GB+ RAM
 - Note: Windows may show a SmartScreen warning on first install. Click More Info then Run Anyway. The installer is signed by Summers Solutions Ltd.
 
 ## macOS 12+
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.3-mac.dmg
-- Version: 0.1.3
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.4-mac.dmg
+- Version: 0.1.4
 - Size: 490 MB
 - Requirements: Intel or Apple Silicon, 8 GB+ RAM
 - Note: macOS may block the app on first launch. Right-click the app, select Open, then click Open again. This is because the app is not yet notarised.
 
 ## Linux x86_64
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.3-x86_64.AppImage
-- Version: 0.1.3
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.4-x86_64.AppImage
+- Version: 0.1.4
 - Size: 356 MB
 - Requirements: x86_64, glibc 2.31+, 8 GB+ RAM
 - Note: Install system dependencies first: sudo apt install espeak-ng portaudio19-dev xclip
