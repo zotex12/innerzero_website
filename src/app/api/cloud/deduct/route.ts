@@ -73,11 +73,12 @@ export async function POST(request: Request) {
     }
   }
 
-  // Look up model tier to get usage_multiplier
+  // Look up model tier to get usage_multiplier.
+  // Use id, not name — the DB has id='auto', name='Auto'. Phase 90 Batch 7 fix.
   const { data: tier } = await admin
     .from("model_tiers")
     .select("usage_multiplier")
-    .eq("name", body.model_tier)
+    .eq("id", body.model_tier)
     .eq("active", true)
     .single();
 

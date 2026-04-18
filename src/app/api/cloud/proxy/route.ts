@@ -50,7 +50,7 @@ export async function POST(request: Request) {
   try {
     body = (await request.json()) as ProxyBody;
   } catch {
-    console.error("[proxy 400] invalid_json_body");
+    console.debug("[proxy 400] invalid_json_body");
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
 
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
   const requestId = body.request_id;
   if (requestId !== undefined) {
     if (typeof requestId !== "string" || !REQUEST_ID_PATTERN.test(requestId)) {
-      console.error(
+      console.debug(
         "[proxy 400] invalid_request_id, type=", typeof requestId,
         "len=", typeof requestId === "string" ? requestId.length : -1,
       );
@@ -71,7 +71,7 @@ export async function POST(request: Request) {
 
   // Validate messages
   if (!Array.isArray(body.messages) || body.messages.length === 0) {
-    console.error(
+    console.debug(
       "[proxy 400] messages_invalid, is_array=", Array.isArray(body.messages),
       "length=", Array.isArray(body.messages) ? body.messages.length : -1,
     );
@@ -90,7 +90,7 @@ export async function POST(request: Request) {
     typeof body.system_prompt === "string" &&
     body.system_prompt.length > MAX_SYSTEM_PROMPT_CHARS
   ) {
-    console.error(
+    console.debug(
       "[proxy 400] system_prompt_too_long, len=", body.system_prompt.length,
       "max=", MAX_SYSTEM_PROMPT_CHARS,
     );
@@ -115,7 +115,7 @@ export async function POST(request: Request) {
       (msg.role !== "user" && msg.role !== "assistant") ||
       typeof msg.content !== "string"
     ) {
-      console.error(
+      console.debug(
         "[proxy 400] message_shape_invalid, role=", msg?.role,
         "content_type=", typeof msg?.content,
         "messages_count=", messages.length,
@@ -127,7 +127,7 @@ export async function POST(request: Request) {
     }
     if (msg.content.length > maxLenSeen) maxLenSeen = msg.content.length;
     if (msg.content.length > MAX_MESSAGE_CONTENT_CHARS) {
-      console.error(
+      console.debug(
         "[proxy 400] message_too_long, max_len_seen=", maxLenSeen,
         "cap=", MAX_MESSAGE_CONTENT_CHARS,
         "messages_count=", messages.length,
@@ -182,16 +182,17 @@ export async function POST(request: Request) {
     );
   }
 
-  // Get tier config
+  // Get tier config.
+  // Use id, not name — the DB has id='auto', name='Auto'. Phase 90 Batch 7 fix.
   const { data: tier } = await admin
     .from("model_tiers")
-    .select("name, usage_multiplier, models")
-    .eq("name", requestedTier)
+    .select("id, usage_multiplier, models")
+    .eq("id", requestedTier)
     .eq("active", true)
     .single();
 
   if (!tier) {
-    console.error("[proxy 400] model_tier_invalid, tier=", requestedTier);
+    console.debug("[proxy 400] model_tier_invalid, tier=", requestedTier);
     return NextResponse.json(
       { error: `Unknown or inactive model tier: ${requestedTier}` },
       { status: 400 }
@@ -238,7 +239,7 @@ export async function POST(request: Request) {
 
     const hasEligiblePack = (paygPacks ?? []).some((p) => p.usage_remaining >= cost);
     if (!hasEligiblePack) {
-      console.error(
+      console.debug(
         "[proxy 402] insufficient_usage (pre-deduct), sub_balance=", subscriptionBalance,
         "cost=", cost,
         "payg_pack_count=", (paygPacks ?? []).length,
@@ -349,7 +350,7 @@ export async function POST(request: Request) {
             userId, cost, requestedTier, provider, modelId, requestId, costPence
           );
           if (newBalance === "spending_cap_exceeded") {
-            console.error(
+            console.debug(
               "[proxy 402] spending_cap_exceeded, cost_pence=", costPence,
               "tier=", requestedTier,
               "provider=", provider,
