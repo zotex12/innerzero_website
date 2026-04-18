@@ -189,6 +189,12 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId
       );
     }
   } else if (cloudPlan.plan_type === "payg") {
+    // PAYG credits live ONLY in usage_packs. The subscription balance
+    // (profiles.usage_balance) MUST NOT be touched here — doing so would
+    // double-grant, since the deduct path draws from packs when subscription
+    // is insufficient. Historical bug: this branch used grantUsage() which
+    // also incremented usage_balance via atomic_grant_subscription, giving
+    // every PAYG buyer 2x the credits they paid for.
     await admin.from("usage_packs").insert({
       user_id: profile.id,
       plan_id: cloudPlan.id,
@@ -196,14 +202,32 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId
       usage_remaining: cloudPlan.usage_amount,
     });
 
-    await grantUsage(
-      profile.id,
-      cloudPlan.usage_amount,
-      "payg_purchase",
-      `${cloudPlan.name} credit pack purchased`,
-      session.id,
-      eventId
-    );
+    // Read the current balance for an accurate (unchanged) balance_after on
+    // the audit row. This is not a RMW — we never write usage_balance here.
+    const { data: balProfile } = await admin
+      .from("profiles")
+      .select("usage_balance")
+      .eq("id", profile.id)
+      .single();
+    const balanceAfter = balProfile?.usage_balance ?? 0;
+
+    // Idempotency: UNIQUE index on usage_transactions.request_id blocks
+    // replays — 23505 on conflict means another handler already processed
+    // this Stripe event, so no-op. Same pattern as grantUsage().
+    const { error: txInsertError } = await admin
+      .from("usage_transactions")
+      .insert({
+        user_id: profile.id,
+        type: "payg_purchase",
+        amount: cloudPlan.usage_amount,
+        balance_after: balanceAfter,
+        description: `${cloudPlan.name} credit pack purchased`,
+        stripe_session_id: session.id,
+        request_id: eventId,
+      });
+    if (txInsertError && txInsertError.code !== "23505") {
+      throw txInsertError;
+    }
   }
 }
 
