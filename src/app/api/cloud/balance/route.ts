@@ -34,7 +34,7 @@ export async function GET(request: Request) {
   // Get active PAYG packs
   const { data: paygPacks } = await admin
     .from("usage_packs")
-    .select("id, usage_remaining, expires_at")
+    .select("id, usage_granted, usage_remaining, expires_at")
     .eq("user_id", auth.user.id)
     .gt("usage_remaining", 0)
     .or("expires_at.is.null,expires_at.gt." + new Date().toISOString())
