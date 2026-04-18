@@ -148,14 +148,22 @@ export async function POST(request: Request) {
     // RPC returned null: concurrent deduction drained the balance. Fall through to PAYG.
   }
 
-  // Subscription balance insufficient, try PAYG packs (oldest first, skip expired)
-  const { data: paygPacks } = await admin
+  // Subscription balance insufficient, try PAYG packs (oldest first, skip expired).
+  // Schema has purchased_at, not created_at — regression guard.
+  const { data: paygPacks, error: packsError } = await admin
     .from("usage_packs")
     .select("id, usage_remaining")
     .eq("user_id", auth.user.id)
     .gt("usage_remaining", 0)
     .or("expires_at.is.null,expires_at.gt." + new Date().toISOString())
-    .order("created_at", { ascending: true });
+    .order("purchased_at", { ascending: true });
+  if (packsError) {
+    console.error("[cloud/deduct] usage_packs query failed", {
+      user_id: auth.user.id,
+      code: packsError.code,
+      message: packsError.message,
+    });
+  }
 
   let deductedPackId: string | null = null;
   let deductedPackRemaining: number | null = null;

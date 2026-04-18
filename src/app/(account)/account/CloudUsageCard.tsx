@@ -165,12 +165,13 @@ export function CloudUsageCard({
     const supabase = createClient();
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (!user) return;
+      // Schema has purchased_at, not created_at — regression guard.
       supabase
         .from("usage_packs")
         .select("id, usage_remaining, expires_at")
         .eq("user_id", user.id)
         .gt("usage_remaining", 0)
-        .order("created_at", { ascending: true })
+        .order("purchased_at", { ascending: true })
         .then(({ data }) => {
           if (data) setPaygPacks(data as PaygPack[]);
         });

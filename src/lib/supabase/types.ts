@@ -291,20 +291,27 @@ export type Database = {
         Relationships: [];
       };
       usage_packs: {
+        // Actual DB columns verified via introspection:
+        //   id, user_id, plan_id, usage_granted, usage_remaining,
+        //   stripe_session_id, purchased_at, expires_at
+        // The prior type claimed created_at which does not exist and caused
+        // every ORDER BY created_at to return 42703 → empty response.
         Row: {
           id: string;
           user_id: string;
           plan_id: string;
           usage_granted: number;
           usage_remaining: number;
+          stripe_session_id: string | null;
+          purchased_at: string;
           expires_at: string | null;
-          created_at: string;
         };
         Insert: {
           user_id: string;
           plan_id: string;
           usage_granted: number;
           usage_remaining: number;
+          stripe_session_id?: string | null;
           expires_at?: string | null;
         };
         Update: {

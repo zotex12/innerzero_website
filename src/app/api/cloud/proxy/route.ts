@@ -229,13 +229,21 @@ export async function POST(request: Request) {
   if (subscriptionBalance < cost) {
     // Verify at least one PAYG pack has enough balance before calling the provider.
     // The actual deduction happens after the provider response below.
-    const { data: paygPacks } = await admin
+    // Schema has purchased_at, not created_at — regression guard.
+    const { data: paygPacks, error: packsError } = await admin
       .from("usage_packs")
       .select("id, usage_remaining")
       .eq("user_id", userId)
       .gt("usage_remaining", 0)
       .or("expires_at.is.null,expires_at.gt." + new Date().toISOString())
-      .order("created_at", { ascending: true });
+      .order("purchased_at", { ascending: true });
+    if (packsError) {
+      console.error("[cloud/proxy] usage_packs pre-check query failed", {
+        user_id: userId,
+        code: packsError.code,
+        message: packsError.message,
+      });
+    }
 
     const hasEligiblePack = (paygPacks ?? []).some((p) => p.usage_remaining >= cost);
     if (!hasEligiblePack) {
@@ -407,13 +415,21 @@ export async function POST(request: Request) {
 
         if (deductSource === "payg") {
           // Atomic PAYG deduction with fall-through to the next eligible pack.
-          const { data: eligiblePacks } = await admin
+          // Schema has purchased_at, not created_at — regression guard.
+          const { data: eligiblePacks, error: eligiblePacksError } = await admin
             .from("usage_packs")
             .select("id, usage_remaining")
             .eq("user_id", userId)
             .gt("usage_remaining", 0)
             .or("expires_at.is.null,expires_at.gt." + new Date().toISOString())
-            .order("created_at", { ascending: true });
+            .order("purchased_at", { ascending: true });
+          if (eligiblePacksError) {
+            console.error("[cloud/proxy] usage_packs deduct query failed", {
+              user_id: userId,
+              code: eligiblePacksError.code,
+              message: eligiblePacksError.message,
+            });
+          }
 
           let packDeducted = false;
           for (const pack of eligiblePacks ?? []) {

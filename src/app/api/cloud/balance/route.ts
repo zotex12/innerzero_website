@@ -31,14 +31,25 @@ export async function GET(request: Request) {
     tierAccess = cloudPlan?.tier_access ?? [];
   }
 
-  // Get active PAYG packs
-  const { data: paygPacks } = await admin
+  // Get active PAYG packs.
+  // Schema has purchased_at, not created_at — regression guard. Ordering
+  // by a non-existent column makes PostgREST return 42703 with data=null,
+  // which silently coalesced to [] and masked every pack in production
+  // until a dev DIAG surfaced it.
+  const { data: paygPacks, error: packsError } = await admin
     .from("usage_packs")
     .select("id, usage_granted, usage_remaining, expires_at")
     .eq("user_id", auth.user.id)
     .gt("usage_remaining", 0)
     .or("expires_at.is.null,expires_at.gt." + new Date().toISOString())
-    .order("created_at", { ascending: true });
+    .order("purchased_at", { ascending: true });
+  if (packsError) {
+    console.error("[balance] usage_packs query failed", {
+      user_id: auth.user.id,
+      code: packsError.code,
+      message: packsError.message,
+    });
+  }
 
   // Get all active model tiers
   const { data: modelTiers } = await admin
@@ -61,7 +72,9 @@ export async function GET(request: Request) {
     spending_cap_pence: profile.spending_cap_pence,
     spending_this_cycle_pence: profile.spending_this_cycle_pence ?? 0,
     tier_access: tierAccess,
-    payg_packs: paygPacks ?? [],
+    // null (not []) when the query actually failed, so clients can
+    // distinguish a read error from a genuinely empty pack list.
+    payg_packs: packsError ? null : (paygPacks ?? []),
     model_tiers: modelTiers ?? [],
   });
 }
