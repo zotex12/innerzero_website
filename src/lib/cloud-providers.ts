@@ -43,8 +43,15 @@ async function callDeepSeek(
     openaiMessages.push({ role: m.role, content: m.content });
   }
 
+  // Azure OpenAI-compatible endpoint on Foundry deployment. URL is the v1
+  // chat/completions route, auth is Bearer, and the body.model field holds
+  // the Azure deployment name "DeepSeek-V3.2" (dot, not hyphen). Do NOT
+  // restore the legacy /openai/deployments/<name>/ pattern — that returns
+  // 404 against this deployment. `modelId` is the provider-level id from
+  // the DB tier config (e.g. "deepseek-chat") used for cost lookup and
+  // response logging; it must not be used for Azure routing.
   const url =
-    "https://innerzero-resource.openai.azure.com/openai/deployments/DeepSeek-V3-2/chat/completions?api-version=2024-12-01-preview";
+    "https://innerzero-resource.openai.azure.com/openai/v1/chat/completions";
 
   let res: Response;
   try {
@@ -52,9 +59,10 @@ async function callDeepSeek(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "api-key": apiKey,
+        "Authorization": `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
+        model: "DeepSeek-V3.2",
         messages: openaiMessages,
         max_tokens: 2048,
       }),
@@ -226,8 +234,10 @@ export const PROVIDER_COSTS: Record<
   string,
   { input_per_1k: number; output_per_1k: number }
 > = {
-  // Azure DeepSeek V3.2: $0.58/1M input, $1.68/1M output
-  "DeepSeek-V3-2": { input_per_1k: 0.0459, output_per_1k: 0.1328 },
+  // Azure DeepSeek V3.2: $0.58/1M input, $1.68/1M output. Key matches the
+  // provider-level model_id from model_tiers.models (proxy passes that in).
+  // The Azure deployment name "DeepSeek-V3.2" lives only inside callDeepSeek.
+  "deepseek-chat": { input_per_1k: 0.0459, output_per_1k: 0.1328 },
   // Google Gemini 2.5 Flash: $0.30/1M input, $2.50/1M output
   "gemini-2.5-flash": { input_per_1k: 0.0237, output_per_1k: 0.1975 },
   // Google Gemini 2.5 Flash-Lite: $0.10/1M input, $0.40/1M output
