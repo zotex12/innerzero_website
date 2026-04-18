@@ -50,6 +50,7 @@ export async function POST(request: Request) {
   try {
     body = (await request.json()) as ProxyBody;
   } catch {
+    console.error("[proxy 400] invalid_json_body");
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
 
@@ -57,6 +58,10 @@ export async function POST(request: Request) {
   const requestId = body.request_id;
   if (requestId !== undefined) {
     if (typeof requestId !== "string" || !REQUEST_ID_PATTERN.test(requestId)) {
+      console.error(
+        "[proxy 400] invalid_request_id, type=", typeof requestId,
+        "len=", typeof requestId === "string" ? requestId.length : -1,
+      );
       return NextResponse.json(
         { error: "request_id must be 1-64 alphanumeric/hyphen characters." },
         { status: 400 }
@@ -66,6 +71,10 @@ export async function POST(request: Request) {
 
   // Validate messages
   if (!Array.isArray(body.messages) || body.messages.length === 0) {
+    console.error(
+      "[proxy 400] messages_invalid, is_array=", Array.isArray(body.messages),
+      "length=", Array.isArray(body.messages) ? body.messages.length : -1,
+    );
     return NextResponse.json(
       { error: "messages array is required and must not be empty." },
       { status: 400 }
@@ -81,6 +90,10 @@ export async function POST(request: Request) {
     typeof body.system_prompt === "string" &&
     body.system_prompt.length > MAX_SYSTEM_PROMPT_CHARS
   ) {
+    console.error(
+      "[proxy 400] system_prompt_too_long, len=", body.system_prompt.length,
+      "max=", MAX_SYSTEM_PROMPT_CHARS,
+    );
     return NextResponse.json(
       {
         error: "system_prompt_too_long",
@@ -94,6 +107,7 @@ export async function POST(request: Request) {
   const requestedTier = body.model_tier || "auto";
 
   // Validate message format
+  let maxLenSeen = 0;
   for (const msg of messages) {
     if (
       !msg.role ||
@@ -101,12 +115,23 @@ export async function POST(request: Request) {
       (msg.role !== "user" && msg.role !== "assistant") ||
       typeof msg.content !== "string"
     ) {
+      console.error(
+        "[proxy 400] message_shape_invalid, role=", msg?.role,
+        "content_type=", typeof msg?.content,
+        "messages_count=", messages.length,
+      );
       return NextResponse.json(
         { error: "Each message must have role (user|assistant) and content (string)." },
         { status: 400 }
       );
     }
+    if (msg.content.length > maxLenSeen) maxLenSeen = msg.content.length;
     if (msg.content.length > MAX_MESSAGE_CONTENT_CHARS) {
+      console.error(
+        "[proxy 400] message_too_long, max_len_seen=", maxLenSeen,
+        "cap=", MAX_MESSAGE_CONTENT_CHARS,
+        "messages_count=", messages.length,
+      );
       return NextResponse.json(
         {
           error: "message_too_long",
@@ -166,6 +191,7 @@ export async function POST(request: Request) {
     .single();
 
   if (!tier) {
+    console.error("[proxy 400] model_tier_invalid, tier=", requestedTier);
     return NextResponse.json(
       { error: `Unknown or inactive model tier: ${requestedTier}` },
       { status: 400 }
@@ -212,6 +238,12 @@ export async function POST(request: Request) {
 
     const hasEligiblePack = (paygPacks ?? []).some((p) => p.usage_remaining >= cost);
     if (!hasEligiblePack) {
+      console.error(
+        "[proxy 402] insufficient_usage (pre-deduct), sub_balance=", subscriptionBalance,
+        "cost=", cost,
+        "payg_pack_count=", (paygPacks ?? []).length,
+        "has_plan=", hasPlan,
+      );
       // 402 sub-codes: "insufficient_usage" and "spending_cap_exceeded".
       // Keep both aligned — desktop branches on the body `error` field.
       return NextResponse.json(
@@ -317,6 +349,11 @@ export async function POST(request: Request) {
             userId, cost, requestedTier, provider, modelId, requestId, costPence
           );
           if (newBalance === "spending_cap_exceeded") {
+            console.error(
+              "[proxy 402] spending_cap_exceeded, cost_pence=", costPence,
+              "tier=", requestedTier,
+              "provider=", provider,
+            );
             return NextResponse.json(
               { error: "spending_cap_exceeded" },
               { status: 402 }
