@@ -343,6 +343,38 @@ export function CloudUsageCard({
         </div>
       )}
 
+      {/* Cancelled-with-retention banner. Shown after subscription.deleted
+          has fired (plan flipped to free) but the user still has spendable
+          credits from the cycle they paid for, and/or PAYG packs. Mirrors
+          the desktop settings.js inline notice — retained credits are valid,
+          sub credits don't renew, resubscribe or top up to continue past them. */}
+      {!hasPlan && (usageBalance > 0 || paygTotal > 0) && (
+        <div className="mt-4 rounded-lg border border-warning/40 bg-warning/5 px-4 py-3 text-sm">
+          <p className="text-text-primary">
+            Your plan was cancelled. You still have{" "}
+            {usageBalance > 0 && (
+              <>
+                <span className="font-medium">
+                  {usageBalance.toLocaleString("en-GB")}
+                </span>{" "}
+                subscription credits
+              </>
+            )}
+            {usageBalance > 0 && paygTotal > 0 ? " and " : ""}
+            {paygTotal > 0 && (
+              <>
+                <span className="font-medium">
+                  {paygTotal.toLocaleString("en-GB")}
+                </span>{" "}
+                top-up credits
+              </>
+            )}{" "}
+            to use. Subscription credits don&apos;t renew &mdash; top up or
+            resubscribe to continue past them.
+          </p>
+        </div>
+      )}
+
       {/* Action buttons */}
       <div className="mt-4 flex flex-wrap gap-3">
         {stripeCustomerId && (
