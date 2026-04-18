@@ -258,13 +258,29 @@ async function handleSubscriptionUpdated(
     // Cloud subscription update
     const { data: profile } = await admin
       .from("profiles")
-      .select("id, plan, usage_monthly_allowance, subscription_status")
+      .select("id, plan, usage_monthly_allowance, subscription_status, cancel_at_period_end")
       .eq("stripe_customer_id", customerId)
       .single();
 
     if (!profile) return;
 
-    // Idempotency: skip if state already matches (same plan, same status)
+    // Always mirror Stripe's cancel_at_period_end bit. Handles BOTH directions:
+    // a fresh cancellation (false → true) and an un-cancel from the portal
+    // (true → false). Written before the idempotency short-circuit below so
+    // the flag still flips even when plan/status/allowance are unchanged
+    // (the common cancel-at-period-end case where only this bit moves).
+    const cancelAtPeriodEnd = subscription.cancel_at_period_end === true;
+    if (profile.cancel_at_period_end !== cancelAtPeriodEnd) {
+      await admin
+        .from("profiles")
+        .update({ cancel_at_period_end: cancelAtPeriodEnd })
+        .eq("id", profile.id);
+    }
+
+    // Idempotency: skip if state already matches (same plan, same status).
+    // Cancel-at-period-end keeps plan/status/allowance unchanged (the sub is
+    // still active through billing_cycle_end), so the cancel flag is handled
+    // above — this short-circuit then correctly no-ops the rest.
     if (
       profile.plan === cloudPlan.id &&
       profile.subscription_status === status &&
@@ -367,13 +383,16 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
       return;
     }
 
-    // Set plan to free, zero allowance, but keep usage_balance
+    // Set plan to free, zero allowance, keep usage_balance, and clear the
+    // cancel_at_period_end flag — the countdown is over, the flag would be
+    // stale on a now-free account.
     await admin
       .from("profiles")
       .update({
         plan: "free",
         usage_monthly_allowance: 0,
         subscription_status: "cancelled",
+        cancel_at_period_end: false,
       })
       .eq("id", profile.id);
 

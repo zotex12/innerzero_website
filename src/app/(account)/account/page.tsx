@@ -161,6 +161,7 @@ export default async function AccountPage() {
           usageMonthlyAllowance={profile?.usage_monthly_allowance ?? 0}
           billingCycleEnd={profile?.billing_cycle_end ?? null}
           stripeCustomerId={profile?.stripe_customer_id ?? null}
+          cancelAtPeriodEnd={profile?.cancel_at_period_end ?? false}
         />
 
         {/* InnerZero links */}

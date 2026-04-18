@@ -36,6 +36,7 @@ interface CloudUsageCardProps {
   usageMonthlyAllowance: number;
   billingCycleEnd: string | null;
   stripeCustomerId: string | null;
+  cancelAtPeriodEnd: boolean;
 }
 
 function formatDate(iso: string): string {
@@ -138,6 +139,7 @@ export function CloudUsageCard({
   usageMonthlyAllowance,
   billingCycleEnd,
   stripeCustomerId,
+  cancelAtPeriodEnd,
 }: CloudUsageCardProps) {
   const [paygPacks, setPaygPacks] = useState<PaygPack[]>([]);
   const [paygPlans, setPaygPlans] = useState<CloudPlan[]>([]);
@@ -314,6 +316,32 @@ export function CloudUsageCard({
           </div>
         );
       })() : null}
+
+      {/* Cancel-at-period-end banner. Amber, not red — this is informative,
+          not an error. Stripe portal's "Renew" button is the un-cancel path,
+          so the helper text nudges the user there rather than adding a
+          separate endpoint. Packs keep working after the sub ends; the
+          subscription itself is still active through billing_cycle_end. */}
+      {cancelAtPeriodEnd && hasPlan && (
+        <div className="mt-4 rounded-lg border border-warning/40 bg-warning/5 px-4 py-3 text-sm">
+          <p className="text-text-primary">
+            {planName ? `Your ${planName} plan` : "Your plan"} cancels on{" "}
+            <span className="font-medium">
+              {billingCycleEnd ? formatDate(billingCycleEnd) : "the end of this billing period"}
+            </span>
+            . You can keep using your {usageBalance.toLocaleString("en-GB")}{" "}
+            subscription credits
+            {paygTotal > 0
+              ? ` and ${paygTotal.toLocaleString("en-GB")} top-up credits `
+              : " "}
+            until then. Top-up credits continue working after the plan ends.
+          </p>
+          <p className="mt-2 text-xs text-text-muted">
+            Changed your mind? Open Manage Billing and click Renew in the
+            Stripe portal to reactivate.
+          </p>
+        </div>
+      )}
 
       {/* Action buttons */}
       <div className="mt-4 flex flex-wrap gap-3">

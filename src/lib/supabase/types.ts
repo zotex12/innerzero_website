@@ -26,6 +26,7 @@ export type Database = {
           spending_cap_pence: number | null;
           spending_this_cycle_pence: number;
           usage_alerts_sent: string[];
+          cancel_at_period_end: boolean;
           created_at: string;
           updated_at: string;
         };
@@ -53,6 +54,7 @@ export type Database = {
           spending_cap_pence?: number | null;
           spending_this_cycle_pence?: number;
           usage_alerts_sent?: string[];
+          cancel_at_period_end?: boolean;
         };
         Update: {
           id?: string;
@@ -78,6 +80,7 @@ export type Database = {
           spending_cap_pence?: number | null;
           spending_this_cycle_pence?: number;
           usage_alerts_sent?: string[];
+          cancel_at_period_end?: boolean;
           updated_at?: string;
         };
         Relationships: [];
