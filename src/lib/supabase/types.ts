@@ -229,7 +229,7 @@ export type Database = {
           display_name: string;
           cost_per_request: number;
           usage_multiplier: number;
-          models: string[];
+          models: { model_id: string; provider: string; priority?: number; display_name?: string }[];
           sort_order: number;
           active: boolean;
           created_at: string;
@@ -240,7 +240,7 @@ export type Database = {
           display_name: string;
           cost_per_request: number;
           usage_multiplier?: number;
-          models?: string[];
+          models?: { model_id: string; provider: string; priority?: number; display_name?: string }[];
           sort_order?: number;
           active?: boolean;
         };
@@ -249,7 +249,7 @@ export type Database = {
           display_name?: string;
           cost_per_request?: number;
           usage_multiplier?: number;
-          models?: string[];
+          models?: { model_id: string; provider: string; priority?: number; display_name?: string }[];
           sort_order?: number;
           active?: boolean;
         };

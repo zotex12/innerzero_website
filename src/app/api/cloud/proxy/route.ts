@@ -258,28 +258,62 @@ export async function POST(request: Request) {
     deductSource = "payg";
   }
 
-  // Select models from tier config
-  const models = tier.models as string[] | null;
-  if (!models || models.length === 0) {
+  // Select models from tier config.
+  // model_tiers.models is a JSONB array of {model_id, provider, priority?,
+  // display_name?} objects. Sorted by priority ascending with fallback to
+  // source order.
+  type TierModelEntry = {
+    model_id: string;
+    provider: string;
+    priority?: number;
+    display_name?: string;
+  };
+  const models = tier.models as TierModelEntry[] | null;
+  if (!Array.isArray(models)) {
+    console.error(
+      "[cloud/proxy] tier.models is not an array, typeof=", typeof models,
+      "tier=", requestedTier,
+    );
+    return NextResponse.json(
+      { error: "Invalid tier configuration." },
+      { status: 500 }
+    );
+  }
+  if (models.length === 0) {
     return NextResponse.json(
       { error: "No models configured for this tier." },
       { status: 500 }
     );
   }
 
-  // Parse model entries: ["provider/model_id", ...]. Require exactly one
-  // forward slash — skip malformed entries so future model ids containing
-  // a slash cannot be silently mis-routed. Do not log user id or request
-  // content; only the offending entry string.
   const MAX_ATTEMPTS = 2;
-  const candidates = models.slice(0, MAX_ATTEMPTS).map((entry) => {
-    const parts = entry.split("/");
-    if (parts.length !== 2 || !parts[0] || !parts[1]) {
-      console.warn(`[cloud/proxy] malformed model entry, skipping: ${entry}`);
-      return null;
-    }
-    return { provider: parts[0], modelId: parts[1] };
-  }).filter((c): c is { provider: string; modelId: string } => c !== null);
+  const validated = models
+    .map((entry, idx) => ({ entry, idx }))
+    .filter(({ entry }) => {
+      if (
+        !entry ||
+        typeof entry.model_id !== "string" ||
+        entry.model_id.length === 0 ||
+        typeof entry.provider !== "string" ||
+        entry.provider.length === 0
+      ) {
+        console.warn(
+          "[cloud/proxy] malformed tier model entry, skipping; missing model_id or provider"
+        );
+        return false;
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      const pa = typeof a.entry.priority === "number" ? a.entry.priority : Number.MAX_SAFE_INTEGER;
+      const pb = typeof b.entry.priority === "number" ? b.entry.priority : Number.MAX_SAFE_INTEGER;
+      if (pa !== pb) return pa - pb;
+      return a.idx - b.idx;
+    });
+
+  const candidates = validated
+    .slice(0, MAX_ATTEMPTS)
+    .map(({ entry }) => ({ provider: entry.provider, modelId: entry.model_id }));
 
   if (candidates.length === 0) {
     return NextResponse.json(
