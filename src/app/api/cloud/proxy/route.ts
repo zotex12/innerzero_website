@@ -27,6 +27,13 @@ const MAX_MESSAGE_EXCHANGES = 10; // 5 exchanges = 10 messages (user + assistant
 const MAX_MESSAGE_CONTENT_CHARS = 50_000;
 const REQUEST_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 
+// Cascade kill-switch. Defaults on; set Vercel env
+// CLOUD_PROXY_CASCADE_ENABLED=false to disable fallback across all cloud
+// proxy requests without a redeploy cycle (operational rollback for cost
+// testing or incident response). When off, the first provider error
+// propagates directly to the user via the existing 502 path.
+const CASCADE_ENABLED = process.env.CLOUD_PROXY_CASCADE_ENABLED !== "false";
+
 interface ProxyMessage {
   role: "user" | "assistant";
   content: string;
@@ -352,8 +359,13 @@ export async function POST(request: Request) {
     );
   }
 
-  // Use shorter timeout when fallback is available
-  const timeoutMs = candidates.length > 1 ? 15_000 : 30_000;
+  // Use shorter timeout when fallback is available. 10s per provider is
+  // generally sufficient for first-token latency on healthy providers and
+  // bounds the ghost-generation window (the cancelled provider\u2019s
+  // upstream compute keeps running server-side even after the proxy
+  // aborts). 30s retained for single-candidate tiers since there is no
+  // fallback to cascade to.
+  const timeoutMs = candidates.length > 1 ? 10_000 : 30_000;
 
   // Provider fallback loop
   let lastError: unknown = null;
@@ -605,7 +617,11 @@ export async function POST(request: Request) {
     } catch (err) {
       lastError = err;
 
-      // Only retry on provider-side errors (timeout, 5xx, connection)
+      // Only retry on provider-side errors (timeout, 5xx, connection).
+      // The CASCADE_ENABLED kill-switch short-circuits the fallback loop
+      // without removing the code path — set env to "false" to disable
+      // cross-provider cascade entirely; first-provider error then
+      // falls through to the 502 response below.
       if (err instanceof ProviderUnavailableError) {
         console.log(
           JSON.stringify({
@@ -617,8 +633,10 @@ export async function POST(request: Request) {
             model_id: modelId,
             error: err.message.slice(0, 80),
             attempt: candidates.indexOf(candidate) + 1,
+            cascade_enabled: CASCADE_ENABLED,
           })
         );
+        if (!CASCADE_ENABLED) break;
         continue; // try next provider
       }
 

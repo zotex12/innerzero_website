@@ -68,8 +68,14 @@ async function callDeepSeek(
       }),
       signal: AbortSignal.timeout(timeoutMs),
     });
-  } catch {
-    throw new ProviderUnavailableError("deepseek", "timeout or connection error");
+  } catch (err) {
+    // Distinguish timeout/abort from other connection failures so cascade
+    // logs can measure rate-by-cause (audit observability gap).
+    const name = (err as { name?: string } | null)?.name;
+    const reason = (name === "TimeoutError" || name === "AbortError")
+      ? "timeout"
+      : "connection_error";
+    throw new ProviderUnavailableError("deepseek", reason);
   }
 
   if (!res.ok) {
@@ -85,7 +91,16 @@ async function callDeepSeek(
     );
   }
 
-  const data = await res.json();
+  // Body read is wrapped: AbortError firing between headers and body
+  // completion was previously an uncaught DOMException that broke the
+  // cascade loop (non-ProviderUnavailableError → break path in proxy).
+  // Now it throws body_read_failed so the next candidate is tried.
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    throw new ProviderUnavailableError("deepseek", "body_read_failed");
+  }
   const choice = data.choices?.[0];
 
   return {
@@ -134,8 +149,12 @@ async function callGoogle(
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(timeoutMs),
     });
-  } catch {
-    throw new ProviderUnavailableError("google", "timeout or connection error");
+  } catch (err) {
+    const name = (err as { name?: string } | null)?.name;
+    const reason = (name === "TimeoutError" || name === "AbortError")
+      ? "timeout"
+      : "connection_error";
+    throw new ProviderUnavailableError("google", reason);
   }
 
   if (!res.ok) {
@@ -147,7 +166,13 @@ async function callGoogle(
     );
   }
 
-  const data = await res.json();
+  // See callDeepSeek — wrap body read so mid-body aborts cascade cleanly.
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    throw new ProviderUnavailableError("google", "body_read_failed");
+  }
   const candidate = data.candidates?.[0];
   const text =
     candidate?.content?.parts?.map((p: { text?: string }) => p.text ?? "").join("") ?? "";
@@ -198,8 +223,12 @@ async function callAnthropic(
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(timeoutMs),
     });
-  } catch {
-    throw new ProviderUnavailableError("anthropic", "timeout or connection error");
+  } catch (err) {
+    const name = (err as { name?: string } | null)?.name;
+    const reason = (name === "TimeoutError" || name === "AbortError")
+      ? "timeout"
+      : "connection_error";
+    throw new ProviderUnavailableError("anthropic", reason);
   }
 
   if (!res.ok) {
@@ -211,7 +240,13 @@ async function callAnthropic(
     );
   }
 
-  const data = await res.json();
+  // See callDeepSeek — wrap body read so mid-body aborts cascade cleanly.
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    throw new ProviderUnavailableError("anthropic", "body_read_failed");
+  }
   const text =
     data.content
       ?.filter((b: { type: string }) => b.type === "text")
