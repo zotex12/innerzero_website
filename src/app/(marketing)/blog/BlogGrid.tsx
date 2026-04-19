@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { BlogMeta } from "@/lib/blog";
+import { TimeAgo } from "@/components/ui/TimeAgo";
 
 interface Props {
   posts: BlogMeta[];
@@ -73,7 +74,7 @@ export function BlogGrid({ posts, tags }: Props) {
               {post.description}
             </p>
             <div className="mt-4 flex items-center gap-3 text-xs text-text-muted">
-              <span>{post.date}</span>
+              <TimeAgo date={post.date} />
               <span>{post.readingTime}</span>
               <span>{post.author}</span>
             </div>

@@ -4,6 +4,7 @@ import { createMetadata } from "@/lib/metadata";
 import { getAllPosts, getAllTags } from "@/lib/blog";
 import Link from "next/link";
 import { BlogGrid } from "./BlogGrid";
+import { TimeAgo } from "@/components/ui/TimeAgo";
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/blog" },
@@ -59,7 +60,7 @@ export default function BlogPage() {
                 {featured.description}
               </p>
               <div className="mt-4 flex items-center gap-4 text-sm text-text-muted">
-                <span>{featured.date}</span>
+                <TimeAgo date={featured.date} />
                 <span>{featured.readingTime}</span>
                 <span>{featured.author}</span>
               </div>
