@@ -412,6 +412,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
     title: "Product",
     links: [
       { label: "Features", href: "/features" },
+      { label: "Models", href: "/models" },
       { label: "Pricing", href: "/pricing" },
       { label: "Download", href: "/download" },
       { label: "Changelog", href: "/changelog" },
