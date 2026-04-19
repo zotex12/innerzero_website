@@ -51,7 +51,31 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col items-center gap-2 border-t border-border-default pt-8 text-center text-sm text-text-muted md:flex-row md:justify-between">
+        {/* Machine-readable feed links: RSS, JSON Feed, and llms.txt */}
+        <div className="mt-8 text-xs text-text-muted">
+          <a
+            href="/feed.xml"
+            className="transition-colors hover:text-text-secondary"
+          >
+            RSS
+          </a>
+          <span className="mx-2">&middot;</span>
+          <a
+            href="/api/feed"
+            className="transition-colors hover:text-text-secondary"
+          >
+            JSON
+          </a>
+          <span className="mx-2">&middot;</span>
+          <a
+            href="/llms.txt"
+            className="transition-colors hover:text-text-secondary"
+          >
+            llms.txt
+          </a>
+        </div>
+
+        <div className="mt-8 flex flex-col items-center gap-2 border-t border-border-default pt-8 text-center text-sm text-text-muted md:flex-row md:justify-between">
           <p>&copy; {year} InnerZero. All rights reserved.</p>
           <div className="flex flex-col items-center gap-1 md:items-end">
             <p>

@@ -15,26 +15,30 @@ export const metadata: Metadata = createMetadata({
   },
 });
 
-interface ChangeEntry {
+export interface ChangeEntry {
   text: string;
 }
 
-interface ChangeGroup {
+export interface ChangeGroup {
   label: "New" | "Improved" | "Fixed";
   entries: ChangeEntry[];
 }
 
-interface Release {
+export interface Release {
   version: string;
   date: string;
+  // ISO 8601 date string for feed pubDate. Optional; when omitted, the
+  // feed handler falls back to the first of the displayed month.
+  releaseDate?: string;
   latest?: boolean;
   groups: ChangeGroup[];
 }
 
-const RELEASES: Release[] = [
+export const RELEASES: Release[] = [
   {
     version: "0.1.4",
     date: "April 2026",
+    releaseDate: "2026-04-18",
     latest: true,
     groups: [
       {
@@ -77,6 +81,7 @@ const RELEASES: Release[] = [
   {
     version: "0.1.3",
     date: "April 2026",
+    releaseDate: "2026-04-14",
     groups: [
       {
         label: "New",
@@ -112,6 +117,7 @@ const RELEASES: Release[] = [
   {
     version: "0.1.2",
     date: "April 2026",
+    releaseDate: "2026-04-08",
     groups: [
       {
         label: "New",
@@ -157,6 +163,7 @@ const RELEASES: Release[] = [
   {
     version: "0.1.1",
     date: "April 2026",
+    releaseDate: "2026-04-06",
     groups: [
       {
         label: "New",
@@ -196,6 +203,7 @@ const RELEASES: Release[] = [
   {
     version: "0.1.0",
     date: "April 2026",
+    releaseDate: "2026-04-07",
     groups: [
       {
         label: "New",
@@ -247,7 +255,7 @@ export default function ChangelogPage() {
           {/* Releases */}
           <div className="space-y-16">
             {RELEASES.map((release) => (
-              <section key={release.version}>
+              <section key={release.version} id={`v${release.version}`}>
                 {/* Version header */}
                 <div className="flex items-center gap-3 mb-6">
                   <span

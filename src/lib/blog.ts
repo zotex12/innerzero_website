@@ -87,6 +87,46 @@ export function getRelatedPosts(
   return scored.slice(0, limit).map((s) => s.post);
 }
 
+/**
+ * Feed-oriented variant of getAllPosts that includes the MDX body so the
+ * RSS/JSON feed handlers can fall back to a body excerpt when a post has
+ * no frontmatter description. Filters out future-dated entries (exclusive
+ * of today's UTC date) and anything marked `draft: true` in frontmatter.
+ * Sort order matches getAllPosts (newest date first).
+ */
+export function getAllPostsForFeed(): BlogPost[] {
+  if (!fs.existsSync(BLOG_DIR)) return [];
+  const now = Date.now();
+  const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"));
+  const posts: BlogPost[] = [];
+  for (const file of files) {
+    const raw = fs.readFileSync(path.join(BLOG_DIR, file), "utf-8");
+    const { data, content } = matter(raw);
+    if (data.draft === true) continue;
+    const postDate = data.date ? new Date(data.date) : null;
+    if (postDate && !Number.isNaN(postDate.getTime()) && postDate.getTime() > now) {
+      continue;
+    }
+    posts.push({
+      slug: data.slug || file.replace(/\.mdx$/, ""),
+      title: data.title || "",
+      description: data.description || "",
+      date: data.date || "",
+      updated: data.updated || undefined,
+      author: data.author || "Louie",
+      authorRole: data.authorRole || undefined,
+      tags: data.tags || [],
+      readingTime: data.readingTime || "",
+      featured: data.featured || false,
+      ogImage: data.ogImage || undefined,
+      content,
+    });
+  }
+  return posts.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+}
+
 export function getAllTags(): { tag: string; count: number }[] {
   const posts = getAllPosts();
   const map = new Map<string, number>();

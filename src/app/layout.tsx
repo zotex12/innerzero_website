@@ -39,6 +39,25 @@ export default function RootLayout({
             `,
           }}
         />
+        {/* Feed discovery for RSS readers, aggregators, and LLM crawlers */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          href="/feed.xml"
+          title="InnerZero Blog"
+        />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          href="/changelog.xml"
+          title="InnerZero Changelog"
+        />
+        <link
+          rel="alternate"
+          type="application/feed+json"
+          href="/api/feed"
+          title="InnerZero Blog JSON"
+        />
       </head>
       <body className="min-h-full flex flex-col bg-bg-primary text-text-primary font-sans antialiased transition-colors duration-200">
         <a
