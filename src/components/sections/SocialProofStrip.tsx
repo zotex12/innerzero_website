@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { getStatsPayload } from "@/lib/stats";
+import { DiscordIcon } from "@/components/icons/DiscordIcon";
 
 const DISCORD_URL = "https://discord.gg/rn9SPXgThT";
 
@@ -17,11 +18,13 @@ export async function SocialProofStrip({ className }: SocialProofStripProps) {
   // Keeps the hero clean rather than rendering a bullet-only Discord row.
   if (!stats.ok && stats.total === 0) return null;
 
-  // Build the visible items in left-to-right order. Spans hide themselves
-  // when the underlying data is missing (rounded === null when downloads
-  // are below the 100 threshold; latest_version === null on a fresh
-  // repo).
-  const items: { key: string; node: React.ReactNode }[] = [];
+  // Build the visible items in left-to-right order. Each item declares
+  // whether it should be preceded by a bullet separator. Plain-text
+  // stats use bullets; the Discord pill is a distinct UI element so it
+  // stands alone without a leading bullet (the pill border itself is
+  // the separator).
+  const items: { key: string; node: React.ReactNode; noBullet?: boolean }[] =
+    [];
 
   if (stats.rounded) {
     items.push({
@@ -39,15 +42,22 @@ export async function SocialProofStrip({ className }: SocialProofStripProps) {
 
   items.push({
     key: "discord",
+    noBullet: true,
     node: (
       <a
         href={DISCORD_URL}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Join InnerZero Discord community"
-        className="inline-flex items-center gap-1 font-medium no-underline transition-colors hover:text-accent-teal"
+        className={cn(
+          "inline-flex items-center gap-2 rounded-full border border-border-default bg-bg-card/40 px-3 py-1.5",
+          "text-sm font-medium text-text-secondary no-underline transition-colors duration-150",
+          "hover:border-[#5865F2] hover:bg-[#5865F2]/10 hover:text-[#5865F2]",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5865F2] focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary",
+        )}
       >
-        Join our Discord <span aria-hidden="true">&rarr;</span>
+        <DiscordIcon />
+        Join our Discord
       </a>
     ),
   });
@@ -62,7 +72,7 @@ export async function SocialProofStrip({ className }: SocialProofStripProps) {
     >
       {items.map((item, i) => (
         <span key={item.key} className="inline-flex items-center gap-x-5">
-          {i > 0 && (
+          {i > 0 && !item.noBullet && (
             <span
               aria-hidden="true"
               className="shrink-0 text-text-muted"
