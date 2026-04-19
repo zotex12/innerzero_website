@@ -1,5 +1,6 @@
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import { SocialProofStrip } from "@/components/sections/SocialProofStrip";
 import { HERO } from "@/lib/constants";
 
 export function Hero() {
@@ -61,6 +62,8 @@ export function Hero() {
             {HERO.secondaryCta}
           </Button>
         </div>
+
+        <SocialProofStrip className="mt-8" />
       </Container>
     </section>
   );
