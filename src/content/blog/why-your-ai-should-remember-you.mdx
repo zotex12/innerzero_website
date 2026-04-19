@@ -18,9 +18,9 @@ But what if your AI actually knew you?
 
 Think about how you work with a human assistant. They learn your habits. They know your schedule. They remember that you prefer bullet points over paragraphs, that your company uses Australian English, that you're allergic to cilantro. You don't re-explain yourself every morning.
 
-Cloud AI can't do this properly. Sure, some services have added "memory" features. But that memory lives on their servers. It's governed by their privacy policy. And it's fundamentally limited because the company has to be careful about what they store and how they use it.
+Cloud AI can't do this properly. Sure, some services have added "[memory](/blog/ai-that-remembers)" features. But that memory lives on their servers. It's governed by their privacy policy. And it's fundamentally limited because the company has to be careful about what they store and how they use it.
 
-## Memory that stays on your machine
+## What is local AI memory?
 
 InnerZero takes a different approach. Your AI builds a local memory database that lives on your hard drive. It's a SQLite file. You own it completely.
 
@@ -28,7 +28,7 @@ When you chat with Zero, it remembers what you talked about. It learns facts abo
 
 This happens naturally. You don't need to configure anything or explicitly "save" information. Just talk to Zero like you'd talk to a person. It figures out what's worth remembering.
 
-## How it works (the simple version)
+## How does InnerZero's memory work?
 
 Zero pays attention to your conversations and extracts useful facts. "My name is Sarah" becomes a permanent fact. "I'm working on a Python project called Atlas" gets stored and associated with your project.
 
@@ -36,7 +36,7 @@ When you ask a question, Zero searches its memory for relevant context. If you m
 
 Over time, Zero also consolidates its memories. It removes duplicates, updates outdated information, and strengthens memories that prove useful. This happens in the background when you're not using the app.
 
-## Privacy is the whole point
+## Why is local memory private by design?
 
 Here's why local memory is fundamentally different from cloud memory. No one can access your AI's memory except you. There's no server breach that could expose it. No employee at some company can browse through it. No government can subpoena it from a third party.
 
@@ -44,7 +44,7 @@ If you delete the memory file, it's gone. Completely. No "soft delete" where it'
 
 You can also add personal profile facts that are always available to Zero. Your name, your address, your work details. Information you'd never put into ChatGPT but that makes your AI assistant genuinely useful.
 
-## What this means in practice
+## What does local memory mean in practice?
 
 **It saves time.** You don't repeat yourself. Zero knows your preferences, your projects, your context.
 

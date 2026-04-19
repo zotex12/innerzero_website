@@ -20,35 +20,35 @@ When you send a message to InnerZero, it's processed by an AI model running on y
 
 This isn't "end-to-end encrypted" cloud processing, which still sends your data to a server. This is genuinely local. Unplug your ethernet cable and it still works. That's the test.
 
-## Your memory is a local file
+## Where is my memory stored?
 
-InnerZero builds a memory of your conversations over time. It learns your name, your preferences, your projects. All of this is stored in a SQLite database file on your hard drive.
+InnerZero builds a [memory](/blog/ai-that-remembers) of your conversations over time. It learns your name, your preferences, your projects. All of this is stored in a SQLite database file on your hard drive.
 
 There's no server-side backup. No sync to the cloud. No "we store your data securely on our servers." The file sits in your user data folder. You can open it, back it up, or delete it. It's yours.
 
 For more on why local memory matters, read [why your AI should remember you](/blog/why-your-ai-should-remember-you).
 
-## No account required
+## Do I need an account to use InnerZero?
 
 You can [download InnerZero](/download) and use it immediately without creating an account, entering an email address, or agreeing to data collection terms. There's no registration flow for the core product.
 
 Accounts exist for optional features like the Business Licence and future cloud plans. The local AI assistant doesn't need one and never will.
 
-## No telemetry in the app
+## Does InnerZero send telemetry?
 
-InnerZero doesn't phone home. There are no analytics, no usage tracking, no crash reporting, no beacon calls in the desktop application. When the app runs, it talks to Ollama on your local machine and that's it.
+InnerZero doesn't phone home. There are no analytics, no usage tracking, no crash reporting, no beacon calls in the desktop application. When the app runs, it talks to [Ollama](/blog/ollama-desktop-app) on your local machine and that's it.
 
 The website (innerzero.com) uses privacy-friendly Vercel Analytics for page views. But the desktop app itself has zero telemetry.
 
-## Voice stays local
+## Does voice mode send audio to the cloud?
 
 When you use [voice mode](/blog/voice-mode-innerzero), your audio is processed locally using faster-whisper for speech recognition and Kokoro for text-to-speech. No audio recordings are sent to any server. Your voice is transcribed in real-time on your hardware and the raw audio is discarded immediately.
 
 Compare this to Alexa, Siri, or Google Assistant, all of which send your voice to cloud servers for processing and may retain recordings.
 
-## Cloud mode is explicit opt-in
+## How does cloud mode work if I enable it?
 
-InnerZero has an optional cloud mode for people who want access to more powerful AI models like Claude, GPT-4, or DeepSeek. This is completely off by default.
+InnerZero has an optional cloud mode for people who want access to more powerful AI models like Claude, GPT-4, or [DeepSeek](/models). This is completely off by default.
 
 When you enable cloud mode, here's exactly what happens:
 
@@ -59,9 +59,9 @@ When you enable cloud mode, here's exactly what happens:
 
 Cloud mode is clearly labelled in the interface. There's a warning when you first enable it. You can turn it off at any time and everything goes back to fully local.
 
-## BYO API keys are yours
+## Where are BYO API keys stored?
 
-If you bring your own API keys for cloud providers, those keys are encrypted and stored locally on your device. When a cloud request is made, your key goes directly to the provider. InnerZero doesn't proxy, intercept, log, or read the traffic.
+If you bring [your own API keys](/blog/claude-opus-4-7-byo-keys) for cloud providers, those keys are encrypted and stored locally on your device. When a cloud request is made, your key goes directly to the provider. InnerZero doesn't proxy, intercept, log, or read the traffic.
 
 You're responsible for your own API costs and key security. InnerZero is just the interface. Your relationship is directly with the provider.
 

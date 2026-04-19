@@ -12,15 +12,15 @@ featured: false
 
 This is the first question everyone asks. Can my PC run [local AI](/what-is-local-ai)? The short answer: probably yes, if it was made in the last five years. The longer answer depends on how fast you want it to be.
 
-## RAM: 16 GB minimum, 32 GB ideal
+## How much RAM do I need for local AI?
 
-AI models need to fit in memory. The models that run locally are compressed versions of the same architectures used by cloud services. They're smaller, but they still need room.
+AI models need to fit in [memory](/blog/ai-that-remembers). The models that run locally are compressed versions of the same architectures used by cloud services. They're smaller, but they still need room.
 
 With 16 GB of RAM, you can run capable models comfortably. The AI will work, respond well, and handle everyday tasks. With 32 GB, you get access to larger models that are smarter and more capable. Above 32 GB gives you headroom for the biggest open-source models available.
 
 If your PC has 8 GB of RAM, local AI will struggle. It's technically possible but not a good experience.
 
-## GPU: NVIDIA recommended, VRAM matters most
+## What GPU do I need for local AI?
 
 The GPU is the single biggest factor in how fast your AI responds. Specifically, the amount of VRAM (video memory) on the card. More VRAM means larger, more capable models. Clock speed matters less than memory.
 
@@ -34,19 +34,19 @@ The GPU is the single biggest factor in how fast your AI responds. Specifically,
 
 AMD GPUs are not currently supported for local AI inference in InnerZero. NVIDIA's CUDA platform is what the AI runtime relies on.
 
-## CPU: modern quad-core with AVX2
+## What CPU is enough for local AI?
 
 Any modern Intel or AMD processor from the last 5 to 7 years will work. The AI doesn't lean heavily on the CPU when a GPU is available. But there's one hard requirement: AVX2 instruction support. Almost every processor since 2015 has this. Very old chips don't.
 
 Core count matters less than you'd think for AI inference. A modern quad-core is fine.
 
-## Disk space: 10 GB minimum
+## How much disk space do I need?
 
 AI models need to be downloaded once and stored on disk. A basic model is about 2 to 5 GB. A mid-range model is 5 to 18 GB. InnerZero itself is around 280 MB.
 
-Plan for at least 10 GB of free space. 30 GB gives you room for multiple models and offline knowledge packs.
+Plan for at least 10 GB of free space. 30 GB gives you room for multiple models and offline [knowledge packs](/blog/knowledge-packs-explained).
 
-## InnerZero tiers explained
+## How does InnerZero pick a model for my hardware?
 
 When you install InnerZero, it scans your hardware and assigns a tier automatically. You don't need to pick models or configure anything. Here's what the tiers look like:
 

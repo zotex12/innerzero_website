@@ -12,7 +12,7 @@ featured: false
 
 LM Studio and InnerZero are both [local AI](/what-is-local-ai) tools, but they're solving very different problems. Comparing them directly is a bit like comparing a compiler to an IDE. One is a tool for running and testing models. The other is a tool for getting work done with them every day.
 
-## What LM Studio is designed for
+## What is LM Studio designed for?
 
 LM Studio is a model exploration and development tool. You can browse the Hugging Face model catalogue, download models in different quantizations (Q4, Q5, Q8, and more), run them on your local hardware, and inspect performance.
 
@@ -20,17 +20,17 @@ It has a developer-friendly local server that exposes an OpenAI-compatible API. 
 
 If you care about model internals, want precise control over parameters, or are building something that needs a local API endpoint, LM Studio is excellent. It's technical in the best possible way.
 
-## What InnerZero is designed for
+## What is InnerZero designed for?
 
 InnerZero is designed for people who want to use AI productively every day, not people who want to study or build with it.
 
 Setup is automatic. InnerZero detects your hardware and picks a model that fits. You don't need to know what quantization means. You just open it and start talking.
 
-What InnerZero adds that LM Studio doesn't have: persistent memory that builds up across sessions, built-in voice interaction with local speech recognition and text-to-speech, 30+ desktop tools the AI can use autonomously, an agent system for multi-step tasks, offline Wikipedia knowledge packs, and a sleep pipeline that consolidates memory while you're away.
+What InnerZero adds that LM Studio doesn't have: persistent [memory](/blog/ai-that-remembers) that builds up across sessions, built-in voice interaction with local speech recognition and text-to-speech, 30+ desktop tools the AI can use autonomously, an agent system for multi-step tasks, offline Wikipedia [knowledge packs](/blog/knowledge-packs-explained), and a sleep pipeline that consolidates memory while you're away.
 
 None of this requires technical knowledge or configuration. It works out of the box.
 
-## You can use both together
+## Can I use InnerZero and LM Studio together?
 
 Here's something worth knowing. LM Studio runs a local server with an OpenAI-compatible API format. InnerZero's BYO API keys feature lets you point it at a custom endpoint. That means you can run a model in LM Studio and connect InnerZero to it.
 
@@ -40,7 +40,7 @@ If you're already running a model in LM Studio that you like, you can layer Inne
 
 | Feature | InnerZero | LM Studio |
 |---------|-----------|-----------|
-| Model browsing | Curated via Ollama | Full Hugging Face catalogue |
+| Model browsing | Curated via [Ollama](/blog/ollama-desktop-app) | Full Hugging Face catalogue |
 | Quantization control | No | Yes |
 | Local API server | No | Yes (OpenAI-compatible) |
 | Persistent memory | Yes | No |
@@ -52,7 +52,7 @@ If you're already running a model in LM Studio that you like, you can layer Inne
 | Developer-friendly | Limited | Yes |
 | Free | Yes | Yes |
 
-## Who should use which
+## Who should use which one? one?
 
 Use LM Studio if you're a developer, researcher, or enthusiast who wants detailed control over models, quantization formats, and API endpoints. It's the right tool for that job.
 

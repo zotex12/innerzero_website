@@ -10,7 +10,7 @@ readingTime: "7 min read"
 featured: false
 ---
 
-**Claude Opus 4.7** released on 15 April 2026. It's Anthropic's strongest reasoning model to date, and InnerZero's v0.1.4 release added it as a selectable model for anyone using **bring your own keys** with their own Anthropic account. This guide walks through the setup, what it costs, and when you'd actually pick it over a model running on your own machine.
+**[Claude Opus 4.7](/models)** released on 15 April 2026. It's Anthropic's strongest reasoning model to date, and InnerZero's v0.1.4 release added it as a selectable model for anyone using **bring your own keys** with their own Anthropic account. This guide walks through the setup, what it costs, and when you'd actually pick it over a model running on your own machine.
 
 I'm not going to pretend Opus 4.7 is the right choice for every task. Most of what I ask my AI assistant is better handled locally. But when I'm debugging something at the edge of a language I don't know well, or drafting something where I want the quality to be high on the first pass, Opus is where I reach.
 
@@ -24,7 +24,7 @@ I'm not going to pretend Opus 4.7 is the right choice for every task. Most of wh
 
 **Claude Opus 4.7 is Anthropic's most capable model in the Claude 4 family**, released 15 April 2026. It's the one you pick when reasoning quality matters more than speed or cost. Anthropic tuned it hard for long-context work, extended thinking, and coding. If you've tried Opus 4.6 and wanted the same behaviour but sharper, that's the upgrade.
 
-InnerZero is a local-first AI assistant. The default setup runs entirely on your machine using [Ollama](https://ollama.com) or LM Studio. Everything is free, stays on your hardware, and needs no internet connection once the model is downloaded. That's the normal mode.
+InnerZero is a local-first AI assistant. The default setup runs entirely on your machine using [Ollama](https://ollama.com) or [LM Studio](/blog/innerzero-vs-lm-studio). Everything is free, stays on your hardware, and needs no internet connection once the model is downloaded. That's the normal mode.
 
 BYO keys are an optional layer on top. If you have an Anthropic account with API credit, you plug that key into InnerZero's Settings and use Claude models directly. The key stays encrypted on your machine. Your messages go straight to Anthropic's API, not through any InnerZero server. There's no markup, no middleman, no account required on our side.
 
@@ -48,7 +48,7 @@ The Settings UI shows you which provider will handle the next request before you
 
 **Anthropic charges $5 per million input tokens and $25 per million output tokens for Opus 4.7**, same pricing as Opus 4.6. A typical back-and-forth in InnerZero sends roughly 500 to 1,500 input tokens and gets 200 to 600 output tokens back, so most individual messages land between roughly $0.01 and $0.02.
 
-Tokens aren't characters. They're roughly word-fragments. The exact cost per message depends on how long your conversation history is, how big your memory pack is, and how verbose the reply needs to be. InnerZero's Costs page logs every cloud API call with the actual token counts returned by Anthropic, so you can see what you've spent this month without guessing.
+Tokens aren't characters. They're roughly word-fragments. The exact cost per message depends on how long your conversation history is, how big your [memory](/blog/ai-that-remembers) pack is, and how verbose the reply needs to be. InnerZero's Costs page logs every cloud API call with the actual token counts returned by Anthropic, so you can see what you've spent this month without guessing.
 
 One thing worth noting. Opus 4.7 uses a different tokenizer than Opus 4.6, so the same prompt can tokenise slightly differently between the two. InnerZero reads the real token count back from each API response and bills you exactly that, rather than estimating ahead of time. Billing stays accurate regardless of tokenizer changes.
 

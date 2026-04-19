@@ -14,13 +14,13 @@ You've probably heard that AI models can be "open source." But what does that ac
 
 Here's the simple version.
 
-## What an AI model is
+## What is an AI model?
 
 An AI model is a very large file of numbers. During training, a computer processes enormous amounts of text (books, websites, conversations) and learns patterns in language. The result is a file containing billions of "parameters," which are numerical weights that determine how the model responds to input.
 
-When you ask an AI a question, the model uses these weights to generate a response one word at a time. The bigger the model (more parameters), the smarter it tends to be. But bigger also means more memory and computing power to run.
+When you ask an AI a question, the model uses these weights to generate a response one word at a time. The bigger the model (more parameters), the smarter it tends to be. But bigger also means more [memory](/blog/ai-that-remembers) and computing power to run.
 
-## What "open source" means for AI
+## What does "open source" mean for AI models?
 
 When an AI model is open source, the company releases the model weights publicly. Anyone can download them, run the model on their own hardware, modify it, and build products with it.
 
@@ -28,7 +28,7 @@ This is different from cloud AI like ChatGPT, where the model stays on OpenAI's 
 
 With open-source models, you own the file. It runs on your machine. No internet required. No terms of service governing how you use it.
 
-## Why companies release them
+## Why do companies release open-source AI models?
 
 This confuses people. Why spend millions on training and then give it away?
 
@@ -42,9 +42,9 @@ This confuses people. Why spend millions on training and then give it away?
 
 The result for users: access to genuinely capable AI models at zero cost.
 
-## The big names
+## Which open-source AI models matter?
 
-**Qwen (Alibaba Cloud).** The Qwen3 family. Strong all-rounders available in multiple sizes from 4B to 235B parameters. Apache 2.0 licence. [InnerZero uses Qwen3](/blog/what-models-does-innerzero-use) as its main AI brain.
+**Qwen (Alibaba Cloud).** The [Qwen3](/models) family. Strong all-rounders available in multiple sizes from 4B to 235B parameters. Apache 2.0 licence. [InnerZero uses Qwen3](/blog/what-models-does-innerzero-use) as its main AI brain.
 
 **Gemma (Google).** The Gemma3 family. Fast and efficient, especially at smaller sizes. InnerZero uses Gemma3 for voice interactions where speed matters.
 
@@ -52,7 +52,7 @@ The result for users: access to genuinely capable AI models at zero cost.
 
 **Mistral (Mistral AI).** A French company producing efficient open models. Known for good performance at smaller sizes.
 
-## What "parameters" mean
+## What do model parameters mean?
 
 You'll see models described as "8B" or "30B." The B stands for billion parameters. More parameters generally means smarter, but also means more memory needed.
 
@@ -63,9 +63,9 @@ You'll see models described as "8B" or "30B." The B stands for billion parameter
 
 You don't need to know any of this to use InnerZero. The setup wizard checks your [hardware](/blog/hardware-for-local-ai) and picks the right model size automatically.
 
-## How Ollama fits in
+## How does Ollama fit in?
 
-[Ollama](https://ollama.com) is an open-source tool that makes running these models easy. Instead of manually downloading model files, configuring memory, and managing GPU allocation, you just tell Ollama which model you want and it handles the rest.
+[Ollama](https://ollama.com) is an open-source tool that makes running these models easy. Instead of manually downloading model files, configuring memory, and managing GPU allocation, you just tell [Ollama](/blog/ollama-desktop-app) which model you want and it handles the rest.
 
 InnerZero bundles Ollama and manages it behind the scenes. You never need to interact with it directly. But if you're curious, Ollama's model library has hundreds of models you can explore.
 

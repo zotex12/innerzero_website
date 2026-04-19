@@ -12,9 +12,9 @@ featured: false
 
 Maybe you have a beefy GPU in a desktop tower but prefer working on a laptop. Maybe you have a home server with an NVIDIA card sitting idle. Maybe you just picked up a DGX Spark and want to use it with InnerZero.
 
-Good news: you can run Ollama on one machine and InnerZero on another. The AI runs on the powerful hardware. The interface runs wherever you want.
+Good news: you can run [Ollama](/blog/ollama-desktop-app) on one machine and InnerZero on another. The AI runs on the powerful hardware. The interface runs wherever you want.
 
-## The setup in 5 steps
+## How do I set up remote Ollama with InnerZero?
 
 ### 1. Install Ollama on the remote machine
 
@@ -53,17 +53,17 @@ Click **Test** to verify the connection works. You should see a green status and
 
 ### 5. Use InnerZero normally
 
-That's it. Everything else works the same. Chat, voice, tools, memory. The only difference is that the AI model runs on the remote machine instead of locally. InnerZero handles the routing transparently.
+That's it. Everything else works the same. Chat, voice, tools, [memory](/blog/ai-that-remembers). The only difference is that the AI model runs on the remote machine instead of locally. InnerZero handles the routing transparently.
 
 The setup wizard will still detect your local hardware for tier assignment. But you can pull larger models on the remote machine manually through Ollama if your remote hardware supports them.
 
-## What works well
+## When does remote Ollama work well?
 
 **LAN connections** are ideal. If both machines are on the same home or office network, latency is minimal. The experience feels identical to running locally.
 
 **VPN connections** work too. If you're away from home but have a VPN back to your network, you can use the remote Ollama instance from anywhere. Latency will be higher, depending on your VPN speed.
 
-## What to watch out for
+## What should I watch out for?
 
 **Security.** Ollama has no built-in authentication. Anyone who can reach the IP and port can use your Ollama instance. On a home network behind a router, this is usually fine. On a public network, you should use a firewall to restrict access, or set up a reverse proxy with authentication.
 
@@ -73,7 +73,7 @@ InnerZero will show a warning if you configure a non-private IP address. Take it
 
 **Ollama must be running.** Unlike local mode where InnerZero starts and stops Ollama automatically, remote mode assumes you keep Ollama running on the remote machine yourself. InnerZero won't try to start or stop it.
 
-## Resetting to local
+## How do I reset back to local?
 
 If you want to go back to running everything locally, open Settings and click **Reset to Local** in the Ollama Connection section. InnerZero will start managing its own local Ollama instance again on the next launch.
 
