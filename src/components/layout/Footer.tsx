@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Logo } from "@/components/icons/Logo";
 import { Container } from "@/components/ui/Container";
 import { FOOTER_COLUMNS } from "@/lib/constants";
@@ -95,6 +96,22 @@ export function Footer() {
               </p>
             )}
           </div>
+          <a
+            href="http://validator.w3.org/feed/check.cgi?url=https%3A//innerzero.com/feed.xml"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Validate InnerZero RSS feed"
+            aria-label="Validate InnerZero RSS feed with W3C"
+            className="inline-flex items-center gap-2 text-xs text-text-muted transition-colors hover:text-text-secondary md:ml-4"
+          >
+            <Image
+              src="/images/valid-rss.png"
+              alt="Valid RSS feed"
+              width={88}
+              height={31}
+              className="h-6 w-auto opacity-70 transition-opacity hover:opacity-100"
+            />
+          </a>
         </div>
       </Container>
     </footer>
