@@ -1,5 +1,5 @@
 import { RELEASES, type Release } from "@/app/(marketing)/changelog/page";
-import { SITE_URL, absoluteUrl, toRfc822, xmlEscape } from "@/lib/feeds";
+import { SITE_URL, absoluteUrl, toRfc822, toRssCdata, xmlEscape } from "@/lib/feeds";
 
 export const revalidate = 3600;
 
@@ -46,7 +46,7 @@ export async function GET() {
       `      <link>${xmlEscape(anchorUrl)}</link>`,
       `      <guid isPermaLink="true">${xmlEscape(anchorUrl)}</guid>`,
       `      <pubDate>${toRfc822(pubDate)}</pubDate>`,
-      `      <description>${xmlEscape(description)}</description>`,
+      `      <description>${toRssCdata(description)}</description>`,
       "    </item>",
     ].join("\n");
   }).join("\n");
@@ -57,7 +57,7 @@ export async function GET() {
     "  <channel>",
     `    <title>${xmlEscape(FEED_TITLE)}</title>`,
     `    <link>${xmlEscape(SITE_URL + "/changelog")}</link>`,
-    `    <description>${xmlEscape(FEED_DESCRIPTION)}</description>`,
+    `    <description>${toRssCdata(FEED_DESCRIPTION)}</description>`,
     `    <language>${LANGUAGE}</language>`,
     `    <lastBuildDate>${lastBuildDate}</lastBuildDate>`,
     `    <copyright>${xmlEscape(COPYRIGHT)}</copyright>`,

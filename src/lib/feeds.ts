@@ -65,8 +65,16 @@ export function truncateAtWord(src: string, max = 200): string {
 
 /**
  * Build an excerpt for a post. Prefers the frontmatter description when
- * present. Falls back to the first ~200 plain-text characters of the MDX
- * body. Always returns a non-empty string for posts that have either.
+ * present, otherwise the first ~200 plain-text characters of the MDX body.
+ *
+ * Ordering discipline (strict): strip markdown -> truncate at word
+ * boundary -> return plain text. Any XML-safe transformation (xmlEscape
+ * for normal fields, CDATA wrap for RSS <description>) is the caller's
+ * final step. Escaping BEFORE truncation is forbidden: word-boundary
+ * slicing can cut through "&amp;" leaving "&am", which feed readers
+ * HTML-decode and flag as "Named entity expected. Got none." in the W3C
+ * feed validator. Escape is always the last transformation on the
+ * string heading into the XML template, never an intermediate step.
  */
 export function buildExcerpt(params: {
   description?: string;
@@ -74,10 +82,46 @@ export function buildExcerpt(params: {
   max?: number;
 }): string {
   const max = params.max ?? 200;
+
+  // Step 1: resolve the plain-text source. Frontmatter description is
+  // already plain text; MDX body needs markdown stripped.
   const desc = (params.description || "").trim();
-  if (desc) return truncateAtWord(desc, max);
-  const body = stripMarkdown(params.content || "");
-  return truncateAtWord(body, max);
+  const plain = desc !== "" ? desc : stripMarkdown(params.content || "");
+
+  // Step 2: truncate at a word boundary. Operating on plain text (never
+  // pre-escaped) means there are no HTML entities to slice through.
+  // Final trim in case truncateAtWord received an already-short string
+  // with trailing whitespace (it only trimEnds on the truncation branch).
+  return truncateAtWord(plain, max).trim();
+}
+
+/**
+ * Wrap a string as an RSS CDATA payload for the <description> field.
+ * CDATA sidesteps the double-decoding that trips HTML parsers inside
+ * some RSS readers (feed XML entity decode -> reader HTML parse), which
+ * is what the W3C feed validator flags with "Named entity expected.
+ * Got none." on otherwise-valid entity references.
+ *
+ * Guards:
+ * - Empty input still emits an empty CDATA block so <description> is
+ *   never missing from an item.
+ * - Literal "]]>" in the payload is split into two adjacent CDATA
+ *   sections via the canonical "]]]]><![CDATA[>" trick so the XML
+ *   stays well-formed. (Not expected in practice, but cheap defence.)
+ * - Trailing whitespace on the excerpt is trimmed before wrapping.
+ *
+ * Everything inside CDATA is treated as literal text by XML parsers, so
+ * ampersands, angle brackets, smart quotes, em dashes, and em spaces
+ * all pass through untouched. No xmlEscape required (and none wanted,
+ * since &amp; inside CDATA would render literally as "&amp;").
+ */
+export function toRssCdata(text: string): string {
+  const trimmed = (text || "").trim();
+  if (trimmed === "") return "<![CDATA[]]>";
+  const safe = trimmed.includes("]]>")
+    ? trimmed.replace(/]]>/g, "]]]]><![CDATA[>")
+    : trimmed;
+  return `<![CDATA[${safe}]]>`;
 }
 
 /**

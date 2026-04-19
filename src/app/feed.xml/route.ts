@@ -4,6 +4,7 @@ import {
   absoluteUrl,
   buildExcerpt,
   toRfc822,
+  toRssCdata,
   xmlEscape,
 } from "@/lib/feeds";
 
@@ -44,7 +45,7 @@ export async function GET() {
         `      <link>${xmlEscape(url)}</link>`,
         `      <guid isPermaLink="true">${xmlEscape(url)}</guid>`,
         `      <pubDate>${toRfc822(post.date)}</pubDate>`,
-        `      <description>${xmlEscape(excerpt)}</description>`,
+        `      <description>${toRssCdata(excerpt)}</description>`,
         categories || null,
         "    </item>",
       ]
@@ -59,7 +60,7 @@ export async function GET() {
     "  <channel>",
     `    <title>${xmlEscape(FEED_TITLE)}</title>`,
     `    <link>${xmlEscape(SITE_URL + "/blog")}</link>`,
-    `    <description>${xmlEscape(FEED_DESCRIPTION)}</description>`,
+    `    <description>${toRssCdata(FEED_DESCRIPTION)}</description>`,
     `    <language>${LANGUAGE}</language>`,
     `    <lastBuildDate>${lastBuildDate}</lastBuildDate>`,
     `    <copyright>${xmlEscape(COPYRIGHT)}</copyright>`,
