@@ -97,30 +97,52 @@ export function buildExcerpt(params: {
 
 /**
  * Wrap a string as an RSS CDATA payload for the <description> field.
- * CDATA sidesteps the double-decoding that trips HTML parsers inside
- * some RSS readers (feed XML entity decode -> reader HTML parse), which
- * is what the W3C feed validator flags with "Named entity expected.
- * Got none." on otherwise-valid entity references.
+ * Belt-and-braces protection: CDATA shields the XML parse layer while
+ * HTML-entity encoding (& < >) shields the second, HTML parse layer
+ * that feed readers run over description content. Either alone is
+ * insufficient — CDATA lets a bare "Q&A" through the XML layer, and
+ * readers' HTML parsers then flag it as "Named entity expected. Got
+ * none." (what the W3C feed validator reports).
+ *
+ * Encoding rules:
+ * - Order is & first, then <, then >. If < / > were encoded first, the
+ *   "&" characters they insert (&lt; / &gt;) would get re-escaped by
+ *   the ampersand pass into &amp;lt; / &amp;gt;. Ampersand-first avoids
+ *   that.
+ * - The & pass is conservative: only encodes "&" that is NOT already
+ *   the lead of a valid HTML entity (&name; / &#123; / &#x1a;). Any
+ *   upstream-encoded content therefore survives unchanged, so a
+ *   pre-escaped "&amp;" stays "&amp;" rather than becoming
+ *   "&amp;amp;".
+ * - Apostrophes and double quotes are left alone. CDATA handles them
+ *   at the XML layer and HTML text content does not require them
+ *   escaped.
  *
  * Guards:
  * - Empty input still emits an empty CDATA block so <description> is
  *   never missing from an item.
- * - Literal "]]>" in the payload is split into two adjacent CDATA
- *   sections via the canonical "]]]]><![CDATA[>" trick so the XML
- *   stays well-formed. (Not expected in practice, but cheap defence.)
+ * - Literal "]]>" in the final payload is split into two adjacent
+ *   CDATA sections via the canonical "]]]]><![CDATA[>" trick so the
+ *   XML stays well-formed. Runs after HTML encoding (which turns ">"
+ *   into "&gt;" and therefore generally removes any "]]>"); retained
+ *   as a cheap defence for belt-and-braces.
  * - Trailing whitespace on the excerpt is trimmed before wrapping.
  *
- * Everything inside CDATA is treated as literal text by XML parsers, so
- * ampersands, angle brackets, smart quotes, em dashes, and em spaces
- * all pass through untouched. No xmlEscape required (and none wanted,
- * since &amp; inside CDATA would render literally as "&amp;").
+ * Net effect on a feed reader: CDATA content "Q&amp;A" decodes as
+ * HTML back to "Q&A" for display. User-visible rendering unchanged.
  */
 export function toRssCdata(text: string): string {
   const trimmed = (text || "").trim();
   if (trimmed === "") return "<![CDATA[]]>";
-  const safe = trimmed.includes("]]>")
-    ? trimmed.replace(/]]>/g, "]]]]><![CDATA[>")
-    : trimmed;
+
+  const htmlEncoded = trimmed
+    .replace(/&(?!(?:[a-zA-Z]+|#\d+|#x[0-9a-fA-F]+);)/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+  const safe = htmlEncoded.includes("]]>")
+    ? htmlEncoded.replace(/]]>/g, "]]]]><![CDATA[>")
+    : htmlEncoded;
   return `<![CDATA[${safe}]]>`;
 }
 
