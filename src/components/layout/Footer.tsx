@@ -9,7 +9,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border-default bg-bg-secondary py-12 md:py-16">
       <Container>
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-5">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-6">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Logo className="mb-4 inline-flex" imageSize={24} />

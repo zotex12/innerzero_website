@@ -48,7 +48,42 @@ const TOC: { id: string; label: string }[] = [
   },
   { id: "what-can-i-do", label: "What can I do with local AI?" },
   { id: "how-innerzero-fits", label: "How does InnerZero fit?" },
+  { id: "who-is-local-ai-for", label: "Who is local AI for?" },
   { id: "faq", label: "Frequently asked questions" },
+];
+
+// Persona fanout: short pointers from the pillar page out to the five
+// /for/* landing pages so definitional traffic can self-route to the
+// most relevant persona surface.
+const PERSONAS: { slug: string; label: string; oneLine: string }[] = [
+  {
+    slug: "developers",
+    label: "Developers",
+    oneLine:
+      "Local coding models, sandboxed agent, optional frontier keys.",
+  },
+  {
+    slug: "writers",
+    label: "Writers",
+    oneLine:
+      "Persistent project memory, offline dictation, tuneable AI voice.",
+  },
+  {
+    slug: "students",
+    label: "Students",
+    oneLine: "Free forever, no account, offline study with knowledge packs.",
+  },
+  {
+    slug: "researchers",
+    label: "Researchers",
+    oneLine:
+      "Sensitive sources stay on your machine; frontier via BYO keys.",
+  },
+  {
+    slug: "offline-work",
+    label: "Offline work",
+    oneLine: "Travel, fieldwork, or air-gapped sites with no internet.",
+  },
 ];
 
 // FAQ section: these Q&A pairs go into the FAQPage JSON-LD. The h2
@@ -585,7 +620,33 @@ export default function WhatIsLocalAiPage() {
             .
           </Body>
 
-          {/* 11. FAQ */}
+          {/* 11. Personas */}
+          <SectionHeading id="who-is-local-ai-for">
+            Who is local AI for?
+          </SectionHeading>
+          <Answer>
+            Most people benefit from local AI, but the pitch differs by
+            context. Pick the persona that matches your use case for a
+            tailored breakdown.
+          </Answer>
+          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {PERSONAS.map((p) => (
+              <Link
+                key={p.slug}
+                href={`/for/${p.slug}`}
+                className="rounded-xl border border-border-default bg-bg-card p-4 transition-colors hover:border-accent-gold/40"
+              >
+                <div className="text-sm font-semibold text-text-primary">
+                  {p.label}
+                </div>
+                <p className="mt-1 text-sm text-text-secondary">
+                  {p.oneLine}
+                </p>
+              </Link>
+            ))}
+          </div>
+
+          {/* 12. FAQ */}
           <SectionHeading id="faq">
             Frequently asked questions
           </SectionHeading>

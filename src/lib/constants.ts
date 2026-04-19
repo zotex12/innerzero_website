@@ -420,6 +420,16 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
     ],
   },
   {
+    title: "Use cases",
+    links: [
+      { label: "For developers", href: "/for/developers" },
+      { label: "For writers", href: "/for/writers" },
+      { label: "For students", href: "/for/students" },
+      { label: "For researchers", href: "/for/researchers" },
+      { label: "For offline work", href: "/for/offline-work" },
+    ],
+  },
+  {
     title: "Company",
     links: [
       { label: "About", href: "/about" },
