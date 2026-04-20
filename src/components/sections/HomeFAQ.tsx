@@ -59,7 +59,7 @@ function ChevronDown({ className }: { className?: string }) {
 
 export function HomeFAQ() {
   return (
-    <section className="py-20 md:py-28">
+    <section id="faq" className="scroll-mt-20 py-20 md:py-28">
       <Container>
         <SectionHeader
           title="Questions, answered"
