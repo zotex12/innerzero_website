@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/icons/Logo";
+import { DiscordIcon } from "@/components/icons/DiscordIcon";
+import { GitHubIcon } from "@/components/icons/GitHubIcon";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { HeaderAuth } from "@/components/layout/HeaderAuth";
@@ -57,6 +59,30 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          {/* External community links. Sized + spaced to match the
+              ThemeToggle button (h-9 w-9 rounded-lg, gap-2 between
+              cluster items) so the cluster reads as one consistent
+              control group. */}
+          <a
+            href="https://discord.gg/rn9SPXgThT"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Join InnerZero Discord community"
+            title="Join Discord"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-text-secondary transition-colors duration-150 hover:text-[#5865F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold cursor-pointer"
+          >
+            <DiscordIcon className="w-5 h-5 shrink-0" />
+          </a>
+          <a
+            href="https://github.com/zotex12/innerzero-releases"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View InnerZero on GitHub"
+            title="View on GitHub"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-text-secondary transition-colors duration-150 hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold cursor-pointer"
+          >
+            <GitHubIcon />
+          </a>
           <ThemeToggle />
           <HeaderAuth />
           <MobileNav open={mobileMenuOpen} onOpenChange={setMobileMenuOpen} />
