@@ -1,8 +1,101 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Logo } from "@/components/icons/Logo";
+import { GitHubIcon } from "@/components/icons/GitHubIcon";
+import { DiscordIcon } from "@/components/icons/DiscordIcon";
+import { XIcon } from "@/components/icons/XIcon";
+import { InstagramIcon } from "@/components/icons/InstagramIcon";
+import { LinkedInIcon } from "@/components/icons/LinkedInIcon";
+import { KoFiIcon } from "@/components/icons/KoFiIcon";
 import { Container } from "@/components/ui/Container";
 import { FOOTER_COLUMNS } from "@/lib/constants";
+
+// Community links live in the Footer rather than constants.ts so the
+// per-link icon component (a React reference, not data) can stay
+// alongside the JSX that consumes it. Each entry pairs the inline
+// SVG icon with its own brand hover colour; constants.ts holds an
+// empty Community placeholder so column ordering stays declarative.
+type CommunityLink = {
+  label: string;
+  href: string;
+  ariaLabel: string;
+  icon: React.ComponentType<{ className?: string }>;
+  hoverClass: string;
+};
+
+const COMMUNITY_LINKS: CommunityLink[] = [
+  {
+    label: "GitHub",
+    href: "https://github.com/zotex12/innerzero-releases",
+    ariaLabel: "View InnerZero on GitHub",
+    icon: GitHubIcon,
+    hoverClass: "hover:text-text-primary",
+  },
+  {
+    label: "Discord",
+    href: "https://discord.gg/rn9SPXgThT",
+    ariaLabel: "Join InnerZero Discord community",
+    icon: DiscordIcon,
+    hoverClass: "hover:text-[#5865F2]",
+  },
+  {
+    label: "X",
+    href: "https://x.com/InnerZero_ai",
+    ariaLabel: "Follow InnerZero on X",
+    icon: XIcon,
+    hoverClass: "hover:text-text-primary",
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/innerzero_ai",
+    ariaLabel: "Follow InnerZero on Instagram",
+    icon: InstagramIcon,
+    hoverClass: "hover:text-[#E4405F]",
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/innerzero",
+    ariaLabel: "Follow InnerZero on LinkedIn",
+    icon: LinkedInIcon,
+    hoverClass: "hover:text-[#0A66C2]",
+  },
+  {
+    label: "Ko-fi",
+    href: "https://ko-fi.com/innerzero",
+    ariaLabel: "Support InnerZero on Ko-fi",
+    icon: KoFiIcon,
+    hoverClass: "hover:text-[#FF5E5B]",
+  },
+];
+
+function CommunityColumn() {
+  return (
+    <div>
+      <h3 className="mb-3 text-sm font-semibold text-text-primary">
+        Community
+      </h3>
+      <ul className="flex flex-col gap-2">
+        {COMMUNITY_LINKS.map((link) => {
+          const Icon = link.icon;
+          return (
+            <li key={link.href}>
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={link.ariaLabel}
+                className={`-mx-1 inline-flex items-center gap-2 rounded-md px-1 py-0.5 text-sm text-text-secondary transition-all duration-150 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary ${link.hoverClass}`}
+              >
+                <Icon className="w-4 h-4 shrink-0" />
+                <span>{link.label}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -19,37 +112,44 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Link columns */}
-          {FOOTER_COLUMNS.map((col) => (
-            <div key={col.title}>
-              <h3 className="mb-3 text-sm font-semibold text-text-primary">
-                {col.title}
-              </h3>
-              <ul className="flex flex-col gap-2">
-                {col.links.map((link) => (
-                  <li key={link.href}>
-                    {link.external ? (
-                      <a
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-text-secondary transition-colors hover:text-text-primary"
-                      >
-                        {link.label}
-                      </a>
-                    ) : (
-                      <Link
-                        href={link.href}
-                        className="text-sm text-text-secondary transition-colors hover:text-text-primary"
-                      >
-                        {link.label}
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {/* Link columns. Community is rendered via the bespoke
+              CommunityColumn so its icon-row entries with brand
+              hover colours don't have to round-trip through the
+              constants schema. */}
+          {FOOTER_COLUMNS.map((col) =>
+            col.title === "Community" ? (
+              <CommunityColumn key={col.title} />
+            ) : (
+              <div key={col.title}>
+                <h3 className="mb-3 text-sm font-semibold text-text-primary">
+                  {col.title}
+                </h3>
+                <ul className="flex flex-col gap-2">
+                  {col.links.map((link) => (
+                    <li key={link.href}>
+                      {link.external ? (
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-text-secondary transition-colors hover:text-text-primary"
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <Link
+                          href={link.href}
+                          className="text-sm text-text-secondary transition-colors hover:text-text-primary"
+                        >
+                          {link.label}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ),
+          )}
         </div>
 
         {/* Machine-readable feed links: RSS, JSON Feed, and llms.txt */}

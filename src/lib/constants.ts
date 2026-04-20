@@ -438,15 +438,13 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       { label: "Waitlist", href: "/waitlist" },
     ],
   },
+  // Community is a placeholder. Footer.tsx detects an empty links
+  // array on the Community title and renders a bespoke icon-row
+  // block (with brand-coloured hovers) in this slot. Keeping the
+  // entry here preserves column ordering across all consumers.
   {
     title: "Community",
-    links: [
-      { label: "Discord", href: "https://discord.gg/rn9SPXgThT", external: true },
-      { label: "Support us", href: "https://ko-fi.com/innerzero", external: true },
-      { label: "X (Twitter)", href: "https://x.com/InnerZero_ai", external: true },
-      { label: "Instagram", href: "https://www.instagram.com/innerzero_ai", external: true },
-      { label: "LinkedIn", href: "https://www.linkedin.com/company/innerzero", external: true },
-    ],
+    links: [],
   },
   {
     title: "Legal",
