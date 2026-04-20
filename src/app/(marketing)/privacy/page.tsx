@@ -247,6 +247,18 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-2">
+                    Newsletter subscriptions (optional)
+                  </h3>
+                  <p>
+                    If you choose to subscribe to our email list, we store your email address, the date you subscribed, and which page you subscribed from. We use this only to send you occasional product updates. Your email is stored in our Supabase database and never shared with third parties. You can unsubscribe from any email we send, or request deletion by contacting{" "}
+                    <a href="mailto:help@innerzero.com" className="text-accent-gold hover:text-accent-gold-hover transition-colors">
+                      help@innerzero.com
+                    </a>.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-2">
                     9. Cookies
                   </h3>
                   <p>

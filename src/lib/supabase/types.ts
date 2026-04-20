@@ -137,6 +137,34 @@ export type Database = {
         };
         Relationships: [];
       };
+      newsletter_subscribers: {
+        Row: {
+          id: number;
+          email: string;
+          source: string;
+          subscribed_at: string;
+          confirmed_at: string | null;
+          unsubscribed_at: string | null;
+          unsubscribe_token: string;
+        };
+        Insert: {
+          email: string;
+          source?: string;
+          subscribed_at?: string;
+          confirmed_at?: string | null;
+          unsubscribed_at?: string | null;
+          unsubscribe_token?: string;
+        };
+        Update: {
+          email?: string;
+          source?: string;
+          subscribed_at?: string;
+          confirmed_at?: string | null;
+          unsubscribed_at?: string | null;
+          unsubscribe_token?: string;
+        };
+        Relationships: [];
+      };
       devices: {
         Row: {
           id: string;

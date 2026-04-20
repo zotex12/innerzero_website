@@ -111,6 +111,7 @@ export const LIMITS = {
   cloudProxy:      { limit: 10,  windowMs: 60_000, store: "cloud-proxy" },
   spendingCap:     { limit: 5,   windowMs: 60_000, store: "spending-cap" },
   themeRedeem:     { limit: 5,   windowMs: 60_000, store: "theme-redeem" },
+  newsletter:      { limit: 3,   windowMs: 3_600_000, store: "newsletter" },
 } as const;
 
 /** Check rate limit and return 429 response if exceeded, or null if OK.

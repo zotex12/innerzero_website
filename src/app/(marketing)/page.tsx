@@ -5,6 +5,7 @@ import { FeatureCards } from "@/components/sections/FeatureCards";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { PrivacyStatement } from "@/components/sections/PrivacyStatement";
 import { HomeFAQ, HOME_FAQ } from "@/components/sections/HomeFAQ";
+import { NewsletterSignup } from "@/components/sections/NewsletterSignup";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { JsonLd } from "@/components/JsonLd";
 import { createMetadata } from "@/lib/metadata";
@@ -31,6 +32,7 @@ export default function Home() {
       <HowItWorks />
       <PrivacyStatement />
       <HomeFAQ />
+      <NewsletterSignup source="homepage" />
       <CTABanner />
 
       {/* JSON-LD: Organization + SoftwareApplication + WebSite */}

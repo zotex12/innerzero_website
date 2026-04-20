@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SYSTEM_REQUIREMENTS } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
+import { NewsletterSignup } from "@/components/sections/NewsletterSignup";
 import { DownloadCards } from "./DownloadCards";
 
 export const metadata: Metadata = createMetadata({
@@ -154,6 +155,12 @@ export default function DownloadPage() {
           </p>
         </div>
       </Container>
+
+      <NewsletterSignup
+        source="download_page"
+        title="Know when new versions ship"
+        subtitle="Get notified about releases, features, and privacy updates. No spam."
+      />
 
       {/* JSON-LD: SoftwareApplication with per-platform offers */}
       <script
