@@ -6,6 +6,7 @@ import { HowItWorks } from "@/components/sections/HowItWorks";
 import { PrivacyStatement } from "@/components/sections/PrivacyStatement";
 import { HomeFAQ, HOME_FAQ } from "@/components/sections/HomeFAQ";
 import { NewsletterSignup } from "@/components/sections/NewsletterSignup";
+import { VideoEmbed } from "@/components/sections/VideoEmbed";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { JsonLd } from "@/components/JsonLd";
 import { createMetadata } from "@/lib/metadata";
@@ -33,6 +34,11 @@ export default function Home() {
       <PrivacyStatement />
       <HomeFAQ />
       <NewsletterSignup source="homepage" />
+      <VideoEmbed
+        videoId="DubxqF7eWRQ"
+        title="See InnerZero in action"
+        subtitle="A full walkthrough of the app, its features, and what it looks like on your own machine."
+      />
       <CTABanner />
 
       {/* JSON-LD: Organization + SoftwareApplication + WebSite */}

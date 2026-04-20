@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { CTABanner } from "@/components/sections/CTABanner";
+import { VideoEmbed } from "@/components/sections/VideoEmbed";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
@@ -83,6 +84,12 @@ export default function AboutPage() {
           </div>
         </Container>
       </div>
+
+      <VideoEmbed
+        videoId="DubxqF7eWRQ"
+        title="Watch the walkthrough"
+        subtitle="See the app running and every major feature in one go."
+      />
 
       <CTABanner />
 
