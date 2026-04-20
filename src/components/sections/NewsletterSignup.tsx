@@ -35,6 +35,16 @@ export function NewsletterSignup({
     "idle" | "submitting" | "success" | "error"
   >("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // Lazy-mount gate for the Turnstile widget. Passive scrollers see a
+  // clean form; the managed challenge only spins up after the user
+  // first focuses or types into the email input. By the time they
+  // finish typing an address, the token callback has typically fired
+  // and Subscribe is enabled with no added delay.
+  const [hasInteracted, setHasInteracted] = useState(false);
+
+  function markInteracted() {
+    if (!hasInteracted) setHasInteracted(true);
+  }
 
   const turnstileRef = useRef<TurnstileRef | null>(null);
   const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -95,10 +105,14 @@ export function NewsletterSignup({
         setEmail("");
         setCaptchaToken("");
         turnstileRef.current?.reset();
-        successTimerRef.current = setTimeout(
-          () => setStatus("idle"),
-          SUCCESS_HOLD_MS,
-        );
+        successTimerRef.current = setTimeout(() => {
+          setStatus("idle");
+          // Return to the clean pre-interaction state so a fresh
+          // signup on the same device re-mounts Turnstile with a
+          // new challenge rather than keeping the stale (already
+          // burnt) widget around.
+          setHasInteracted(false);
+        }, SUCCESS_HOLD_MS);
       } else {
         setStatus("error");
         setErrorMessage(
@@ -162,7 +176,14 @@ export function NewsletterSignup({
                 required
                 disabled={isBusy}
                 value={email}
+                onFocus={markInteracted}
                 onChange={(e) => {
+                  // Focus may not have fired first on paste or
+                  // browser autofill, so the change handler is the
+                  // second interaction gate. markInteracted is a
+                  // no-op after the first call so this costs nothing
+                  // on subsequent keystrokes.
+                  markInteracted();
                   setEmail(e.target.value);
                   clearErrorOnTyping();
                 }}
@@ -178,12 +199,14 @@ export function NewsletterSignup({
                 {isBusy ? "Subscribing..." : "Subscribe"}
               </button>
             </div>
-            <Turnstile
-              ref={turnstileRef}
-              onVerify={setCaptchaToken}
-              onExpire={() => setCaptchaToken("")}
-              onError={() => setCaptchaToken("")}
-            />
+            {hasInteracted && (
+              <Turnstile
+                ref={turnstileRef}
+                onVerify={setCaptchaToken}
+                onExpire={() => setCaptchaToken("")}
+                onError={() => setCaptchaToken("")}
+              />
+            )}
           </form>
         )}
 
