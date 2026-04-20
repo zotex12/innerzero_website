@@ -4,7 +4,9 @@ import { HeroScreenshots } from "@/components/sections/HeroScreenshots";
 import { FeatureCards } from "@/components/sections/FeatureCards";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { PrivacyStatement } from "@/components/sections/PrivacyStatement";
+import { HomeFAQ, HOME_FAQ } from "@/components/sections/HomeFAQ";
 import { CTABanner } from "@/components/sections/CTABanner";
+import { JsonLd } from "@/components/JsonLd";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
@@ -28,6 +30,7 @@ export default function Home() {
       <FeatureCards />
       <HowItWorks />
       <PrivacyStatement />
+      <HomeFAQ />
       <CTABanner />
 
       {/* JSON-LD: Organization + SoftwareApplication + WebSite */}
@@ -118,6 +121,24 @@ export default function Home() {
               },
             },
           ]),
+        }}
+      />
+
+      {/* JSON-LD: FAQPage. Built from the same HOME_FAQ array the
+          visible section renders, so the schema text matches the
+          displayed answers byte-for-byte (including the £ symbol). */}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: HOME_FAQ.map((item) => ({
+            "@type": "Question",
+            name: item.question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: item.answer,
+            },
+          })),
         }}
       />
     </>
