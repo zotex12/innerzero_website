@@ -155,7 +155,14 @@ const PAGE_DATA: PersonaPageProps = {
     },
   ],
   publishedDate: "2026-04-19",
-  modifiedDate: "2026-04-19",
+  modifiedDate: "2026-04-20",
+  heroScreenshot: {
+    src: "/images/appagentpageimage.png",
+    alt:
+      "InnerZero AI Specialists page showing the Coding specialist agent connected to Zero, with Automation and Art specialists marked coming soon",
+    caption:
+      "Zero's Coding Specialist handles code tasks in a separate model, hot-swapped in VRAM, with approval gates before any file changes.",
+  },
 };
 
 export default function DevelopersPage() {

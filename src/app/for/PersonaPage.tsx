@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/JsonLd";
@@ -31,6 +32,12 @@ export interface PersonaBullet {
   detail: string;
 }
 
+export interface PersonaScreenshot {
+  src: string;
+  alt: string;
+  caption: string;
+}
+
 export interface PersonaPageProps {
   slug: string;
   persona: string;
@@ -44,6 +51,11 @@ export interface PersonaPageProps {
   relatedBlog: PersonaRelatedPost[];
   publishedDate: string;
   modifiedDate: string;
+  // Optional hero screenshot rendered between the lead paragraphs
+  // and the "Why" section. Static (no lightbox) since each persona
+  // page targets a single concept and the image is supporting copy
+  // rather than a gallery.
+  heroScreenshot?: PersonaScreenshot;
 }
 
 export function PersonaPage(props: PersonaPageProps) {
@@ -60,6 +72,7 @@ export function PersonaPage(props: PersonaPageProps) {
     relatedBlog,
     publishedDate,
     modifiedDate,
+    heroScreenshot,
   } = props;
 
   const pageUrl = `${SITE_URL}/for/${slug}`;
@@ -110,6 +123,29 @@ export function PersonaPage(props: PersonaPageProps) {
               {leadFit}
             </p>
           </header>
+
+          {/* Optional hero screenshot. Mirrors HeroScreenshots framing
+              (dark frame + 19:10 inner aspect + object-contain) so
+              persona pages and the homepage feel consistent without
+              the lightbox interaction overhead. */}
+          {heroScreenshot && (
+            <section className="mt-10 md:mt-14" aria-label="Product screenshot">
+              <div className="overflow-hidden rounded-xl border border-border-default bg-[#0a0a0f] p-3 md:p-4">
+                <div className="relative aspect-19/10 overflow-hidden rounded-md">
+                  <Image
+                    src={heroScreenshot.src}
+                    alt={heroScreenshot.alt}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 80vw"
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+              <p className="mt-3 text-center text-sm text-text-secondary">
+                {heroScreenshot.caption}
+              </p>
+            </section>
+          )}
 
           {/* Why */}
           <section

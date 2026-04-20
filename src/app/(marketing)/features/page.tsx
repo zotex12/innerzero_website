@@ -1,5 +1,7 @@
+import { Fragment } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import {
   MessageSquare, Zap, History, Brain as BrainIcon, Settings2,
   Mic, AudioLines, Volume2, Timer, Cloud,
@@ -182,43 +184,78 @@ export default function FeaturesPage() {
 
       {/* Feature sections */}
       {SECTIONS.map((section) => (
-        <section
-          key={section.title}
-          className={`py-12 md:py-16 ${section.bg === "secondary" ? "bg-bg-secondary" : ""}`}
-        >
-          <Container>
-            <ScrollReveal>
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold text-text-primary">
-                  {section.title}
-                </h2>
-                <p className="mt-1 text-text-secondary">
-                  {section.subtitle}
-                </p>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {section.items.map((item) => (
-                  <div
-                    key={item.title}
-                    className="rounded-lg border border-border-default bg-bg-card p-5 transition-all duration-150 hover:-translate-y-0.5 hover:border-accent-gold hover:shadow-[0_0_16px_rgba(212,168,67,0.04)]"
-                  >
-                    <div className="flex items-start gap-3">
-                      <item.icon className="mt-0.5 h-5 w-5 shrink-0 text-accent-teal" />
-                      <div>
-                        <h3 className="text-sm font-semibold text-text-primary">
-                          {item.title}
-                        </h3>
-                        <p className="mt-1 text-xs text-text-secondary leading-relaxed">
-                          {item.desc}
-                        </p>
+        <Fragment key={section.title}>
+          <section
+            className={`py-12 md:py-16 ${section.bg === "secondary" ? "bg-bg-secondary" : ""}`}
+          >
+            <Container>
+              <ScrollReveal>
+                <div className="mb-8">
+                  <h2 className="text-2xl font-bold text-text-primary">
+                    {section.title}
+                  </h2>
+                  <p className="mt-1 text-text-secondary">
+                    {section.subtitle}
+                  </p>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {section.items.map((item) => (
+                    <div
+                      key={item.title}
+                      className="rounded-lg border border-border-default bg-bg-card p-5 transition-all duration-150 hover:-translate-y-0.5 hover:border-accent-gold hover:shadow-[0_0_16px_rgba(212,168,67,0.04)]"
+                    >
+                      <div className="flex items-start gap-3">
+                        <item.icon className="mt-0.5 h-5 w-5 shrink-0 text-accent-teal" />
+                        <div>
+                          <h3 className="text-sm font-semibold text-text-primary">
+                            {item.title}
+                          </h3>
+                          <p className="mt-1 text-xs text-text-secondary leading-relaxed">
+                            {item.desc}
+                          </p>
+                        </div>
                       </div>
                     </div>
+                  ))}
+                </div>
+              </ScrollReveal>
+            </Container>
+          </section>
+
+          {/* Personality screenshot, paired visually with the
+              Customisation section that introduces "AI personality"
+              as a feature card. Static framing matches the
+              homepage HeroScreenshots pattern (dark frame, 19:10
+              inner aspect, object-contain). No lightbox here since
+              the features page is deep-content; the image is
+              supporting evidence, not a gallery. */}
+          {section.title === "Customisation" && (
+            <section
+              aria-label="Personality settings screenshot"
+              className={`py-10 md:py-14 ${section.bg === "secondary" ? "bg-bg-secondary" : ""}`}
+            >
+              <Container>
+                <div className="mx-auto max-w-5xl">
+                  <div className="overflow-hidden rounded-xl border border-border-default bg-[#0a0a0f] p-3 md:p-4">
+                    <div className="relative aspect-19/10 overflow-hidden rounded-md">
+                      <Image
+                        src="/images/appsettingspersonalitypage.png"
+                        alt="InnerZero personality settings with Professional, Friendly, and Concise presets plus a custom personality creation form"
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 80vw"
+                        className="object-contain"
+                      />
+                    </div>
                   </div>
-                ))}
-              </div>
-            </ScrollReveal>
-          </Container>
-        </section>
+                  <p className="mt-3 text-center text-sm text-text-secondary">
+                    Choose a prebuilt personality or write your own. Applies
+                    to both text chat and voice.
+                  </p>
+                </div>
+              </Container>
+            </section>
+          )}
+        </Fragment>
       ))}
 
       {/* CTA */}
