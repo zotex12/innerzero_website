@@ -5,7 +5,7 @@
 InnerZero (one word, capital I and Z; casually "Zero") is a complete AI assistant that runs on open-source models via a local backend (Ollama by default, LM Studio supported). Your conversations, memory, voice, and documents stay on your machine. Cloud AI is optional, opt-in, and clearly labelled when active.
 
 Tagline: inner peace. inner joy. innerzero.
-Website: https://innerzero.com/
+Website: https://innerzero.com
 Download: https://innerzero.com/download
 Company: Summers Solutions Ltd, a UK company based in Birmingham, England (Company No. 16448945)
 Data protection: ICO registered (registration ZC122497)
@@ -16,7 +16,7 @@ Recommended: 16+ GB RAM, NVIDIA GPU with 6+ GB VRAM, SSD
 
 ## Start here
 
-- [Home](https://innerzero.com/): Product overview, tagline, primary download CTAs.
+- [Home](https://innerzero.com): Product overview, tagline, primary download CTAs.
 - [Download InnerZero (free)](https://innerzero.com/download): Free installers for Windows 10/11, macOS 12+, and Linux x86_64. Windows installer is code-signed by Summers Solutions Ltd.
 - [Features](https://innerzero.com/features): Full capability breakdown: AI chat, voice, memory, 30+ tools, knowledge packs, screen automation, cloud AI, customisation, and unrestricted mode.
 - [Pricing](https://innerzero.com/pricing): Free forever for personal use. Business Licence £50/year per seat. Optional cloud AI from £9.99/month or bring your own API keys.
@@ -71,7 +71,7 @@ InnerZero is a private AI assistant desktop application. It provides:
 
 ## Main site pages
 
-- [Home](https://innerzero.com/): Product overview.
+- [Home](https://innerzero.com): Product overview.
 - [Features](https://innerzero.com/features): Every feature category.
 - [Pricing](https://innerzero.com/pricing): Free, Business Licence, cloud plans, PAYG credits, supporter, FAQ.
 - [Download](https://innerzero.com/download): Per-OS installers, system requirements, CLI commands.

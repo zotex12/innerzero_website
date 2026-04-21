@@ -169,7 +169,7 @@ export default function DownloadPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            "@id": "https://innerzero.com/#software",
+            "@id": `${absoluteUrl("/")}#software`,
             name: "InnerZero",
             applicationCategory: "UtilitiesApplication",
             applicationSubCategory: "AI Assistant",
@@ -181,7 +181,7 @@ export default function DownloadPage() {
             downloadUrl: absoluteUrl("/download"),
             publisher: {
               "@type": "Organization",
-              "@id": "https://innerzero.com/#organization",
+              "@id": `${absoluteUrl("/")}#organization`,
               name: "InnerZero",
               url: absoluteUrl("/"),
             },

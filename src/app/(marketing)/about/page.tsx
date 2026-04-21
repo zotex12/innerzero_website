@@ -100,7 +100,7 @@ export default function AboutPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            "@id": "https://innerzero.com/#organization",
+            "@id": `${absoluteUrl("/")}#organization`,
             name: "InnerZero",
             url: absoluteUrl("/"),
             description:

@@ -167,13 +167,13 @@ export default async function BlogPostPage({ params }: Props) {
               image: post.ogImage || absoluteUrl("/banner.png"),
               author: {
                 "@type": "Organization",
-                "@id": "https://innerzero.com/#organization",
+                "@id": `${absoluteUrl("/")}#organization`,
                 name: "InnerZero",
                 url: absoluteUrl("/"),
               },
               publisher: {
                 "@type": "Organization",
-                "@id": "https://innerzero.com/#organization",
+                "@id": `${absoluteUrl("/")}#organization`,
                 name: "InnerZero",
                 url: absoluteUrl("/"),
                 logo: {

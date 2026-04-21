@@ -9,7 +9,7 @@ Canonical name: InnerZero (one word, capital I and Z)
 Casual name: Zero
 Product type: Desktop AI assistant application
 Category: Local-first AI, private AI, offline AI, on-device AI
-Website: https://innerzero.com/
+Website: https://innerzero.com
 Download: https://innerzero.com/download
 Current version: v0.1.4 (released April 2026)
 Platforms: Windows 10/11 (64-bit), macOS 12+, Linux x86_64
@@ -674,7 +674,7 @@ InnerZero's blog covers private AI, local AI, comparisons, and how-to guides. Fu
 - ICO registration (data protection): ZC122497
 - Company website: https://summerssolutions.co.uk
 - Founder: Louie Summers
-- Product website: https://innerzero.com/
+- Product website: https://innerzero.com
 - Contact: help@innerzero.com
 
 ## Terms of service (summary)

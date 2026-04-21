@@ -48,7 +48,7 @@ export default function Home() {
             {
               "@context": "https://schema.org",
               "@type": "Organization",
-              "@id": "https://innerzero.com/#organization",
+              "@id": `${absoluteUrl("/")}#organization`,
               name: "InnerZero",
               url: absoluteUrl("/"),
               description:
@@ -79,7 +79,7 @@ export default function Home() {
             {
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
-              "@id": "https://innerzero.com/#software",
+              "@id": `${absoluteUrl("/")}#software`,
               name: "InnerZero",
               applicationCategory: "UtilitiesApplication",
               applicationSubCategory: "AI Assistant",
@@ -100,7 +100,7 @@ export default function Home() {
                 "Optional cloud AI via BYO API keys",
               ],
               publisher: {
-                "@id": "https://innerzero.com/#organization",
+                "@id": `${absoluteUrl("/")}#organization`,
               },
               offers: {
                 "@type": "Offer",
@@ -112,11 +112,11 @@ export default function Home() {
             {
               "@context": "https://schema.org",
               "@type": "WebSite",
-              "@id": "https://innerzero.com/#website",
+              "@id": `${absoluteUrl("/")}#website`,
               name: "InnerZero",
               url: absoluteUrl("/"),
               publisher: {
-                "@id": "https://innerzero.com/#organization",
+                "@id": `${absoluteUrl("/")}#organization`,
               },
               potentialAction: {
                 "@type": "SearchAction",
