@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/blog";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { Button } from "@/components/ui/Button";
+import { absoluteUrl } from "@/lib/metadata";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getPostBySlug(slug);
   if (!post) return {};
 
-  const url = `https://innerzero.com/blog/${post.slug}`;
+  const url = absoluteUrl(`/blog/${post.slug}`);
   return {
     title: post.title,
     description: post.description,
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url,
       images: [
         {
-          url: post.ogImage || "https://innerzero.com/banner.png",
+          url: post.ogImage || absoluteUrl("/banner.png"),
           width: 1536,
           height: 1024,
           alt: post.title,
@@ -47,7 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
-      images: [post.ogImage || "https://innerzero.com/banner.png"],
+      images: [post.ogImage || absoluteUrl("/banner.png")],
     },
   };
 }
@@ -163,26 +164,26 @@ export default async function BlogPostPage({ params }: Props) {
               description: post.description,
               datePublished: post.date,
               dateModified: post.updated || post.date,
-              image: post.ogImage || "https://innerzero.com/banner.png",
+              image: post.ogImage || absoluteUrl("/banner.png"),
               author: {
                 "@type": "Organization",
                 "@id": "https://innerzero.com/#organization",
                 name: "InnerZero",
-                url: "https://innerzero.com",
+                url: absoluteUrl("/"),
               },
               publisher: {
                 "@type": "Organization",
                 "@id": "https://innerzero.com/#organization",
                 name: "InnerZero",
-                url: "https://innerzero.com",
+                url: absoluteUrl("/"),
                 logo: {
                   "@type": "ImageObject",
-                  url: "https://innerzero.com/images/logo.png",
+                  url: absoluteUrl("/images/logo.png"),
                 },
               },
               mainEntityOfPage: {
                 "@type": "WebPage",
-                "@id": `https://innerzero.com/blog/${post.slug}`,
+                "@id": absoluteUrl(`/blog/${post.slug}`),
               },
             }),
           }}

@@ -9,10 +9,10 @@ import { NewsletterSignup } from "@/components/sections/NewsletterSignup";
 import { VideoEmbed } from "@/components/sections/VideoEmbed";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { JsonLd } from "@/components/JsonLd";
-import { createMetadata } from "@/lib/metadata";
+import { absoluteUrl, createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
-  alternates: { canonical: "/" },
+  path: "/",
   title: "InnerZero. Free Private AI Assistant That Runs on Your PC",
   description:
     "InnerZero is a free private AI assistant that runs entirely on your PC. No cloud. No tracking. Just you and your AI.",
@@ -20,7 +20,6 @@ export const metadata: Metadata = createMetadata({
     title: "InnerZero. Free Private AI Assistant That Runs on Your PC",
     description:
       "InnerZero is a free private AI assistant that runs entirely on your PC. No cloud. No tracking. Just you and your AI.",
-    url: "https://innerzero.com",
   },
 });
 
@@ -51,7 +50,7 @@ export default function Home() {
               "@type": "Organization",
               "@id": "https://innerzero.com/#organization",
               name: "InnerZero",
-              url: "https://innerzero.com",
+              url: absoluteUrl("/"),
               description:
                 "InnerZero is a free private AI assistant that runs entirely on your PC. No cloud, no tracking, no subscription required.",
               foundingDate: "2025",
@@ -62,7 +61,7 @@ export default function Home() {
               },
               logo: {
                 "@type": "ImageObject",
-                url: "https://innerzero.com/images/logo.png",
+                url: absoluteUrl("/images/logo.png"),
               },
               sameAs: [
                 "https://x.com/InnerZero_ai",
@@ -88,8 +87,8 @@ export default function Home() {
               softwareVersion: "0.1.4",
               description:
                 "A free private AI assistant that runs entirely on your PC. No cloud. No tracking. No subscription.",
-              url: "https://innerzero.com",
-              downloadUrl: "https://innerzero.com/download",
+              url: absoluteUrl("/"),
+              downloadUrl: absoluteUrl("/download"),
               featureList: [
                 "Runs 100% locally — no cloud required",
                 "Persistent memory system",
@@ -115,7 +114,7 @@ export default function Home() {
               "@type": "WebSite",
               "@id": "https://innerzero.com/#website",
               name: "InnerZero",
-              url: "https://innerzero.com",
+              url: absoluteUrl("/"),
               publisher: {
                 "@id": "https://innerzero.com/#organization",
               },
@@ -123,7 +122,7 @@ export default function Home() {
                 "@type": "SearchAction",
                 target: {
                   "@type": "EntryPoint",
-                  urlTemplate: "https://innerzero.com/blog?q={search_term_string}",
+                  urlTemplate: `${absoluteUrl("/blog")}?q={search_term_string}`,
                 },
                 "query-input": "required name=search_term_string",
               },

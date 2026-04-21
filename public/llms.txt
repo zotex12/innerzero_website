@@ -5,7 +5,7 @@
 InnerZero (one word, capital I and Z; casually "Zero") is a complete AI assistant that runs on open-source models via a local backend (Ollama by default, LM Studio supported). Your conversations, memory, voice, and documents stay on your machine. Cloud AI is optional, opt-in, and clearly labelled when active.
 
 Tagline: inner peace. inner joy. innerzero.
-Website: https://innerzero.com
+Website: https://innerzero.com/
 Download: https://innerzero.com/download
 Company: Summers Solutions Ltd, a UK company based in Birmingham, England (Company No. 16448945)
 Data protection: ICO registered (registration ZC122497)

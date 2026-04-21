@@ -2,6 +2,24 @@ import type { Metadata } from "next";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://innerzero.com";
 
+// Site-wide URL convention:
+//   - Root "/" resolves to `${SITE_URL}/` (with trailing slash)
+//   - All other paths resolve to `${SITE_URL}/<path>` (no trailing slash)
+//   - Host is always `innerzero.com`; the www variant 308s back to apex
+// Rationale: matches what Next.js emits natively with `trailingSlash: false`
+// and what the www→non-www redirect lands on. Unifying URL emission
+// around this convention stops Google choosing its own canonical when
+// openGraph / JSON-LD / alternates drift against each other.
+export function absoluteUrl(path: string): string {
+  if (!path || path === "/") return `${SITE_URL}/`;
+  const withLead = path.startsWith("/") ? path : `/${path}`;
+  const trimmed =
+    withLead.length > 1 && withLead.endsWith("/")
+      ? withLead.slice(0, -1)
+      : withLead;
+  return `${SITE_URL}${trimmed}`;
+}
+
 export const DEFAULT_METADATA: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -40,16 +58,41 @@ export const DEFAULT_METADATA: Metadata = {
   },
 };
 
-export function createMetadata(overrides: Metadata): Metadata {
+// Optional `path` is a convenience that fills in alternates.canonical
+// (as a relative path) and openGraph.url (absolute via absoluteUrl).
+// Precedence is explicit caller > path-derived > undefined — i.e. if
+// the caller passes `alternates.canonical` or `openGraph.url`, their
+// value always wins over whatever `path` would have produced. This
+// keeps existing callers unchanged while giving new callers a single
+// field to keep the two URL representations in lockstep.
+export function createMetadata(
+  overrides: Metadata & { path?: string },
+): Metadata {
+  const { path, ...rest } = overrides;
+
+  const canonicalFromPath = path;
+  const ogUrlFromPath = path ? absoluteUrl(path) : undefined;
+
+  const hasAlternates = canonicalFromPath || rest.alternates;
+
   return {
-    ...overrides,
+    ...rest,
+    ...(hasAlternates
+      ? {
+          alternates: {
+            ...(canonicalFromPath ? { canonical: canonicalFromPath } : {}),
+            ...rest.alternates,
+          },
+        }
+      : {}),
     openGraph: {
       ...DEFAULT_METADATA.openGraph,
-      ...overrides.openGraph,
+      ...(ogUrlFromPath ? { url: ogUrlFromPath } : {}),
+      ...rest.openGraph,
     },
     twitter: {
       ...DEFAULT_METADATA.twitter,
-      ...overrides.twitter,
+      ...rest.twitter,
     },
   };
 }

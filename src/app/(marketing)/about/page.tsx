@@ -3,7 +3,7 @@ import { Container } from "@/components/ui/Container";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { VideoEmbed } from "@/components/sections/VideoEmbed";
-import { createMetadata } from "@/lib/metadata";
+import { absoluteUrl, createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/about" },
@@ -102,7 +102,7 @@ export default function AboutPage() {
             "@type": "Organization",
             "@id": "https://innerzero.com/#organization",
             name: "InnerZero",
-            url: "https://innerzero.com",
+            url: absoluteUrl("/"),
             description:
               "InnerZero is a free private AI assistant that runs entirely on your PC. Built by Summers Solutions, a UK-based software company focused on privacy-respecting tools.",
             foundingDate: "2025",
@@ -113,7 +113,7 @@ export default function AboutPage() {
             },
             logo: {
               "@type": "ImageObject",
-              url: "https://innerzero.com/images/logo.png",
+              url: absoluteUrl("/images/logo.png"),
             },
             sameAs: [
               "https://x.com/InnerZero_ai",

@@ -9,7 +9,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SYSTEM_REQUIREMENTS } from "@/lib/constants";
-import { createMetadata } from "@/lib/metadata";
+import { absoluteUrl, createMetadata } from "@/lib/metadata";
 import { NewsletterSignup } from "@/components/sections/NewsletterSignup";
 import { DownloadCards } from "./DownloadCards";
 
@@ -177,13 +177,13 @@ export default function DownloadPage() {
             softwareVersion: "0.1.4",
             description:
               "A free private AI assistant that runs entirely on your PC. No cloud. No tracking. No subscription.",
-            url: "https://innerzero.com",
-            downloadUrl: "https://innerzero.com/download",
+            url: absoluteUrl("/"),
+            downloadUrl: absoluteUrl("/download"),
             publisher: {
               "@type": "Organization",
               "@id": "https://innerzero.com/#organization",
               name: "InnerZero",
-              url: "https://innerzero.com",
+              url: absoluteUrl("/"),
             },
             offers: [
               {

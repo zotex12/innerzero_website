@@ -18,7 +18,7 @@ import type { LucideIcon } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { createMetadata } from "@/lib/metadata";
+import { absoluteUrl, createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/features" },
@@ -294,7 +294,7 @@ export default function FeaturesPage() {
             offers: { "@type": "Offer", price: "0", priceCurrency: "GBP" },
             description:
               "Free private AI assistant with chat, voice, memory, 30+ tools, knowledge packs, and screen automation. Runs entirely on your PC.",
-            url: "https://innerzero.com",
+            url: absoluteUrl("/"),
           }),
         }}
       />
