@@ -36,10 +36,51 @@ export interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.5",
+    date: "April 2026",
+    releaseDate: "2026-04-25",
+    latest: true,
+    groups: [
+      {
+        label: "New",
+        entries: [
+          { text: "Calendar page with Month, Week, Day, and Agenda views. Click an empty slot to create an event. Drag events to reschedule." },
+          { text: "Two-way Google Calendar sync. Connect your Google account in Settings; events from Google appear locally and events you create at home publish back. Private events stay on your machine." },
+          { text: "Gmail integration (read-only). Sender, subject, and a short snippet of recent inbox emails so Zero can answer questions about your mail. Message bodies are never fetched or stored." },
+          { text: "Tasks page with a live queue. Kanban lanes, progress bars, ETAs, and resource coordination so you can see what Zero is doing in the background." },
+          { text: "Dashboard 7-day calendar widget with a next-up section." },
+          { text: "AI agency over your calendar. Zero can create, find, update, and delete events directly from chat with approval gates on writes." },
+          { text: "Source provenance on memories. Every memory now records where it came from (chat, voice, document, Gmail, calendar) and surfaces that source to the AI." },
+          { text: "Mac code signing with Developer ID and hardened runtime. The macOS installer is now signed by Summers Solutions Ltd." },
+          { text: "Windows installer hardened with Azure Trusted Signing and a deferred-swap auto-updater that resolves the WebView2 file-lock during in-app upgrades." },
+        ],
+      },
+      {
+        label: "Improved",
+        entries: [
+          { text: "Anthropic prompt caching is now active on Director calls, reducing cost on repeated cache-hit prompts within the 5-minute window." },
+          { text: "Calendar-aware memory. Time-sensitive questions surface upcoming 7-day events directly into Zero's context." },
+          { text: "Knowledge pack search quality. Two-phase title boosting, prose extraction, and question-prefix stripping produce cleaner answers." },
+          { text: "Faster voice shortcuts. Time, weather, calculator, dictionary, system info, and timer queries now respond in under two seconds." },
+          { text: "Privacy hardening for cloud features. Every cloud dispatch path (initial messages, retries, and multi-round agent loops) now routes through one privacy-blacklist chokepoint." },
+        ],
+      },
+      {
+        label: "Fixed",
+        entries: [
+          { text: "Windows in-app updater no longer fails on the WebView2 DLL file-lock. The new deferred-swap pattern applies the upgrade at next cold start." },
+          { text: "Archive page now shows archived memories correctly." },
+          { text: "Settings hover styling and tab consistency across all 9 tabs." },
+          { text: "Mac and Linux launches are now reliable: pywebview backend bindings ship with the correct platform markers." },
+          { text: "Memory system: sleep pipeline routes correctly on the LM Studio backend, preference-type memories reach the Director prompt, and project-scoped retrieval backfills bidirectionally." },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.4",
     date: "April 2026",
     releaseDate: "2026-04-18",
-    latest: true,
     groups: [
       {
         label: "New",

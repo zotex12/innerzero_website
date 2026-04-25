@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, Monitor, Apple, Terminal } from "lucide-react";
 
-const VERSION = "0.1.4";
+const VERSION = "0.1.5";
 
 const PLATFORMS = [
   {
@@ -11,7 +11,7 @@ const PLATFORMS = [
     label: "Windows 10/11",
     icon: Monitor,
     file: `InnerZero-Setup-${VERSION}.exe`,
-    size: "239 MB",
+    size: "244 MB",
     url: `/download/thanks?asset=InnerZero-Setup-${VERSION}.exe`,
     reqs: "64-bit, 8 GB+ RAM",
     note: 'Windows may show a SmartScreen warning on first install. Click "More info" then "Run anyway". The installer is signed by Summers Solutions Ltd.',
@@ -22,10 +22,10 @@ const PLATFORMS = [
     label: "macOS 12+",
     icon: Apple,
     file: `InnerZero-Setup-${VERSION}-mac.dmg`,
-    size: "490 MB",
+    size: "532 MB",
     url: `/download/thanks?asset=InnerZero-Setup-${VERSION}-mac.dmg`,
     reqs: "Intel or Apple Silicon, 8 GB+ RAM",
-    note: 'macOS may block the app. Right-click the app, select "Open", then click "Open" again. This is because the app is not yet notarised.',
+    note: 'Signed with Developer ID and hardened runtime. On first launch, Gatekeeper does a one-time online check with Apple. If you are offline, right-click the app, select "Open", then click "Open" again.',
     cli: `curl -L -o InnerZero.dmg https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-${VERSION}-mac.dmg && open InnerZero.dmg`,
   },
   {
@@ -33,10 +33,10 @@ const PLATFORMS = [
     label: "Linux x86_64",
     icon: Terminal,
     file: `InnerZero-${VERSION}-x86_64.AppImage`,
-    size: "356 MB",
+    size: "479 MB",
     url: `/download/thanks?asset=InnerZero-${VERSION}-x86_64.AppImage`,
     reqs: "x86_64, glibc 2.31+, 8 GB+ RAM",
-    note: "Install system dependencies first: sudo apt install espeak-ng portaudio19-dev xclip",
+    note: "Install system dependencies first: sudo apt install -y espeak-ng portaudio19-dev xclip libwebkit2gtk-4.1-0 libgirepository-1.0-1 libfuse2 gir1.2-webkit2-4.1",
     cli: `wget https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-${VERSION}-x86_64.AppImage && chmod +x InnerZero-${VERSION}-x86_64.AppImage && ./InnerZero-${VERSION}-x86_64.AppImage`,
   },
 ];

@@ -79,6 +79,7 @@ const SECTIONS: FeatureSection[] = [
       { icon: Heart, title: "Sleep and reflection", desc: "Overnight processing extracts facts, prunes duplicates, and strengthens important memories." },
       { icon: Clipboard, title: "Memory import", desc: "Paste text or upload files to teach Zero about you or your work." },
       { icon: FolderOpen, title: "Project scoping", desc: "Organise memory by project so Zero stays focused on what matters." },
+      { icon: List, title: "Source provenance", desc: "Every memory tracks where it came from (chat, voice, document, Gmail, calendar) so Zero knows the source of what it remembers." },
     ],
   },
   {
@@ -90,6 +91,9 @@ const SECTIONS: FeatureSection[] = [
       { icon: FileText, title: "Document Q&A", desc: "Upload .txt, .md, .pdf, .docx, .xlsx, .csv files and ask questions." },
       { icon: Calculator, title: "Calculator", desc: "Accurate arithmetic, math functions, and unit awareness." },
       { icon: FileEdit, title: "File operations", desc: "Write, read, rename, delete files in a sandboxed output folder." },
+      { icon: Timer, title: "Calendar", desc: "Month, Week, Day, and Agenda views with two-way Google Calendar sync. Zero can also create, find, and update events directly from chat." },
+      { icon: Send, title: "Gmail integration", desc: "Read-only Gmail with metadata only (sender, subject, snippet). Message bodies are never fetched or stored." },
+      { icon: LayoutDashboard, title: "Live tasks queue", desc: "Background work shown as a kanban with progress, ETAs, and resource lane coordination." },
       { icon: Timer, title: "Timers, alarms, reminders", desc: "Set countdowns, alarms with custom sounds, and timed reminders." },
       { icon: StickyNote, title: "Notes", desc: "Quick timestamped notes saved locally." },
       { icon: BookOpen, title: "Dictionary", desc: "Word definitions, synonyms, and examples." },
@@ -158,9 +162,9 @@ const SECTIONS: FeatureSection[] = [
     subtitle: "What's next.",
     bg: "secondary",
     items: [
-      { icon: Code, title: "Mac code signing", desc: "Signed and notarised macOS installer. Currently unsigned." },
+      { icon: Code, title: "Mac notarisation", desc: "The macOS installer is already signed with Developer ID and hardened runtime. Stapled notarisation is next, removing the one-time online Gatekeeper check." },
       { icon: BookOpen, title: "More knowledge packs", desc: "Science, history, and specialised reference databases." },
-      { icon: PenTool, title: "Background task execution", desc: "Let Zero work on tasks while you do other things." },
+      { icon: PenTool, title: "More connectors", desc: "Outlook, Discord, and LinkedIn on the same connector framework that powers Gmail and Google Calendar." },
     ],
   },
 ];

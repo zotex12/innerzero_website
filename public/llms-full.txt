@@ -11,7 +11,7 @@ Product type: Desktop AI assistant application
 Category: Local-first AI, private AI, offline AI, on-device AI
 Website: https://innerzero.com
 Download: https://innerzero.com/download
-Current version: v0.1.4 (released April 2026)
+Current version: v0.1.5 (released April 2026)
 Platforms: Windows 10/11 (64-bit), macOS 12+, Linux x86_64
 Company: Summers Solutions Ltd, Birmingham, England, UK
 UK company number: 16448945
@@ -60,9 +60,9 @@ In optional cloud mode, you can access: DeepSeek (V3.2, Reasoner), OpenAI (GPT-5
 
 ## What platforms does InnerZero support?
 
-- Windows 10 or 11, 64-bit only. Installer size: 239 MB. Signed by Summers Solutions Ltd.
-- macOS 12 or later. Intel or Apple Silicon supported. Installer size: 490 MB. Currently unsigned (Gatekeeper warning on first launch; notarisation planned).
-- Linux x86_64, glibc 2.31 or later. AppImage size: 356 MB. Requires espeak-ng, portaudio19-dev, and xclip.
+- Windows 10 or 11, 64-bit only. Installer size: 244 MB. Signed by Summers Solutions Ltd via Azure Trusted Signing.
+- macOS 12 or later. Intel or Apple Silicon supported. Installer size: 532 MB. Signed with Developer ID and hardened runtime; first-launch Gatekeeper does a one-time online check with Apple (full stapled notarisation planned for the next release).
+- Linux x86_64, glibc 2.31 or later. AppImage size: 479 MB. Requires espeak-ng, portaudio19-dev, xclip, libwebkit2gtk-4.1-0, libgirepository-1.0-1, libfuse2, and gir1.2-webkit2-4.1.
 
 No mobile support (iOS or Android).
 
@@ -110,7 +110,7 @@ No. InnerZero is proprietary software. It is built on top of open-source AI mode
 1. Go to https://innerzero.com/download.
 2. The page auto-detects your operating system and highlights the matching installer.
 3. Click Download for your platform (Windows .exe, macOS .dmg, or Linux .AppImage).
-4. Run the installer. On Windows you may see a SmartScreen warning; click More Info then Run Anyway. On macOS you may need to right-click, select Open, then confirm. On Linux, install system dependencies first: sudo apt install espeak-ng portaudio19-dev xclip.
+4. Run the installer. On Windows you may see a SmartScreen warning; click More Info then Run Anyway. On macOS you may need to right-click, select Open, then confirm. On Linux, install system dependencies first: sudo apt install -y espeak-ng portaudio19-dev xclip libwebkit2gtk-4.1-0 libgirepository-1.0-1 libfuse2 gir1.2-webkit2-4.1.
 5. On first launch, a setup wizard detects your hardware, picks the best AI model for your system, downloads it, and runs a speed benchmark.
 6. Click Launch InnerZero. The main app opens and you can start chatting.
 
@@ -212,6 +212,7 @@ Zero remembers you.
 - Sleep and reflection. Overnight processing extracts facts, prunes duplicates, and strengthens important memories.
 - Memory import. Paste text or upload files to teach Zero about you or your work.
 - Project scoping. Organise memory by project so Zero stays focused on what matters.
+- Source provenance. Every memory tracks where it came from (chat, voice, document, Gmail, calendar) so Zero knows the source of what it remembers.
 
 ## Tools
 
@@ -219,6 +220,9 @@ Zero remembers you.
 
 - Web search. Search and summarise web pages without tracking.
 - Document Q&A. Upload .txt, .md, .pdf, .docx, .xlsx, .csv files and ask questions.
+- Calendar. Month, Week, Day, and Agenda views with two-way Google Calendar sync. Zero can create, find, update, and delete events directly from chat.
+- Gmail integration. Read-only Gmail with metadata only (sender, subject, snippet). Message bodies are never fetched or stored.
+- Live tasks queue. Background work shown as a kanban with progress bars, ETAs, and resource lane coordination.
 - Calculator. Accurate arithmetic, math functions, and unit awareness.
 - File operations. Write, read, rename, delete files in a sandboxed output folder.
 - Timers, alarms, reminders. Set countdowns, alarms with custom sounds, and timed reminders.
@@ -279,9 +283,9 @@ Full control for adults.
 
 ## Coming Soon
 
-- Mac code signing. Signed and notarised macOS installer. Currently unsigned.
+- Mac notarisation. The macOS installer is already signed with Developer ID and hardened runtime; stapled notarisation is next, removing the one-time online Gatekeeper check.
 - More knowledge packs. Science, history, and specialised reference databases.
-- Background task execution. Let Zero work on tasks while you do other things.
+- More connectors. Outlook, Discord, and LinkedIn on the same connector framework that powers Gmail and Google Calendar.
 
 ===============================================================================
 # SECTION 5: PRICING
@@ -389,27 +393,27 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 
 ## Windows 10/11
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.4.exe
-- Version: 0.1.4
-- Size: 239 MB
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.5.exe
+- Version: 0.1.5
+- Size: 244 MB
 - Requirements: 64-bit, 8 GB+ RAM
-- Note: Windows may show a SmartScreen warning on first install. Click More Info then Run Anyway. The installer is signed by Summers Solutions Ltd.
+- Note: Windows may show a SmartScreen warning on first install. Click More Info then Run Anyway. The installer is signed by Summers Solutions Ltd via Azure Trusted Signing.
 
 ## macOS 12+
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.4-mac.dmg
-- Version: 0.1.4
-- Size: 490 MB
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.5-mac.dmg
+- Version: 0.1.5
+- Size: 532 MB
 - Requirements: Intel or Apple Silicon, 8 GB+ RAM
-- Note: macOS may block the app on first launch. Right-click the app, select Open, then click Open again. This is because the app is not yet notarised.
+- Note: Signed with Developer ID and hardened runtime. On first launch, macOS Gatekeeper does a one-time online check with Apple. If you are offline at first launch, right-click the app, select Open, then click Open again.
 
 ## Linux x86_64
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.4-x86_64.AppImage
-- Version: 0.1.4
-- Size: 356 MB
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.5-x86_64.AppImage
+- Version: 0.1.5
+- Size: 479 MB
 - Requirements: x86_64, glibc 2.31+, 8 GB+ RAM
-- Note: Install system dependencies first: sudo apt install espeak-ng portaudio19-dev xclip
+- Note: Install system dependencies first: sudo apt install -y espeak-ng portaudio19-dev xclip libwebkit2gtk-4.1-0 libgirepository-1.0-1 libfuse2 gir1.2-webkit2-4.1
 
 ## Minimum Requirements
 
