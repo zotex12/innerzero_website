@@ -71,7 +71,7 @@ const PERSONAS: { slug: string; label: string; oneLine: string }[] = [
   {
     slug: "students",
     label: "Students",
-    oneLine: "Free forever, no account, offline study with knowledge packs.",
+    oneLine: "Free, no account, offline study with knowledge packs.",
   },
   {
     slug: "researchers",
@@ -149,7 +149,7 @@ const COMPARISON_ROWS: {
   },
   {
     row: "Cost",
-    local: "Free forever. Electricity is the only marginal cost.",
+    local: "Free. Electricity is the only marginal cost.",
     cloud: "Subscription or pay-per-token. Scales with usage.",
     hybrid: "Free for local tasks. You pay the provider only for cloud calls.",
   },
@@ -439,9 +439,9 @@ export default function WhatIsLocalAiPage() {
           </SectionHeading>
           <Answer>
             Yes. The open-source models and the runtimes that serve them are
-            free to download and use. InnerZero itself is free forever for
-            personal use. Your only marginal cost is the electricity each
-            inference uses.
+            free to download and use. InnerZero itself is free for personal
+            use. Your only marginal cost is the electricity each inference
+            uses.
           </Answer>
           <Body>
             The realistic catch is not money, it is time and hardware. A

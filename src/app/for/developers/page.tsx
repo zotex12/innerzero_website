@@ -36,7 +36,7 @@ const PAGE_DATA: PersonaPageProps = {
     {
       title: "No subscription for daily tasks",
       detail:
-        "Boilerplate, tests, refactors, and explanations run on a local model you download once. Free forever, no per-seat billing.",
+        "Boilerplate, tests, refactors, and explanations run on a local model you download once. Free, no per-seat billing.",
     },
     {
       title: "Sandboxed coding agent",

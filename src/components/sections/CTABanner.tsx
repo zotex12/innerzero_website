@@ -15,7 +15,7 @@ interface CTABannerProps {
 export function CTABanner({
   className,
   headline = "Ready to meet your private AI?",
-  description = "InnerZero is free forever. Download and start chatting in minutes.",
+  description = "InnerZero is free to download. Start chatting in minutes.",
   ctaText = "Download Free",
   ctaHref = "/download",
 }: CTABannerProps) {

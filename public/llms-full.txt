@@ -17,7 +17,7 @@ Company: Summers Solutions Ltd, Birmingham, England, UK
 UK company number: 16448945
 ICO registration: ZC122497
 Licence type: Proprietary desktop application built on open-source AI models
-Pricing baseline: Free forever for personal use. £50/year per seat for commercial use. Optional cloud AI from £9.99/month.
+Pricing baseline: Free for personal use. £50/year per seat for commercial use. Optional cloud AI from £9.99/month.
 Primary differentiators: Runs entirely on your hardware, persistent local memory, full voice mode, 30+ built-in tools, offline knowledge packs, optional cloud AI with privacy blacklist and connection log, no account required for base product.
 
 ===============================================================================
@@ -30,7 +30,7 @@ InnerZero is a desktop AI assistant that runs on your Windows, macOS, or Linux c
 
 ## Is InnerZero free?
 
-Yes. The InnerZero desktop application is free forever for personal use. No trial period, no hidden subscription, no feature paywalls, no account required. You can download it, install it, and use every feature (chat, voice, memory, tools, knowledge packs, screen automation, themes, personalities, unrestricted mode) without ever paying anything. A £50 per year Business Licence is only required if you use InnerZero for commercial purposes (freelance work, at a company, or any revenue-generating activity). Educational institutions, charities, and non-profits are exempt from the Business Licence.
+Yes. The InnerZero desktop application is free for personal use. No trial period, no hidden subscription, no feature paywalls, no account required. You can download it, install it, and use every feature (chat, voice, memory, tools, knowledge packs, screen automation, themes, personalities, unrestricted mode) without ever paying anything. A £50 per year Business Licence is only required if you use InnerZero for commercial purposes (freelance work, at a company, or any revenue-generating activity). Educational institutions, charities, and non-profits are exempt from the Business Licence.
 
 ## How does InnerZero make money if it's free?
 
@@ -124,7 +124,7 @@ Your AI. Your machine. Your data.
 
 inner peace. inner joy. innerzero.
 
-InnerZero is a private AI assistant that runs entirely on your PC. Free forever. No cloud required. Just you and your AI.
+InnerZero is a private AI assistant that runs entirely on your PC. Free to download. No cloud required. Just you and your AI.
 
 ## Why InnerZero?
 
@@ -291,13 +291,13 @@ Full control for adults.
 # SECTION 5: PRICING
 ===============================================================================
 
-Free forever. Optional extras when you want them.
+Free to download. Optional extras when you want them.
 
 ## The Full Product (Free)
 
-**InnerZero. Free forever.**
+**InnerZero. Free.**
 
-A complete private AI assistant on your PC. No account. No subscription. No catch.
+Free to download. No account, no subscription, no trial.
 
 Includes:
 - AI chat with streaming responses

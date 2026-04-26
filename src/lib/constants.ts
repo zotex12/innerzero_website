@@ -38,7 +38,7 @@ export const HERO = {
   headline: "Your AI. Your machine. Your data.",
   tagline: "inner peace. inner joy. innerzero.",
   description:
-    "InnerZero is a private AI assistant that runs entirely on your PC. Free forever. No cloud required. Just you and your AI.",
+    "InnerZero is a private AI assistant that runs entirely on your PC. Free to download. No cloud required. Just you and your AI.",
   primaryCta: "Download Free",
   primaryCtaHref: "/download",
   secondaryCta: "Learn more",

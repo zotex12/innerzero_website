@@ -49,7 +49,7 @@ const PAGE_DATA: PersonaPageProps = {
         "Set the assistant's tone to match your voice, your editor's voice, or a specific character. Not a corporate-neutral default.",
     },
     {
-      title: "Free forever, no deadline paywall",
+      title: "Free, no deadline paywall",
       detail:
         "No subscription means the AI does not suddenly stop the night before your manuscript is due.",
     },

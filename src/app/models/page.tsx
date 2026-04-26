@@ -169,8 +169,8 @@ export default function ModelsPage() {
               via Ollama or LM Studio. The main families are Qwen 3, Gemma 3,
               and gpt-oss, covering everything from a 1B voice model on a
               basic laptop to a 235B reasoning model on a datacenter-class
-              workstation. Local AI is free forever, no subscription, no
-              account required.
+              workstation. Local AI is free, no subscription, no account
+              required.
             </p>
             <p className="mt-4 max-w-3xl text-lg text-text-secondary">
               Cloud support is optional. If you want frontier-quality models

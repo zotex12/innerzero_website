@@ -281,7 +281,7 @@ export function PersonaPage(props: PersonaPageProps) {
               Ready to try it?
             </h2>
             <p className="mt-3 text-text-secondary">
-              Free forever for personal use. No account required.
+              Free for personal use. No account required.
             </p>
             <div className="mt-6 flex flex-col items-center gap-3">
               <Button href="/download">Download InnerZero</Button>

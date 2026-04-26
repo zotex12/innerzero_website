@@ -26,10 +26,10 @@ const PAGE_DATA: PersonaPageProps = {
   leadPain:
     "Students get squeezed between a paid-AI subscription they cannot afford, a campus network that may log cloud AI traffic, and free tiers that ration usage the night before a deadline. Most assistants also require an email and a credit card before you can do anything useful.",
   leadFit:
-    "InnerZero is free forever, runs fully on your laptop so nothing touches your university's network, and works offline in the library or on the bus. No account, no email, no trial.",
+    "InnerZero is free, runs fully on your laptop so nothing touches your university's network, and works offline in the library or on the bus. No account, no email, no trial.",
   whyBullets: [
     {
-      title: "Free forever",
+      title: "Free to download",
       detail:
         "No trial, no usage caps, no credit card. Local chat, voice, memory, and knowledge packs are all included at zero cost.",
     },

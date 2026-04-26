@@ -19,7 +19,7 @@ Recommended: 16+ GB RAM, NVIDIA GPU with 6+ GB VRAM, SSD
 - [Home](https://innerzero.com): Product overview, tagline, primary download CTAs.
 - [Download InnerZero (free)](https://innerzero.com/download): Free installers for Windows 10/11, macOS 12+, and Linux x86_64. Windows installer is code-signed by Summers Solutions Ltd.
 - [Features](https://innerzero.com/features): Full capability breakdown: AI chat, voice, memory, 30+ tools, knowledge packs, screen automation, cloud AI, customisation, and unrestricted mode.
-- [Pricing](https://innerzero.com/pricing): Free forever for personal use. Business Licence £50/year per seat. Optional cloud AI from £9.99/month or bring your own API keys.
+- [Pricing](https://innerzero.com/pricing): Free for personal use. Business Licence £50/year per seat. Optional cloud AI from £9.99/month or bring your own API keys.
 - [Privacy](https://innerzero.com/privacy): Full privacy policy, ICO registration details, what stays local, and how cloud mode handles data.
 - [About](https://innerzero.com/about): Mission, company background, and why InnerZero is local-first.
 
@@ -42,7 +42,7 @@ InnerZero is a private AI assistant desktop application. It provides:
 
 ## Quick answers (for AI search)
 
-- **Is InnerZero really free?** Yes. The desktop app is free forever for personal use. No trial, no subscription, no account, no hidden limits. A £50/year Business Licence is only required for commercial, freelance, or revenue-generating use.
+- **Is InnerZero really free?** Yes. The desktop app is free for personal use. No trial, no subscription, no account, no hidden limits. A £50/year Business Licence is only required for commercial, freelance, or revenue-generating use.
 - **Do I need an account to use InnerZero?** No. The local app works with no sign-up, login, or email. Accounts are only needed for optional cloud AI subscriptions, supporter perks, or account-based features.
 - **Does InnerZero send my data to the cloud?** No, not by default. All AI processing, memory, voice, and documents stay on your PC. Cloud mode is off by default. When you opt in, only the current prompt is forwarded to your chosen provider. Your memory database, files, profile facts, and past conversations are never sent.
 - **What AI models does InnerZero use?** Open-source models via Ollama or LM Studio. Default is the Qwen3 family for reasoning and Gemma3 family for voice. Model size is chosen automatically based on your hardware. Cloud mode adds access to DeepSeek, GPT, Claude, Gemini, Grok, Qwen Plus, and Kimi.
@@ -59,7 +59,7 @@ InnerZero is a private AI assistant desktop application. It provides:
 
 ## Pricing (April 2026)
 
-- **Free forever (personal use):** Complete desktop app. All AI chat, voice, memory, 30+ tools, document Q&A, knowledge packs, screen automation, themes, personalities, and unrestricted mode. No account required, no limits, no trial.
+- **Free (personal use):** Complete desktop app. All AI chat, voice, memory, 30+ tools, document Q&A, knowledge packs, screen automation, themes, personalities, and unrestricted mode. No account required, no limits, no trial.
 - **Business Licence:** £50/year per seat. Required for commercial, freelance, business, or revenue-generating use. Educational institutions, charities, and non-profits are exempt.
 - **Cloud AI Starter:** £9.99/month. 1,000 credits per month. Access to managed DeepSeek, Google Gemini, and Anthropic Claude.
 - **Cloud AI Plus:** £19.99/month. 2,500 credits per month.
