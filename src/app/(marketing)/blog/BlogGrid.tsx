@@ -23,7 +23,7 @@ export function BlogGrid({ posts, tags }: Props) {
   return (
     <>
       {/* Tag filter bar */}
-      <div className="flex gap-2 overflow-x-auto pb-2 mb-8 scrollbar-hide">
+      <div className="flex flex-wrap gap-2 mb-8">
         <button
           onClick={() => { setActiveTag(null); setShowAll(false); }}
           className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
