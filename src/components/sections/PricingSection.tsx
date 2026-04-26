@@ -319,7 +319,7 @@ export function PricingSection({ className }: PricingSectionProps) {
       <section id="cloud-ai" className="scroll-mt-20 py-12 md:py-20">
         <Container>
           <ScrollReveal>
-            <div className="mx-auto max-w-3xl text-center mb-10">
+            <div className="mx-auto max-w-3xl text-center mb-6">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Zap className="h-5 w-5 text-accent-gold" />
                 <h2 className="text-2xl font-bold text-text-primary md:text-[2rem]">
@@ -331,6 +331,12 @@ export function PricingSection({ className }: PricingSectionProps) {
               </p>
               <p className="mt-2 text-sm text-text-muted">
                 Or add your own API keys for free, with zero markup.
+              </p>
+            </div>
+
+            <div className="mx-auto max-w-2xl mb-10 rounded-xl border border-border-default bg-bg-card p-5 text-sm text-text-secondary">
+              <p>
+                Cloud AI runs on powerful servers instead of your PC. Use it for faster answers, longer responses, or premium models like Claude, GPT, and DeepSeek. Your local InnerZero is always available without it. Cloud is fully optional, and most users do not need it.
               </p>
             </div>
 
@@ -438,10 +444,10 @@ export function PricingSection({ className }: PricingSectionProps) {
             <ScrollReveal>
               <div className="mx-auto max-w-3xl text-center mb-10">
                 <h2 className="text-2xl font-bold text-text-primary md:text-[2rem]">
-                  Pay As You Go
+                  Cloud credits, pay as you go
                 </h2>
                 <p className="mt-4 text-text-secondary">
-                  Top up when you need it. No subscription required.
+                  One-time top-ups for cloud AI. Use them anytime, no subscription required.
                 </p>
               </div>
 
@@ -462,7 +468,7 @@ export function PricingSection({ className }: PricingSectionProps) {
                       className="rounded-xl border border-border-default bg-bg-card p-6 text-center transition-all duration-150 hover:-translate-y-[2px] hover:border-border-hover"
                     >
                       <h3 className="text-lg font-semibold text-text-primary">
-                        {formatUsage(pack.usage_amount)} Usage
+                        {formatUsage(pack.usage_amount)} Cloud Credits
                       </h3>
 
                       <div className="mt-3">
@@ -472,7 +478,7 @@ export function PricingSection({ className }: PricingSectionProps) {
                       </div>
 
                       <p className="mt-2 text-sm text-text-muted">
-                        {perUnit.toFixed(1)}p per usage
+                        {perUnit.toFixed(1)}p per cloud credit
                       </p>
 
                       <p className="mt-3 text-xs text-text-muted">

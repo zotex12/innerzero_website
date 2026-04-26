@@ -22,7 +22,7 @@ export default function PricingPage() {
       <section className="pt-28 md:pt-36">
         <div className="mx-auto max-w-3xl text-center px-4">
           <h1 className="text-3xl font-bold text-text-primary md:text-[2.5rem] md:leading-[1.2]">
-            Free forever. Optional extras when you want them.
+            Free to download. Optional extras when you want them.
           </h1>
           <p className="mt-4 text-lg text-text-secondary">
             InnerZero is a complete AI assistant that runs on your PC, no subscription required.

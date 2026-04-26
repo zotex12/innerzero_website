@@ -125,8 +125,8 @@ export const PRIVACY_STATEMENT = {
 
 export const PRICING_FREE = {
   planName: "InnerZero",
-  price: "Free forever.",
-  subtitle: "A complete private AI assistant on your PC. No account. No subscription. No catch.",
+  price: "Free",
+  subtitle: "Free to download. No account, no subscription, no trial.",
   features: [
     "AI chat with streaming responses",
     "Full voice mode (speech + TTS)",
