@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { User } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import { createClient } from "@/lib/supabase/client";
 
 export function HeaderAuth() {
@@ -28,14 +27,14 @@ export function HeaderAuth() {
   }, []);
 
   if (!loaded) {
-    return <div className="hidden md:block w-[130px]" />;
+    return <div className="h-9 w-22" aria-hidden="true" />;
   }
 
   if (user) {
     return (
       <Link
         href="/account"
-        className="hidden md:flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary"
+        className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary"
       >
         <User className="h-4 w-4" />
         Account
@@ -44,16 +43,11 @@ export function HeaderAuth() {
   }
 
   return (
-    <div className="hidden md:flex items-center gap-3">
-      <Link
-        href="/login"
-        className="text-sm font-medium text-text-secondary transition-colors hover:text-text-primary"
-      >
-        Log In
-      </Link>
-      <Button href="/download" className="text-sm px-4 py-2">
-        Download Free
-      </Button>
-    </div>
+    <Link
+      href="/login"
+      className="rounded-lg px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary"
+    >
+      Log In
+    </Link>
   );
 }

@@ -8,6 +8,7 @@ import { GitHubIcon } from "@/components/icons/GitHubIcon";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { HeaderAuth } from "@/components/layout/HeaderAuth";
+import { Button } from "@/components/ui/Button";
 import { NAV_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -45,8 +46,8 @@ export function Header() {
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Logo />
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
+        {/* Desktop nav (lg+) */}
+        <nav className="hidden lg:flex items-center gap-6" aria-label="Main navigation">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -58,33 +59,44 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
-          {/* External community links. Sized + spaced to match the
-              ThemeToggle button (h-9 w-9 rounded-lg, gap-2 between
-              cluster items) so the cluster reads as one consistent
-              control group. */}
-          <a
-            href="https://discord.gg/rn9SPXgThT"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Join InnerZero Discord community"
-            title="Join Discord"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-text-secondary transition-colors duration-150 hover:text-[#5865F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold cursor-pointer"
-          >
-            <DiscordIcon className="w-5 h-5 shrink-0" />
-          </a>
-          <a
-            href="https://github.com/zotex12/innerzero-releases"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="View InnerZero on GitHub"
-            title="View on GitHub"
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-text-secondary transition-colors duration-150 hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold cursor-pointer"
-          >
-            <GitHubIcon />
-          </a>
+        {/* Desktop right cluster (lg+). Asymmetric gaps signal grouping:
+            gap-4 between groups, gap-2 inside the social pair. Tab order
+            matches DOM order: theme toggle → socials → account → download. */}
+        <div className="hidden lg:flex items-center gap-4">
           <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <a
+              href="https://discord.gg/rn9SPXgThT"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Join InnerZero Discord community"
+              title="Join Discord"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-text-secondary transition-colors duration-150 hover:text-[#5865F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold cursor-pointer"
+            >
+              <DiscordIcon className="w-5 h-5 shrink-0" />
+            </a>
+            <a
+              href="https://github.com/zotex12/innerzero-releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View InnerZero on GitHub"
+              title="View on GitHub"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-text-secondary transition-colors duration-150 hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold cursor-pointer"
+            >
+              <GitHubIcon />
+            </a>
+          </div>
           <HeaderAuth />
+          <Button href="/download" className="text-sm px-5 py-2">
+            Download Free
+          </Button>
+        </div>
+
+        {/* Mobile right cluster (<lg): compact Download + hamburger. */}
+        <div className="flex lg:hidden items-center gap-2">
+          <Button href="/download" className="text-sm px-3 py-1.5">
+            Download
+          </Button>
           <MobileNav open={mobileMenuOpen} onOpenChange={setMobileMenuOpen} />
         </div>
       </div>
