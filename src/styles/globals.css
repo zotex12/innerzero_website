@@ -218,6 +218,12 @@ body {
   }
 }
 
+/* === Theme-aware logo swap (used by IntegrationsSection card logos) === */
+.theme-dark-glyph { display: block; }
+.theme-light-glyph { display: none; }
+[data-theme="light"] .theme-dark-glyph { display: none; }
+[data-theme="light"] .theme-light-glyph { display: block; }
+
 /* === Skip to content === */
 .skip-to-content {
   position: absolute;

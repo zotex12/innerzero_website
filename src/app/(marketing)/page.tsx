@@ -4,6 +4,7 @@ import { HeroScreenshots } from "@/components/sections/HeroScreenshots";
 import { FeatureCards } from "@/components/sections/FeatureCards";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { PrivacyStatement } from "@/components/sections/PrivacyStatement";
+import { IntegrationsSection } from "@/components/sections/IntegrationsSection";
 import { HomeFAQ, HOME_FAQ } from "@/components/sections/HomeFAQ";
 import { NewsletterSignup } from "@/components/sections/NewsletterSignup";
 import { VideoEmbed } from "@/components/sections/VideoEmbed";
@@ -31,6 +32,7 @@ export default function Home() {
       <FeatureCards />
       <HowItWorks />
       <PrivacyStatement />
+      <IntegrationsSection />
       <HomeFAQ />
       <NewsletterSignup source="homepage" />
       <VideoEmbed

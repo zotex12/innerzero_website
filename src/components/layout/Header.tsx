@@ -59,11 +59,12 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Desktop right cluster (lg+). Asymmetric gaps signal grouping:
-            gap-4 between groups, gap-2 inside the social pair. Tab order
-            matches DOM order: theme toggle → socials → account → download. */}
+        {/* Desktop right cluster (lg+). Order: socials, auth, Download Free,
+            then ThemeToggle pushed to the far right as a utility control,
+            separated from the primary CTA by gap-3 (a hair tighter than the
+            gap-4 between cluster items so it reads as "edge utility" rather
+            than primary cluster member). Tab order matches DOM order. */}
         <div className="hidden lg:flex items-center gap-4">
-          <ThemeToggle />
           <div className="flex items-center gap-2">
             <a
               href="https://discord.gg/rn9SPXgThT"
@@ -90,6 +91,9 @@ export function Header() {
           <Button href="/download" className="text-sm px-5 py-2">
             Download Free
           </Button>
+          <div className="-ml-1">
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* Mobile right cluster (<lg): compact Download + hamburger. */}
