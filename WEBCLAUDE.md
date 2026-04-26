@@ -54,7 +54,7 @@ Phase 5 desktop app integration (account.py, cloud routing, BYO API key UI) is c
 | Tagline | inner peace. inner joy. innerzero. |
 | Supporting line | Your AI. Your machine. Your data. |
 | Company | Summers Solutions |
-| Local app | Free forever — no subscription, no trial, no account required |
+| Local app | Free to download, no subscription, no trial, no account required |
 | Cloud plans | Optional — Starter £9.99/mo, Plus £19.99/mo, Pro £39.99/mo (live) |
 | BYO API keys | Free — user adds their own, zero markup |
 | Supporter | £4.99/month — donation, not compute |
