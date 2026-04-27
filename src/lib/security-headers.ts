@@ -4,10 +4,12 @@
  * source "/:path*" so a custom Response is indistinguishable from a default
  * one at the response layer.
  *
- * Phase 7B-1 additions: Content-Security-Policy-Report-Only and Report-To.
- * Same justification — must match the next.config.ts values byte-for-byte
- * so the report endpoint groups violations consistently regardless of which
- * code path emitted the response.
+ * Phase 7B-2: CSP and Report-To REMOVED from this helper. CSP carries a
+ * per-request nonce and is now owned exclusively by `src/middleware.ts`;
+ * an append-only static helper cannot inject per-request nonces and must
+ * not ship a nonceless CSP that would override the middleware-issued one.
+ * The five static headers below remain — they are per-host, not per-request,
+ * and are safe to duplicate from a static helper.
  *
  * Append-only: existing CORS, Content-Type, Cache-Control, Retry-After, and
  * X-* application headers are never touched. Headers that are already set
@@ -16,16 +18,19 @@
  *
  * Status, body, and signature-verification paths are out of scope here.
  *
- * MAINTENANCE: any change to PERMISSIONS_POLICY, the CSP directive set, or
- * the theme-script hash here MUST be mirrored in next.config.ts (and vice
- * versa). The two values are intentionally duplicated rather than imported
- * because next.config.ts runs in the Node config phase while this file runs
- * inside route handlers — keeping them as plain string constants in each
- * place avoids cross-runtime import gotchas.
+ * MAINTENANCE: any change to PERMISSIONS_POLICY or HSTS here MUST be
+ * mirrored in next.config.ts (and vice versa). The two values are
+ * intentionally duplicated rather than imported because next.config.ts runs
+ * in the Node config phase while this file runs inside route handlers —
+ * keeping them as plain string constants in each place avoids cross-runtime
+ * import gotchas.
  */
 
 // Phase 7B-1: comma-only separator. No OWS anywhere in the value. See
 // next.config.ts for the rationale (Snyk parser rejects `, ` form).
+//
+// Phase 7B-2: PiP/fullscreen expand to allow delegation to the
+// youtube-nocookie iframe — see next.config.ts for the diagnosis.
 const PERMISSIONS_POLICY = [
   "camera=()",
   "microphone=()",
@@ -53,53 +58,26 @@ const PERMISSIONS_POLICY = [
   "attribution-reporting=()",
   "run-ad-auction=()",
   "join-ad-interest-group=()",
-  "fullscreen=(self)",
-  "picture-in-picture=(self)",
+  'fullscreen=(self "https://www.youtube-nocookie.com")',
+  'picture-in-picture=(self "https://www.youtube-nocookie.com")',
 ].join(",");
 
-// Phase 7B-1. Mirror of next.config.ts. Theme-script hash covers the inline
-// script in src/app/layout.tsx. See next.config.ts for the regen command.
-const THEME_SCRIPT_HASH = "'sha256-f7LAjRiK+uoAyu7rUwSbVvtnehpB2z0d+hr4fBMjsds='";
-
-const SUPABASE_URL_RAW =
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://chdsbjydwswtshjflkva.supabase.co";
-const SUPABASE_HOST = SUPABASE_URL_RAW.replace(/^https?:\/\//, "").replace(/\/$/, "");
-
-const CSP_REPORT_ONLY = [
-  "default-src 'self'",
-  `script-src 'self' ${THEME_SCRIPT_HASH} https://challenges.cloudflare.com https://va.vercel-scripts.com`,
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https:",
-  "font-src 'self' data:",
-  `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://challenges.cloudflare.com https://formspree.io https://va.vercel-scripts.com`,
-  "frame-src https://challenges.cloudflare.com https://www.youtube-nocookie.com",
-  "frame-ancestors 'none'",
-  "form-action 'self'",
-  "base-uri 'self'",
-  "object-src 'none'",
-  "upgrade-insecure-requests",
-  "report-uri /api/csp-report",
-  "report-to csp-endpoint",
-].join("; ");
-
-const REPORT_TO = JSON.stringify({
-  group: "csp-endpoint",
-  max_age: 10800,
-  endpoints: [{ url: "/api/csp-report" }],
-});
+const HSTS_VALUE = "max-age=63072000; includeSubDomains; preload";
 
 const SECURITY_HEADERS: ReadonlyArray<readonly [string, string]> = [
   ["X-Content-Type-Options", "nosniff"],
   ["X-Frame-Options", "DENY"],
   ["Referrer-Policy", "strict-origin-when-cross-origin"],
   ["Permissions-Policy", PERMISSIONS_POLICY],
-  ["Content-Security-Policy-Report-Only", CSP_REPORT_ONLY],
-  ["Report-To", REPORT_TO],
+  ["Strict-Transport-Security", HSTS_VALUE],
 ];
 
 /**
- * Append the Phase 7A + 7B-1 security headers to a Response, in place.
+ * Append the Phase 7A security headers (plus HSTS) to a Response, in place.
  * Returns the same Response so call sites can `return applySecurityHeaders(res)`.
+ *
+ * Phase 7B-2: this helper no longer touches CSP or Report-To. Those are
+ * middleware-only because the nonce in script-src must rotate per request.
  */
 export function applySecurityHeaders<T extends Response>(response: T): T {
   for (const [key, value] of SECURITY_HEADERS) {

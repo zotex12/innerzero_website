@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { DEFAULT_METADATA } from "@/lib/metadata";
@@ -17,16 +18,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+// Phase 7B-2. Reading the request headers() in the root layout is what
+// opts the entire app into dynamic rendering — Next.js's nonce
+// auto-propagation only applies during SSR, so static pages cannot carry
+// the per-request nonce that the CSP middleware emits. The trade-off is
+// SSG → Edge SSR for marketing pages; HTML edge-cache hits go away, asset
+// cache is unaffected. Reading the nonce here also lets us pass it to the
+// theme-flash inline script as a defence-in-depth path alongside the
+// SHA-256 hash already in script-src.
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
     <html lang="en" className={`${inter.variable} h-full`} suppressHydrationWarning>
       <head>
         {/* Prevent flash of wrong theme */}
         <script
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
