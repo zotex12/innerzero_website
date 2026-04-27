@@ -14,7 +14,13 @@ import { absoluteUrl, createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
   path: "/",
-  title: "InnerZero. Free Private AI Assistant That Runs on Your PC",
+  // Absolute title bypasses the "%s | InnerZero..." template in
+  // src/lib/metadata.ts. Without absolute, the brand appears twice in
+  // the rendered <title> because this page's title already starts with
+  // "InnerZero". Same pattern as /models and /download/thanks.
+  title: {
+    absolute: "InnerZero: Free Private AI Assistant That Runs on Your PC",
+  },
   description:
     "InnerZero is a free private AI assistant that runs entirely on your PC. No cloud. No tracking. Just you and your AI.",
   openGraph: {
@@ -92,7 +98,7 @@ export default function Home() {
               url: absoluteUrl("/"),
               downloadUrl: absoluteUrl("/download"),
               featureList: [
-                "Runs 100% locally — no cloud required",
+                "Runs 100% locally, no cloud required",
                 "Persistent memory system",
                 "Voice and text interaction",
                 "30+ built-in tools",

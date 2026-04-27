@@ -18,6 +18,7 @@ import type { LucideIcon } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { HardwareTable } from "@/components/sections/HardwareTable";
 import { absoluteUrl, createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
@@ -259,6 +260,13 @@ export default function FeaturesPage() {
               </Container>
             </section>
           )}
+
+          {/* HardwareTable mounts after the Customisation section's
+              "Hardware profiles" item so the natural flow goes from
+              "Zero auto-detects your hardware" to "here are the tiers
+              it picks between". Sits before Unrestricted Mode and
+              Coming Soon. Data lives in src/lib/hardware.ts. */}
+          {section.title === "Customisation" && <HardwareTable />}
         </Fragment>
       ))}
 
