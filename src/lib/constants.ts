@@ -41,7 +41,7 @@ export const HERO = {
     "InnerZero is a private AI assistant that runs entirely on your PC. Free to download. No cloud required. Just you and your AI.",
   primaryCta: "Download Free",
   primaryCtaHref: "/download",
-  secondaryCta: "Learn more",
+  secondaryCta: "See features",
   secondaryCtaHref: "/features",
 } as const;
 

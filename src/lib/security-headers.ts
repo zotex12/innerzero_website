@@ -64,12 +64,18 @@ const PERMISSIONS_POLICY = [
 
 const HSTS_VALUE = "max-age=63072000; includeSubDomains; preload";
 
+// Phase 7C. Cross-Origin-Opener-Policy mirrors the next.config.ts value so
+// any custom-response route the helper covers ships the same defence as
+// the framework-served HTML routes. See next.config.ts for the rationale.
+const COOP_VALUE = "same-origin";
+
 const SECURITY_HEADERS: ReadonlyArray<readonly [string, string]> = [
   ["X-Content-Type-Options", "nosniff"],
   ["X-Frame-Options", "DENY"],
   ["Referrer-Policy", "strict-origin-when-cross-origin"],
   ["Permissions-Policy", PERMISSIONS_POLICY],
   ["Strict-Transport-Security", HSTS_VALUE],
+  ["Cross-Origin-Opener-Policy", COOP_VALUE],
 ];
 
 /**

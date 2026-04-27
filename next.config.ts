@@ -99,6 +99,17 @@ const nextConfig: NextConfig = {
             key: "Strict-Transport-Security",
             value: "max-age=63072000; includeSubDomains; preload",
           },
+          // Phase 7C: Cross-Origin-Opener-Policy. `same-origin` strips the
+          // window.opener relationship for any cross-origin window opened
+          // from this site (and refuses to expose this site's window
+          // handle to a cross-origin opener). Defence-in-depth against
+          // tabnabbing-style attacks. The site has no popup-based flows
+          // that need cross-origin window communication: Stripe Checkout
+          // is a top-level redirect, Turnstile runs in an iframe, and
+          // Supabase auth is redirect-based. Static value, no per-request
+          // computation needed, so it lives here next to the other static
+          // headers rather than in middleware.
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
           // Phase 7B-2: CSP and Report-To intentionally NOT set here. See
           // src/middleware.ts. Static assets that bypass middleware do not
           // need CSP — they're not HTML and do not execute scripts.
