@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCloudPlanByPriceId, grantUsage } from "@/lib/cloud-plans";
+import { applySecurityHeaders } from "@/lib/security-headers";
 import crypto from "crypto";
 import type Stripe from "stripe";
 
@@ -615,18 +616,20 @@ export async function POST(request: Request) {
   const { limit, windowMs, store } = LIMITS.stripeWebhook;
   const rl = rateLimit(event.type, limit, windowMs, store);
   if (!rl.success) {
-    return new Response(
-      JSON.stringify({
-        error: "Too many requests. Please try again later.",
-        retryAfter: rl.retryAfter,
-      }),
-      {
-        status: 429,
-        headers: {
-          "Content-Type": "application/json",
-          "Retry-After": String(rl.retryAfter),
-        },
-      }
+    return applySecurityHeaders(
+      new Response(
+        JSON.stringify({
+          error: "Too many requests. Please try again later.",
+          retryAfter: rl.retryAfter,
+        }),
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            "Retry-After": String(rl.retryAfter),
+          },
+        }
+      )
     );
   }
 

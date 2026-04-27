@@ -1,5 +1,6 @@
 import { getAllPostsForFeed } from "@/lib/blog";
 import { SITE_URL, absoluteUrl, buildExcerpt } from "@/lib/feeds";
+import { applySecurityHeaders } from "@/lib/security-headers";
 
 // JSON Feed 1.1 — https://jsonfeed.org/version/1.1
 //
@@ -87,11 +88,13 @@ export async function GET() {
     items,
   };
 
-  return new Response(JSON.stringify(feed, null, 2) + "\n", {
-    status: 200,
-    headers: {
-      "Content-Type": "application/feed+json; charset=utf-8",
-      "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
-    },
-  });
+  return applySecurityHeaders(
+    new Response(JSON.stringify(feed, null, 2) + "\n", {
+      status: 200,
+      headers: {
+        "Content-Type": "application/feed+json; charset=utf-8",
+        "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+      },
+    })
+  );
 }

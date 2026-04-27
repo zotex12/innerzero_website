@@ -9,6 +9,7 @@ import {
 } from "@/lib/cloud-providers";
 import { checkRateLimit, getRateLimitKey } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
+import { applySecurityHeaders } from "@/lib/security-headers";
 
 // Known limitation: the idempotency check for request_id runs BEFORE the
 // provider call, so two concurrent retries of the same request_id can each
@@ -599,20 +600,22 @@ export async function POST(request: Request) {
 
       const remainingBalance = updatedProfile?.usage_balance ?? 0;
 
-      return NextResponse.json(
-        {
-          content: result.content,
-          provider: result.provider,
-          model: result.model,
-          input_tokens: result.input_tokens,
-          output_tokens: result.output_tokens,
-        },
-        {
-          headers: {
-            "X-Usage-Remaining": String(remainingBalance),
-            "X-Provider": provider,
+      return applySecurityHeaders(
+        NextResponse.json(
+          {
+            content: result.content,
+            provider: result.provider,
+            model: result.model,
+            input_tokens: result.input_tokens,
+            output_tokens: result.output_tokens,
           },
-        }
+          {
+            headers: {
+              "X-Usage-Remaining": String(remainingBalance),
+              "X-Provider": provider,
+            },
+          }
+        )
       );
     } catch (err) {
       lastError = err;
