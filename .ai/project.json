@@ -1,0 +1,11 @@
+{
+  "project_id": "innerzero_website",
+  "display_name": "InnerZero Website",
+  "root": "C:\\Users\\sumlu\\Documents\\innerzero_website",
+  "expected_remote_slug": "zotex12/innerzero_website",
+  "main_branch": "main",
+  "guide": "C:\\Users\\sumlu\\Documents\\innerzero_website\\WEBCLAUDE.md",
+  "workflow_profile": "innerzero_website",
+  "preferred_builder": "claude_code",
+  "fallback_builder": "codex"
+}
