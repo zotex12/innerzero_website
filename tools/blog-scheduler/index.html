@@ -57,7 +57,7 @@
 
     a { color: var(--fg); }
 
-    /* Top bar with two stacked rows: titles+stats+nav, then filters+search */
+    /* Top bar with two stacked rows */
     .topbar {
       padding: 12px 20px;
       border-bottom: 1px solid var(--border);
@@ -133,7 +133,6 @@
       font-family: inherit;
       font-size: 13px;
       cursor: pointer;
-      transition: background 120ms ease, border-color 120ms ease, opacity 120ms ease;
     }
     button:hover { background: var(--surface-hi); border-color: var(--border-hi); }
     button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -176,7 +175,6 @@
       background: var(--surface);
       cursor: pointer;
       user-select: none;
-      transition: background 120ms ease, border-color 120ms ease, opacity 120ms ease;
     }
 
     .filter-pill[aria-pressed="true"] {
@@ -243,7 +241,6 @@
       flex-direction: row;
       height: calc(100vh - 132px);
       width: 100%;
-      gap: 0;
     }
 
     .calendar-wrap {
@@ -315,7 +312,6 @@
       border-left: 4px solid var(--grey);
       font-size: 13px;
       cursor: pointer;
-      transition: transform 100ms ease, box-shadow 100ms ease;
       user-select: none;
       width: 100%;
       text-align: left;
@@ -324,13 +320,18 @@
     }
 
     .chip:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow);
+      background: var(--surface);
+      border-color: var(--border-hi);
     }
 
     .chip:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 2px;
+    }
+
+    .chip-selected {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
     }
 
     .chip-published { border-left-color: var(--green); }
@@ -377,22 +378,14 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* Side panel as a flex column, never an overlay */
+    /* Side panel — always visible, fixed width, no animation */
     .side-panel {
       flex: 0 0 360px;
       background: var(--surface);
       border-left: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      transition: flex-basis 200ms ease, opacity 160ms ease, border-left-width 200ms ease;
       overflow: hidden;
-    }
-
-    .side-panel.is-collapsed {
-      flex: 0 0 0;
-      opacity: 0;
-      border-left-width: 0;
-      pointer-events: none;
     }
 
     .panel-head {
@@ -404,14 +397,21 @@
       gap: 8px;
     }
 
-    .panel-state {
-      font-size: 11px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--fg-dim);
-      margin-right: 6px;
+    .panel-head-title {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--fg);
+      flex: 1;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
-    .panel-state.is-pinned { color: var(--accent); }
+
+    .panel-home-btn[data-empty="true"] {
+      opacity: 0.3;
+      cursor: default;
+      pointer-events: none;
+    }
 
     .panel-body {
       padding: 14px 18px;
@@ -423,8 +423,7 @@
       font-size: 16px;
       font-weight: 600;
       line-height: 1.35;
-      flex: 1;
-      min-width: 0;
+      margin: 0 0 12px 0;
       overflow-wrap: anywhere;
     }
 
@@ -477,7 +476,6 @@
       color: var(--fg-muted);
       cursor: pointer;
       font-family: inherit;
-      transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
     }
     .pill:hover {
       background: var(--surface);
@@ -503,6 +501,61 @@
       font-size: 13px;
       padding-left: 18px;
       margin: 0;
+    }
+
+    /* Empty-state link board */
+    .linkboard-section {
+      margin-bottom: 18px;
+    }
+
+    .linkboard-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .linkboard-section-head {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .linkboard-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+      font-size: 13px;
+      color: var(--fg);
+      text-decoration: none;
+      transition: color 100ms ease;
+    }
+
+    .linkboard-link .arrow {
+      color: var(--fg-dim);
+      width: 14px;
+      flex-shrink: 0;
+      transition: color 100ms ease, transform 100ms ease;
+    }
+
+    .linkboard-link:hover {
+      color: var(--accent);
+    }
+
+    .linkboard-link:hover .arrow {
+      color: var(--accent);
+      transform: translateX(2px);
+    }
+
+    .linkboard-tip {
+      font-size: 12px;
+      color: var(--fg-muted);
+      line-height: 1.5;
+      padding: 10px 12px;
+      border: 1px dashed var(--border);
+      border-radius: 6px;
+      background: var(--surface-hi);
     }
 
     .empty {
@@ -576,7 +629,6 @@
       line-height: 1.6;
     }
 
-    /* Visually hidden helper for SR-only labels */
     .sr-only {
       position: absolute;
       width: 1px; height: 1px;
@@ -650,16 +702,15 @@
       <div class="grid" id="grid"></div>
     </main>
 
-    <aside class="side-panel is-collapsed" id="panel" aria-hidden="true">
+    <aside class="side-panel" id="panel">
       <div class="panel-head">
-        <span class="panel-state" id="panel-state">Preview</span>
-        <div class="panel-title" id="panel-title">Select a post</div>
-        <button class="icon-btn" id="panel-close" title="Close (Esc)" aria-label="Close panel">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <div class="panel-head-title" id="panel-head-title">Quick links</div>
+        <button class="icon-btn panel-home-btn" id="panel-home" data-empty="true" title="Show quick links" aria-label="Show quick links">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5V21a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z"></path></svg>
         </button>
       </div>
       <div class="panel-body" id="panel-body"></div>
-      <div class="panel-actions">
+      <div class="panel-actions" id="panel-actions" hidden>
         <button id="btn-live" disabled>Open live URL</button>
         <button id="btn-vscode" disabled>Edit in VS Code</button>
       </div>
@@ -679,18 +730,17 @@
           <tr><td><span class="key">&larr;</span> / <span class="key">&rarr;</span></td><td>Previous / next month</td></tr>
           <tr><td><span class="key">T</span></td><td>Jump to today</td></tr>
           <tr><td><span class="key">/</span></td><td>Focus search box</td></tr>
-          <tr><td><span class="key">Esc</span></td><td>Close panel; if no panel, clear search</td></tr>
+          <tr><td><span class="key">Esc</span></td><td>Clear search; if no search, blur focused input</td></tr>
           <tr><td><span class="key">?</span></td><td>Toggle this help overlay</td></tr>
         </tbody>
       </table>
       <div class="help-foot" id="help-foot">
-        Posts publish via cron (Tuesday + Friday 09:00 UTC). Hover a chip for a preview, click to pin.
+        Posts publish via cron (Tuesday + Friday 09:00 UTC). Hover a chip to fill the side panel; click to mark it selected.
       </div>
     </div>
   </div>
 
   <script>
-    // Inline SVG icons for chip status (no emojis, no icon library).
     const ICONS = {
       published: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>',
       scheduled: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>',
@@ -712,19 +762,67 @@
     const FILTER_STORAGE_KEY = 'blog-scheduler-filters-v2';
     const THEME_STORAGE_KEY = 'blog-scheduler-theme';
 
+    // Empty-state link board content. Hardcoded for v1; URLs verified
+    // against the current repo and Phase 4 social block in WEBCLAUDE.md
+    // (Discord invite rn9SPXgThT). vscode://file paths assume Louie's
+    // single-user Windows desktop layout.
+    const LINK_BOARD = [
+      {
+        title: 'Site',
+        links: [
+          { label: 'Live site',    url: 'https://innerzero.com' },
+          { label: 'Blog index',   url: 'https://innerzero.com/blog' },
+          { label: 'Pricing',      url: 'https://innerzero.com/pricing' },
+          { label: 'Download',     url: 'https://innerzero.com/download' },
+        ],
+      },
+      {
+        title: 'Repo',
+        links: [
+          { label: 'GitHub repo (zotex12/innerzero_website)', url: 'https://github.com/zotex12/innerzero_website' },
+          { label: 'blog-queue/ in VS Code',                  url: 'vscode://file/C:/Users/sumlu/Documents/innerzero_website/blog-queue' },
+          { label: 'src/content/blog/ in VS Code',            url: 'vscode://file/C:/Users/sumlu/Documents/innerzero_website/src/content/blog' },
+          { label: 'Repo root in VS Code',                    url: 'vscode://file/C:/Users/sumlu/Documents/innerzero_website' },
+        ],
+      },
+      {
+        title: 'Community',
+        links: [
+          { label: 'Discord',         url: 'https://discord.gg/rn9SPXgThT' },
+          { label: 'X / Twitter',     url: 'https://x.com/InnerZero_ai' },
+          { label: 'Reddit',          url: 'https://reddit.com/r/InnerZero' },
+          { label: 'Ko-fi',           url: 'https://ko-fi.com/innerzero' },
+        ],
+      },
+      {
+        title: 'Tools',
+        links: [
+          { label: 'Vercel dashboard',        url: 'https://vercel.com/dashboard' },
+          { label: 'Supabase dashboard',      url: 'https://supabase.com/dashboard' },
+          { label: 'GitHub Actions',          url: 'https://github.com/zotex12/innerzero_website/actions' },
+          { label: 'Google Search Console',   url: 'https://search.google.com/search-console' },
+        ],
+      },
+      {
+        title: 'Desktop repo',
+        links: [
+          { label: 'GitHub repo (zotex12/InnerZero)',   url: 'https://github.com/zotex12/InnerZero' },
+          { label: 'Desktop repo root in VS Code',      url: 'vscode://file/C:/Users/sumlu/Documents/InnerZero' },
+        ],
+      },
+    ];
+
+    const ARROW_SVG = '<svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
+
     // State
-    let posts = [];                // raw response
-    let topMeta = {};              // cron_expression, publish_time_utc
-    let visiblePosts = [];         // posts after filter + search
-    let postsByDate = new Map();   // date string -> visible posts
-    let currentYear, currentMonth; // 0-indexed month
-    let filterState = {};          // { published: true, ... }
+    let posts = [];
+    let topMeta = {};
+    let visiblePosts = [];
+    let postsByDate = new Map();
+    let currentYear, currentMonth;
+    let filterState = {};
     let searchTerm = '';
-    let panelMode = 'none';        // none | preview | pinned
-    let panelPost = null;          // currently displayed post
-    let chipHovered = false;
-    let panelHovered = false;
-    let previewCloseTimer = null;
+    let currentPanelPostSlug = null; // null means show empty state link board
 
     function init() {
       const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
@@ -733,7 +831,6 @@
       filterState = loadFilters();
       paintFilterPills();
 
-      // Render weekday header once
       const w = document.getElementById('weekdays');
       WEEKDAYS.forEach((label) => {
         const el = document.createElement('div');
@@ -752,7 +849,7 @@
       document.getElementById('btn-refresh').addEventListener('click', refresh);
       document.getElementById('btn-help').addEventListener('click', toggleHelp);
       document.getElementById('btn-theme').addEventListener('click', toggleTheme);
-      document.getElementById('panel-close').addEventListener('click', () => closePanel({ force: true }));
+      document.getElementById('panel-home').addEventListener('click', resetPanelToEmpty);
       document.getElementById('btn-live').addEventListener('click', openLive);
       document.getElementById('btn-vscode').addEventListener('click', openVscode);
       document.getElementById('help-close').addEventListener('click', toggleHelp);
@@ -770,19 +867,10 @@
         pill.addEventListener('click', () => toggleFilter(pill.dataset.status));
       });
 
-      const panel = document.getElementById('panel');
-      panel.addEventListener('mouseenter', () => {
-        panelHovered = true;
-        clearPreviewCloseTimer();
-      });
-      panel.addEventListener('mouseleave', () => {
-        panelHovered = false;
-        schedulePreviewClose();
-      });
-
       window.addEventListener('focus', refresh);
       document.addEventListener('keydown', onKeydown);
 
+      renderPanelContent();
       refresh();
     }
 
@@ -808,9 +896,7 @@
           }
           return out;
         }
-      } catch (_) {
-        // fall through to defaults
-      }
+      } catch (_) { /* fall through to defaults */ }
       const defaults = {};
       for (const key of FILTER_KEYS) defaults[key] = true;
       return defaults;
@@ -892,22 +978,20 @@
         renderStats(data.stats || {});
         applyFilters();
         document.getElementById('empty-state').hidden = posts.length > 0;
-        // Update help overlay foot to match server-reported schedule
         const footEl = document.getElementById('help-foot');
         if (footEl && topMeta.cron_expression) {
           footEl.textContent =
-            `Posts publish via cron "${topMeta.cron_expression}" at ${topMeta.publish_time_utc} UTC. Hover a chip for a preview, click to pin.`;
+            `Posts publish via cron "${topMeta.cron_expression}" at ${topMeta.publish_time_utc} UTC. Hover a chip to fill the side panel; click to mark it selected.`;
         }
-        // If a panel is currently open, refresh its content from the new data
-        if (panelPost) {
-          const fresh = posts.find((p) => p.filename === panelPost.filename);
-          if (fresh) {
-            panelPost = fresh;
-            renderPanel(panelPost);
-          } else {
-            closePanel({ force: true });
+        // If a post is currently shown in the panel, refresh from new data.
+        // Drop selection if the post is gone.
+        if (currentPanelPostSlug) {
+          const fresh = posts.find((p) => p.slug === currentPanelPostSlug);
+          if (!fresh) {
+            currentPanelPostSlug = null;
           }
         }
+        renderPanelContent();
       } catch (e) {
         console.error('Failed to fetch /api/posts:', e);
         document.getElementById('empty-state').hidden = false;
@@ -1006,10 +1090,13 @@
     function renderChip(post) {
       const chip = document.createElement('button');
       chip.className = 'chip chip-' + post.status;
+      if (post.slug && post.slug === currentPanelPostSlug) {
+        chip.classList.add('chip-selected');
+      }
       chip.type = 'button';
       const time = post.publish_time_utc || topMeta.publish_time_utc || '';
       chip.title = `${post.title || post.filename}${time ? ' (' + time + ' UTC)' : ''}`;
-      chip.dataset.filename = post.filename;
+      chip.dataset.slug = post.slug || '';
       chip.tabIndex = 0;
 
       const icon = document.createElement('span');
@@ -1034,89 +1121,109 @@
       sr.textContent = ' (' + STATUS_LABEL[post.status] + ')';
       chip.appendChild(sr);
 
+      // Hover sets panel content. Mouseleave does nothing.
       chip.addEventListener('mouseenter', () => onChipHover(post));
-      chip.addEventListener('mouseleave', onChipMouseLeave);
       chip.addEventListener('focus', () => onChipHover(post));
-      chip.addEventListener('blur', onChipMouseLeave);
       chip.addEventListener('click', (ev) => {
         ev.preventDefault();
-        pinPanel(post);
+        onChipClick(post);
       });
 
       return chip;
     }
 
-    // ---------- Panel state machine ----------
+    // ---------- Panel state (3 simple states) ----------
 
     function onChipHover(post) {
-      chipHovered = true;
-      clearPreviewCloseTimer();
-      if (panelMode === 'pinned') return; // pinned panel does not respond to hover
-      panelMode = 'preview';
-      panelPost = post;
-      openPanelDom();
-      renderPanel(post);
+      // Hover sets panel content but does not mark the chip selected.
+      // Only an explicit click toggles the .chip-selected class.
+      currentPanelPostSlug = post.slug || null;
+      renderPanelContent();
     }
 
-    function onChipMouseLeave() {
-      chipHovered = false;
-      schedulePreviewClose();
-    }
-
-    function pinPanel(post) {
-      panelMode = 'pinned';
-      panelPost = post;
-      clearPreviewCloseTimer();
-      openPanelDom();
-      renderPanel(post);
-    }
-
-    function clearPreviewCloseTimer() {
-      if (previewCloseTimer !== null) {
-        clearTimeout(previewCloseTimer);
-        previewCloseTimer = null;
+    function onChipClick(post) {
+      currentPanelPostSlug = post.slug || null;
+      // Move the .chip-selected outline to the clicked chip.
+      document.querySelectorAll('.chip-selected').forEach((el) => {
+        el.classList.remove('chip-selected');
+      });
+      // Find the chip(s) for this slug and re-mark. The panel content
+      // is the same as on hover — the only difference is the outline.
+      if (post.slug) {
+        document.querySelectorAll('.chip').forEach((el) => {
+          if (el.dataset.slug === post.slug) el.classList.add('chip-selected');
+        });
       }
+      renderPanelContent();
     }
 
-    function schedulePreviewClose() {
-      if (panelMode !== 'preview') return;
-      clearPreviewCloseTimer();
-      previewCloseTimer = setTimeout(() => {
-        if (panelMode === 'preview' && !chipHovered && !panelHovered) {
-          closePanel();
-        }
-      }, 200);
+    function resetPanelToEmpty() {
+      currentPanelPostSlug = null;
+      document.querySelectorAll('.chip-selected').forEach((el) => {
+        el.classList.remove('chip-selected');
+      });
+      renderPanelContent();
     }
 
-    function openPanelDom() {
-      const panel = document.getElementById('panel');
-      panel.classList.remove('is-collapsed');
-      panel.setAttribute('aria-hidden', 'false');
-      const stateLabel = document.getElementById('panel-state');
-      stateLabel.textContent = panelMode === 'pinned' ? 'Pinned' : 'Preview';
-      stateLabel.classList.toggle('is-pinned', panelMode === 'pinned');
+    function renderPanelContent() {
+      const post = currentPanelPostSlug
+        ? posts.find((p) => p.slug === currentPanelPostSlug)
+        : null;
+      if (post) renderPostInPanel(post);
+      else renderEmptyState();
     }
 
-    function closePanel(opts) {
-      const force = !!(opts && opts.force);
-      if (panelMode === 'pinned' && !force) return;
-      const panel = document.getElementById('panel');
-      panel.classList.add('is-collapsed');
-      panel.setAttribute('aria-hidden', 'true');
-      panelMode = 'none';
-      panelPost = null;
-      chipHovered = false;
-      panelHovered = false;
-      clearPreviewCloseTimer();
-      const stateLabel = document.getElementById('panel-state');
-      stateLabel.textContent = 'Preview';
-      stateLabel.classList.remove('is-pinned');
+    // ---------- Empty state (link board) ----------
+
+    function renderEmptyState() {
+      document.getElementById('panel-head-title').textContent = 'Quick links';
+      document.getElementById('panel-home').setAttribute('data-empty', 'true');
+      document.getElementById('panel-actions').hidden = true;
       document.getElementById('btn-live').disabled = true;
       document.getElementById('btn-vscode').disabled = true;
+
+      const body = document.getElementById('panel-body');
+      body.innerHTML = '';
+
+      for (const section of LINK_BOARD) {
+        const wrap = document.createElement('div');
+        wrap.className = 'linkboard-section';
+        const h = document.createElement('div');
+        h.className = 'linkboard-section-head';
+        h.textContent = section.title;
+        wrap.appendChild(h);
+        for (const link of section.links) {
+          const a = document.createElement('a');
+          a.className = 'linkboard-link';
+          a.href = link.url;
+          a.textContent = '';
+          // External links: open in new tab. vscode://file links: same window
+          // (the browser hands off to the OS and the page stays put).
+          if (/^https?:/.test(link.url)) {
+            a.target = '_blank';
+            a.rel = 'noopener';
+          }
+          a.innerHTML = ARROW_SVG;
+          const span = document.createElement('span');
+          span.textContent = link.label;
+          a.appendChild(span);
+          wrap.appendChild(a);
+        }
+        body.appendChild(wrap);
+      }
+
+      const tip = document.createElement('div');
+      tip.className = 'linkboard-tip';
+      tip.textContent = 'Hover any chip to preview it here. Click a chip to mark it selected.';
+      body.appendChild(tip);
     }
 
-    function renderPanel(post) {
-      document.getElementById('panel-title').textContent = post.title || post.filename;
+    // ---------- Post-in-panel render ----------
+
+    function renderPostInPanel(post) {
+      document.getElementById('panel-head-title').textContent = post.title || post.filename;
+      document.getElementById('panel-home').setAttribute('data-empty', 'false');
+      document.getElementById('panel-actions').hidden = false;
 
       const body = document.getElementById('panel-body');
       body.innerHTML = '';
@@ -1166,6 +1273,10 @@
       const vscodeBtn = document.getElementById('btn-vscode');
       liveBtn.disabled = post.status !== 'published' || !post.live_url;
       vscodeBtn.disabled = !post.vscode_url;
+      // Stash the active post on the action buttons so the click handlers
+      // can read it without needing a separate "selected post" variable.
+      liveBtn.dataset.url = post.live_url || '';
+      vscodeBtn.dataset.url = post.vscode_url || '';
     }
 
     function panelRow(label, value) {
@@ -1215,7 +1326,6 @@
             timeZoneName: 'short',
           }).format(utc);
         } catch (_) {
-          // Fall back without timezone name
           formatted = new Intl.DateTimeFormat(undefined, {
             hour: '2-digit',
             minute: '2-digit',
@@ -1260,20 +1370,19 @@
       } else {
         setSearch(tag);
       }
-      // Re-render the panel so the active state on the tag pill updates
-      if (panelPost) renderPanel(panelPost);
+      // Re-render the panel so the active pill state updates if the
+      // current post is still showing.
+      renderPanelContent();
     }
 
     function openLive() {
-      if (panelPost && panelPost.live_url) {
-        window.open(panelPost.live_url, '_blank', 'noopener');
-      }
+      const url = document.getElementById('btn-live').dataset.url;
+      if (url) window.open(url, '_blank', 'noopener');
     }
 
     function openVscode() {
-      if (panelPost && panelPost.vscode_url) {
-        window.location.href = panelPost.vscode_url;
-      }
+      const url = document.getElementById('btn-vscode').dataset.url;
+      if (url) window.location.href = url;
     }
 
     // ---------- Navigation ----------
@@ -1300,8 +1409,7 @@
     // ---------- Help overlay ----------
 
     function toggleHelp() {
-      const overlay = document.getElementById('help-overlay');
-      overlay.classList.toggle('is-open');
+      document.getElementById('help-overlay').classList.toggle('is-open');
     }
 
     function helpOpen() {
@@ -1323,10 +1431,6 @@
           toggleHelp();
           return;
         }
-        if (panelMode !== 'none') {
-          closePanel({ force: true });
-          return;
-        }
         if (searchTerm) {
           setSearch('');
           return;
@@ -1336,7 +1440,6 @@
       }
 
       if (ev.key === '/') {
-        // Don't fight typing in non-search inputs
         if (target && target.id === 'search-input') return;
         ev.preventDefault();
         const input = document.getElementById('search-input');
@@ -1344,7 +1447,6 @@
         return;
       }
 
-      // Shortcuts that should not fire while typing in an input
       if (inInput) return;
 
       if (ev.key === 'ArrowLeft') {

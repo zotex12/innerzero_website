@@ -14,17 +14,21 @@ Requires Python on PATH. No pip dependencies; stdlib only.
 
 ## Status colours
 
-- **Green check (Published)** - file lives in `src/content/blog/`. Click opens `https://innerzero.com/blog/<slug>` in a new tab.
-- **Orange clock (Scheduled)** - file lives in `blog-queue/` with a `date >=` today UTC. Click opens VS Code on the file.
-- **Red triangle (Overdue)** - file lives in `blog-queue/` with a `date <` today UTC. Cron should have published it, did not. Click opens VS Code so you can fix or move it.
+- **Green check (Published)** - file lives in `src/content/blog/`.
+- **Orange clock (Scheduled)** - file lives in `blog-queue/` with a `date >=` today UTC.
+- **Red triangle (Overdue)** - file lives in `blog-queue/` with a `date <` today UTC. Cron should have published it, did not.
 - **Red triangle on hatched chip (Error)** - frontmatter is malformed, a required field is missing, or two posts share a `slug:`. Side panel lists the specific reason.
-- **Grey pencil (Draft)** - file lives in `blog-queue/` with `draft: true`. Click opens VS Code.
+- **Grey pencil (Draft)** - file lives in `blog-queue/` with `draft: true`.
 
-## What clicking a chip does
+## How the side panel works
 
-- Hover (or keyboard-focus) a chip to open the side panel as a preview. Move off, the panel auto-closes after a 200 ms grace.
-- Click a chip to pin the panel: it stays open until you hit the X, press Esc, or click another chip.
-- The side panel's "Open live URL" button is enabled only for published posts; "Edit in VS Code" works for every post. Clicking either button leaves the panel open.
+The right side panel is always visible at 360 px wide. It has three states:
+
+- **Default (empty state):** shows a board of useful links - site URLs, repo folders, Discord, dashboards. This is what you see on first load.
+- **Hover preview:** hovering any chip on the calendar fills the panel with that post's details. Moving your mouse off the chip leaves the content as it was. The panel does not auto-close.
+- **Selected:** clicking a chip marks it with an outline ring and fills the panel with its details. Click another chip to switch. Click the home icon at the top of the panel to return to the link board.
+
+The panel is permanent. The calendar always sits to its left at the remaining width. To act on the post currently shown, use the "Open live URL" or "Edit in VS Code" buttons at the bottom of the panel; live URL is enabled only for published posts.
 
 ## Filters and search
 
@@ -37,7 +41,7 @@ Requires Python on PATH. No pip dependencies; stdlib only.
 - Left / Right arrows: previous / next month
 - T: jump to today
 - /: focus the search box
-- Esc: close panel; if no panel, clear search; if no search, blur the focused input
+- Esc: clear search; if no search, blur the focused input
 - ?: toggle the keyboard shortcut help overlay
 
 The help overlay is also reachable from the "?" icon in the top right of the page.
