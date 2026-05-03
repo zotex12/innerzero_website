@@ -49,3 +49,8 @@ next-env.d.ts
 # Front Matter CMS local state
 .frontmatter/database/
 .frontmatter/content/
+
+# Scratch directory: throwaway smoke scripts, server logs, anything
+# transient. Tools that need scratch space create files here at run
+# time and clean up after themselves; nothing here should be tracked.
+/scratch/
