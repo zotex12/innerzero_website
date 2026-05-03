@@ -34,6 +34,13 @@ QUEUE_DIR = REPO_ROOT / "blog-queue"
 
 LIVE_BASE_URL = "https://innerzero.com/blog/"
 
+# Publishing schedule: matches `.github/workflows/blog-auto-publish.yml`
+# (Tuesday + Friday 09:00 UTC). Hardcoded here as a single source of truth
+# for the UI; if the cron ever changes, update both the workflow file and
+# these two constants.
+CRON_EXPRESSION = "0 9 * * 2,5"
+PUBLISH_TIME_UTC = "09:00"
+
 DATE_FORMAT = "%Y-%m-%d"
 QUICK_EDIT_COMMENT_RE = re.compile(
     r"\A\s*<!--\s*.*?-->\s*\n?",
@@ -246,6 +253,7 @@ def _post_dict(path: Path, folder: str) -> dict:
         "draft": bool(meta.get("draft", False)),
         "live_url": live_url,
         "vscode_url": vscode_url,
+        "publish_time_utc": PUBLISH_TIME_UTC,
         "errors": errors,
     }
 
@@ -290,6 +298,8 @@ def _build_payload() -> dict:
 
     return {
         "generated_at": _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "cron_expression": CRON_EXPRESSION,
+        "publish_time_utc": PUBLISH_TIME_UTC,
         "stats": stats,
         "posts": posts,
     }
@@ -298,6 +308,8 @@ def _build_payload() -> dict:
 def _error_payload(message: str) -> dict:
     return {
         "generated_at": _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "cron_expression": CRON_EXPRESSION,
+        "publish_time_utc": PUBLISH_TIME_UTC,
         "stats": {"published": 0, "scheduled": 0, "overdue": 0, "errors": 1, "draft": 0},
         "posts": [],
         "fatal_error": message,

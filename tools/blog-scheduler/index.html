@@ -21,6 +21,7 @@
       --red: #ef4444;
       --grey: #6b7280;
       --shadow: 0 6px 18px rgba(0, 0, 0, 0.32);
+      --backdrop: rgba(0, 0, 0, 0.55);
     }
     :root[data-theme="light"] {
       --bg: #ffffff;
@@ -37,6 +38,7 @@
       --red: #dc2626;
       --grey: #6b7280;
       --shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+      --backdrop: rgba(15, 23, 42, 0.4);
     }
 
     * { box-sizing: border-box; }
@@ -50,17 +52,25 @@
       font-size: 14px;
       line-height: 1.6;
       min-height: 100vh;
+      overflow: hidden;
     }
 
     a { color: var(--fg); }
 
+    /* Top bar with two stacked rows: titles+stats+nav, then filters+search */
     .topbar {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      padding: 18px 24px;
+      padding: 12px 20px;
       border-bottom: 1px solid var(--border);
       background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
       flex-wrap: wrap;
     }
 
@@ -72,8 +82,8 @@
 
     .stats {
       display: flex;
-      gap: 18px;
-      font-size: 14px;
+      gap: 16px;
+      font-size: 13px;
       color: var(--fg-muted);
     }
 
@@ -93,6 +103,12 @@
     .stats .num-scheduled { color: var(--orange); }
     .stats .num-overdue { color: var(--red); }
     .stats .num-errors { color: var(--red); }
+
+    .stats-filter-note {
+      font-size: 12px;
+      color: var(--fg-muted);
+      font-style: italic;
+    }
 
     .nav {
       display: inline-flex;
@@ -117,10 +133,11 @@
       font-family: inherit;
       font-size: 13px;
       cursor: pointer;
-      transition: background 120ms ease, border-color 120ms ease;
+      transition: background 120ms ease, border-color 120ms ease, opacity 120ms ease;
     }
     button:hover { background: var(--surface-hi); border-color: var(--border-hi); }
     button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .icon-btn {
       width: 32px;
@@ -131,9 +148,109 @@
       justify-content: center;
     }
 
-    /* Calendar grid */
-    .grid-wrap {
-      padding: 18px 24px;
+    /* Filter row */
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-row-label {
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--fg-dim);
+      font-weight: 500;
+    }
+
+    .filter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      user-select: none;
+      transition: background 120ms ease, border-color 120ms ease, opacity 120ms ease;
+    }
+
+    .filter-pill[aria-pressed="true"] {
+      border-color: var(--filter-color, var(--border-hi));
+      color: var(--filter-color, var(--fg));
+      background: var(--surface-hi);
+    }
+
+    .filter-pill[aria-pressed="false"] {
+      color: var(--fg-dim);
+      opacity: 0.55;
+    }
+
+    .filter-pill[data-status="published"] { --filter-color: var(--green); }
+    .filter-pill[data-status="scheduled"] { --filter-color: var(--orange); }
+    .filter-pill[data-status="overdue"] { --filter-color: var(--red); }
+    .filter-pill[data-status="error"] { --filter-color: var(--red); }
+    .filter-pill[data-status="draft"] { --filter-color: var(--grey); }
+
+    /* Search */
+    .search-wrap {
+      position: relative;
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .search-input {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--fg);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 6px 30px 6px 12px;
+      width: 240px;
+    }
+    .search-input::placeholder { color: var(--fg-dim); }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 22px;
+      height: 22px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: var(--fg-muted);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .search-clear:hover { color: var(--fg); background: var(--surface-hi); }
+    .search-clear[hidden] { display: none; }
+
+    /* App body: calendar + side panel as a flex row */
+    .app-layout {
+      display: flex;
+      flex-direction: row;
+      height: calc(100vh - 132px);
+      width: 100%;
+      gap: 0;
+    }
+
+    .calendar-wrap {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: auto;
+      padding: 16px 20px;
     }
 
     .weekdays {
@@ -200,6 +317,10 @@
       cursor: pointer;
       transition: transform 100ms ease, box-shadow 100ms ease;
       user-select: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      color: var(--fg);
     }
 
     .chip:hover {
@@ -249,28 +370,33 @@
       flex: 1;
     }
 
-    /* Detail panel */
-    .panel {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 380px;
-      max-width: 90vw;
-      height: 100vh;
-      background: var(--surface);
-      border-left: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      transform: translateX(100%);
-      transition: transform 180ms ease;
-      display: flex;
-      flex-direction: column;
-      z-index: 10;
+    .chip-time {
+      font-size: 11px;
+      color: var(--fg-muted);
+      flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
     }
 
-    .panel.is-open { transform: translateX(0); }
+    /* Side panel as a flex column, never an overlay */
+    .side-panel {
+      flex: 0 0 360px;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      transition: flex-basis 200ms ease, opacity 160ms ease, border-left-width 200ms ease;
+      overflow: hidden;
+    }
+
+    .side-panel.is-collapsed {
+      flex: 0 0 0;
+      opacity: 0;
+      border-left-width: 0;
+      pointer-events: none;
+    }
 
     .panel-head {
-      padding: 16px 18px;
+      padding: 14px 18px;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
@@ -278,8 +404,17 @@
       gap: 8px;
     }
 
+    .panel-state {
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--fg-dim);
+      margin-right: 6px;
+    }
+    .panel-state.is-pinned { color: var(--accent); }
+
     .panel-body {
-      padding: 16px 18px;
+      padding: 14px 18px;
       overflow-y: auto;
       flex: 1;
     }
@@ -288,6 +423,9 @@
       font-size: 16px;
       font-weight: 600;
       line-height: 1.35;
+      flex: 1;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .badge {
@@ -337,19 +475,28 @@
       background: var(--surface-hi);
       border: 1px solid var(--border);
       color: var(--fg-muted);
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+    }
+    .pill:hover {
+      background: var(--surface);
+      color: var(--fg);
+      border-color: var(--border-hi);
+    }
+    .pill.is-active {
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      color: var(--accent);
+      border-color: var(--accent);
     }
 
     .panel-actions {
-      padding: 14px 18px;
+      padding: 12px 18px;
       border-top: 1px solid var(--border);
       display: flex;
       gap: 8px;
     }
     .panel-actions button { flex: 1; }
-    .panel-actions button:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
 
     .errors-list {
       color: var(--red);
@@ -367,6 +514,68 @@
       margin: 18px 0;
     }
 
+    /* Help overlay */
+    .help-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--backdrop);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+    .help-overlay.is-open { display: flex; }
+
+    .help-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 26px;
+      width: 480px;
+      max-width: 92vw;
+      box-shadow: var(--shadow);
+    }
+
+    .help-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .help-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .help-card table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .help-card td {
+      padding: 6px 4px;
+      border-top: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .help-card tr:first-child td { border-top: none; }
+    .help-card .key {
+      font-family: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+      background: var(--surface-hi);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .help-foot {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--fg-muted);
+      line-height: 1.6;
+    }
+
     /* Visually hidden helper for SR-only labels */
     .sr-only {
       position: absolute;
@@ -379,51 +588,106 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="title">InnerZero blog schedule</div>
-    <div class="stats" id="stats">
-      <span class="stat"><span class="num num-published" id="stat-published">0</span> published</span>
-      <span class="stat"><span class="num num-scheduled" id="stat-scheduled">0</span> scheduled</span>
-      <span class="stat"><span class="num num-overdue" id="stat-overdue">0</span> overdue</span>
-      <span class="stat"><span class="num num-errors" id="stat-errors">0</span> errors</span>
+    <div class="topbar-row">
+      <div class="title">InnerZero blog schedule</div>
+      <div class="stats" id="stats">
+        <span class="stat"><span class="num num-published" id="stat-published">0</span> published</span>
+        <span class="stat"><span class="num num-scheduled" id="stat-scheduled">0</span> scheduled</span>
+        <span class="stat"><span class="num num-overdue" id="stat-overdue">0</span> overdue</span>
+        <span class="stat"><span class="num num-errors" id="stat-errors">0</span> errors</span>
+        <span class="stats-filter-note" id="stats-filter-note" hidden></span>
+      </div>
+
+      <div class="nav">
+        <button class="icon-btn" id="nav-prev" title="Previous month (Left arrow)" aria-label="Previous month">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <button id="nav-today" title="Jump to today (T)">Today</button>
+        <span class="month-label" id="month-label">Loading</span>
+        <button class="icon-btn" id="nav-next" title="Next month (Right arrow)" aria-label="Next month">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+        <button id="btn-refresh" title="Refresh data">Refresh</button>
+        <button class="icon-btn" id="btn-help" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </button>
+        <button class="icon-btn" id="btn-theme" title="Toggle theme" aria-label="Toggle theme">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+        </button>
+      </div>
     </div>
 
-    <div class="nav">
-      <button class="icon-btn" id="nav-prev" title="Previous month" aria-label="Previous month">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-      </button>
-      <button id="nav-today" title="Jump to today">Today</button>
-      <span class="month-label" id="month-label">Loading</span>
-      <button class="icon-btn" id="nav-next" title="Next month" aria-label="Next month">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-      </button>
-      <button id="btn-refresh" title="Refresh data">Refresh</button>
-      <button class="icon-btn" id="btn-theme" title="Toggle theme" aria-label="Toggle theme">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
-      </button>
+    <div class="filter-row">
+      <span class="filter-row-label">Filter</span>
+      <button class="filter-pill" data-status="published" type="button" aria-pressed="true">Published</button>
+      <button class="filter-pill" data-status="scheduled" type="button" aria-pressed="true">Scheduled</button>
+      <button class="filter-pill" data-status="overdue" type="button" aria-pressed="true">Overdue</button>
+      <button class="filter-pill" data-status="error" type="button" aria-pressed="true">Errors</button>
+      <button class="filter-pill" data-status="draft" type="button" aria-pressed="true">Drafts</button>
+
+      <div class="search-wrap">
+        <input
+          type="search"
+          id="search-input"
+          class="search-input"
+          placeholder="Search title, slug, or tag..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button class="search-clear" id="search-clear" title="Clear search" aria-label="Clear search" hidden>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
     </div>
   </header>
 
-  <main class="grid-wrap">
-    <div id="empty-state" class="empty" hidden>
-      No posts found. Check that the script can read <code>src/content/blog/</code> and <code>blog-queue/</code>.
-    </div>
-    <div class="weekdays" id="weekdays" aria-hidden="true"></div>
-    <div class="grid" id="grid"></div>
-  </main>
+  <div class="app-layout">
+    <main class="calendar-wrap">
+      <div id="empty-state" class="empty" hidden>
+        No posts found. Check that the script can read <code>src/content/blog/</code> and <code>blog-queue/</code>.
+      </div>
+      <div class="weekdays" id="weekdays" aria-hidden="true"></div>
+      <div class="grid" id="grid"></div>
+    </main>
 
-  <aside class="panel" id="panel" aria-hidden="true">
-    <div class="panel-head">
-      <div class="panel-title" id="panel-title">Select a post</div>
-      <button class="icon-btn" id="panel-close" title="Close" aria-label="Close panel">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
+    <aside class="side-panel is-collapsed" id="panel" aria-hidden="true">
+      <div class="panel-head">
+        <span class="panel-state" id="panel-state">Preview</span>
+        <div class="panel-title" id="panel-title">Select a post</div>
+        <button class="icon-btn" id="panel-close" title="Close (Esc)" aria-label="Close panel">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="panel-body" id="panel-body"></div>
+      <div class="panel-actions">
+        <button id="btn-live" disabled>Open live URL</button>
+        <button id="btn-vscode" disabled>Edit in VS Code</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="help-overlay" id="help-overlay" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <div class="help-card">
+      <div class="help-head">
+        <div class="help-title" id="help-title">Keyboard shortcuts</div>
+        <button class="icon-btn" id="help-close" title="Close" aria-label="Close help">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <table>
+        <tbody>
+          <tr><td><span class="key">&larr;</span> / <span class="key">&rarr;</span></td><td>Previous / next month</td></tr>
+          <tr><td><span class="key">T</span></td><td>Jump to today</td></tr>
+          <tr><td><span class="key">/</span></td><td>Focus search box</td></tr>
+          <tr><td><span class="key">Esc</span></td><td>Close panel; if no panel, clear search</td></tr>
+          <tr><td><span class="key">?</span></td><td>Toggle this help overlay</td></tr>
+        </tbody>
+      </table>
+      <div class="help-foot" id="help-foot">
+        Posts publish via cron (Tuesday + Friday 09:00 UTC). Hover a chip for a preview, click to pin.
+      </div>
     </div>
-    <div class="panel-body" id="panel-body"></div>
-    <div class="panel-actions">
-      <button id="btn-live" disabled>Open live URL</button>
-      <button id="btn-vscode" disabled>Edit in VS Code</button>
-    </div>
-  </aside>
+  </div>
 
   <script>
     // Inline SVG icons for chip status (no emojis, no icon library).
@@ -444,16 +708,30 @@
     };
 
     const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const FILTER_KEYS = ['published', 'scheduled', 'overdue', 'error', 'draft'];
+    const FILTER_STORAGE_KEY = 'blog-scheduler-filters-v2';
+    const THEME_STORAGE_KEY = 'blog-scheduler-theme';
 
-    let posts = [];
-    let postsByDate = new Map();
+    // State
+    let posts = [];                // raw response
+    let topMeta = {};              // cron_expression, publish_time_utc
+    let visiblePosts = [];         // posts after filter + search
+    let postsByDate = new Map();   // date string -> visible posts
     let currentYear, currentMonth; // 0-indexed month
-    let selectedPost = null;
+    let filterState = {};          // { published: true, ... }
+    let searchTerm = '';
+    let panelMode = 'none';        // none | preview | pinned
+    let panelPost = null;          // currently displayed post
+    let chipHovered = false;
+    let panelHovered = false;
+    let previewCloseTimer = null;
 
     function init() {
-      // Theme: load from localStorage, default dark
-      const savedTheme = localStorage.getItem('blog-scheduler-theme') || 'dark';
+      const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
       document.documentElement.setAttribute('data-theme', savedTheme);
+
+      filterState = loadFilters();
+      paintFilterPills();
 
       // Render weekday header once
       const w = document.getElementById('weekdays');
@@ -470,44 +748,136 @@
 
       document.getElementById('nav-prev').addEventListener('click', () => shiftMonth(-1));
       document.getElementById('nav-next').addEventListener('click', () => shiftMonth(1));
-      document.getElementById('nav-today').addEventListener('click', () => {
-        const t = new Date();
-        currentYear = t.getFullYear();
-        currentMonth = t.getMonth();
-        renderCalendar();
-      });
+      document.getElementById('nav-today').addEventListener('click', goToday);
       document.getElementById('btn-refresh').addEventListener('click', refresh);
+      document.getElementById('btn-help').addEventListener('click', toggleHelp);
       document.getElementById('btn-theme').addEventListener('click', toggleTheme);
-      document.getElementById('panel-close').addEventListener('click', closePanel);
+      document.getElementById('panel-close').addEventListener('click', () => closePanel({ force: true }));
       document.getElementById('btn-live').addEventListener('click', openLive);
       document.getElementById('btn-vscode').addEventListener('click', openVscode);
+      document.getElementById('help-close').addEventListener('click', toggleHelp);
+      document.getElementById('help-overlay').addEventListener('click', (ev) => {
+        if (ev.target.id === 'help-overlay') toggleHelp();
+      });
+      document.getElementById('search-input').addEventListener('input', (ev) => {
+        setSearch(ev.target.value);
+      });
+      document.getElementById('search-clear').addEventListener('click', () => {
+        setSearch('');
+        document.getElementById('search-input').focus();
+      });
+      document.querySelectorAll('.filter-pill').forEach((pill) => {
+        pill.addEventListener('click', () => toggleFilter(pill.dataset.status));
+      });
+
+      const panel = document.getElementById('panel');
+      panel.addEventListener('mouseenter', () => {
+        panelHovered = true;
+        clearPreviewCloseTimer();
+      });
+      panel.addEventListener('mouseleave', () => {
+        panelHovered = false;
+        schedulePreviewClose();
+      });
 
       window.addEventListener('focus', refresh);
-      window.addEventListener('keydown', (ev) => {
-        if (ev.key === 'Escape') closePanel();
-      });
+      document.addEventListener('keydown', onKeydown);
 
       refresh();
     }
+
+    // ---------- Theme ----------
 
     function toggleTheme() {
       const cur = document.documentElement.getAttribute('data-theme') || 'dark';
       const next = cur === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('blog-scheduler-theme', next);
+      localStorage.setItem(THEME_STORAGE_KEY, next);
     }
 
-    function shiftMonth(delta) {
-      currentMonth += delta;
-      if (currentMonth < 0) {
-        currentMonth = 11;
-        currentYear -= 1;
-      } else if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear += 1;
+    // ---------- Filters ----------
+
+    function loadFilters() {
+      try {
+        const raw = localStorage.getItem(FILTER_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const out = {};
+          for (const key of FILTER_KEYS) {
+            out[key] = typeof parsed[key] === 'boolean' ? parsed[key] : true;
+          }
+          return out;
+        }
+      } catch (_) {
+        // fall through to defaults
       }
-      renderCalendar();
+      const defaults = {};
+      for (const key of FILTER_KEYS) defaults[key] = true;
+      return defaults;
     }
+
+    function saveFilters() {
+      try {
+        localStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify(filterState));
+      } catch (_) { /* swallow quota errors silently */ }
+    }
+
+    function paintFilterPills() {
+      document.querySelectorAll('.filter-pill').forEach((pill) => {
+        const key = pill.dataset.status;
+        pill.setAttribute('aria-pressed', String(!!filterState[key]));
+      });
+    }
+
+    function toggleFilter(key) {
+      if (!FILTER_KEYS.includes(key)) return;
+      filterState[key] = !filterState[key];
+      paintFilterPills();
+      saveFilters();
+      applyFilters();
+    }
+
+    // ---------- Search ----------
+
+    function setSearch(value) {
+      searchTerm = (value || '').trim().toLowerCase();
+      const input = document.getElementById('search-input');
+      if (input.value !== value) input.value = value;
+      document.getElementById('search-clear').hidden = !searchTerm;
+      applyFilters();
+    }
+
+    function postMatchesSearch(post) {
+      if (!searchTerm) return true;
+      const haystack = [
+        post.title || '',
+        post.slug || '',
+        ...(post.tags || []),
+      ].join(' ').toLowerCase();
+      return haystack.includes(searchTerm);
+    }
+
+    function applyFilters() {
+      visiblePosts = posts.filter((p) => filterState[p.status] && postMatchesSearch(p));
+      rebuildIndex();
+      renderCalendar();
+      updateFilterStatsNote();
+    }
+
+    function updateFilterStatsNote() {
+      const note = document.getElementById('stats-filter-note');
+      const showing = visiblePosts.length;
+      const total = posts.length;
+      if (showing === total && !searchTerm) {
+        note.hidden = true;
+        note.textContent = '';
+      } else {
+        note.hidden = false;
+        note.textContent = `(showing ${showing} of ${total})`;
+      }
+    }
+
+    // ---------- Data fetch ----------
 
     async function refresh() {
       try {
@@ -515,10 +885,29 @@
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const data = await resp.json();
         posts = data.posts || [];
-        rebuildIndex();
+        topMeta = {
+          cron_expression: data.cron_expression || '',
+          publish_time_utc: data.publish_time_utc || '09:00',
+        };
         renderStats(data.stats || {});
-        renderCalendar();
+        applyFilters();
         document.getElementById('empty-state').hidden = posts.length > 0;
+        // Update help overlay foot to match server-reported schedule
+        const footEl = document.getElementById('help-foot');
+        if (footEl && topMeta.cron_expression) {
+          footEl.textContent =
+            `Posts publish via cron "${topMeta.cron_expression}" at ${topMeta.publish_time_utc} UTC. Hover a chip for a preview, click to pin.`;
+        }
+        // If a panel is currently open, refresh its content from the new data
+        if (panelPost) {
+          const fresh = posts.find((p) => p.filename === panelPost.filename);
+          if (fresh) {
+            panelPost = fresh;
+            renderPanel(panelPost);
+          } else {
+            closePanel({ force: true });
+          }
+        }
       } catch (e) {
         console.error('Failed to fetch /api/posts:', e);
         document.getElementById('empty-state').hidden = false;
@@ -527,7 +916,7 @@
 
     function rebuildIndex() {
       postsByDate = new Map();
-      for (const p of posts) {
+      for (const p of visiblePosts) {
         if (!p.date) continue;
         if (!postsByDate.has(p.date)) postsByDate.set(p.date, []);
         postsByDate.get(p.date).push(p);
@@ -541,6 +930,8 @@
       get('stat-overdue').textContent = stats.overdue || 0;
       get('stat-errors').textContent = stats.errors || 0;
     }
+
+    // ---------- Calendar render ----------
 
     function monthName(year, monthIndex) {
       return new Date(year, monthIndex, 1).toLocaleDateString('en-GB', {
@@ -560,16 +951,10 @@
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
 
-      // ISO week start (Monday). JS getDay: 0=Sun, 1=Mon, ..., 6=Sat.
       const first = new Date(currentYear, currentMonth, 1);
-      // Convert to ISO weekday index where Mon=0..Sun=6
       const firstWeekdayIso = (first.getDay() + 6) % 7;
-
-      // Day-before this month, used to compute leading days from the
-      // previous month so the grid starts on Monday.
       const prevMonthLastDay = new Date(currentYear, currentMonth, 0).getDate();
 
-      // Build a flat list of 42 day cells (6 rows x 7 cols).
       const cells = [];
       for (let i = 0; i < firstWeekdayIso; i++) {
         const day = prevMonthLastDay - firstWeekdayIso + 1 + i;
@@ -622,7 +1007,8 @@
       const chip = document.createElement('button');
       chip.className = 'chip chip-' + post.status;
       chip.type = 'button';
-      chip.title = post.title || post.filename;
+      const time = post.publish_time_utc || topMeta.publish_time_utc || '';
+      chip.title = `${post.title || post.filename}${time ? ' (' + time + ' UTC)' : ''}`;
       chip.dataset.filename = post.filename;
       chip.tabIndex = 0;
 
@@ -633,36 +1019,103 @@
 
       const titleSpan = document.createElement('span');
       titleSpan.className = 'chip-title';
-      titleSpan.textContent = truncate(post.title || post.filename, 28);
+      titleSpan.textContent = truncate(post.title || post.filename, 26);
       chip.appendChild(titleSpan);
+
+      if (time) {
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'chip-time';
+        timeSpan.textContent = time;
+        chip.appendChild(timeSpan);
+      }
 
       const sr = document.createElement('span');
       sr.className = 'sr-only';
       sr.textContent = ' (' + STATUS_LABEL[post.status] + ')';
       chip.appendChild(sr);
 
-      chip.addEventListener('mouseenter', () => openPanel(post));
-      chip.addEventListener('focus', () => openPanel(post));
+      chip.addEventListener('mouseenter', () => onChipHover(post));
+      chip.addEventListener('mouseleave', onChipMouseLeave);
+      chip.addEventListener('focus', () => onChipHover(post));
+      chip.addEventListener('blur', onChipMouseLeave);
       chip.addEventListener('click', (ev) => {
         ev.preventDefault();
-        openPanel(post);
-        // Direct dispatch on click: published goes to live, others to VS Code.
-        if (post.status === 'published' && post.live_url) {
-          window.open(post.live_url, '_blank', 'noopener');
-        } else if (post.vscode_url) {
-          window.location.href = post.vscode_url;
-        }
+        pinPanel(post);
       });
 
       return chip;
     }
 
-    function openPanel(post) {
-      selectedPost = post;
-      const panel = document.getElementById('panel');
-      panel.classList.add('is-open');
-      panel.setAttribute('aria-hidden', 'false');
+    // ---------- Panel state machine ----------
 
+    function onChipHover(post) {
+      chipHovered = true;
+      clearPreviewCloseTimer();
+      if (panelMode === 'pinned') return; // pinned panel does not respond to hover
+      panelMode = 'preview';
+      panelPost = post;
+      openPanelDom();
+      renderPanel(post);
+    }
+
+    function onChipMouseLeave() {
+      chipHovered = false;
+      schedulePreviewClose();
+    }
+
+    function pinPanel(post) {
+      panelMode = 'pinned';
+      panelPost = post;
+      clearPreviewCloseTimer();
+      openPanelDom();
+      renderPanel(post);
+    }
+
+    function clearPreviewCloseTimer() {
+      if (previewCloseTimer !== null) {
+        clearTimeout(previewCloseTimer);
+        previewCloseTimer = null;
+      }
+    }
+
+    function schedulePreviewClose() {
+      if (panelMode !== 'preview') return;
+      clearPreviewCloseTimer();
+      previewCloseTimer = setTimeout(() => {
+        if (panelMode === 'preview' && !chipHovered && !panelHovered) {
+          closePanel();
+        }
+      }, 200);
+    }
+
+    function openPanelDom() {
+      const panel = document.getElementById('panel');
+      panel.classList.remove('is-collapsed');
+      panel.setAttribute('aria-hidden', 'false');
+      const stateLabel = document.getElementById('panel-state');
+      stateLabel.textContent = panelMode === 'pinned' ? 'Pinned' : 'Preview';
+      stateLabel.classList.toggle('is-pinned', panelMode === 'pinned');
+    }
+
+    function closePanel(opts) {
+      const force = !!(opts && opts.force);
+      if (panelMode === 'pinned' && !force) return;
+      const panel = document.getElementById('panel');
+      panel.classList.add('is-collapsed');
+      panel.setAttribute('aria-hidden', 'true');
+      panelMode = 'none';
+      panelPost = null;
+      chipHovered = false;
+      panelHovered = false;
+      clearPreviewCloseTimer();
+      const stateLabel = document.getElementById('panel-state');
+      stateLabel.textContent = 'Preview';
+      stateLabel.classList.remove('is-pinned');
+      document.getElementById('btn-live').disabled = true;
+      document.getElementById('btn-vscode').disabled = true;
+    }
+
+    function renderPanel(post) {
       document.getElementById('panel-title').textContent = post.title || post.filename;
 
       const body = document.getElementById('panel-body');
@@ -677,25 +1130,14 @@
       body.appendChild(status);
 
       body.appendChild(panelRow('Date', post.date || 'unknown'));
+
+      const time = post.publish_time_utc || topMeta.publish_time_utc || '09:00';
+      body.appendChild(publishTimeRow(post.date, time));
+
       body.appendChild(panelRow('Slug', post.slug || '(none)'));
 
       if (post.tags && post.tags.length) {
-        const tagRow = document.createElement('div');
-        tagRow.className = 'panel-row';
-        const lab = document.createElement('span');
-        lab.className = 'label';
-        lab.textContent = 'Tags';
-        tagRow.appendChild(lab);
-        const pills = document.createElement('div');
-        pills.className = 'pills';
-        for (const t of post.tags) {
-          const p = document.createElement('span');
-          p.className = 'pill';
-          p.textContent = t;
-          pills.appendChild(p);
-        }
-        tagRow.appendChild(pills);
-        body.appendChild(tagRow);
+        body.appendChild(tagsRow(post.tags));
       }
 
       if (post.description) body.appendChild(panelRow('Description', post.description));
@@ -740,22 +1182,190 @@
       return row;
     }
 
-    function closePanel() {
-      const panel = document.getElementById('panel');
-      panel.classList.remove('is-open');
-      panel.setAttribute('aria-hidden', 'true');
-      selectedPost = null;
+    function publishTimeRow(dateStr, utcTime) {
+      const row = document.createElement('div');
+      row.className = 'panel-row';
+      const lab = document.createElement('span');
+      lab.className = 'label';
+      lab.textContent = 'Publish time';
+      row.appendChild(lab);
+      const val = document.createElement('span');
+      val.className = 'value';
+      const local = localTimeFromUtc(dateStr, utcTime);
+      val.textContent = local
+        ? `${utcTime} UTC (${local} your local time)`
+        : `${utcTime} UTC`;
+      row.appendChild(val);
+      return row;
+    }
+
+    function localTimeFromUtc(dateStr, utcTime) {
+      if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return '';
+      if (!/^\d{1,2}:\d{2}$/.test(utcTime)) return '';
+      try {
+        const [y, mo, d] = dateStr.split('-').map(Number);
+        const [h, m] = utcTime.split(':').map(Number);
+        const utc = new Date(Date.UTC(y, mo - 1, d, h, m));
+        let formatted = '';
+        try {
+          formatted = new Intl.DateTimeFormat(undefined, {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+            timeZoneName: 'short',
+          }).format(utc);
+        } catch (_) {
+          // Fall back without timezone name
+          formatted = new Intl.DateTimeFormat(undefined, {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+          }).format(utc);
+        }
+        return formatted;
+      } catch (_) {
+        return '';
+      }
+    }
+
+    function tagsRow(tags) {
+      const row = document.createElement('div');
+      row.className = 'panel-row';
+      const lab = document.createElement('span');
+      lab.className = 'label';
+      lab.textContent = 'Tags';
+      row.appendChild(lab);
+      const pillWrap = document.createElement('div');
+      pillWrap.className = 'pills';
+      for (const t of tags) {
+        const p = document.createElement('button');
+        p.type = 'button';
+        p.className = 'pill';
+        p.textContent = t;
+        p.title = `Filter to "${t}"`;
+        if (searchTerm && searchTerm === t.toLowerCase()) {
+          p.classList.add('is-active');
+        }
+        p.addEventListener('click', () => onTagPillClick(t));
+        pillWrap.appendChild(p);
+      }
+      row.appendChild(pillWrap);
+      return row;
+    }
+
+    function onTagPillClick(tag) {
+      const lower = (tag || '').toLowerCase();
+      if (searchTerm === lower) {
+        setSearch('');
+      } else {
+        setSearch(tag);
+      }
+      // Re-render the panel so the active state on the tag pill updates
+      if (panelPost) renderPanel(panelPost);
     }
 
     function openLive() {
-      if (selectedPost && selectedPost.live_url) {
-        window.open(selectedPost.live_url, '_blank', 'noopener');
+      if (panelPost && panelPost.live_url) {
+        window.open(panelPost.live_url, '_blank', 'noopener');
       }
     }
 
     function openVscode() {
-      if (selectedPost && selectedPost.vscode_url) {
-        window.location.href = selectedPost.vscode_url;
+      if (panelPost && panelPost.vscode_url) {
+        window.location.href = panelPost.vscode_url;
+      }
+    }
+
+    // ---------- Navigation ----------
+
+    function shiftMonth(delta) {
+      currentMonth += delta;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear -= 1;
+      } else if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear += 1;
+      }
+      renderCalendar();
+    }
+
+    function goToday() {
+      const t = new Date();
+      currentYear = t.getFullYear();
+      currentMonth = t.getMonth();
+      renderCalendar();
+    }
+
+    // ---------- Help overlay ----------
+
+    function toggleHelp() {
+      const overlay = document.getElementById('help-overlay');
+      overlay.classList.toggle('is-open');
+    }
+
+    function helpOpen() {
+      return document.getElementById('help-overlay').classList.contains('is-open');
+    }
+
+    // ---------- Keyboard shortcuts ----------
+
+    function onKeydown(ev) {
+      const target = ev.target;
+      const inInput =
+        target &&
+        (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+
+      // Always-on shortcuts (work even when input is focused)
+      if (ev.key === 'Escape') {
+        ev.preventDefault();
+        if (helpOpen()) {
+          toggleHelp();
+          return;
+        }
+        if (panelMode !== 'none') {
+          closePanel({ force: true });
+          return;
+        }
+        if (searchTerm) {
+          setSearch('');
+          return;
+        }
+        if (target && typeof target.blur === 'function') target.blur();
+        return;
+      }
+
+      if (ev.key === '/') {
+        // Don't fight typing in non-search inputs
+        if (target && target.id === 'search-input') return;
+        ev.preventDefault();
+        const input = document.getElementById('search-input');
+        if (input) input.focus();
+        return;
+      }
+
+      // Shortcuts that should not fire while typing in an input
+      if (inInput) return;
+
+      if (ev.key === 'ArrowLeft') {
+        ev.preventDefault();
+        shiftMonth(-1);
+        return;
+      }
+      if (ev.key === 'ArrowRight') {
+        ev.preventDefault();
+        shiftMonth(1);
+        return;
+      }
+      if (ev.key === 't' || ev.key === 'T') {
+        ev.preventDefault();
+        goToday();
+        return;
+      }
+      if (ev.key === '?' || (ev.shiftKey && ev.key === '/')) {
+        ev.preventDefault();
+        toggleHelp();
+        return;
       }
     }
 

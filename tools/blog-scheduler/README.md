@@ -22,9 +22,25 @@ Requires Python on PATH. No pip dependencies; stdlib only.
 
 ## What clicking a chip does
 
-- Single click opens the relevant target (live URL for published, VS Code for everything else) and pops the side panel with the post's full details.
-- Hover or keyboard focus also opens the side panel without navigating.
-- The side panel's "Open live URL" button is disabled for non-published posts; "Edit in VS Code" works for every post.
+- Hover (or keyboard-focus) a chip to open the side panel as a preview. Move off, the panel auto-closes after a 200 ms grace.
+- Click a chip to pin the panel: it stays open until you hit the X, press Esc, or click another chip.
+- The side panel's "Open live URL" button is enabled only for published posts; "Edit in VS Code" works for every post. Clicking either button leaves the panel open.
+
+## Filters and search
+
+- Filter pills at the top of the page show or hide posts by status (Published, Scheduled, Overdue, Errors, Drafts). Toggle state persists across launches via localStorage.
+- The search box filters by case-insensitive substring across title, slug, and tags. Stats line shows "X of Y" while a search or filter is active.
+- Tag pills inside the side panel are clickable. Clicking a tag fills the search box with that tag and filters the calendar to it; clicking the same tag again clears the filter.
+
+## Keyboard shortcuts
+
+- Left / Right arrows: previous / next month
+- T: jump to today
+- /: focus the search box
+- Esc: close panel; if no panel, clear search; if no search, blur the focused input
+- ?: toggle the keyboard shortcut help overlay
+
+The help overlay is also reachable from the "?" icon in the top right of the page.
 
 ## How to stop it
 
