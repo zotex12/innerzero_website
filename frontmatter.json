@@ -1,0 +1,93 @@
+{
+  "$schema": "https://frontmatter.codes/frontmatter.schema.json",
+  "frontMatter.framework.id": "next.js",
+  "frontMatter.preview.host": "http://localhost:3000",
+  "frontMatter.content.publicFolder": "public",
+  "frontMatter.dashboard.openOnStart": true,
+  "frontMatter.content.pageFolders": [
+    {
+      "title": "Published",
+      "path": "[[workspace]]/src/content/blog",
+      "contentTypes": ["blog"],
+      "filePrefix": null
+    },
+    {
+      "title": "Scheduled",
+      "path": "[[workspace]]/blog-queue",
+      "contentTypes": ["blog"],
+      "filePrefix": null
+    }
+  ],
+  "frontMatter.taxonomy.contentTypes": [
+    {
+      "name": "blog",
+      "pageBundle": false,
+      "previewPath": "blog",
+      "fields": [
+        {
+          "title": "Title",
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "single": true
+        },
+        {
+          "title": "Description",
+          "name": "description",
+          "type": "string",
+          "required": true,
+          "single": false
+        },
+        {
+          "title": "Publish date",
+          "name": "date",
+          "type": "datetime",
+          "required": true,
+          "dateFormat": "yyyy-MM-dd"
+        },
+        {
+          "title": "Author",
+          "name": "author",
+          "type": "string",
+          "single": true
+        },
+        {
+          "title": "Author role",
+          "name": "authorRole",
+          "type": "string",
+          "single": true
+        },
+        {
+          "title": "Slug",
+          "name": "slug",
+          "type": "slug",
+          "editable": true
+        },
+        {
+          "title": "Tags",
+          "name": "tags",
+          "type": "tags"
+        },
+        {
+          "title": "Reading time",
+          "name": "readingTime",
+          "type": "string",
+          "single": true
+        },
+        {
+          "title": "Featured",
+          "name": "featured",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "title": "Draft",
+          "name": "draft",
+          "type": "draft",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "frontMatter.taxonomy.tags": []
+}

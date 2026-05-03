@@ -9,7 +9,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 ---
 title: "Cloud Credits vs BYO Keys: Real Cost Breakdown Across Providers"
 description: "Managed cloud plans vs your own API keys for AI usage. Which saves money, which saves hassle, and the break-even points for each of the 7 supported providers."
-date: "PUBLISH_DATE_PLACEHOLDER"
+date: "2026-05-19"
 author: "Louie"
 authorRole: "Founder"
 slug: "cloud-credits-vs-byo-keys"

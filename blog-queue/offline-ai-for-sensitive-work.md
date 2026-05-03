@@ -9,7 +9,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 ---
 title: "Offline AI for Sensitive Work: Legal, Medical, and Finance Use Cases"
 description: "Lawyers, doctors, and finance pros need AI that doesn't leak client data. How offline AI fits sensitive workflows and what to check before adopting."
-date: "PUBLISH_DATE_PLACEHOLDER"
+date: "2026-06-02"
 author: "Louie"
 authorRole: "Founder"
 slug: "offline-ai-for-sensitive-work"

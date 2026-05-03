@@ -9,7 +9,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 ---
 title: "The Hidden Costs of Running AI on Your Own PC (That Nobody Warns You About)"
 description: "Local AI is free to run, but not free of tradeoffs. Disk usage, GPU thermals, model-version drift, and the other costs people discover the hard way."
-date: "PUBLISH_DATE_PLACEHOLDER"
+date: "2026-05-26"
 author: "Louie"
 authorRole: "Founder"
 slug: "hidden-costs-of-local-ai"

@@ -9,7 +9,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 ---
 title: "Why Every AI Coding Agent Should Have a Sandbox"
 description: "AI coding agents shouldn't have free run of your disk. What a proper sandbox looks like, why most agents don't have one, and what to check before trusting any."
-date: "PUBLISH_DATE_PLACEHOLDER"
+date: "2026-06-09"
 author: "Louie"
 authorRole: "Founder"
 slug: "ai-coding-agent-sandbox-safety"

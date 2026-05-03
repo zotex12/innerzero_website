@@ -9,7 +9,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 ---
 title: "Frontier Tier Hardware for Local AI: When Does It Make Sense?"
 description: "256 GB RAM, 120 GB VRAM, workstation-class hardware for local AI. Who actually needs this tier, what it costs, and when it's worth the investment."
-date: "PUBLISH_DATE_PLACEHOLDER"
+date: "2026-06-16"
 author: "Louie"
 authorRole: "Founder"
 slug: "frontier-tier-hardware-local-ai"

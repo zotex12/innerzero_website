@@ -10,7 +10,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 ---
 title: "Does Your AI Train on Your Prompts? Anthropic, OpenAI, Google, DeepSeek, Kimi Compared"
 description: "Plain-English audit of how each major AI provider handles your API prompts. Who trains on your data by default, who doesn't, what the fine print says."
-date: "PUBLISH_DATE_PLACEHOLDER"
+date: "2026-05-05"
 author: "Louie"
 authorRole: "Founder"
 slug: "ai-prompt-training-comparison"

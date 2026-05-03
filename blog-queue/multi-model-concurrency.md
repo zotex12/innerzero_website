@@ -9,7 +9,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 ---
 title: "Running Multiple AI Models on One PC: What Actually Works"
 description: "Running multiple AI models on one PC is harder than it sounds. How InnerZero handles it, when swap beats concurrent loading, and VRAM budgets in practice."
-date: "PUBLISH_DATE_PLACEHOLDER"
+date: "2026-05-12"
 author: "Louie"
 authorRole: "Founder"
 slug: "multi-model-concurrency"
