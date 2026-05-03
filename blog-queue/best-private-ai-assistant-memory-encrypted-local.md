@@ -1,0 +1,93 @@
+<!-- QUICK-EDIT CHECKLIST
+- Verify no factual claims are stale, especially the encryption-at-rest claim
+- Update version mentions if a new release dropped
+- Check internal links resolve
+- Confirm no em dashes
+-->
+---
+title: "Best Private AI Assistant With Memory: Local-First, Encrypted at Rest"
+description: "A private AI assistant with memory you actually own, local-first by design, with OS-level encryption at rest and in-transit privacy controls when you opt into cloud."
+date: "2026-06-19"
+author: "Louie"
+authorRole: "Founder"
+slug: "best-private-ai-assistant-memory-encrypted-local"
+tags: ["privacy", "memory", "local-ai"]
+readingTime: "7 min read"
+---
+
+A private AI assistant with memory needs three things working together: the memory has to live on your machine, it has to be protected at rest, and it has to stay protected on any path it travels (which for local-first means almost no path at all). In 2026, the local-first assistants that ship structured memory have largely solved the first piece. The second piece (encryption at rest) is mostly delegated to your OS, and the third (in transit) only applies when you opt into cloud. This post is the honest technical rundown of what "encrypted memory storage" actually means, what InnerZero does, and what nobody can responsibly promise.
+
+I built InnerZero so the data the assistant accumulates about me belongs to me. That includes being able to read it, edit it, delete it, back it up, and protect it with the same tools I already use to protect everything else on my disk.
+
+## Why does memory encryption matter for an AI assistant?
+
+A daily-driver AI assistant ends up holding the kind of personal context most apps never see in one place. Your projects, your preferences, the people you talk about, the things you have asked it to remember about your life. That is a different category of data from your browser history or your photos. It deserves a different category of protection.
+
+Encryption at rest is the bar most personal data needs to meet. It guarantees that a stolen disk, a casual snoop, or an undefended backup cannot read the contents without the decryption key. Most users assume their AI memory benefits from the same protections as the rest of their files; whether that assumption holds depends on where the memory is actually stored. For cloud assistants the answer is "the provider handles encryption", which is true but means the protection is theirs, not yours. For local-first assistants the answer is "the protection comes from your OS-level disk encryption, plus whatever the application adds on top", which is honest but worth understanding clearly.
+
+## What does "local-first" actually guarantee?
+
+Local-first guarantees that the data lives on hardware you own and stays there unless you explicitly send it elsewhere. It does not by itself guarantee encryption: a plain SQLite file on an unencrypted disk is local but not encrypted. The full privacy story requires both: local storage (so nobody else has a copy), plus encryption (so nobody who gets physical access to the disk can read it without your credentials).
+
+Most modern operating systems make encryption the easy default. Windows offers BitLocker (Pro and Enterprise editions), macOS has FileVault on by default for new installs, and most Linux distributions offer LUKS during install. With any of these enabled, the entire user partition (including your AI memory database) is encrypted at rest, and reading it requires your login password plus the boot-time disk key. That is the protection most users actually have, and for most people it is sufficient.
+
+## How does InnerZero handle memory at rest?
+
+InnerZero stores memory in a SQLite database in your platform-specific user data directory: `%APPDATA%/InnerZero/db/innerzero.db` on Windows, `~/Library/Application Support/InnerZero/db/innerzero.db` on macOS, `~/.local/share/innerzero/db/innerzero.db` on Linux. The full architectural detail is in [AI that remembers your conversations](/blog/ai-that-remembers).
+
+The honest story on encryption: the memory database itself is a standard SQLite file, not application-encrypted. Protection at rest comes from your OS-level disk encryption (BitLocker, FileVault, or LUKS). Two parts of InnerZero do use application-level encryption: BYO API keys are stored encrypted with a Fernet key derived from your machine ID, and Telegram bot tokens use the same scheme. Everything else, including the memory database and your conversation history, relies on disk-level encryption rather than adding a second layer.
+
+Why the design choice. Adding a second encryption layer on top of OS-level disk encryption sounds appealing but has two trade-offs. First, you have to manage another credential (or derive it from existing ones, which weakens it). Second, the second layer slows down the high-volume read path the memory retrieval uses on every prompt. The honest assessment in 2026 is that a properly-encrypted disk under your login is the right protection for the memory database for most users. If you want belt-and-braces, the answer is encrypted-volume tooling (VeraCrypt) over the user data directory, which works without any application change.
+
+## What about memory in transit during cloud mode? Privacy blacklist, scrubbing
+
+In default local mode, memory never leaves your machine, so the in-transit question does not apply. The moment you opt into cloud mode (BYO keys or managed plans), per-message context goes to the cloud provider you picked. The full memory database still does not leave; only the relevant facts the retrieval system selected for the current prompt.
+
+InnerZero adds a privacy blacklist for cloud mode that scrubs user-defined sensitive terms before any outbound request. You add terms (real names, addresses, project codenames, anything you want kept off the wire) and the scrubber replaces them with placeholders before the prompt leaves the machine, then unscrubs the response before display, memory storage, or logging. Original terms never travel. The full data-flow detail across local and cloud paths lives in [how InnerZero stays private](/blog/how-innerzero-stays-private).
+
+The blacklist is not a substitute for trust. The cloud provider you BYO to still sees the scrubbed prompt; if you have left a sensitive term out of your blacklist, the provider sees it. The blacklist is a useful belt-and-braces layer; treat it as defence-in-depth, not absolute redaction.
+
+## Can I lock or wipe my memory if my laptop is stolen?
+
+The honest answer depends on what you mean. If your disk is encrypted at the OS level, a thief without your login cannot read your memory or anything else on the machine. That is the primary defence. Reset your account passwords (cloud accounts you might have BYO'd), and the practical impact of the theft is bounded.
+
+InnerZero itself does not currently expose a "remote wipe" or "lock memory" option. It cannot, because the app only runs on your machine; there is no cloud account to sign you out of. What you can do locally: delete the SQLite memory database, delete the encrypted secrets blob (which removes any stored BYO API keys), or uninstall the app entirely. All three operations require physical or administrative access to the machine. Full disk encryption at the OS level is the protection that does the heavy lifting in the laptop-theft scenario.
+
+## Which other private AI assistants offer encrypted memory?
+
+The 2026 landscape, with the encryption story made explicit, looks like this:
+
+| Tool | Memory location | OS-level encryption usable | In-transit privacy | Self-hostable |
+|------|-----------------|----------------------------|---------------------|---------------|
+| Cloud assistants (ChatGPT, Claude, Gemini) | Provider servers | N/A (protection theirs, not yours) | TLS in transit, provider-stored | No |
+| Ollama + plugin frontends | Plugin-dependent | Yes, on your disk | N/A (no cloud by default) | Yes |
+| LocalLlama community frontends | Varies, usually on your disk | Yes, on your disk | Varies, usually no cloud | Yes |
+| InnerZero | Local SQLite, your user data dir | Yes, on your disk | Privacy blacklist + BYO direct-to-provider | Yes |
+
+The honest read: every local-first assistant that stores memory on your disk benefits from OS-level encryption equally. The differentiators are how the memory gets used (structured vs notes vs none), how cloud paths are handled when you opt in, and whether the application adds defence-in-depth scrubbing on top. Cloud-only assistants are in a different category entirely; their privacy is whatever the provider promises in the policy you signed.
+
+If your work is research-grade sensitive (handling subject data, regulated information, or anything that needs an audit trail), the [researchers persona page](/for/researchers) covers the full local-only configuration approach.
+
+## Frequently asked questions
+
+### Is my AI memory really safer than my browser history?
+
+It depends on the chatbot. If you use a cloud assistant, your AI memory lives on a provider's servers under their policy. Your browser history lives on your device. Local-first AI memory lives on your device too, so the protection picture matches your browser cache: as safe as your disk encryption and your login password.
+
+### What if I want belt-and-braces encryption on top of OS-level?
+
+The cleanest approach is putting the InnerZero user data directory inside an encrypted volume (VeraCrypt is a common choice). The volume mounts on demand with a passphrase separate from your OS login, and InnerZero reads and writes through it transparently. This adds a second key-management step and a small performance cost, in exchange for an additional independent encryption layer. No app changes required.
+
+### Does InnerZero ever phone home with memory data?
+
+No. There is no telemetry on memory contents, no anonymous analytics that ship hashes of your facts, no version-check ping that includes anything from your memory database. The only outbound traffic is when you explicitly invoke a tool that needs the network (web search, weather lookup, BYO cloud calls), and the per-tool [privacy policy](/privacy) describes exactly what each one sends.
+
+### Can family members on my PC see my AI memory?
+
+If they share your OS user account, yes; the SQLite file is in your user profile and any process running under your login can read it. If they have their own OS account, no; OS-level user isolation prevents one user from reading another user's profile data without admin rights. The defence is OS-level user separation, the same model that protects the rest of your personal files.
+
+### How do I delete a specific memory I regret sharing?
+
+InnerZero ships an in-app memory inspector that lists every fact, when it was learned, and which conversation it came from. You can edit individual entries or delete them. The change is immediate; there is no version history kept on memory rows by default. The underlying file is also a standard SQLite database openable in any third-party browser if you want to inspect or operate on it directly.
+
+What this means in practice: a private AI assistant with memory is a real category in 2026, and the honest protection story is "local storage plus OS-level encryption plus disciplined cloud-mode opt-in". InnerZero ships exactly that, with a privacy blacklist for the cloud paths and full memory inspection so nothing is hidden from you. [Download InnerZero](/download) and the protection profile mirrors your existing OS security: as strong as your disk encryption, with no extra credentials to manage and no provider holding the keys.
