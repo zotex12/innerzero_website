@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/blog";
 import { extractFaqs } from "@/lib/blog-faq";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/Button";
 import { absoluteUrl } from "@/lib/metadata";
 
@@ -125,7 +126,10 @@ export default async function BlogPostPage({ params }: Props) {
 
           {/* MDX body */}
           <div className="blog-prose">
-            <MDXRemote source={post.content} />
+            <MDXRemote
+              source={post.content}
+              options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+            />
           </div>
 
           {/* Related posts */}
