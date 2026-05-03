@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/blog";
+import { extractFaqs } from "@/lib/blog-faq";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { Button } from "@/components/ui/Button";
 import { absoluteUrl } from "@/lib/metadata";
@@ -59,6 +60,23 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) notFound();
 
   const related = getRelatedPosts(post.slug, post.tags, 3);
+
+  const faqs = extractFaqs(post.content);
+  const faqJsonLd =
+    faqs.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map(({ question, answer }) => ({
+            "@type": "Question",
+            name: question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: answer,
+            },
+          })),
+        }
+      : null;
 
   return (
     <div className="pt-28 pb-16 md:pt-36 md:pb-24">
@@ -188,6 +206,14 @@ export default async function BlogPostPage({ params }: Props) {
             }),
           }}
         />
+
+        {/* JSON-LD: FAQPage (only when the post has an FAQ section) */}
+        {faqJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+          />
+        )}
       </Container>
     </div>
   );
