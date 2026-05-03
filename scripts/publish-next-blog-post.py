@@ -68,12 +68,30 @@ COMMENT_RE = re.compile(
 FRONTMATTER_RE = re.compile(r"\A\s*---\n(.*?)\n---\n", re.DOTALL)
 
 # Match `date: "YYYY-MM-DD"` (or single-quoted, or unquoted) inside a
-# frontmatter block. Tolerant of trailing whitespace and Windows line
-# endings. Captures the bare date token only.
+# frontmatter block. Tolerant of trailing whitespace. Captures the bare
+# date token only. Line-ending normalisation happens at read time via
+# `_normalise_text` so this regex can assume LF.
 DATE_LINE_RE = re.compile(
     r"^date:\s*['\"]?(\d{4}-\d{2}-\d{2})['\"]?\s*$",
     re.MULTILINE,
 )
+
+
+def _normalise_text(raw: str) -> str:
+    r"""Strip a leading UTF-8 BOM and normalise CRLF to LF.
+
+    FRONTMATTER_RE expects literal `\n`, so a queue file saved with CRLF
+    would silently fail frontmatter detection without this normalisation.
+    Python's `\s` does not match U+FEFF (category Cf, not Zs), so the BOM
+    strip has to be explicit. Both transformations are idempotent and
+    cheap; called once at every read site so downstream parsers can
+    assume normalised input.
+    """
+    if raw.startswith("﻿"):
+        raw = raw[1:]
+    if "\r\n" in raw:
+        raw = raw.replace("\r\n", "\n")
+    return raw
 
 
 def _truthy(value: str | None) -> bool:
@@ -141,15 +159,9 @@ def _extract_frontmatter_date(raw: str) -> _dt.date | None:
 
     Strips any leading QUICK-EDIT CHECKLIST HTML comment before parsing
     so frontmatter detection works on queue files that carry the
-    pre-publish checklist as a leading comment block.
+    pre-publish checklist as a leading comment block. Assumes `raw` has
+    already been passed through `_normalise_text` at the read site.
     """
-    # Strip a leading UTF-8 BOM if present, then the leading HTML comment
-    # (if any), so both the python-frontmatter parser and the regex
-    # fallback see the `---` block at position 0. \s in Python regex does
-    # not match U+FEFF (it's category Cf, not Zs) so the BOM strip has to
-    # be explicit.
-    if raw.startswith("﻿"):
-        raw = raw[1:]
     cleaned = COMMENT_RE.sub("", raw, count=1)
 
     # Optional fast path via python-frontmatter (developer convenience;
@@ -209,7 +221,7 @@ def _select_next_queue_file(today_utc: _dt.date) -> Path | None:
             continue
 
         try:
-            raw = path.read_text(encoding="utf-8")
+            raw = _normalise_text(path.read_text(encoding="utf-8"))
         except OSError as e:
             warn(f"Could not read {path.name}: {e}. Skipping.")
             continue
@@ -338,7 +350,7 @@ def main() -> int:
         return 1
 
     try:
-        raw = queue_file.read_text(encoding="utf-8")
+        raw = _normalise_text(queue_file.read_text(encoding="utf-8"))
         # The frontmatter date is the source of truth (set by the human
         # editor when scheduling). _select_next_queue_file already
         # validated it parses correctly; re-extract here for body
