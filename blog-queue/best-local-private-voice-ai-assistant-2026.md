@@ -1,0 +1,110 @@
+<!-- QUICK-EDIT CHECKLIST
+- Verify no factual claims are stale
+- Update version mentions if a new release dropped
+- Check internal links resolve
+- Confirm no em dashes
+-->
+---
+title: "Best Local Private Voice AI Assistant for PC in 2026: Ollama, LM Studio, Jan, Whisper, Piper Compared"
+description: "A local voice AI assistant for PC keeps speech, transcription, and reasoning on your machine. Honest 2026 comparison of Ollama, LM Studio, Jan, Whisper, Piper."
+date: "2026-05-22"
+author: "Louie"
+authorRole: "Founder"
+slug: "best-local-private-voice-ai-assistant-2026"
+tags: ["voice", "comparison", "local-ai"]
+readingTime: "8 min read"
+---
+
+A local voice AI assistant runs three things on your machine: speech recognition (your voice into text), language reasoning (the model that decides what to say back), and text-to-speech (the response back to audio). In 2026 the open-source pieces for each step are mature. The challenge is that most "local AI" tools handle one or two of those steps and leave the rest to you. This post is the honest field guide for which tools cover which steps, and what InnerZero ties together that the others leave loose.
+
+I built voice into InnerZero from day one because typing breaks the assistant illusion the moment you actually want to use one for a quick task. If your AI is local, your voice should be too.
+
+> **Quick summary**
+> - Whisper (or faster-whisper) is the standard for offline speech-to-text in 2026
+> - Kokoro and Piper are the two leading open-source TTS engines, both run locally
+> - Ollama, LM Studio, and Jan do not ship voice; you wire it together yourself
+> - InnerZero ships faster-whisper + Kokoro + Silero VAD pre-wired, default offline
+
+## What does a "local voice AI" actually mean in 2026?
+
+A local voice AI is an end-to-end voice assistant where every audio byte and every reasoning token stays on your machine. No cloud round trip for the speech, no cloud round trip for the model, no cloud round trip for the synthesised reply.
+
+The bar is higher than "uses a local LLM". Many tools that claim local voice still send audio to a cloud STT service like OpenAI Whisper API or Deepgram, then reason locally, then maybe send text to a cloud TTS like ElevenLabs. That is hybrid voice. It is not local voice. The pull-the-cable test applies to voice exactly like it does to chat: if the assistant stops working when you disconnect, you do not have a local voice assistant.
+
+A genuinely local stack has four pieces plus the language model: activation, voice activity detection, speech-to-text, and text-to-speech, all running on your hardware with no fallback to cloud unless you opt in. The [features page](/features) lays out which of these InnerZero ships pre-wired versus which you would have to assemble in other tools.
+
+## Why is Whisper the standard for local speech recognition?
+
+OpenAI's Whisper, and the community-optimised faster-whisper variant, dominate offline speech recognition in 2026 because they are accurate, small enough to run on consumer hardware, and free to use under the MIT licence. There is no realistic competitor at the same accuracy/footprint trade-off.
+
+Whisper ships in several sizes from tiny (39M parameters) to large-v3 (1.5B). The faster-whisper port reimplements inference in CTranslate2 for meaningful speedups on the same hardware. InnerZero defaults to large-v3-turbo on capable GPUs because the latency cost over the smaller models is small and the accuracy gain on names and technical terms is large.
+
+The honest caveat: Whisper struggles with heavy background noise, overlapping speakers, and very short utterances. For everyday desktop dictation in a quiet room it is solved. For voice control in noisy environments the technology is not magic.
+
+## What are the options for local TTS: Piper, Kokoro, others?
+
+The two contenders worth considering in 2026 are Piper and Kokoro. Both are small enough to run on CPU on a modern laptop. Both produce noticeably better-than-robotic voices. They sit in slightly different sweet spots.
+
+Piper is from the Rhasspy project, designed for embedded and accessibility use cases. Voices are compact (60-100 MB each), inference runs fast even on a Raspberry Pi, and the catalogue covers many languages. The trade-off is naturalness: Piper voices sound clearly synthetic, in the friendly screen-reader way.
+
+Kokoro is the newer of the two, an 82M-parameter model that sounds noticeably more human than Piper at the cost of slightly higher latency. InnerZero ships with Kokoro because the voice quality maps better to assistant-style conversation. Piper is a perfectly reasonable alternative if you want lower latency or run on smaller hardware, and it slots into a similar stack with a weekend of work. XTTS (Coqui) was the previous benchmark but its maintainer shut down in 2024, so the active-maintenance story is weaker now.
+
+## Can Ollama, LM Studio, or Jan do voice? Short answer: not natively
+
+None of the three ship a voice pipeline. They run language models. Voice is a separate problem they have not tried to solve, and the ecosystem usually solves it with glue scripts.
+
+| Tool | Built-in STT | Built-in TTS | Wake-word | VAD |
+|------|-------------|-------------|-----------|-----|
+| Ollama (alone) | No | No | No | No |
+| LM Studio (alone) | No | No | No | No |
+| Jan (alone) | No | No | No | No |
+| Open WebUI + Whisper plugin | Yes (plugin) | Plugin-dependent | No | Limited |
+| InnerZero | Yes (faster-whisper) | Yes (Kokoro 82M) | Push-to-talk | Yes (Silero) |
+
+Open WebUI with the right community plugins is the closest thing to "voice on top of Ollama" without writing your own glue. The experience varies by plugin and you keep the pieces in sync yourself. Several open-source projects have attempted full voice stacks on Ollama (Home Assistant integrations, Wyoming Whisper, custom Python orchestrators); they work but require setup the average user will not do. InnerZero ships the stack pre-wired so STT, TTS, VAD, and the model layer all install in one go.
+
+## How does InnerZero put the pieces together?
+
+InnerZero runs four pieces in a single voice loop: faster-whisper transcribes speech to text, Silero VAD detects when you have stopped speaking, the language model (local Ollama, LM Studio, or any of the seven supported BYO cloud providers) generates the reply, and Kokoro turns the reply back into audio.
+
+The integration matters. A voice loop with a 200ms hiccup between stages feels slow even when the underlying pieces are fast. InnerZero pre-warms the models, streams partial transcriptions, and starts TTS as soon as the first sentence of the model reply is available, so perceived latency is much shorter than the sum of the steps. The full architecture is documented in [voice mode in InnerZero](/blog/voice-mode-innerzero). Voice also runs through the same memory and tool system as text, so it is not a dumber sub-mode of the assistant. It is the same assistant with a different input modality.
+
+## What about Cloud Voice for users who want premium voices?
+
+InnerZero's default voice mode is fully local. There is also an opt-in Cloud Voice option that routes through OpenAI's voice API for users who specifically want a premium voice (currently 13 voices to pick from). It is genuinely opt-in. Default mode never touches a cloud voice service.
+
+Two things worth knowing. Cloud Voice uses your OpenAI API key (BYO model), so the cost is whatever OpenAI charges per minute, billed directly to your account. And in Standard mode the reasoning still runs on whichever LLM you configured (local, BYO Anthropic, whatever), with only the text reply sent to the cloud TTS step. Your prompt and model output stay on the path you picked. The voice TTS is the only cloud step, and only when you opt in. Full data-flow detail is in [how InnerZero stays private](/blog/how-innerzero-stays-private). For users who treat offline-capable voice as a hard requirement, Cloud Voice should stay off and Kokoro is the answer. The [offline work persona page](/for/offline-work) covers offline-first scenarios in more depth.
+
+## Is on-device voice actually fast enough for real conversations?
+
+On capable hardware (modern GPU, 16 GB+ RAM), local voice round-trip latency is typically 1.5 to 3 seconds from end-of-utterance to first audio out. That is conversational, if not quite phone-call real-time. On CPU-only or smaller hardware, latency stretches to 4-6 seconds and the experience leans walkie-talkie.
+
+The biggest determinant of perceived speed is the language model size, not the voice components. Whisper transcription and Kokoro synthesis are the fast parts. Model thinking is what takes time. A 4B model on a modest GPU keeps voice feeling responsive; a 30B model on the same GPU does not. The [supported model list](/models) maps to hardware tiers if you want to size for your machine.
+
+## Frequently asked questions
+
+### Does voice mode work fully offline?
+
+Yes, by default. faster-whisper, Kokoro, and Silero all run locally with no network call. Pull your network cable mid-conversation and voice keeps working. The only voice mode that needs the network is the opt-in Cloud Voice setting, which is clearly indicated in the UI and never the default.
+
+### Are my voice recordings stored anywhere?
+
+No. Audio is captured, transcribed in memory, and discarded. Only the transcribed text reaches the rest of the assistant pipeline, and that text is treated like any other prompt: it can become part of memory if it carries memory-worthy facts, and you can read or delete that memory at any time. There is no audio archive on disk anywhere by default.
+
+### What's the latency like compared to Siri or Alexa?
+
+Cloud assistants like Siri and Alexa get a network advantage on the small-prompt path (their backends are optimised for sub-second response on simple queries). Local voice loses on that floor (1.5+ seconds is the realistic best case for local). On longer or more complex requests, local voice closes the gap or wins outright because the response generation is happening on hardware you own with no queue contention.
+
+### Can I use cloud voice if I want a specific voice (like ElevenLabs-style)?
+
+InnerZero's built-in Cloud Voice option uses OpenAI voices currently, with 13 to choose from. ElevenLabs voices are not natively supported in 2026; if you want ElevenLabs specifically, the realistic path is wiring it through their API yourself, which is a feature request rather than a current capability.
+
+### Does it support voice on Linux as well as Windows?
+
+Yes, with a footnote: on macOS and Linux, espeak-ng needs to be installed separately for Kokoro to work (`brew install espeak-ng` on Mac, your distro's package manager on Linux). The Windows installer bundles everything; licensing means espeak-ng cannot be redistributed elsewhere.
+
+### Can I customise the wake word?
+
+Not currently. Voice mode uses push-to-talk activation rather than a wake-word system in 2026. Push-to-talk is a deliberate choice: it removes a class of always-on-microphone privacy concerns and the false-activation problem wake-words have. Optional wake-word support may land in a future release, but it is not the default.
+
+What this means in practice: a fully local voice AI assistant in 2026 is a real product, not a research demo. The pieces exist (Whisper, Kokoro, Silero, your local LLM of choice), and the assembly is the work nobody likes doing. [Download InnerZero](/download) if you want it pre-wired. Build it yourself if you want to learn the layers. Either way, voice no longer requires giving up your privacy to feel responsive.

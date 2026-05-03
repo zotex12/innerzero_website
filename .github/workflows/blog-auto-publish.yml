@@ -19,8 +19,8 @@ name: Blog auto-publish from queue
 
 on:
   schedule:
-    # Tuesday 09:00 UTC
-    - cron: "0 9 * * 2"
+    # Tuesday + Friday 09:00 UTC
+    - cron: "0 9 * * 2,5"
   workflow_dispatch:
     inputs:
       dry_run:
