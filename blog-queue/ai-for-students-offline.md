@@ -1,0 +1,121 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify the canonical /for/students wording still reads "InnerZero is free, runs fully on your laptop so nothing touches your university's network, and works offline in the library or on the bus. No account, no email, no trial."
+- [ ] Verify the canonical /pricing wording still reads "Free to download." and "InnerZero is a complete AI assistant that runs on your PC, no subscription required."
+- [ ] Re-check ChatGPT Plus, Claude Pro, Gemini Advanced, Quillbot Premium prices against current pricing pages
+- [ ] Confirm Knowledge packs (Wikipedia) still ships and is downloadable from Settings
+- [ ] Update the smallest-model line if hardware tiers have shifted (currently 4B parameter range on 16 GB CPU laptops)
+-->
+---
+title: "The Best Free AI Assistant for Students Who Work Offline"
+description: "Cloud AI subscriptions cost money students do not have, and university wifi is unreliable. InnerZero is free, runs offline once installed, and needs no account. Here is how it fits a student workflow."
+date: "2026-07-10"
+author: "Louie"
+authorRole: "Founder"
+slug: "ai-for-students-offline"
+tags: ["local ai", "guide", "getting started"]
+readingTime: "7 min read"
+featured: false
+---
+
+Most students cannot easily afford a paid AI subscription, and most cannot rely on the wifi to use the free tiers. Cloud AI subscriptions sit at [£20 a month for ChatGPT Plus](https://openai.com/chatgpt/pricing) and a [similar tier for Claude Pro](https://www.anthropic.com/pricing). University networks log traffic, exam halls block the internet, dorm wifi drops out, and trains have notoriously bad signal. The student experience of cloud AI is "I cannot afford it, and when I can, the connection cannot."
+
+InnerZero is a different shape. The desktop app is free to download, runs on your laptop, needs no account, and keeps working when the internet is gone.
+
+> **Quick summary**
+> - InnerZero is a free desktop AI assistant; no subscription, no account, no card details, no trial period
+> - Once a model is downloaded (a one-time internet step), the AI runs fully offline; libraries, exam halls, trains, and weak campus wifi all stop being a problem
+> - Useful for lecture summarisation, document Q&A on PDFs and notes, knowledge lookup via offline Wikipedia, voice-mode study sessions, and persistent memory across courses
+> - Realistic constraint: a student-tier laptop runs smaller, faster local models (not frontier reasoning), which is fine for most study tasks
+
+## Why is free AI for students so hard to find?
+
+Free AI is loud. Genuinely free AI for students is rare. ChatGPT, Claude, and Gemini each ship a free tier, but each comes with usage caps, account requirements, and conversation logging. They also stop working without internet, which is the thing students need most. Quillbot is closer in shape but is a writing-only tool with its own paywall above the free tier.
+
+The wording on the [pricing page](/pricing) is exact: free to download. InnerZero is a complete AI assistant that runs on your PC, no subscription required. There is no time limit on the local app, no usage cap on chat, no feature gate, and no point at which a card is requested for the core experience. Optional paid extras exist (an optional cloud AI subscription for users who want frontier-model access, a business licence at £50/year for commercial use), but nothing in the student-shaped use case is behind a paywall.
+
+## What does InnerZero give a student that ChatGPT free does not?
+
+The wording on the [for/students page](/for/students) sums it up: free, runs fully on your laptop so nothing touches your university's network, and works offline in the library or on the bus. No account, no email, no trial. Translated into student-day terms:
+
+- It works in the library when the wifi is throttled.
+- It works on the train without a signal.
+- It works in an exam-prep session in a room with the router unplugged.
+- It does not ask for an email address you do not want to give to a vendor.
+- It does not log conversations on a corporate server.
+
+Cloud AI free tiers cannot offer most of these because the model itself is in the cloud. InnerZero's model is on your laptop.
+
+## What does offline study with InnerZero actually look like?
+
+The same workflow most students already have, with an AI sitting alongside that does not need the internet.
+
+- **Lecture and textbook Q&A.** Drop your lecture PDF or scanned notes into the assistant and ask questions about them. The Phase you're standing on is the [local document Q&A](/blog/local-document-qa) capability: documents stay on your machine.
+- **Offline reference.** Install a [knowledge pack](/blog/knowledge-packs-explained) and the AI can cross-check facts against an offline Wikipedia copy. Useful when you are revising and not sure whether a half-remembered fact is right.
+- **Voice mode for study sessions.** Talk to the assistant the way you would a study partner. Local speech recognition and text-to-speech mean nothing leaves the room.
+- **Memory across courses.** Tell the assistant once that you are studying environmental policy this term, and it remembers. Subsequent questions get framed against your actual courses instead of starting from zero each time.
+- **Note-taking, dictionary, calculator, timer tools.** All built in. None of them ping a server.
+
+## What are the realistic limits on a student laptop?
+
+Three honest constraints worth knowing.
+
+**Smaller models, not frontier reasoning.** A student-tier laptop (8 to 16 GB RAM, integrated or modest GPU) runs models in the 4B to 8B parameter range comfortably. These are good at chat, summarisation, definition lookup, and short-form Q&A. They are not GPT-5 or Claude Opus. For most study tasks the gap is invisible; for hardcore mathematical proof work or long-form creative writing, the gap shows. The [hardware guide](/blog/hardware-for-local-ai) walks through what each tier actually feels like.
+
+**Huge textbooks need focused prompts.** A 2000-page reference book is bigger than the local model's context window. The fix is to ask focused-section questions ("explain section 4.3") rather than holistic ones ("summarise the whole textbook"). For most modules this is how you would study anyway.
+
+**One-time internet for setup.** The first model download needs a connection (typically a few hundred MB to a few GB depending on tier). After that, the assistant works offline indefinitely. Plan to install over campus wifi or at home before the first exam-hall study session.
+
+## How does this compare to ChatGPT, Claude, Gemini, and Quillbot?
+
+Different trade-offs. Cloud AI tools (ChatGPT, Claude, Gemini, Quillbot) ship larger and more capable models, polished web UIs, and do not require any local hardware. The student cost is the subscription tier (or the daily cap on the free tier), the account, the internet dependency, and the conversation logging on the vendor's servers.
+
+InnerZero ships a smaller model that runs locally, which trades some raw capability for full offline use, no account, and no conversation logging. The post is not arguing those tools are bad; it is arguing they solve a different problem. A frontier model on the cloud and a smaller model on your laptop are both useful; only one of them works in an exam hall.
+
+## Example study prompts that work fully offline
+
+Five prompts, all of which run with the network disconnected:
+
+- "Summarise this 30-page lecture PDF into a one-page revision outline with the key terms in bold."
+- "Quiz me on the definitions in section 5 of this textbook. Ask me one at a time and tell me if I am right."
+- "I have ten past papers in PDF. Find every question on the topic of supply and demand and list them with the year."
+- "Help me structure an essay on the causes of the 2008 financial crisis. Six paragraphs, give me a thesis sentence and a topic sentence for each."
+- "Explain the difference between covalent and ionic bonds, then quiz me with three multiple-choice questions."
+
+For computer science students, code review and small-program scaffolding work the same way: paste the code into the chat, ask questions, no upload, no log.
+
+## What about academic integrity, mental health, and personal essays?
+
+A few sensitive cases worth being honest about.
+
+**Academic integrity.** Your institution's policy on AI in coursework is the rule. InnerZero is a tool. It is suited to brainstorming, restructuring notes, explaining concepts, drafting practice essays, revising code. It is not a plagiarism-laundering service and should not be used as one. Read the policy first.
+
+**Mental health and personal journals.** A lot of students use AI as a low-friction journal or sounding board. The cloud-AI version of that means your mental health writing lives on a corporate server indexed against your account. Local AI means it stays on your laptop. The distinction matters more than most products want to admit.
+
+**Personal essays and applications.** UCAS personal statements, scholarship applications, and similar private writing are exactly the kind of thing that benefits from a private AI. The drafts, iterations, and feedback all stay local.
+
+## Frequently asked questions
+
+### Is InnerZero actually free, or is there a paid upgrade I will hit?
+
+The local app is free to download. There is no usage cap, no time limit, and no feature gate on the core student experience. Optional paid extras exist (an optional cloud AI subscription, a business licence) but nothing in the standard local workflow is behind a paywall.
+
+### Will my university see what I am asking?
+
+No, in local mode. Nothing touches the network when the AI is running locally. The university's proxy and firewall see no traffic because no traffic is generated. Optional cloud mode is explicitly opt-in; leave it off and you are fully local.
+
+### Does it work without a GPU?
+
+Yes. A CPU-only laptop with 16 GB RAM runs the smallest models (4B parameter range) well enough for chat, summarisation, and document Q&A. It is slower than a GPU setup but usable for everyday study.
+
+### Can I use it for coursework?
+
+Subject to your institution's policy. The tool itself can help you brainstorm, restructure notes, draft practice essays, and revise code. Whether you are allowed to use AI assistance for a specific submission is a question for your course handbook.
+
+### What happens to my notes and chats if I uninstall?
+
+The original files in your Documents folder are untouched; uninstalling does not move or delete them. Local chat history and AI memory are stored locally and can be cleared from Settings before uninstall if you want a clean exit.
+
+## Start studying
+
+[Download InnerZero](/download) for Windows. The first model download takes a few minutes; after that, the AI works fully offline. For the broader feature picture see the [features page](/features). If you want a longer tour of what offline-first AI feels like across the rest of student life, [using AI offline](/blog/use-ai-offline) and [AI without a subscription](/blog/ai-without-subscription) are good starting points.
