@@ -659,6 +659,7 @@
         <button class="icon-btn" id="nav-next" title="Next month (Right arrow)" aria-label="Next month">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
+        <button id="btn-copy" title="Copy all visible posts as markdown for paste into AI chat" aria-label="Copy filtered and searched posts as markdown" aria-live="polite">Copy</button>
         <button id="btn-refresh" title="Refresh data">Refresh</button>
         <button class="icon-btn" id="btn-help" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
@@ -729,6 +730,7 @@
         <tbody>
           <tr><td><span class="key">&larr;</span> / <span class="key">&rarr;</span></td><td>Previous / next month</td></tr>
           <tr><td><span class="key">T</span></td><td>Jump to today</td></tr>
+          <tr><td><span class="key">C</span></td><td>Copy filtered posts as markdown</td></tr>
           <tr><td><span class="key">/</span></td><td>Focus search box</td></tr>
           <tr><td><span class="key">Esc</span></td><td>Clear search; if no search, blur focused input</td></tr>
           <tr><td><span class="key">?</span></td><td>Toggle this help overlay</td></tr>
@@ -846,6 +848,7 @@
       document.getElementById('nav-prev').addEventListener('click', () => shiftMonth(-1));
       document.getElementById('nav-next').addEventListener('click', () => shiftMonth(1));
       document.getElementById('nav-today').addEventListener('click', goToday);
+      document.getElementById('btn-copy').addEventListener('click', handleCopyClick);
       document.getElementById('btn-refresh').addEventListener('click', refresh);
       document.getElementById('btn-help').addEventListener('click', toggleHelp);
       document.getElementById('btn-theme').addEventListener('click', toggleTheme);
@@ -1416,6 +1419,172 @@
       return document.getElementById('help-overlay').classList.contains('is-open');
     }
 
+    // ---------- Copy as markdown ----------
+
+    const COPY_DESCRIPTION_MAX_CHARS = 200;
+    const COPY_FEEDBACK_SUCCESS_MS = 2000;
+    const COPY_FEEDBACK_FAIL_MS = 3000;
+    const COPY_FEEDBACK_EMPTY_MS = 2000;
+
+    const COPY_SECTION_ORDER = [
+      { key: 'published', label: 'Published', includeTime: false, sort: (a, b) => (b.date || '').localeCompare(a.date || '') },
+      { key: 'scheduled', label: 'Scheduled', includeTime: true,  sort: (a, b) => (a.date || '').localeCompare(b.date || '') },
+      { key: 'overdue',   label: 'Overdue',   includeTime: true,  sort: (a, b) => (a.date || '').localeCompare(b.date || '') },
+      { key: 'error',     label: 'Errors',    includeTime: true,  sort: (a, b) => (a.date || '').localeCompare(b.date || '') },
+      { key: 'draft',     label: 'Drafts',    includeTime: true,  sort: (a, b) => (a.title || '').localeCompare(b.title || '') },
+    ];
+
+    const FILTER_LABELS = {
+      published: 'Published',
+      scheduled: 'Scheduled',
+      overdue:   'Overdue',
+      error:     'Errors',
+      draft:     'Drafts',
+    };
+
+    function escapeMarkdownCell(text) {
+      const s = (text == null) ? '' : String(text);
+      return s.replace(/\r?\n/g, ' ').replace(/\|/g, '\\|').trim();
+    }
+
+    function trimDescription(text) {
+      const s = (text == null) ? '' : String(text);
+      const cleaned = s.replace(/\r?\n/g, ' ').trim();
+      if (cleaned.length <= COPY_DESCRIPTION_MAX_CHARS) return cleaned;
+      return cleaned.slice(0, COPY_DESCRIPTION_MAX_CHARS) + '...';
+    }
+
+    function activeFilterLabels() {
+      const off = FILTER_KEYS.filter((k) => !filterState[k]);
+      if (off.length === 0) return null;
+      const on = FILTER_KEYS.filter((k) => filterState[k]).map((k) => FILTER_LABELS[k]);
+      return on.length === 0 ? 'none' : on.join(', ');
+    }
+
+    function describeFilters() {
+      const filterDescription = activeFilterLabels();
+      const parts = [];
+      if (filterDescription === null) {
+        parts.push('All posts');
+      } else if (filterDescription === 'none') {
+        parts.push('All filters off');
+      } else {
+        parts.push('Filtered to ' + filterDescription);
+      }
+      if (searchTerm) {
+        parts.push('search: "' + searchTerm + '"');
+      }
+      return parts.join('; ');
+    }
+
+    function buildCopyMarkdown(visible, total) {
+      const now = new Date();
+      const headerStamp = now.toISOString().replace(/\.\d{3}Z$/, 'Z');
+
+      const counts = { published: 0, scheduled: 0, overdue: 0, error: 0, draft: 0 };
+      for (const p of visible) {
+        const status = p && p.status;
+        if (counts.hasOwnProperty(status)) counts[status]++;
+      }
+
+      const summaryLine = describeFilters();
+      const totalsLine = 'Total visible: ' +
+        counts.published + ' published, ' +
+        counts.scheduled + ' scheduled, ' +
+        counts.overdue   + ' overdue, ' +
+        counts.error     + ' error, ' +
+        counts.draft     + ' draft (out of ' + total + ' all posts)';
+
+      const lines = [];
+      lines.push('# InnerZero blog content state ' + headerStamp);
+      lines.push('');
+      lines.push(summaryLine);
+      lines.push('');
+      lines.push(totalsLine);
+
+      for (const section of COPY_SECTION_ORDER) {
+        const rows = visible.filter((p) => p && p.status === section.key);
+        if (rows.length === 0) continue;
+        rows.sort(section.sort);
+
+        lines.push('');
+        lines.push('## ' + section.label + ' (' + rows.length + ')');
+        lines.push('');
+
+        if (section.includeTime) {
+          lines.push('| Date | Time | Title | Slug | Tags | Description |');
+          lines.push('|------|------|-------|------|------|-------------|');
+          for (const r of rows) {
+            const date = escapeMarkdownCell(r.date || '');
+            const time = escapeMarkdownCell(r.publish_time_utc || '');
+            const title = escapeMarkdownCell(r.title || '');
+            const slug = escapeMarkdownCell(r.slug || '');
+            const tags = escapeMarkdownCell((r.tags || []).join(', '));
+            const desc = escapeMarkdownCell(trimDescription(r.description || ''));
+            lines.push('| ' + date + ' | ' + time + ' | ' + title + ' | ' + slug + ' | ' + tags + ' | ' + desc + ' |');
+          }
+        } else {
+          lines.push('| Date | Title | Slug | Tags | Description |');
+          lines.push('|------|-------|------|------|-------------|');
+          for (const r of rows) {
+            const date = escapeMarkdownCell(r.date || '');
+            const title = escapeMarkdownCell(r.title || '');
+            const slug = escapeMarkdownCell(r.slug || '');
+            const tags = escapeMarkdownCell((r.tags || []).join(', '));
+            const desc = escapeMarkdownCell(trimDescription(r.description || ''));
+            lines.push('| ' + date + ' | ' + title + ' | ' + slug + ' | ' + tags + ' | ' + desc + ' |');
+          }
+        }
+      }
+
+      lines.push('');
+      return lines.join('\n');
+    }
+
+    let copyFeedbackTimer = null;
+
+    function flashCopyButton(text, durationMs) {
+      const btn = document.getElementById('btn-copy');
+      if (!btn) return;
+      if (copyFeedbackTimer) {
+        clearTimeout(copyFeedbackTimer);
+        copyFeedbackTimer = null;
+      }
+      btn.textContent = text;
+      copyFeedbackTimer = setTimeout(() => {
+        btn.textContent = 'Copy';
+        copyFeedbackTimer = null;
+      }, durationMs);
+    }
+
+    function handleCopyClick() {
+      const visible = Array.isArray(visiblePosts) ? visiblePosts.slice() : [];
+      const total = Array.isArray(posts) ? posts.length : 0;
+
+      if (visible.length === 0) {
+        flashCopyButton('Nothing to copy', COPY_FEEDBACK_EMPTY_MS);
+        return;
+      }
+
+      const markdown = buildCopyMarkdown(visible, total);
+      const filtersActive = FILTER_KEYS.some((k) => !filterState[k]);
+      const searchActive = !!searchTerm;
+      const successText = (filtersActive || searchActive)
+        ? 'Copied ' + visible.length + ' of ' + total
+        : 'Copied all ' + visible.length;
+
+      const promise = (navigator.clipboard && navigator.clipboard.writeText)
+        ? navigator.clipboard.writeText(markdown)
+        : Promise.reject(new Error('Clipboard API unavailable in this context'));
+
+      promise.then(() => {
+        flashCopyButton(successText, COPY_FEEDBACK_SUCCESS_MS);
+      }).catch((err) => {
+        console.error('[blog-scheduler] copy to clipboard failed:', err);
+        flashCopyButton('Copy failed - see console', COPY_FEEDBACK_FAIL_MS);
+      });
+    }
+
     // ---------- Keyboard shortcuts ----------
 
     function onKeydown(ev) {
@@ -1462,6 +1631,11 @@
       if (ev.key === 't' || ev.key === 'T') {
         ev.preventDefault();
         goToday();
+        return;
+      }
+      if ((ev.key === 'c' || ev.key === 'C') && !ev.ctrlKey && !ev.metaKey && !ev.altKey && !ev.shiftKey) {
+        ev.preventDefault();
+        handleCopyClick();
         return;
       }
       if (ev.key === '?' || (ev.shiftKey && ev.key === '/')) {
