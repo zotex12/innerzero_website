@@ -1,0 +1,129 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale (accessibility API names, Ollama model families)
+- [ ] Confirm screen automation default state is still OFF on first launch
+- [ ] Re-check the five safety gates description matches what currently ships
+- [ ] Verify external links (Microsoft UI Automation, Ollama) are still live
+- [ ] Update the "Common prompt examples" section if any tool wording has shifted
+-->
+---
+title: "How Screen Automation Works in a Private AI Assistant"
+description: "Screen automation lets a private AI read your screen and click, type, and scroll for you. Here is how it works in InnerZero, what it can and cannot do, and why the safety story matters more than the capability."
+date: "2026-06-23"
+author: "Louie"
+authorRole: "Founder"
+slug: "screen-automation-private-ai"
+tags: ["features", "innerzero", "automation"]
+readingTime: "8 min read"
+featured: false
+---
+
+Most AI assistants are clever in a chat window and useless outside it. They can write a poem, but they cannot help you click through a clunky desktop app. Screen automation closes that gap. Your AI looks at the screen, identifies what is on it, and acts: clicks, types, scrolls. On InnerZero, it does all of that locally, with strict safety gates, opt-in by default.
+
+This post explains how screen automation works in a private AI assistant, what it can and cannot do, and why the safety story matters more than the capability story.
+
+> **Quick summary**
+> - Screen automation lets your AI read the screen and interact with apps for you (click, type, scroll) instead of just answering chat questions
+> - InnerZero's screen automation runs locally on your PC and is OFF by default; you turn it on in Settings when you want it
+> - Five safety protections stay active whenever it is enabled: opt-in default, the Escape emergency stop, the file approval gate, the screen control gate, and the CSAM hard block
+> - It works best on clear, predictable interfaces; cluttered or fast-moving UIs reduce accuracy
+
+## What is screen automation in a private AI assistant?
+
+Screen automation is the ability for an AI to read your screen and act on it. Read means it can see what apps are open, what window is focused, what buttons and fields are visible. Act means it can click, type, and scroll inside those windows the same way you would, but driven by the AI from a chat or voice instruction.
+
+In a desktop AI assistant for the PC, this is what turns the chat from a conversation into a working assistant. Instead of telling you "open Notepad and paste this", the AI just does it. The same capability comes with a serious safety story, because giving the AI agency over your screen needs conservative defaults.
+
+## How does InnerZero's screen automation actually work?
+
+At a surface level, InnerZero uses standard accessibility APIs to read the screen. Microsoft documents the UI Automation framework at [learn.microsoft.com/dotnet/framework/ui-automation/ui-automation-overview](https://learn.microsoft.com/en-us/dotnet/framework/ui-automation/ui-automation-overview). These are the same interfaces that screen readers like Narrator and JAWS rely on. They expose what is on screen as a structured tree of elements (windows, buttons, text fields, lists), not as raw pixels.
+
+Reading from a structured tree matters for two reasons. First, it is more accurate than running computer vision over a screenshot, because the operating system already knows what each control is and what role it plays. Second, it is far cheaper to compute on a consumer PC, which is why InnerZero can do it without renting cloud GPUs.
+
+When you ask the assistant to act on the screen, it picks an element from that tree and triggers a click, type, or scroll. The mechanics are similar to what [pywinauto](https://pywinauto.readthedocs.io) has used for years to drive Windows UIs from scripts, except the instruction comes from your chat rather than a hand-written script.
+
+The model deciding which element to interact with is a local open-source model running on your PC via [Ollama](https://ollama.com). The element it chose, the click it sent, the text it typed: none of that leaves your machine. OpenAI does not see it. Anthropic does not see it. We do not see it.
+
+## What can the AI do with the screen?
+
+Three actions cover the long tail:
+
+- Click. The AI picks a button, tab, list item, or link by description and clicks it.
+- Type. The AI puts focus into a text field and types the content you asked for.
+- Scroll. The AI scrolls inside the active window or browser tab.
+
+Plus one read-only capability: take a structured snapshot of the screen and reason over what is in it (for example, "what app is this, and is the file unsaved?").
+
+That is the whole vocabulary. There is no drag-and-drop, no right-click menu navigation, no webcam access, no keyboard chords beyond plain typing. The actions that are NOT there are deliberately absent until the safety story for each is properly worked out.
+
+## How does InnerZero keep screen automation safe?
+
+Safety is the spine of this feature, not an afterthought. Five protections stay on whenever screen automation is enabled.
+
+**Opt-in default off.** Screen automation is off by default. New installs do not have it active. You go into Settings and turn it on, knowing what you are doing.
+
+**Escape emergency stop.** The Escape key cancels any in-flight screen action immediately. If the AI starts clicking somewhere you did not want, hit Escape. The action stops, and the assistant will not retry without an explicit new instruction.
+
+**File approval gate.** Anything the AI does that would touch the file system (creating, opening, writing, or deleting a file) requires explicit per-action approval. The screen automation feature does not bypass this. If the AI tries to drive a Save dialog, the underlying file write still surfaces the approval prompt.
+
+**Screen control gate.** Screen automation has a separate top-level gate from chat and voice. Turning chat off does not silently leave screen control on. You manage it explicitly, and you can flip the gate off at any time without uninstalling anything.
+
+**CSAM hard block.** The CSAM (child sexual abuse material) detection that runs across InnerZero's vision and image inputs remains active during screen automation. The AI will refuse to read or act on screens containing flagged content, full stop. This block is not user-configurable.
+
+## Common prompt examples
+
+A few prompts that exercise screen automation. These are typical of what people ask once they turn the feature on.
+
+- "Take a snapshot of what is on screen and tell me which app is focused, and whether the file is unsaved."
+- "Open the Notepad window that is on screen and type my full email signature."
+- "Scroll the active browser tab to the bottom and summarise the last visible section."
+- "Click the third option in the dropdown that is open right now."
+- "Read the current Slack channel and tell me who has unread mentions for me."
+
+You phrase these naturally. If the assistant cannot identify the right element it asks a follow-up rather than guessing.
+
+## What are the realistic limitations of screen automation?
+
+Three trade-offs worth knowing about before you turn the feature on.
+
+**Latency.** A click takes a beat to execute. On a modern PC with an NVIDIA GPU, the read-pick-dispatch loop runs in roughly 1 to 3 seconds for a clear instruction. Cluttered windows or ambiguous instructions can push it to 5 seconds or more, especially on entry-tier hardware (16 GB RAM, 6 GB VRAM). This is not fast in the way a hand-written keyboard shortcut is fast; screen automation is for tasks where you would otherwise be moving the mouse around manually.
+
+**Accuracy on cluttered UIs.** Old desktop apps with many similar buttons, custom-rendered UIs that ignore accessibility APIs, or browser pages with deep nesting can confuse the element picker. The assistant tries to disambiguate, asks you for clarification when it cannot decide, and falls back to read-only when the right click target is genuinely ambiguous.
+
+**Scope.** Screen automation is for everyday tasks: filling forms, navigating menus, summarising what is on screen, kicking off long actions you do not want to do by hand. It is not a replacement for keyboard shortcuts you already know. It is not a robotic process automation engine for high-volume back-office work. And it should not be used on screens that contain other people's confidential information without their consent.
+
+## Should I turn screen automation on?
+
+Useful for: developers who want an AI that can drive their tools (the [for/developers](/for/developers) page covers the local model layer for that audience), accessibility-conscious users who like a voice-driven layer over their PC, anyone working long days inside repetitive desktop apps. If you mostly work without internet access, [for/offline-work](/for/offline-work) covers the offline story across the whole product, screen automation included.
+
+Skip it for: heavily security-restricted machines (air-gapped, regulated, shared-screen environments), anyone uncomfortable granting an AI agency over their PC even with the safety gates above, anyone who only wants chat-style help. The default is OFF for a reason. You decide whether the trade is worth it.
+
+## Frequently asked questions
+
+### Can the AI see my screen if screen automation is off?
+
+No. With the screen control gate set to off, the assistant does not call the accessibility APIs at all. It does not take screenshots, does not read window contents, and does not know which apps you have open. Chat and voice continue to work normally without that capability.
+
+### Does screen automation work offline?
+
+Yes. The model driving the screen runs locally on your PC via Ollama. Reading the screen and dispatching clicks, typing, and scrolls all happen on-device. There is no cloud round trip. The feature continues to work with the network unplugged, the same way [InnerZero's offline mode for chat](/blog/use-ai-offline) does.
+
+### What if the AI clicks something I did not want?
+
+Press Escape. The action stops. Then tell the assistant what went wrong and it adjusts. Because the file approval gate still fires for any write the screen action would trigger, the worst-case outcome of an unwanted click is usually a wasted UI navigation, not a destroyed file.
+
+### Why is screen control behind a separate gate, not just a tools toggle?
+
+Screen automation interacts with whatever is on screen, including content from other apps you have not granted to InnerZero directly. That is a different risk class from a single tool like the calculator. A separate top-level gate makes the choice explicit. Hidden defaults are how trust gets eroded.
+
+### Can I limit screen automation to specific apps?
+
+Not in the current release. The gate is global: on or off. App-by-app allowlists are on the roadmap; if they ship, they will be additive (you opt into specific apps) rather than subtractive. The default-deny posture stays.
+
+### Does screen automation send anything to OpenAI or Anthropic?
+
+Not in local mode. The model doing the work is the local one running on your PC. If you have configured cloud mode and explicitly chosen a cloud Director, the chat instruction itself can travel to that cloud provider, but the screen contents and the structured element tree stay on your machine. [How InnerZero stays private](/blog/how-innerzero-stays-private) walks through that boundary in detail.
+
+## Turn it on
+
+[Download InnerZero](/download) for Windows. Open Settings, find Tools, and toggle screen automation on. Try a low-stakes prompt first: "Snapshot what is on screen and tell me what app is focused." For the broader capability list see the [features page](/features), and for the full data-handling story see the [privacy page](/privacy). For a wider tour of what the assistant can do, [things you can do with InnerZero](/blog/things-you-can-do-with-innerzero) is a good starting point.
