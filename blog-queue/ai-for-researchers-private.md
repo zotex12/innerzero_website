@@ -1,0 +1,122 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify the canonical /for/researchers wording still reads "InnerZero processes documents entirely on your hardware by default and offers an optional bring-your-own-key path to Claude Opus 4.7 or Gemini 2.5 Pro for tasks where a frontier model earns its keep."
+- [ ] Verify the /privacy "Optional Google connectors stay private" card from commit 9b83d15 is still on the live page
+- [ ] Re-check Nature's AI editorial policy URL and COPE's AI author position URL are still live
+- [ ] Update the NotebookLM, Elicit, and Consensus comparator descriptions if their data-flow positioning has shifted
+- [ ] Refresh the BYO-keys provider list if Anthropic/Google model versions have moved
+-->
+---
+title: "Private AI for Researchers: Keeping Sources Off the Cloud"
+description: "Interview transcripts, anonymised participant data, draft manuscripts, NDA-bound corporate research. None of it should sit on a third party's server. InnerZero processes sensitive documents entirely on your hardware and offers optional BYO-key access to frontier models when a task genuinely needs one."
+date: "2026-07-14"
+author: "Louie"
+authorRole: "Founder"
+slug: "ai-for-researchers-private"
+tags: ["privacy", "local ai", "guide"]
+readingTime: "8 min read"
+featured: false
+---
+
+Research often involves sources that should not pass through a third party's logging pipeline. Interview transcripts under participant consent. Anonymised survey data. Draft manuscripts before journal embargo lifts. NDA-bound corporate research. The wording on the [for/researchers page](/for/researchers) is exact: research often involves sensitive sources, unpublished data, or interview transcripts that cannot go through a third party's logging pipeline. Provider retention policies change, API terms shift, and your supervisor is right to be cautious about what lands in a cloud prompt.
+
+InnerZero takes a specific stance on this. Documents stay on your machine. The model reading them runs on your machine. Frontier models are available when you genuinely need them, but only through your own provider key, never via an InnerZero-operated proxy.
+
+> **Quick summary**
+> - InnerZero processes documents entirely on your hardware by default; nothing about your sources reaches a third-party server
+> - Optional BYO-key access to Claude Opus 4.7 or Gemini 2.5 Pro for synthesis tasks where a frontier model earns its keep, without an InnerZero proxy in the path
+> - Useful for qualitative coding, literature review, anonymised data analysis, draft-manuscript work, and cross-source synthesis
+> - Realistic constraint: a research-tier laptop runs strong but not frontier models locally; for hardest-case synthesis use BYO keys; for everything else local is enough
+
+## Why does private AI matter for academic research?
+
+Two distinct concerns are usually wrapped under "AI privacy" in academic contexts: privacy (what the AI provider does with the data) and confidentiality (whether participants or sources retain the protections you promised them). Cloud AI threatens the second more than the first. Even with a vendor's "we do not train on your data" assurance, the data has been transmitted, parsed, and stored on infrastructure outside your institution's data governance. For participant data covered by ethics review, for unpublished manuscripts under journal pre-publication policy, or for source documents protected by NDA, that transmission is itself a confidentiality concern.
+
+Local AI changes that conversation. The wording on the [privacy page](/privacy) is exact: all conversations, memories, and files stay on your machine. The model is on your machine, the source is on your machine, the inference happens on your machine. No third-party server sees the content.
+
+This is not a substitute for proper data governance, an IRB protocol, or a Data Protection Officer. It is a tool that reduces one specific risk: source leakage into a vendor cloud.
+
+## What can InnerZero do for a researcher's daily workflow?
+
+The bulk of qualitative and mixed-methods research workflows fit local AI well, because most of the work is reading, tagging, extracting, and organising rather than holistic synthesis across enormous corpora.
+
+- **Qualitative coding of interview transcripts.** Drop the transcript in, ask for first-pass thematic codes, refine. The transcript stays on disk. The pattern is documented in [local document Q&A](/blog/local-document-qa).
+- **Literature review across PDFs.** Add a stack of papers and ask focused questions: "which of these address measurement validity for X?" or "which papers cite Y as a limitation?" Cross-source queries do not need any source to leave your machine.
+- **Anonymised survey data review.** Spreadsheet questions ("which open-text responses cluster around the housing-cost theme?") work without uploading the dataset.
+- **Draft manuscript review.** A pre-publication draft is exactly the kind of file you do not want sitting on a vendor's servers. Ask the assistant to flag weak claims, repeated phrasing, or sections that need a citation.
+- **Cross-source synthesis.** Stack interview snippets, field notes, and one or two papers and ask the assistant to surface contradictions or convergences. Memory across the session helps; nothing leaves the laptop.
+- **Reference and citation hygiene.** Pasted in or read from disk: the assistant can format, check, and standardise references in a chosen style.
+
+For frontier-model tasks (very large synthesis, hard-case reasoning across many sources), BYO keys are an option. Prompts go directly from your machine to Anthropic or Google through your own provider account; no InnerZero-operated proxy in the path.
+
+## How does this compare to NotebookLM, Elicit, and Consensus?
+
+Different trade-offs. These tools are designed around uploading sources into a cloud workspace and indexing them server-side. NotebookLM is the closest cloud comparator: it pulls your sources into Google's infrastructure and runs frontier-model summarisation, citation, and thematic analysis against them. Useful, especially for fast literature scoping. The cost is that every source you ask about lives on Google's servers.
+
+Elicit and Consensus position themselves as research-specific search and synthesis layers, their value coming from a curated index plus AI-assisted reasoning over it. For already-public sources (published papers) the upload cost is low because the data was already public. For sources that are NOT public (interview transcripts, unpublished drafts, IRB-bound data), the calculation flips. Cloud research-AI tools that need your sources in their cloud are a poor fit for that data.
+
+InnerZero gives you locally-run reading and synthesis at the cost of frontier-grade single-pass synthesis on the largest corpora. "Read, code, extract, draft, refine, cite" rarely hits that ceiling. "Summarise 200 papers in one pass" does, and a frontier cloud tool will do that better.
+
+## What about IRB, ethics review, and pre-publication concerns?
+
+Two places where source-handling matters most.
+
+**IRB and ethics review.** Many ethics committees are uneasy about cloud AI for participant data, and the conversation has shifted noticeably in the last two years. Local AI changes the data-flow story: there is no transmission to a third-party processor, so the analysis falls within your institution's own infrastructure. This post is not the place for IRB-specific advice; check your protocol, your institution's data-governance policy, and your DPO. But the data-flow shift is the substantive thing local AI offers your ethics conversation.
+
+**Pre-publication.** Journals are increasingly explicit about disclosure of AI assistance, and the more conservative ones treat AI tool use as a confidentiality concern in addition to an authorship concern. [Nature's editorial policy on AI](https://www.nature.com/nature-portfolio/editorial-policies/ai) and the [COPE position statement on AI authorship](https://publicationethics.org/cope-position-statements/ai-author) both lean toward disclosure-first norms. Local AI does not change your disclosure obligation, but it does mean the manuscript itself never sat on a vendor's server before peer review, which addresses a concern some journals have raised about pre-publication confidentiality.
+
+## What are the realistic limits for local AI in research?
+
+Three honest constraints.
+
+**Model size.** A research-tier laptop (16 to 32 GB RAM, modest GPU) runs strong but not frontier local models. For 80% of research workflows the gap is invisible. For the remaining 20% (hardest-case synthesis, very long context, deep reasoning chains) BYO keys to a frontier model bridge the gap without giving up source privacy.
+
+**Statistical analysis.** Document Q&A on a CSV is text-based reasoning, not a replacement for R, Python, or SPSS. The assistant can describe a table, summarise patterns, or sanity-check a claim, but the actual quantitative work belongs in your stats environment.
+
+**Very large corpora.** A thousand-paper corpus exceeds any single-shot context. The fix is focused-section prompts ("which of these papers address measurement validity?" rather than "summarise all of these"), which is how most literature reviews proceed anyway.
+
+## Example research prompts that work locally
+
+Five prompts that work entirely on-device:
+
+- "I have these five interview transcripts in PDF. Suggest a first-pass thematic coding with example quotes for each theme."
+- "Across these eight papers, which address sampling bias as a limitation, and how do they handle it?"
+- "Read this draft manuscript and flag every claim that should have a citation but does not."
+- "In this anonymised survey CSV, which open-text responses cluster around concerns about housing affordability?"
+- "Compare the methods sections of these three papers. Where do they converge, and where do they make different choices?"
+
+The cross-source patterns work because the local model holds multiple sources in context within a session. Nothing crosses the wire.
+
+## Should I use a private AI or a cloud AI for my research?
+
+Useful for: qualitative work with participant data, draft manuscripts under embargo, NDA-bound corporate research, source documents under access restrictions, interview workflows where confidentiality is part of the consent contract, anyone whose institution treats AI vendor uploads as a data-governance question.
+
+Skip it if your workflow is dominated by very-large-corpus synthesis, body-level search across thousands of papers, or deep reasoning that genuinely needs a frontier model and your sources are already public anyway. A cloud research-AI tool will do those tasks better.
+
+The point of being explicit is so you pick deliberately. For a researcher, the question is rarely "is this AI good"; it is "does this AI's data-flow story fit my data-governance obligations". Local AI passes that test for sensitive sources by construction.
+
+## Frequently asked questions
+
+### Does InnerZero retain my documents or transcripts?
+
+No. In default local mode, nothing is uploaded or logged off-device. Conversation history is stored in a local database file you control; delete it whenever you want. Optional cloud mode forwards only the current prompt to the provider you chose, and InnerZero does not store or log that content.
+
+### Can I use frontier models without giving up source privacy?
+
+For inference yes, with BYO keys. Add your Anthropic, OpenAI, or Google key and the request goes directly from your machine to the provider. The source documents themselves stay on your machine; only the slice of text relevant to your question travels with the prompt. The provider's retention policy applies on their side, but no InnerZero-operated proxy is in the path.
+
+### Is there a connection log I can show my supervisor or ethics board?
+
+Yes. InnerZero displays every outbound connection in a filterable in-app log. Useful for demonstrating that nothing left the machine during a given session, or that BYO-key calls went directly to the named provider with no other endpoints touched.
+
+### Does this work for collaborative research where multiple people need access?
+
+Each researcher runs InnerZero on their own laptop with their own copy of the source files. There is no shared cloud workspace by design; the trade-off for the privacy posture. Standard file-sharing tools (a private repo, an institutional drive, an encrypted share) handle the collaboration layer.
+
+### How does it compare to ChatGPT for literature review specifically?
+
+Frontier cloud models still lead on hardest-case synthesis and very long context. For a literature review where you want a frontier model, BYO keys give you that path while keeping the source documents on your machine. For everything earlier in the workflow (reading, tagging, extracting, drafting) a local model is typically good enough and keeps your sources private.
+
+## Keep your sources local
+
+[Download InnerZero](/download) for Windows. Drop a PDF or transcript into the assistant and start asking questions; the source stays on disk. For the broader feature picture see the [features page](/features). For the wider data-flow story across the product see [how InnerZero stays private](/blog/how-innerzero-stays-private), and for the offline-anywhere story [using AI offline](/blog/use-ai-offline) is a good companion.
