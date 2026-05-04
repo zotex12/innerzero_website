@@ -1,0 +1,130 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify the canonical /features Project scoping wording still reads "Organise memory by project so Zero stays focused on what matters."
+- [ ] Verify the canonical /features Core profile wording still reads "Store personal facts (name, preferences, work) that Zero always knows."
+- [ ] Verify the canonical /features Source provenance wording still reads "Every memory tracks where it came from (chat, voice, document, Gmail, calendar) so Zero knows the source of what it remembers."
+- [ ] Re-check Anthropic's Projects announcement and OpenAI's memory FAQ URLs are still live
+- [ ] Update the ChatGPT / Claude.ai / Gemini comparator descriptions if their memory positioning has shifted
+-->
+---
+title: "Keeping Work and Personal AI Memory Separate With Project Scoping"
+description: "AI assistants with persistent memory are great until your work context bleeds into personal context, or client A's project codenames show up in client B's prompts. Project scoping is the answer: organise memory by project, switch between them, and the AI only sees the active project's context."
+date: "2026-07-21"
+author: "Louie"
+authorRole: "Founder"
+slug: "project-scoping-memory"
+tags: ["memory", "features", "guide"]
+readingTime: "8 min read"
+featured: false
+---
+
+Persistent memory is the thing that turns an AI from a clever chatbot into a working assistant that knows your context. It is also the thing that makes mixed contexts awkward. Once your medical research, your client work, your novel draft, and your family logistics all sit in one undifferentiated memory blob, the assistant starts dragging context from one situation into another. You ask about a client deliverable and get a tangent about your last GP visit, because both happened to use the word "appointment".
+
+InnerZero's project scoping is the answer. Organise memory by project, switch between them, and the AI only sees the active project's context. This post explains how it works, when to use it, and what it does not protect against.
+
+> **Quick summary**
+> - Project scoping organises memory into named project workspaces (Work, Personal, Client A, Novel Draft, etc.); the AI only sees the active project's context
+> - An optional small "core profile" can travel across all projects (your name, basic preferences, working style); everything else stays project-scoped
+> - Useful for freelancers juggling clients under NDA, writers managing multiple manuscripts, developers across codebases, and anyone separating personal from professional context
+> - Realistic limit: project scoping is a user-organisational tool, not a security boundary; anyone with access to the local machine can switch projects
+
+## What is project scoping in an AI assistant?
+
+Most cloud AI assistants give you one undifferentiated memory blob per account. Whatever you tell ChatGPT in February about your novel still floats around in May when you ask about a client contract. The AI is doing its best to be helpful, but it has nowhere to file the information and no way to know which context you are in right now.
+
+The wording on the [features page](/features) is exact: project scoping organises memory by project so Zero stays focused on what matters. You create named projects. Each project keeps its own working memory: facts you have shared, references to documents you have added, conversation history within that project. When you switch to a project, the AI's context becomes that project's context. When you switch away, the previous project's memory steps back out of view.
+
+The result is closer to how humans actually work. You think in modes. The assistant follows.
+
+## How does project scoping work day-to-day?
+
+You create a project, give it a name, and start working. Anything you tell the AI in that project (preferences, ongoing tasks, document references, recurring people, project-specific terminology) gets remembered against that project. When you finish for the day or pivot to a different domain, you switch projects from the project picker, and the AI's working context switches with you.
+
+A typical workflow looks like:
+
+- Morning: switch to "Day Job", ask about the sprint review
+- Lunch: switch to "Personal", ask the assistant to draft a doctor's note
+- Afternoon: switch to "Client A", paste in the latest draft brief, ask for feedback
+- Evening: switch to "Novel", ask about the chapter you were working on yesterday
+
+In each case the assistant has the right context for that work and only that work. There is no cross-bleed.
+
+## What does the optional core profile do?
+
+The features-page wording is: store personal facts (name, preferences, work) that Zero always knows. The core profile is a small set of basics you have decided every project should know. Your name. Your timezone. That you write British English. That you prefer concise responses. The kind of thing that should not need to be re-taught every time you switch projects.
+
+Everything else (project-specific people, codenames, ongoing tasks, references) lives inside a project, not the core profile. If you put something sensitive in the core profile (a client identifier, a project codename, a medical detail), it travels everywhere; pick what goes there carefully.
+
+## When should I create a new project?
+
+Three good signals:
+
+1. **Different audience or stakeholder.** A client engagement, a different employer, a different domain expert. If the people involved differ, the project usually should too.
+2. **Different terminology.** When the same word means different things in two contexts (a "deployment" in your day-job is a code release; a "deployment" in your military-research interest is a unit posting), separate projects keep the AI from blending the meanings.
+3. **Different confidentiality posture.** Anything under NDA, embargo, or legal privilege is a clean reason to wall the context off. Once those NDAs lapse, you can choose to merge the project back into a general pool or archive it.
+
+You do not need a project for every single hat you wear; over-fragmentation is its own problem. Three to seven active projects is a typical comfortable working set.
+
+## What does project scoping NOT protect against?
+
+This is the load-bearing caveat. Project scoping is a user-organisational tool, not a security boundary.
+
+**Anyone with access to the local machine can switch projects.** If a colleague borrows your laptop and clicks the project picker, they see whatever projects you have created. Lock your screen. Use OS-level user accounts to separate users on shared devices.
+
+**Manual switching is your responsibility.** If you ask a Personal-context question while still in Work scope, you get a Work-context answer. The assistant follows the active project; it does not detect that the question changed scope.
+
+**The core profile is universal by design.** Anything you put there is visible in every project. That is what makes it useful (your name should not need to be re-explained); it also means a careless addition can create small unintended context bleed.
+
+**It is not a privacy guarantee against cloud routing.** If you enable cloud mode and send a prompt, project scoping limits which memory the prompt is built from, but the prompt itself still goes to the cloud provider you selected. The wording on the [privacy page](/privacy) is exact: only your current prompt and a short conversation window are sent to the AI provider. For sensitive project work, keep cloud mode off.
+
+## How does this compare to ChatGPT memory and Claude.ai projects?
+
+Different trade-offs.
+
+**ChatGPT memory** is one global blob per account. OpenAI's [memory FAQ](https://help.openai.com/en/articles/8590148-memory-faq) covers what gets remembered, what does not, and how to clear it. The mechanism is one undifferentiated memory pool that the assistant draws from across every conversation. Useful for general personal context; less useful when you have multiple distinct domains.
+
+**Claude.ai Projects** is the closest cloud comparator. Anthropic [introduced Projects](https://www.anthropic.com/news/projects) in mid-2024 specifically to give multi-context users a workspace per topic. Each Project keeps its own files, instructions, and recent conversations server-side. The data-flow story: project memory lives on Anthropic's infrastructure and is subject to Anthropic's retention. For users comfortable with that, it is a strong product.
+
+**Gemini context** is similarly account-scoped on Google's infrastructure, with a less explicit project layer at time of writing.
+
+InnerZero's project scoping is local rather than cloud. Memory lives on your machine, switching is local, the active scope is local. Each option has trade-offs: cloud-side projects scale across devices easily, local-side projects keep the data on a single machine. Pick the one whose data-flow story matches your work.
+
+## Common project setup examples
+
+Three patterns from real workflows:
+
+- **Freelancer with three active clients.** Projects: "Client A", "Client B", "Client C", plus a "Business" project for invoicing and tax notes. The freelancer drops each client's NDA-bound documents into the matching project and switches projects when answering client emails.
+- **Writer with two manuscripts.** Projects: "Novel - Working Title 1", "Novel - Working Title 2", plus "Personal Writing". Each project tracks its own characters, world details, and plot threads. The assistant never accidentally references the other novel.
+- **Developer with day-job + side-project + open-source contributions.** Projects: "Day Job (Stack X)", "Side Project (Stack Y)", "OSS - LibName". Each project has its own coding conventions, domain terminology, and recurring file paths.
+
+For more researcher-shaped patterns, [private AI for researchers](/blog/ai-for-researchers-private) covers cohort-by-cohort separation. For the broader student-context picture, [AI for students offline](/blog/ai-for-students-offline) covers per-course scoping.
+
+## Frequently asked questions
+
+### Can the AI accidentally pull memory from another project?
+
+Not when project scoping is on and a project is active. The AI sees the active project's memory plus the optional core profile, and nothing else. If you have not enabled scoping, all memory is in one pool by default.
+
+### How do I move memory from one project to another?
+
+Memories can be archived or moved between projects from the Memory tab. Each memory carries a source label so it is traceable, per the features-page wording: every memory tracks where it came from (chat, voice, document, Gmail, calendar) so Zero knows the source of what it remembers.
+
+### Should I use project scoping for personal vs work?
+
+Yes, especially if you ever talk to the assistant about both. The split keeps personal context from showing up in work answers and vice versa. The mental cost of switching projects (one click) is small compared to the cost of the assistant referencing your medical history while drafting a board update.
+
+### Is project scoping a privacy feature?
+
+Not exactly. It is an organisational feature with privacy-adjacent benefits. The strongest privacy posture is local mode plus the [privacy blacklist](/blog/privacy-blacklist-explained) for cloud-bound work. Project scoping reduces context bleed; it does not reduce who can read the projects on your machine.
+
+### Can I delete a project entirely?
+
+Yes. Deleting a project removes its memories from the assistant's working set. The original source files (PDFs, transcripts, anything you added) stay in the folders you put them in; deleting a project does not move or delete your files.
+
+### Do projects sync across machines?
+
+Not by default. Each install of InnerZero keeps its own local memory. Multi-device sync is a roadmap consideration; the current state is one machine, one project set.
+
+## Set up your projects
+
+[Download InnerZero](/download) for Windows. Create two or three projects to start, give them clear names, and try switching between them as you work. The mental model gets natural quickly. For the bigger picture on memory generally, [AI that remembers](/blog/ai-that-remembers) and [why your AI should remember you](/blog/why-your-ai-should-remember-you) are the canonical references. For the developer-shaped use case, the [for/developers](/for/developers) page covers project scoping alongside the broader local-AI workflow; for writers managing multiple drafts, [for/writers](/for/writers) is the matching audience page.
