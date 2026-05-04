@@ -1,0 +1,139 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify the canonical Document Q&A wording on /features still reads "Upload .txt, .md, .pdf, .docx, .xlsx, .csv files and ask questions."
+- [ ] Verify the canonical privacy wording on /privacy still reads "All conversations, memories, and files stay on your machine."
+- [ ] Confirm ChatPDF, Adobe AI Assistant, and NotebookLM still describe themselves as cloud document AI; update if positioning has shifted
+- [ ] Re-check the supported file type list against what currently ships
+- [ ] Refresh the OCR note if scanned-PDF support has changed
+-->
+---
+title: "How AI Reads Your PDFs Without Uploading Them"
+description: "Most AI document tools require uploading the file to their servers, which puts your document on someone else's infrastructure indefinitely. InnerZero takes a different trade-off: documents stay on your machine, processing happens locally, and the model reads the file directly without it leaving the disk."
+date: "2026-07-07"
+author: "Louie"
+authorRole: "Founder"
+slug: "local-document-qa"
+tags: ["features", "privacy", "guide"]
+readingTime: "8 min read"
+featured: false
+---
+
+Most AI document tools work by uploading the file to a cloud service and indexing it server-side. ChatPDF asks you to drop in a PDF; Adobe AI Assistant works inside a cloud account; NotebookLM imports your sources into Google's infrastructure; ChatGPT's file upload sends the bytes to OpenAI. The cost is that your document is now on someone else's hardware, indexed against their retention policies, available to whatever subprocessors they use.
+
+InnerZero takes a different trade-off. The file stays on your machine. The model reading it runs on your machine. Nothing about the document leaves your hardware.
+
+> **Quick summary**
+> - Most document AI tools (ChatPDF, Adobe AI Assistant, NotebookLM, ChatGPT file upload) need you to upload the file to their servers
+> - InnerZero reads documents directly from your disk; the file is never uploaded, and the model interpreting it is local
+> - Supported file types: `.txt`, `.md`, `.pdf`, `.docx`, `.xlsx`, `.csv`
+> - Realistic limits: very large PDFs hit context-window limits, scanned PDFs need a separate OCR step, spreadsheet Q&A is text-based, answer quality depends on the local model you have configured
+
+## What does it mean to read documents without uploading them?
+
+The default for almost every cloud document AI is the same: bytes travel to a server, the server extracts text, indexes it, and serves answers from that indexed copy. The file's content now lives on the vendor's infrastructure, often retained for an unspecified window, sometimes used to improve the service.
+
+InnerZero does not do that. The privacy page wording is exact: all conversations, memories, and files stay on your machine. The local model reads the file from your disk directly. There is no upload step, no cloud index, no third-party server seeing the contents.
+
+This matters most for documents you would not be comfortable handing to a third party: legal contracts under NDA, medical records, financial statements, journalism source documents, draft writing you are not ready to share. The [features page](/features) describes the capability simply: upload .txt, .md, .pdf, .docx, .xlsx, .csv files and ask questions. The "upload" there is from disk to the local app, not from your machine to a server.
+
+## How does InnerZero read your documents locally?
+
+When you add a document, the app extracts the text using standard, well-documented file format parsers. PDF text comes from the [Adobe PDF specification](https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf) layout. DOCX content comes from the [Office Open XML](https://learn.microsoft.com/en-us/openspecs/office_standards/ms-docx/) container; XLSX is the same family. CSV, Markdown, and `.txt` are read as plain text.
+
+The extracted text stays on your machine. When you ask the assistant a question, the local model reads the text and answers from it. In private mode, none of this involves a network at all. In cloud mode, only the prompt you typed (and the slice of document text relevant to your question) travels to whichever cloud provider you have explicitly configured. The full document still does not get uploaded.
+
+## What file types can InnerZero read?
+
+The full set, as it ships:
+
+- **`.txt`**: plain text. Anything from notes, log files, scraped articles, raw exports.
+- **`.md`**: Markdown. Documentation, READMEs, knowledge base notes that you keep in plain text.
+- **`.pdf`**: PDFs that contain a text layer. Most PDFs generated from Word, web exports, ebooks, research papers, contracts.
+- **`.docx`**: Microsoft Word documents in the Open XML format. Most Word documents from the last 15 years.
+- **`.xlsx`**: Microsoft Excel spreadsheets. Cell values, basic formulas, sheet names. Not full data analysis.
+- **`.csv`**: comma-separated value tables. Exports from databases, analytics tools, accounting software.
+
+Older binary formats (`.doc`, `.xls`) and proprietary formats (Pages, Keynote, Numbers) are not currently supported. If you need to read one of those, export to a supported format first.
+
+## What can document Q&A do?
+
+Most of the work people actually want from a document AI:
+
+- **Summarisation.** "Give me a one-paragraph summary of this 30-page contract." Works well for files that fit inside the local model's context window, which covers most everyday documents.
+- **Fact lookup.** "What is the notice period in section 8?" The model reads the relevant section and answers from the text.
+- **Cross-document comparison.** Add two contracts and ask "what differs in the indemnity clauses?" The local model holds both in context.
+- **Research paper Q&A.** "What does this paper conclude about its third research question?" Useful when triaging a stack of papers before deep reading.
+- **Spreadsheet column queries.** "Which rows in this CSV have a value above 1000 in revenue?" Text-grade analysis, not pandas-grade.
+- **Contract clause extraction.** "List every clause in this MSA that mentions data processing." Works because clause structure is in the text.
+
+For tasks like these, no useful capability is lost by keeping the file on your machine.
+
+## What are the realistic limits?
+
+Four honest constraints worth knowing about before you rely on this for anything important.
+
+**Very large PDFs hit context-window limits.** A 1000-page filing is bigger than what most local models can hold in one shot. The assistant handles this by reading the parts most relevant to your question, but a question that needs the whole document at once is bumping against a real limit. Smaller models hit it sooner.
+
+**Scanned PDFs are images.** A PDF that contains scanned pages with no embedded text layer is a sequence of images, not text. Reading those needs OCR, which is a separate capability. If your file is image-only, run it through OCR first; once it has a text layer, document Q&A works normally.
+
+**Spreadsheet Q&A is text-based.** XLSX and CSV files are read as text values, not as a pandas dataframe. The assistant can answer "which rows have X" or "what is the average of column Y" for small-to-mid-sized sheets. It is not a replacement for a real data analysis tool on a million-row table.
+
+**Answer quality depends on your model.** A 1.7B-parameter model on a CPU will give shorter, less precise answers than a 14B-parameter model on a GPU. The trade-off is private-but-modest vs cloud-and-bigger.
+
+## How does this compare to ChatPDF, Adobe AI Assistant, and NotebookLM?
+
+These tools take a different trade-off. They are designed around uploading documents to a cloud service and indexing them server-side. That gives them capabilities InnerZero does not always match: very large source collections (NotebookLM in particular), polished web UIs, persistent shared workspaces.
+
+The cost is that every document you ask about lives on the vendor's infrastructure. Even with retention policies and "we do not train on your data" statements, the file has been transmitted, parsed, and stored somewhere you do not control. For some documents that is fine. For NDAs, medical records, source documents, legal filings, or anything covered by client confidentiality, it is a hard no.
+
+Cloud document AI gives you scale at the cost of upload. InnerZero gives you privacy at the cost of scale. The same posture applies to the [Gmail integration](/blog/ai-gmail-privately) and the [Google Calendar integration](/blog/ai-google-calendar-privately): different connector, same trade-off.
+
+## Example prompts for document Q&A
+
+Five prompts that exercise local document Q&A across different file types:
+
+- "Summarise this MSA in one paragraph and flag any clauses about data processing or subcontractors."
+- "Compare these two contracts side by side and tell me where the indemnity clauses differ."
+- "Read this research paper and answer the three questions on page one of my notes."
+- "In this CSV, which rows have a value above 1000 in the revenue column? Show me the top 10."
+- "I have ten PDFs from this regulatory consultation. Which ones mention 'small business exemption' and what do they say?"
+
+The last one quietly exercises the cross-document pattern: reading a stack of files and answering across them, all without any of those files leaving your disk.
+
+## Should I use a local document AI or a cloud one?
+
+Useful for: anyone working with confidential documents (lawyers, doctors, financial professionals, journalists protecting sources), [researchers](/for/researchers) reading papers under embargo, [writers](/for/writers) editing drafts they are not ready to share, anyone bound by NDA or client confidentiality.
+
+Skip it if you regularly work with very large source collections that exceed local-model context, depend on cloud-side workspace features, or are comfortable uploading documents to a cloud AI and just want the most capable model regardless of where it runs.
+
+A document AI that reads your file is doing something useful. A document AI that reads your file AND keeps a copy of it on its servers is doing two things, and most product pages only mention the first one.
+
+## Frequently asked questions
+
+### Does InnerZero ever upload my document, even temporarily?
+
+No. The file is read from your local disk; there is no InnerZero document server to upload it to. In cloud mode, when you have explicitly chosen a cloud Director, the slice of document text relevant to your question travels to that provider along with your prompt, but the full file still does not leave your machine. [How InnerZero stays private](/blog/how-innerzero-stays-private) explains exactly what crosses the wire in each mode.
+
+### What about scanned PDFs without a text layer?
+
+Those are image files inside a PDF wrapper. OCR is a separate capability that turns the images into a text layer first. Run the file through your preferred OCR tool and document Q&A works normally on the result.
+
+### Does it work offline?
+
+Yes, when you are in local mode. The model reading the document runs on your PC. The document is on your disk. Neither needs internet. [Offline mode](/blog/use-ai-offline) covers the broader offline story across the product.
+
+### Can the assistant remember things from a document for later conversations?
+
+Yes, with provenance. When the assistant learns something from a document you have shared, the resulting memory carries a "document" source label so it is traceable back to where it came from. You can see what has been remembered (and delete any of it) from the Memory tab. [How memory works](/blog/ai-that-remembers) explains this in more detail.
+
+### Are very large PDFs a problem?
+
+They can be. A 30-page contract works well; a 1000-page regulatory filing pushes the local model's context window. The assistant handles long files by reading the parts most relevant to your question. For book-length sources, expect to ask narrower questions rather than one all-encompassing summary.
+
+### What happens to a document if I uninstall InnerZero?
+
+The original file is in whatever folder you put it; uninstalling does not move or delete your documents. Cached extractions stored locally can be cleared from Settings before uninstall if you want a clean exit.
+
+## Open a document
+
+[Download InnerZero](/download) for Windows. Open Settings, find the Documents section, and add a file from disk; the assistant can answer questions about it immediately. For the broader privacy posture across the whole product, the [privacy page](/privacy) is the canonical reference.
