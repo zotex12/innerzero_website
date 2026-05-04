@@ -247,3 +247,9 @@ The highest-signal section. Read every time.
 12. Trailing slash discipline. Internal links use `/blog/<slug>`, not `/blog/<slug>/`. Centralised in `src/lib/metadata.ts:absoluteUrl()`.
 13. Tags use SPACES, not hyphens. `"local ai"` not `"local-ai"`. `"coding agent"` not `"coding-agent"`. Audited across all 28 published posts.
 14. PROJECT_MAP.md is a desktop-repo concern only. Website publishes do not regenerate it.
+
+## References
+
+When authoring or rewriting a post, also load:
+
+- `references/citation-eligibility-tactics.md`: Princeton GEO study tactics for AI citation eligibility (external citations, statistics, quotations, authoritative language, plus the keyword-stuffing anti-pattern). Auto-load when a draft does not hit at least 3 of 4 missing tactics on first pass, or when the user asks for a "citation pass" / "AEO pass" / "GEO check".
