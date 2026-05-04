@@ -111,7 +111,7 @@ const PAGE_DATA: PersonaPageProps = {
     {
       question: "Is InnerZero actually free, or is it a trial?",
       answer:
-        "Actually free, forever, for personal use. There is no time limit, no usage cap, no hidden feature gate. Optional paid extras exist (cloud AI subscription, business licence) but nothing in the core local experience is behind a paywall.",
+        "Actually free, for personal use. There is no time limit, no usage cap, no hidden feature gate. Optional paid extras exist (cloud AI subscription, business licence) but nothing in the core local experience is behind a paywall.",
     },
     {
       question: "Will my university see what I am asking InnerZero?",

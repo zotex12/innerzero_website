@@ -109,6 +109,15 @@ export default function PrivacyPage() {
 
                 <div>
                   <h3 className="text-base font-semibold text-text-primary mb-1">
+                    Optional Google connectors stay private
+                  </h3>
+                  <p className="text-text-secondary leading-relaxed">
+                    Optional Google connectors are read-only or narrowly scoped. Read-only Gmail with metadata only (sender, subject, snippet). Message bodies are never fetched or stored. Calendar integration uses two-way Google Calendar sync; private events stay on your machine.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-1">
                     BYO API keys stay on your machine
                   </h3>
                   <p className="text-text-secondary leading-relaxed">
