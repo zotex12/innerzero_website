@@ -79,11 +79,12 @@ Field reference:
 | ogImage | string | no | Falls back to `/banner.png`. Omit unless a custom image exists. |
 | draft | boolean | no | Only honoured by RSS/JSON feed (excludes from feed). Not used in shipped corpus. |
 
-## Approved tag taxonomy (13 entries)
+## Approved tag taxonomy (14 entries)
 
 The corpus uses SPACES, not hyphens. Audited via `grep -h "^tags:" src/content/blog/*.mdx` across all 28 published posts. New tags require explicit Louie approval. Pick 2-4 per post.
 
 - `announcement`
+- `automation`
 - `claude`
 - `cloud ai`
 - `coding agent`
