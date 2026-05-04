@@ -1,0 +1,135 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify the canonical /features Privacy blacklist wording still reads "Scrub sensitive terms (names, addresses, company info) from cloud messages before they leave your machine. Reversed on response."
+- [ ] Verify the canonical /features Connection log wording still reads "See every outbound connection InnerZero makes. Filterable inline log with daily rotation."
+- [ ] Verify the canonical /features My Privacy page wording still reads "Centralised privacy dashboard. Toggle Offline, Private, or Cloud mode. Manage blacklist, view connections, see privacy stats."
+- [ ] Re-check NIST AI RMF and OpenAI enterprise privacy URLs are still live
+- [ ] Update the ChatGPT Enterprise comparator wording if their data-retention controls have shifted
+-->
+---
+title: "What Your AI Scrubs Before Sending to the Cloud"
+description: "Cloud AI is useful, but the moment you send a prompt you have sent every word in it. Names, addresses, client identifiers, project codenames. The privacy blacklist is the bridge between using cloud AI and keeping the sensitive specifics out of cloud AI."
+date: "2026-07-17"
+author: "Louie"
+authorRole: "Founder"
+slug: "privacy-blacklist-explained"
+tags: ["privacy", "features", "cloud ai"]
+readingTime: "8 min read"
+featured: false
+---
+
+Cloud AI has real value for some tasks: frontier reasoning, fast generation, certain kinds of creative work. The trade-off is that the moment you send a prompt, you have sent every word in it. Names you typed by reflex. Addresses copied from an email. Client identifiers. Project codenames. Medical terms. The model needs the prompt; the vendor's infrastructure also sees it.
+
+InnerZero's privacy blacklist sits between you and that send. It scrubs sensitive terms out of cloud-bound messages before they leave your machine, and reverses the substitution on the response so you see the original terms back when the answer arrives.
+
+> **Quick summary**
+> - The privacy blacklist scrubs terms you choose (names, addresses, project codenames, client names, anything sensitive to you) from prompts before they leave your machine in cloud mode
+> - The cloud provider sees placeholders; the response comes back with placeholders; those placeholders are restored locally before you see the answer
+> - Pattern matching is not semantic understanding: if you blacklist "Sarah" but type "the marketing lead", the role still leaks. The post is explicit about this and other limits
+> - The blacklist hardens cloud mode. For absolute privacy on a topic, local-only mode remains the only guarantee
+
+## What is the privacy blacklist, and what does it actually do?
+
+The wording on the [features page](/features) is exact: scrub sensitive terms (names, addresses, company info) from cloud messages before they leave your machine. Reversed on response.
+
+You maintain a list of terms you do not want sent to a cloud AI provider. When cloud mode is on and you send a prompt, those terms are replaced with placeholders before the request leaves the machine. The cloud provider runs the request against the placeholder version. The response comes back referencing the same placeholders. InnerZero restores the original terms locally before you see the answer.
+
+The blacklist is opt-in and lives entirely on your machine. The cloud provider never sees your blacklist; only the redacted prompt.
+
+## How does scrubbing work from a user's perspective?
+
+You type a prompt the way you normally would. Suppose you have "Acme Corp" and "the Falcon project" on your blacklist. You ask: "Draft a one-page status update for Acme Corp about the Falcon project."
+
+What goes to the cloud provider: "Draft a one-page status update for [REDACTED-1] about the [REDACTED-2]."
+
+What comes back to your machine: a draft using `[REDACTED-1]` and `[REDACTED-2]` as the references.
+
+What you see on screen: a draft using "Acme Corp" and "the Falcon project". The placeholders never reach you; they were replaced back to the originals before render.
+
+That is the whole user-visible flow. You write, the cloud sees redactions, you read your real terms.
+
+## What sensitive terms should I put on my blacklist?
+
+The right list depends on your work. A few realistic shapes:
+
+- **Consultants and freelancers.** Client names, project codenames, internal product names, ongoing engagement codes.
+- **Clinicians.** Patient identifiers (names, MRNs, postcodes when included by accident in a paste), specific case identifiers.
+- **Software developers.** Internal repository names, codenamed projects, customer identifiers, partial keys you paste while debugging.
+- **Journalists.** Source names, source aliases, tip-line identifiers, organisations under embargo.
+- **Personal use.** Family member names, your home address, account numbers, anything you would not want sitting in a cloud transcript.
+
+For most people the list is short (10 to 30 entries) and stable. You add to it when something new becomes sensitive and remove from it when something stops being sensitive.
+
+## What does the connection log show me?
+
+The features page describes it as: see every outbound connection InnerZero makes. Filterable inline log with daily rotation.
+
+If you are in cloud mode and want to know what actually went out, the connection log shows it. Every outbound request from InnerZero is recorded locally with destination, timing, and status. You can filter by provider, by time, by mode. The log rotates daily and is stored on your machine; it is not transmitted anywhere. Useful for showing a colleague, a supervisor, or an ethics board exactly what crossed the wire during a session.
+
+## What about the My Privacy dashboard?
+
+The features-page wording is: centralised privacy dashboard. Toggle Offline, Private, or Cloud mode. Manage blacklist, view connections, see privacy stats.
+
+The dashboard is the single page where the privacy controls live together: the mode toggle, the blacklist editor, a window into the connection log, and summary stats. You add or remove blacklist terms here. You flip cloud mode on or off here. You inspect what has been sent here. The point of consolidating all of it is that the privacy posture should not be scattered across seven settings panels.
+
+## What does the blacklist NOT protect against?
+
+This is the most important section in the post. The blacklist is a hardening tool, not a privacy guarantee.
+
+**Pattern matching is not semantic understanding.** The blacklist matches the literal terms you list. If you blacklist "Sarah" but write "the marketing lead", the role still leaks. If you blacklist "Acme Corp" but write "the company that just IPO'd in March", the description still leaks. The model on the other end can sometimes reconstruct the redacted concept from context.
+
+**Long contextual chains can re-leak.** A message that says "redacted-1 is based in [city] and works in [industry]" still leaks something about redacted-1, even if the literal name is replaced. The blacklist removes the term; it cannot remove every clue around it.
+
+**The blacklist is opt-in.** Default cloud-mode behaviour without a populated blacklist sends the full prompt. Adding nothing to the list means nothing is scrubbed.
+
+**It only acts in cloud mode.** Local mode does not need the blacklist (nothing leaves the machine anyway). The blacklist is for the cloud-mode hardening case.
+
+**For absolute privacy on a topic, use local-only mode.** The blacklist makes cloud mode safer for casual sensitive references. For sources that genuinely cannot leave your machine, switch off cloud mode entirely. The wording on the [privacy page](/privacy) is exact: only your current prompt and a short conversation window are sent to the AI provider you select. With cloud mode off, the answer is "nothing".
+
+## How does this compare to ChatGPT Enterprise and other cloud AI tools?
+
+Different trade-offs. ChatGPT Enterprise, Claude for Work, and similar tier-up products mostly offer server-side controls: data-retention windows, no-training assurances, audit logs, SOC 2 attestations. Those are real protections, and for many enterprise contexts they are sufficient.
+
+What they generally do not offer is client-side scrubbing before the data leaves your machine. Once a prompt arrives at the vendor's edge, it has been transmitted; the protections kick in after that point. For data-minimisation-first contexts (the [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework) treats minimisation as a foundational practice), the difference matters: server-side controls protect data the vendor has, client-side scrubbing means the vendor never had the sensitive specifics in the first place.
+
+InnerZero's blacklist is not a replacement for vendor-side controls; it is a complement. If you are on [OpenAI's enterprise privacy](https://openai.com/enterprise-privacy/) tier and your team has signed off on it, you may not need the blacklist for most prompts. For the prompts that touch genuinely sensitive specifics, scrubbing at the client puts a second layer in front.
+
+## Common prompt examples
+
+Three before-and-after illustrations:
+
+- Prompt with "Acme Corp" and "Falcon project" blacklisted: *"Draft a status update for Acme Corp about the Falcon project."* → Cloud sees: *"Draft a status update for [REDACTED-1] about the [REDACTED-2]."* → You see: a draft using "Acme Corp" and "Falcon project".
+- Prompt with a patient identifier blacklisted: *"Summarise the case notes for patient MRN-58293 from the last visit."* → Cloud sees: *"Summarise the case notes for patient [REDACTED-1] from the last visit."* → You see: a summary referring to the original MRN.
+- Prompt with a personal address blacklisted: *"Format this letter to be sent to 12 Oakwood Lane."* → Cloud sees: *"Format this letter to be sent to [REDACTED-1]."* → You see: the formatted letter with the original address.
+
+In each case the cloud provider's logs and any subprocessor pipeline contain only the redacted version.
+
+## Frequently asked questions
+
+### Does the cloud provider know what was redacted?
+
+No. The cloud provider receives only the redacted prompt. The mapping from placeholders back to original terms stays on your machine.
+
+### What about typos or partial matches?
+
+The blacklist matches the literal terms you list. "Sarah" does not match "Saraah" or "Sara". Add common misspellings if they matter for your use case.
+
+### Can the cloud provider see my blacklist?
+
+No. The blacklist itself never leaves your machine. The cloud provider sees the redacted prompt and nothing else about which terms are sensitive to you.
+
+### Does the blacklist work in local mode?
+
+It is not used in local mode because nothing leaves the machine in local mode. The blacklist only acts on cloud-bound messages.
+
+### Will the assistant tell me when a placeholder fired?
+
+Yes. When scrubbing has happened on a request, the response is annotated with a small indicator showing how many placeholders were used. You can inspect the connection log for the request to see counts and timing.
+
+### Should I rely on the blacklist instead of just using local mode?
+
+No. The blacklist is a hardening tool for cases where you genuinely need cloud capability. For data that cannot afford any leakage, including indirect leakage from context around the redacted term, local-only mode is the right choice.
+
+## Build your blacklist
+
+[Download InnerZero](/download) for Windows. Open the My Privacy dashboard, switch to cloud mode if you intend to use it, and add the terms that matter for your work. The list is short for most people. For the optional cloud subscription tier see the [pricing page](/pricing). For the wider data-flow story across modes, [how InnerZero stays private](/blog/how-innerzero-stays-private) is the canonical reference. For the trade-offs that frame when cloud mode is worth it, [local AI vs cloud AI](/blog/local-ai-vs-cloud-ai) and the [BYO keys guide](/blog/claude-opus-4-7-byo-keys) are good companions.
