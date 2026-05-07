@@ -271,7 +271,55 @@ export default function PrivacyPage() {
                     9. Cookies
                   </h3>
                   <p>
-                    The InnerZero website uses only essential cookies for functionality (such as authentication session cookies and theme preference stored in localStorage). We do not use advertising, marketing, or third-party tracking cookies. If we add privacy-respecting analytics in the future (such as Plausible), we will update this policy accordingly.
+                    InnerZero is built privacy-first, and that principle extends to this website. We collect the bare minimum needed for the site to function. No advertising. No marketing. No third-party tracking. No fingerprinting.
+                  </p>
+                  <p className="mt-2">
+                    The InnerZero website sets only essential cookies for core functionality. They are listed below.
+                  </p>
+                  <div className="mt-3 overflow-x-auto">
+                    <table className="min-w-full text-sm border border-border-default">
+                      <thead>
+                        <tr className="border-b border-border-default bg-bg-card">
+                          <th className="px-3 py-2 text-left font-semibold text-text-primary">Cookie group</th>
+                          <th className="px-3 py-2 text-left font-semibold text-text-primary">Set by</th>
+                          <th className="px-3 py-2 text-left font-semibold text-text-primary">Purpose</th>
+                          <th className="px-3 py-2 text-left font-semibold text-text-primary">Type</th>
+                          <th className="px-3 py-2 text-left font-semibold text-text-primary">Duration</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-b border-border-default">
+                          <td className="px-3 py-2 align-top">Authentication session</td>
+                          <td className="px-3 py-2 align-top">Supabase</td>
+                          <td className="px-3 py-2 align-top">Keeps you signed in to your account when you log in</td>
+                          <td className="px-3 py-2 align-top">First-party, essential</td>
+                          <td className="px-3 py-2 align-top">Session</td>
+                        </tr>
+                        <tr>
+                          <td className="px-3 py-2 align-top">Bot protection challenge</td>
+                          <td className="px-3 py-2 align-top">Cloudflare Turnstile</td>
+                          <td className="px-3 py-2 align-top">Verifies submissions on login, registration, forgot password, and newsletter signup forms</td>
+                          <td className="px-3 py-2 align-top">Third-party, essential</td>
+                          <td className="px-3 py-2 align-top">Up to 30 minutes</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="mt-3">
+                    We also use Vercel Analytics for aggregate site traffic insights. It is cookieless by design and uses anonymised page-view signals only. No persistent identifier is set on your device.
+                  </p>
+                  <p className="mt-2">
+                    Your theme preference (dark or light mode) is stored in your browser&apos;s localStorage, not in a cookie. It never leaves your device.
+                  </p>
+                  <p className="mt-3">We do not use:</p>
+                  <ul className="mt-1 list-disc pl-6 space-y-1">
+                    <li>Advertising or marketing cookies</li>
+                    <li>Third-party tracking pixels (no Google Analytics, no Facebook Pixel, no equivalent)</li>
+                    <li>Cross-site behavioural profiling</li>
+                    <li>Fingerprinting</li>
+                  </ul>
+                  <p className="mt-3">
+                    You can clear or block cookies through your browser&apos;s settings. Doing so will prevent login and form submissions from working, since both rely on essential cookies.
                   </p>
                 </div>
 
