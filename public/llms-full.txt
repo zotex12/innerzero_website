@@ -11,8 +11,8 @@ Product type: Desktop AI assistant application
 Category: Local-first AI, private AI, offline AI, on-device AI
 Website: https://innerzero.com
 Download: https://innerzero.com/download
-Current version: v0.1.5 (released April 2026)
-Platforms: Windows 10/11 (64-bit), macOS 12+, Linux x86_64
+Current version: v0.1.6 (released May 2026)
+Platforms: Windows 10/11 (64-bit), macOS 14+, Linux x86_64
 Company: Summers Solutions Ltd, Birmingham, England, UK
 UK company number: 16448945
 ICO registration: ZC122497
@@ -60,9 +60,9 @@ In optional cloud mode, you can access: DeepSeek (V3.2, Reasoner), OpenAI (GPT-5
 
 ## What platforms does InnerZero support?
 
-- Windows 10 or 11, 64-bit only. Installer size: 244 MB. Signed by Summers Solutions Ltd via Azure Trusted Signing.
-- macOS 12 or later. Intel or Apple Silicon supported. Installer size: 532 MB. Signed with Developer ID and hardened runtime; first-launch Gatekeeper does a one-time online check with Apple (full stapled notarisation planned for the next release).
-- Linux x86_64, glibc 2.31 or later. AppImage size: 479 MB. Requires espeak-ng, portaudio19-dev, xclip, libwebkit2gtk-4.1-0, libgirepository-1.0-1, libfuse2, and gir1.2-webkit2-4.1.
+- Windows 10 or 11, 64-bit only. Installer size: 1.32 GB. Signed by Summers Solutions Ltd via Microsoft Trusted Signing.
+- macOS 14 (Sonoma) or later, Apple Silicon. Installer size: 654 MB. Signed with Developer ID and hardened runtime; first-launch Gatekeeper does a one-time online check with Apple. If you are offline on first launch, right-click the app, select Open, then click Open again.
+- Linux x86_64, glibc 2.31 or later. AppImage size: 1.24 GB. Requires espeak-ng, portaudio19-dev, xclip, libwebkit2gtk-4.1-0, libgirepository-1.0-1, libfuse2, and gir1.2-webkit2-4.1.
 
 No mobile support (iOS or Android).
 
@@ -232,6 +232,24 @@ Zero remembers you.
 - System info. Check CPU, RAM, disk, GPU status from chat.
 - Other tools include: clipboard read/write, URL fetch, JSON tool, hash and base64 utilities, weather, datetime info, file list, open file, open app, download file, knowledge lookup.
 
+## Proactive Assistant
+
+Briefings, summaries, and reminders that arrive when you want them.
+
+- Natural-language scheduling. "Remind me at 5pm tomorrow" works as a chat command or via the Quick Add input.
+- Multi-channel notifications. Desktop chat, system notification, and an optional Telegram bridge if you want briefings on your phone.
+- Smart briefings. A higher-quality briefing mode that pulls from your memory, mail, and knowledge packs as needed.
+- Quiet hours. Pause briefings during set windows of the day.
+- Automation Specialist. Route automation tasks to a small local model, your main assistant, or a dedicated cloud model.
+
+## Slash Commands
+
+Type / in chat for quick actions.
+
+- /help lists everything available.
+- /clear resets the visible conversation while leaving long-term memory intact.
+- More commands for common actions without typing prompts.
+
 ## Knowledge Packs
 
 Offline Wikipedia in your AI.
@@ -393,38 +411,38 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 
 ## Windows 10/11
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.5.exe
-- Version: 0.1.5
-- Size: 244 MB
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.6.exe
+- Version: 0.1.6
+- Size: 1.32 GB
 - Requirements: 64-bit, 8 GB+ RAM
-- Note: Windows may show a SmartScreen warning on first install. Click More Info then Run Anyway. The installer is signed by Summers Solutions Ltd via Azure Trusted Signing.
+- Note: Windows may show a SmartScreen warning on first install. Click More Info then Run Anyway. The installer is signed by Summers Solutions Ltd via Microsoft Trusted Signing.
 
-## macOS 12+
+## macOS 14+
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.5-mac.dmg
-- Version: 0.1.5
-- Size: 532 MB
-- Requirements: Intel or Apple Silicon, 8 GB+ RAM
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.6-mac.dmg
+- Version: 0.1.6
+- Size: 654 MB
+- Requirements: Apple Silicon, 8 GB+ RAM
 - Note: Signed with Developer ID and hardened runtime. On first launch, macOS Gatekeeper does a one-time online check with Apple. If you are offline at first launch, right-click the app, select Open, then click Open again.
 
 ## Linux x86_64
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.5-x86_64.AppImage
-- Version: 0.1.5
-- Size: 479 MB
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.6-x86_64.AppImage
+- Version: 0.1.6
+- Size: 1.24 GB
 - Requirements: x86_64, glibc 2.31+, 8 GB+ RAM
 - Note: Install system dependencies first: sudo apt install -y espeak-ng portaudio19-dev xclip libwebkit2gtk-4.1-0 libgirepository-1.0-1 libfuse2 gir1.2-webkit2-4.1
 
 ## Minimum Requirements
 
-- Windows 10 (64-bit) or later, macOS 12+, or Linux x86_64 (glibc 2.31+)
+- Windows 10 (64-bit) or later, macOS 14+, or Linux x86_64 (glibc 2.31+)
 - 8 GB RAM
 - 10 GB free disk space
 - Modern CPU (Intel i5 / AMD Ryzen 5 or equivalent) with AVX2 support
 
 ## Recommended
 
-- Windows 10/11 (64-bit), macOS 12+, or Linux x86_64
+- Windows 10/11 (64-bit), macOS 14+, or Linux x86_64
 - 16 GB+ RAM
 - 20 GB+ free disk space
 - NVIDIA GPU with 6 GB+ VRAM

@@ -20,7 +20,7 @@ export interface ChangeEntry {
 }
 
 export interface ChangeGroup {
-  label: "New" | "Improved" | "Fixed";
+  label: "New" | "Improved" | "Fixed" | "Known limitations";
   entries: ChangeEntry[];
 }
 
@@ -36,10 +36,56 @@ export interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.6",
+    date: "May 2026",
+    releaseDate: "2026-05-09",
+    latest: true,
+    groups: [
+      {
+        label: "New",
+        entries: [
+          { text: "Proactive Assistant: schedule briefings, daily summaries, and reminders that arrive when you want them. Natural-language scheduling like \"remind me at 5pm tomorrow\", quiet hours, multi-channel notifications, and an optional Telegram bridge if you want briefings on your phone." },
+          { text: "Smart briefings: a higher-quality briefing mode that pulls from your memory, mail, and knowledge packs as needed instead of relying on a single prompt-and-response." },
+          { text: "Automation Specialist: route automation tasks to a small local model, your main assistant, or a dedicated cloud model based on what you want to optimise for (speed, quality, or privacy)." },
+          { text: "Slash commands in chat: type /help to see what is available, /clear to reset the visible conversation, and more for quick actions without typing prompts." },
+          { text: "First-run hardware detection: InnerZero now tests your GPU on first run and picks the right model tier automatically. You can also override it manually in the setup wizard." },
+          { text: "Bundled Ollama upgraded to v0.22.1 with full GPU acceleration: modern NVIDIA via CUDA 13, Apple Silicon via Metal, AMD and cross-vendor via Vulkan, and Intel via OneAPI." },
+          { text: "AMD GPU users can now opt in to GPU acceleration in Settings. AMD support is conservative-by-default for this release while we collect real-world feedback." },
+          { text: "Single-instance lock: launching InnerZero a second time now focuses the existing window instead of opening a duplicate." },
+        ],
+      },
+      {
+        label: "Improved",
+        entries: [
+          { text: "Chat reliability for LM Studio backends: better handling of replies that drift from the expected response shape, and replies that contain emoji or non-ASCII characters now render correctly on Windows." },
+          { text: "Linux installer streamlined for modern NVIDIA (Turing onward) via CUDA 13, plus Vulkan for AMD and cross-vendor." },
+          { text: "Mac code-signing hygiene: cleaner Gatekeeper experience on first launch." },
+        ],
+      },
+      {
+        label: "Fixed",
+        entries: [
+          { text: "Bundled Ollama on Mac and Linux now resolves correctly. Users on previous versions whose bundled Ollama silently failed to start should see chat working out of the box on v0.1.6." },
+          { text: "LM Studio chat replies containing emoji or smart quotes no longer crash on Windows." },
+          { text: "LM Studio: when a model returns a response shape that does not match what InnerZero expects, the actual answer text is recovered where possible instead of showing a raw fallback." },
+          { text: "Several internal coverage gaps in the installer bundle that affected slash commands and other modules in installed builds." },
+        ],
+      },
+      {
+        label: "Known limitations",
+        entries: [
+          { text: "The macOS DMG ships unstapled in v0.1.6. The app is signed with Developer ID, runs under hardened runtime, and applies the necessary entitlements. On first launch with internet, Gatekeeper does a one-time online check with Apple and the app opens normally. If you are offline on first launch, right-click the app, select Open, then click Open again. Stapling returns in a future release." },
+          { text: "macOS minimum is now Sonoma 14. Bundled Ollama 0.22.1 no longer supports Monterey or Ventura." },
+          { text: "Pre-Turing NVIDIA Linux users on the bundled mode (GTX 9 series Maxwell, GTX 10 series Pascal, V100 Volta) should use Vulkan or install Ollama separately for full CUDA support." },
+          { text: "Installer sizes have grown vs v0.1.5 because of the Ollama 0.22.1 bundling. See the download page for current sizes per platform." },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.5",
     date: "April 2026",
     releaseDate: "2026-04-25",
-    latest: true,
     groups: [
       {
         label: "New",
@@ -276,6 +322,7 @@ const BADGE_COLORS: Record<string, string> = {
   New: "bg-accent-teal-muted text-accent-teal",
   Improved: "bg-accent-gold-muted text-accent-gold",
   Fixed: "bg-[rgba(34,197,94,0.12)] text-success",
+  "Known limitations": "border border-border-default text-text-secondary",
 };
 
 export default function ChangelogPage() {

@@ -9,15 +9,15 @@ Website: https://innerzero.com
 Download: https://innerzero.com/download
 Company: Summers Solutions Ltd, a UK company based in Birmingham, England (Company No. 16448945)
 Data protection: ICO registered (registration ZC122497)
-Current version: v0.1.5 (April 2026)
-Install sizes: 244 MB (Windows), 532 MB (macOS), 479 MB (Linux)
+Current version: v0.1.6 (May 2026)
+Install sizes: 1.32 GB (Windows), 654 MB (macOS), 1.24 GB (Linux)
 Minimum requirements: 8 GB RAM, 10 GB free disk, modern 64-bit CPU (AVX2)
 Recommended: 16+ GB RAM, NVIDIA GPU with 6+ GB VRAM, SSD
 
 ## Start here
 
 - [Home](https://innerzero.com): Product overview, tagline, primary download CTAs.
-- [Download InnerZero (free)](https://innerzero.com/download): Free installers for Windows 10/11, macOS 12+, and Linux x86_64. Windows installer is code-signed by Summers Solutions Ltd.
+- [Download InnerZero (free)](https://innerzero.com/download): Free installers for Windows 10/11, macOS 14+, and Linux x86_64. Windows installer is code-signed by Summers Solutions Ltd.
 - [Features](https://innerzero.com/features): Full capability breakdown: AI chat, voice, memory, 30+ tools, knowledge packs, screen automation, cloud AI, customisation, and unrestricted mode.
 - [Pricing](https://innerzero.com/pricing): Free for personal use. Business Licence £50/year per seat. Optional cloud AI from £9.99/month or bring your own API keys.
 - [Privacy](https://innerzero.com/privacy): Full privacy policy, ICO registration details, what stays local, and how cloud mode handles data.
@@ -46,7 +46,7 @@ InnerZero is a private AI assistant desktop application. It provides:
 - **Do I need an account to use InnerZero?** No. The local app works with no sign-up, login, or email. Accounts are only needed for optional cloud AI subscriptions, supporter perks, or account-based features.
 - **Does InnerZero send my data to the cloud?** No, not by default. All AI processing, memory, voice, and documents stay on your PC. Cloud mode is off by default. When you opt in, only the current prompt is forwarded to your chosen provider. Your memory database, files, profile facts, and past conversations are never sent.
 - **What AI models does InnerZero use?** Open-source models via Ollama or LM Studio. Default is the Qwen3 family for reasoning and Gemma3 family for voice. Model size is chosen automatically based on your hardware. Cloud mode adds access to DeepSeek, GPT, Claude, Gemini, Grok, Qwen Plus, and Kimi.
-- **What platforms does InnerZero run on?** Windows 10/11 (64-bit), macOS 12+ (Intel or Apple Silicon), and Linux x86_64 (glibc 2.31+). Mobile is not supported.
+- **What platforms does InnerZero run on?** Windows 10/11 (64-bit), macOS 14+ (Apple Silicon), and Linux x86_64 (glibc 2.31+). Mobile is not supported.
 - **Does InnerZero work offline?** Yes. Once models are downloaded, the entire app works with no internet connection. Knowledge packs provide offline reference content. Offline mode can disable all outbound network activity with one toggle.
 - **Can I use my own API keys?** Yes. Bring your own keys for DeepSeek, OpenAI, Anthropic, Google AI, xAI Grok, Qwen, or Kimi. Zero markup. Keys are encrypted locally using a machine-derived key.
 - **Who built InnerZero?** Summers Solutions Ltd, a UK software company based in Birmingham, England. Company number 16448945. ICO registered (ZC122497).

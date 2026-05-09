@@ -301,7 +301,7 @@ export default function FeaturesPage() {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
             name: "InnerZero",
-            operatingSystem: "Windows 10, Windows 11, macOS 12+, Linux x86_64",
+            operatingSystem: "Windows 10, Windows 11, macOS 14+, Linux x86_64",
             applicationCategory: "DesktopApplication",
             offers: { "@type": "Offer", price: "0", priceCurrency: "GBP" },
             description:
