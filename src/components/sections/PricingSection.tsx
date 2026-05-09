@@ -336,7 +336,7 @@ export function PricingSection({ className }: PricingSectionProps) {
 
             <div className="mx-auto max-w-2xl mb-10 rounded-xl border border-border-default bg-bg-card p-5 text-sm text-text-secondary">
               <p>
-                Cloud AI runs on powerful servers instead of your PC. Use it for faster answers, longer responses, or premium models like Claude, GPT, and DeepSeek. Your local InnerZero is always available without it. Cloud is fully optional, and most users do not need it.
+                Cloud AI runs on datacentre servers instead of your PC. Use it for faster answers, longer responses, or premium models like Claude, GPT, and DeepSeek. Your local InnerZero is always available without it. Cloud is fully optional, and most users do not need it.
               </p>
             </div>
 

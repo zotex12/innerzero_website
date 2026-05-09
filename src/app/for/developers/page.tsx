@@ -159,7 +159,7 @@ const PAGE_DATA: PersonaPageProps = {
   heroScreenshot: {
     src: "/images/appagentpageimage.png",
     alt:
-      "InnerZero AI Specialists page showing the Coding specialist agent connected to Zero, with Automation and Art specialists marked coming soon",
+      "InnerZero AI Specialists page showing the Coding specialist agent connected to Zero, alongside placeholders for additional specialists",
     caption:
       "Zero's Coding Specialist handles code tasks in a separate model, hot-swapped in VRAM, with approval gates before any file changes.",
   },

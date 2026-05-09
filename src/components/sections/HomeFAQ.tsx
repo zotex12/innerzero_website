@@ -29,7 +29,7 @@ export const HOME_FAQ: HomeFAQItem[] = [
       "Windows, macOS, and Linux. Download the installer for your platform from the download page.",
   },
   {
-    question: "Do I need a powerful PC?",
+    question: "Do I need a high-end PC?",
     answer:
       "No. InnerZero detects your hardware on first launch and picks the right AI model for your system. It runs on modest laptops with 16 GB of RAM, and scales up to high-end workstations with 64 GB and a GPU.",
   },

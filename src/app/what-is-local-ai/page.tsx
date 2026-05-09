@@ -128,7 +128,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Can I run local AI on a Mac or Linux?",
     answer:
-      "Ollama and LM Studio both run on macOS, Linux, and Windows. Open-source models run anywhere those runtimes run. InnerZero is currently a Windows desktop app, but the local AI stack underneath is cross-platform.",
+      "Ollama and LM Studio both run on macOS, Linux, and Windows. Open-source models run anywhere those runtimes run. InnerZero ships on Windows, macOS, and Linux, so the local AI stack is cross-platform end to end.",
   },
 ];
 
@@ -595,8 +595,8 @@ export default function WhatIsLocalAiPage() {
             InnerZero is the interface that makes local AI feel like a
             product instead of a tinkering project. Cloud is optional and
             always opt-in: add your own API key for any of seven providers,
-            or subscribe to the managed plan. Either way, local stays free
-            forever. Start at the{" "}
+            or subscribe to the managed plan. Either way, the local app stays
+            free. Start at the{" "}
             <Link
               href="/features"
               className="text-accent-gold transition-colors hover:text-accent-gold-hover"

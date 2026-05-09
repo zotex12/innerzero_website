@@ -135,7 +135,7 @@ export const PRICING_FREE = {
     "Document upload and Q&A",
     "Knowledge packs (offline Wikipedia)",
     "Screen automation",
-    "5 themes and AI personality",
+    "6 themes and AI personality",
     "Unrestricted mode (18+)",
     "Remote Ollama support",
     "All free. No account required.",
@@ -245,9 +245,9 @@ export const FAQ_DATA: FAQItem[] = [
       "No. The local app works without any account. You only need an account if you want cloud AI plans, supporter perks, or future hosted features.",
   },
   {
-    question: "When will cloud plans be available?",
+    question: "Are cloud plans available?",
     answer:
-      "We're building cloud AI plans now. Join the waitlist to be the first to know when they launch.",
+      "Yes. Cloud AI plans are live, starting at £9.99/month for Cloud Starter. See the pricing tiers above for the full breakdown. The local app stays free regardless.",
   },
   {
     question: "Do I need a licence to use InnerZero at work?",

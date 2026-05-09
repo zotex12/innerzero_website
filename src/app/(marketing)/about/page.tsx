@@ -66,7 +66,7 @@ export default function AboutPage() {
                   Most AI assistants send everything you say to the cloud. Your questions, your documents, your personal context, all processed on someone else&apos;s servers, stored in someone else&apos;s database, used to train someone else&apos;s models.
                 </p>
                 <p>
-                  We believe AI should be <strong className="text-text-primary">personal and private</strong>. Your AI assistant should work for you, on your machine, with your data staying exactly where it belongs. with you.
+                  We believe AI should be <strong className="text-text-primary">personal and private</strong>. Your AI assistant should work for you, on your machine, with your data staying exactly where it belongs, with you.
                 </p>
                 <p>
                   That&apos;s why we built InnerZero. An AI that runs locally, remembers locally, and never phones home.
@@ -92,7 +92,7 @@ export default function AboutPage() {
                   , a UK-based software company focused on building tools that respect user privacy and put people in control of their technology.
                 </p>
                 <p>
-                  InnerZero is our flagship product, the result of a deep belief that powerful AI and genuine privacy can coexist.
+                  InnerZero is our flagship product, the result of a deep belief that you should not have to trade privacy for capability.
                 </p>
               </section>
             </ScrollReveal>
@@ -103,7 +103,7 @@ export default function AboutPage() {
                   Meet the founder
                 </h2>
                 <p>
-                  I&apos;m Louie Summers, founder of Summers Solutions Ltd and the sole developer of InnerZero. I&apos;m based in Birmingham, UK. I started Summers Solutions to build software that respects user privacy by default. InnerZero is the product I always wanted: powerful AI that does not phone home.
+                  I&apos;m Louie Summers, founder of Summers Solutions Ltd and the sole developer of InnerZero. I&apos;m based in Birmingham, UK. I started Summers Solutions to build software that respects user privacy by default. InnerZero is the product I always wanted: AI that is genuinely useful and never phones home.
                 </p>
                 <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
                   <li>

@@ -7,11 +7,11 @@ export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/pricing" },
   title: "Pricing | InnerZero: Free AI, Business Licence, Optional Cloud",
   description:
-    "InnerZero is free for personal use. Business licence £50/year. Optional cloud AI coming soon. Add your own API keys for free.",
+    "InnerZero is free for personal use. Business licence £50/year. Optional cloud AI plans from £9.99/month. Add your own API keys for free.",
   openGraph: {
     title: "Pricing | InnerZero: Free AI, Business Licence, Optional Cloud",
     description:
-      "InnerZero is free for personal use. Business licence £50/year. Optional cloud AI coming soon.",
+      "InnerZero is free for personal use. Business licence £50/year. Optional cloud AI plans from £9.99/month.",
     url: "https://innerzero.com/pricing",
   },
 });
@@ -43,7 +43,7 @@ export default function PricingPage() {
               "@type": "SoftwareApplication",
               name: "InnerZero",
               applicationCategory: "DesktopEnhancement",
-              operatingSystem: "Windows",
+              operatingSystem: "Windows, macOS, Linux",
               description:
                 "A free private AI assistant that runs entirely on your PC. No subscription required.",
               offers: {

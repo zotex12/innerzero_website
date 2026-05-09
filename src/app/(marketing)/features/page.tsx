@@ -163,7 +163,7 @@ const SECTIONS: FeatureSection[] = [
     subtitle: "What's next.",
     bg: "secondary",
     items: [
-      { icon: Code, title: "Mac notarisation", desc: "The macOS installer is already signed with Developer ID and hardened runtime. Stapled notarisation is next, removing the one-time online Gatekeeper check." },
+      { icon: Code, title: "Mac notarisation", desc: "The macOS installer is signed with Developer ID and runs under hardened runtime. On first launch, right-click the app and select Open, then click Open again to bypass Gatekeeper. Notarisation returns in a future release." },
       { icon: BookOpen, title: "More knowledge packs", desc: "Science, history, and specialised reference databases." },
       { icon: PenTool, title: "More connectors", desc: "Outlook, Discord, and LinkedIn on the same connector framework that powers Gmail and Google Calendar." },
     ],

@@ -258,8 +258,8 @@ export default function ModelsPage() {
           <p className="mt-16 border-t border-border-default pt-6 text-xs text-text-muted md:mt-20">
             Model support last reviewed {formatReviewDate(lastReviewed)}.
             Pricing is set by each provider and changes over time; follow the
-            pricing links above for current rates. Local models are free
-            forever.
+            pricing links above for current rates. Local models are free to
+            download and run.
           </p>
         </div>
       </Container>
