@@ -310,11 +310,12 @@ export default function TermsPage() {
                 <li>Kokoro TTS (Hexgrad, Apache 2.0)</li>
                 <li>faster-whisper (SYSTRAN, MIT)</li>
                 <li>Silero VAD (MIT)</li>
-                <li>PyTorch. BSD-3-Clause</li>
+                <li>PyTorch (BSD-3-Clause)</li>
+                <li>Python Build Standalone (Astral, MPL-2.0; bundled CPython under PSF License v2)</li>
                 <li>Unrestricted models (optional, user-installed): huihui.ai, Apache 2.0. These models are not distributed by Summers Solutions Ltd and must be downloaded independently from Hugging Face.</li>
               </ul>
               <p className="mt-2">
-                Full attribution and licence details are available within the desktop application under Settings &gt; General &gt; Third-Party Licences &amp; Notices.
+                The bundled Ollama distribution includes additional runtime components (Vulkan, OneAPI, CUDA runtime libraries, Apple Metal) under their respective vendor licences. Full attribution and licence details are available within the desktop application under Settings &gt; General &gt; Third-Party Licences &amp; Notices.
               </p>
               <p className="mt-2">
                 By using InnerZero with models subject to third-party use restrictions, including but not limited to Google Gemma, you agree to comply with those models&apos; terms of use in addition to these terms. Summers Solutions Ltd does not claim ownership of any third-party software or AI models.
