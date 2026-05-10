@@ -22,7 +22,7 @@ export default function TermsPage() {
           <h1 className="text-3xl font-bold text-text-primary md:text-[2.5rem] md:leading-[1.2]">
             Terms of Service
           </h1>
-          <p className="mt-2 text-sm text-text-muted">Last updated: April 2026</p>
+          <p className="mt-2 text-sm text-text-muted">Last updated: May 2026</p>
 
           {/* Solicitor review notice */}
           <div className="mt-6 rounded-lg border-l-4 border-[#f59e0b] bg-[rgba(245,158,11,0.1)] p-4">
@@ -52,7 +52,7 @@ export default function TermsPage() {
                 InnerZero is free desktop software that provides a local AI assistant. The software runs on your personal computer and processes AI tasks locally using third-party open-source AI models. No subscription, account, or payment is required to use the core software.
               </p>
               <p className="mt-2">
-                InnerZero is currently supported on Windows 10 and Windows 11 (64-bit) only. NVIDIA GPUs with CUDA support are recommended for optimal performance; AMD and Intel GPUs are not officially supported and may result in reduced functionality or errors. macOS and Linux are not currently supported.
+                InnerZero is currently supported on Windows 10 and Windows 11 (64-bit), macOS 14 Sonoma or later (Apple Silicon), and Linux x86_64 (glibc 2.31+, libfuse2). NVIDIA GPUs with CUDA support are recommended for optimal performance on Windows and Linux. Apple Silicon GPUs are supported on macOS via Metal. AMD and Intel GPU acceleration is available on an opt-in basis through Vulkan and may produce reduced functionality compared to NVIDIA on Windows and Linux.
               </p>
               <p className="mt-2">
                 Running InnerZero on unsupported operating systems, hardware configurations, or modified environments is entirely at your own risk. Summers Solutions Ltd accepts no liability for any issues, damage, data loss, or errors arising from unsupported usage.
@@ -69,11 +69,11 @@ export default function TermsPage() {
               </p>
               <ul className="mt-2 list-disc pl-6 space-y-1">
                 <li><strong>Supporter membership:</strong> A voluntary monthly contribution of £4.99/month to support InnerZero development, processed through Ko-fi and PayPal. Includes a supporter badge, extra themes, early access to new features, and a Discord role. Supporter membership does not include cloud AI credits or compute.</li>
-                <li><strong>Cloud AI plans:</strong> Optional monthly subscriptions for access to premium cloud AI models (coming soon). Details will be published when available.</li>
+                <li><strong>Cloud AI plans:</strong> Optional monthly subscriptions for access to premium cloud AI models, starting at £9.99/month. See <a href="https://innerzero.com/pricing" className="text-accent-gold hover:text-accent-gold-hover transition-colors">innerzero.com/pricing</a> for current tiers and pricing.</li>
                 <li><strong>One-off donations:</strong> Optional one-time contributions of any amount via Ko-fi.</li>
               </ul>
               <p className="mt-2">
-                InnerZero does not process payments directly. All transactions are handled by Ko-fi and PayPal (for supporter memberships and donations) or Stripe (for future cloud plans). Refund requests for supporter memberships and donations must be directed to Ko-fi or PayPal per their respective refund policies. Summers Solutions Ltd has no ability to issue refunds for transactions processed by third-party payment processors.
+                InnerZero does not process payments directly. All transactions are handled by Ko-fi and PayPal (for supporter memberships and donations) or Stripe (for cloud plans). Refund requests for supporter memberships and donations must be directed to Ko-fi or PayPal per their respective refund policies. Summers Solutions Ltd has no ability to issue refunds for transactions processed by third-party payment processors.
               </p>
               <p className="mt-2">
                 Paid services auto-renew where applicable unless cancelled before the next billing date. You may cancel at any time.
@@ -228,7 +228,7 @@ export default function TermsPage() {
                 9. Cloud Mode and BYO API Keys
               </h2>
               <p>
-                InnerZero offers an optional Cloud Mode that routes AI requests to third-party cloud AI providers, including but not limited to DeepSeek, OpenAI, Anthropic, Google AI, and Qwen/DashScope. When Cloud Mode is enabled, your prompts are transmitted to the provider you select and responses are returned to your device.
+                InnerZero offers an optional Cloud Mode that routes AI requests to third-party cloud AI providers, including but not limited to DeepSeek, OpenAI, Anthropic, Google AI, Qwen/DashScope, xAI, and Kimi. When Cloud Mode is enabled, your prompts are transmitted to the provider you select and responses are returned to your device.
               </p>
               <p className="mt-2">
                 Each cloud AI provider has its own terms of service, acceptable use policy, and privacy policy. You are solely responsible for reviewing, understanding, and complying with those terms before enabling Cloud Mode. Summers Solutions Ltd is not a party to any agreement between you and a third-party AI provider.
