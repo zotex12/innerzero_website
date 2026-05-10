@@ -135,7 +135,7 @@ export default function PrivacyPage() {
                 Privacy Policy
               </h2>
               <p className="mt-2 text-sm text-text-muted">
-                Last updated: April 2026
+                Last updated: 2026-05-10
               </p>
 
               <div className="mt-6 space-y-6 text-text-secondary leading-relaxed text-sm">
@@ -179,7 +179,19 @@ export default function PrivacyPage() {
                     3. Cloud Mode
                   </h3>
                   <p>
-                    If you enable the optional Cloud Mode, your prompts are sent to the third-party AI provider you select (such as DeepSeek, OpenAI, Anthropic, Google AI, or Qwen/DashScope) and responses are returned to your device. InnerZero does not store, log, intercept, or read your prompts or responses at any point. Each AI provider has its own privacy policy governing how they handle your data; you should review the relevant provider&apos;s privacy policy before enabling Cloud Mode.
+                    If you enable the optional Cloud Mode, your prompts are sent to the third-party AI provider you select (such as DeepSeek, OpenAI, Anthropic, Google AI, Qwen/DashScope, xAI, or Kimi) and responses are returned to your device. InnerZero does not store, log, intercept, or read your prompts or responses at any point. Each AI provider has its own privacy policy governing how they handle your data; you should review the relevant provider&apos;s privacy policy before enabling Cloud Mode.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-2">
+                    Telegram bridge (optional)
+                  </h3>
+                  <p>
+                    InnerZero offers an optional Telegram bridge for mirroring chat messages between your desktop and your phone, and for receiving Proactive Assistant briefings on your phone. The bridge is off by default and must be explicitly enabled in Settings.
+                  </p>
+                  <p className="mt-2">
+                    When enabled, messages and briefings routed through the bridge are processed by Telegram&apos;s servers under their privacy policy and terms of service. Your Telegram bot token is encrypted and stored locally on your device only. You may disable the bridge at any time from Settings.
                   </p>
                 </div>
 
@@ -242,6 +254,15 @@ export default function PrivacyPage() {
                   </h3>
                   <p>
                     If you use InnerZero&apos;s voice features, the application accesses your microphone to capture speech for local speech-to-text processing. All audio is processed locally on your device using offline speech recognition models. No audio recordings are transmitted, stored, or sent to any server. Audio data is processed in real-time and discarded immediately after transcription. If Cloud Voice mode is enabled, your transcribed text (not audio) is sent to OpenAI for response generation; see Section 3 (Cloud Mode) for details.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-2">
+                    Proactive Assistant (optional)
+                  </h3>
+                  <p>
+                    Proactive Assistant briefings may pull from your local memory, connected mail (if Gmail is enabled), and knowledge packs to compose briefing output. Composition happens on your machine. If you have routed automation tasks to a cloud model, that routing is covered by the Cloud Mode disclosures above.
                   </p>
                 </div>
 
@@ -333,6 +354,7 @@ export default function PrivacyPage() {
                   <ul className="mt-2 list-disc pl-6 space-y-1">
                     <li>Supabase: authentication and database hosting (EU region)</li>
                     <li>Vercel: website hosting and deployment</li>
+                    <li>Cloudflare Turnstile: bot-detection challenge on form submissions (United States); processes IP address and ephemeral challenge signals per Cloudflare&apos;s privacy policy. The challenge is essential for form security and is not used to track or profile you across the site.</li>
                     <li>Ko-fi and PayPal: supporter membership and donation payment processing</li>
                     <li>Stripe: cloud AI subscription and credit pack payment processing</li>
                     <li>Formspree: contact form submissions</li>
