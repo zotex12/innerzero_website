@@ -38,6 +38,7 @@ interface FeatureItem {
   icon: LucideIcon;
   title: string;
   desc: string;
+  comingSoon?: boolean;
 }
 
 interface FeatureSection {
@@ -45,6 +46,7 @@ interface FeatureSection {
   subtitle: string;
   items: FeatureItem[];
   bg?: "primary" | "secondary";
+  lead?: string;
 }
 
 const SECTIONS: FeatureSection[] = [
@@ -57,6 +59,7 @@ const SECTIONS: FeatureSection[] = [
       { icon: History, title: "Persistent chat", desc: "Your conversation history survives app restarts. Clear it whenever you want." },
       { icon: Settings2, title: "Multiple thinking modes", desc: "Quick for fast answers, Thorough for deeper reasoning." },
       { icon: FileEdit, title: "Markdown rendering", desc: "Formatted responses with code blocks, lists, tables, and more." },
+      { icon: MessageSquare, title: "Slash commands", desc: "Type / in chat for built-in commands like /help and /clear. Deterministic routing, not AI-interpreted." },
     ],
   },
   {
@@ -100,6 +103,31 @@ const SECTIONS: FeatureSection[] = [
       { icon: BookOpen, title: "Dictionary", desc: "Word definitions, synonyms, and examples." },
       { icon: Wrench, title: "Text transforms", desc: "Uppercase, word count, sort, deduplicate, bullet formatting, and more." },
       { icon: Cpu, title: "System info", desc: "Check CPU, RAM, disk, GPU status from chat." },
+    ],
+  },
+  {
+    title: "Specialists",
+    subtitle: "Agents with their own model, dedicated to one kind of work.",
+    lead:
+      "Specialists are dedicated agent personas with their own model, separate from the main assistant. Each one is purpose-built for a specific kind of work, with approval gates around the actions it can take.",
+    items: [
+      { icon: Code, title: "Coding Specialist", desc: "Live. Hands code tasks to a separate model and asks before any file changes." },
+      { icon: Rocket, title: "Automation Specialist", desc: "Live in v0.1.6. Routes automation tasks to a small local model, your main assistant, or a dedicated cloud model." },
+      { icon: Sparkles, title: "Art Specialist", desc: "A specialist for image and creative work.", comingSoon: true },
+    ],
+  },
+  {
+    title: "Proactive Assistant",
+    subtitle: "Briefings and reminders that arrive when you want them.",
+    bg: "secondary",
+    lead:
+      "Schedule briefings, daily summaries, and reminders. Optional and off by default. Composed locally from your memory, connected mail, and knowledge packs.",
+    items: [
+      { icon: Timer, title: "Natural-language scheduling", desc: "Type \"remind me at 5pm tomorrow\" in chat or use Quick Add. Zero parses the phrase and schedules the reminder." },
+      { icon: FileText, title: "Smart briefings", desc: "A higher-quality briefing mode that pulls from your memory, mail, and knowledge packs as needed." },
+      { icon: Power, title: "Quiet hours", desc: "Pause briefings during set windows of the day. They resume automatically when the window ends." },
+      { icon: Send, title: "Multi-channel notifications", desc: "Desktop chat, system notification, and an optional Telegram bridge if you want briefings on your phone." },
+      { icon: ToggleLeft, title: "Off by default", desc: "The Proactive Assistant only runs once you turn it on. Schedules and channels are yours to configure." },
     ],
   },
   {
@@ -202,6 +230,11 @@ export default function FeaturesPage() {
                   <p className="mt-1 text-text-secondary">
                     {section.subtitle}
                   </p>
+                  {section.lead && (
+                    <p className="mt-3 max-w-2xl text-sm text-text-secondary leading-relaxed">
+                      {section.lead}
+                    </p>
+                  )}
                 </div>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                   {section.items.map((item) => (
@@ -214,6 +247,11 @@ export default function FeaturesPage() {
                         <div>
                           <h3 className="text-sm font-semibold text-text-primary">
                             {item.title}
+                            {item.comingSoon && (
+                              <span className="ml-2 inline-flex items-center rounded-full border border-border-default px-2 py-0.5 text-[10px] font-medium text-text-secondary">
+                                Coming soon
+                              </span>
+                            )}
                           </h3>
                           <p className="mt-1 text-xs text-text-secondary leading-relaxed">
                             {item.desc}
