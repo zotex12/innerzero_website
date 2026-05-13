@@ -13,11 +13,11 @@ export const metadata: Metadata = createMetadata({
     absolute: "Pricing | InnerZero: Free AI, Business Licence, Optional Cloud",
   },
   description:
-    "InnerZero is free for personal use. Business licence £50/year. Optional cloud AI plans from £9.99/month. Add your own API keys for free.",
+    "InnerZero is free for personal use. Business Licence from £19.99/seat/month or £129.99/seat/year. Optional cloud AI plans from £9.99/month. Add your own API keys for free.",
   openGraph: {
     title: "Pricing | InnerZero: Free AI, Business Licence, Optional Cloud",
     description:
-      "InnerZero is free for personal use. Business licence £50/year. Optional cloud AI plans from £9.99/month.",
+      "InnerZero is free for personal use. Business Licence from £19.99/seat/month or £129.99/seat/year. Optional cloud AI plans from £9.99/month.",
     url: "https://innerzero.com/pricing",
   },
 });
@@ -39,7 +39,11 @@ export default function PricingPage() {
 
       <PricingSection />
 
-      {/* JSON-LD: SoftwareApplication + FAQPage */}
+      {/* JSON-LD: SoftwareApplication + FAQPage. Offers expanded to an array:
+          the free desktop app (£0), Business Licence annual (AggregateOffer
+          with the £129.99-£149.99 volume range, offerCount=2 for the two
+          Stripe tiers), and Business Licence monthly (£19.99 flat per seat).
+          25+ seats is enterprise contact and intentionally not in the schema. */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -51,13 +55,47 @@ export default function PricingPage() {
               applicationCategory: "DesktopEnhancement",
               operatingSystem: "Windows, macOS, Linux",
               description:
-                "A free private AI assistant that runs entirely on your PC. No subscription required.",
-              offers: {
-                "@type": "Offer",
-                price: "0",
-                priceCurrency: "GBP",
-                availability: "https://schema.org/InStock",
-              },
+                "A free private AI assistant that runs entirely on your PC. No subscription required. Optional Business Licence for commercial use.",
+              offers: [
+                {
+                  "@type": "Offer",
+                  name: "InnerZero (personal use)",
+                  price: "0",
+                  priceCurrency: "GBP",
+                  availability: "https://schema.org/InStock",
+                },
+                {
+                  "@type": "AggregateOffer",
+                  name: "Business Licence (annual)",
+                  description:
+                    "Per-seat annual Business Licence, volume-tiered for 5+ seats.",
+                  lowPrice: "129.99",
+                  highPrice: "149.99",
+                  priceCurrency: "GBP",
+                  offerCount: 2,
+                  availability: "https://schema.org/InStock",
+                  eligibleQuantity: {
+                    "@type": "QuantitativeValue",
+                    minValue: 1,
+                    maxValue: 24,
+                    unitText: "seats",
+                  },
+                },
+                {
+                  "@type": "Offer",
+                  name: "Business Licence (monthly)",
+                  description: "Per-seat monthly Business Licence.",
+                  price: "19.99",
+                  priceCurrency: "GBP",
+                  availability: "https://schema.org/InStock",
+                  eligibleQuantity: {
+                    "@type": "QuantitativeValue",
+                    minValue: 1,
+                    maxValue: 24,
+                    unitText: "seats",
+                  },
+                },
+              ],
             },
             {
               "@context": "https://schema.org",

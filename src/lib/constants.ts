@@ -185,26 +185,13 @@ export const SUPPORTER = {
   ctaHref: "https://ko-fi.com/innerzero",
 } as const;
 
-/* ── Pricing: Business Licence ── */
+/* ── Pricing: Business Licence ──
 
-export const BUSINESS_LICENCE = {
-  planName: "Business Licence",
-  price: "£50",
-  period: "/year",
-  perSeat: "per seat",
-  description:
-    "Commercial use licence for InnerZero. Use it at work, in your business, or for any revenue-generating activity. Same free app, just the legal right to use it commercially.",
-  features: [
-    "Full InnerZero desktop app",
-    "All local AI features",
-    "BYO API keys supported",
-    "Commercial & business use rights",
-    "Annual billing, cancel anytime",
-    "Invoice & receipt included",
-  ],
-  cta: "Buy Business Licence",
-  ctaHref: "#",
-} as const;
+Per-seat pricing constants and helpers live in `src/lib/stripe.ts`
+(TIER1_ANNUAL_PENCE, TIER2_ANNUAL_PENCE, MONTHLY_PENCE, VOLUME_THRESHOLD,
+MAX_SELF_SERVE_SEATS, computeBusinessTotal, computeYearlySavings). The
+PricingSection renders an interactive card driven by those helpers, so the
+visible Business Licence copy is derived rather than hardcoded here. */
 
 /* ── FAQ ── */
 
@@ -252,7 +239,7 @@ export const FAQ_DATA: FAQItem[] = [
   {
     question: "Do I need a licence to use InnerZero at work?",
     answer:
-      "If you're using InnerZero for business, commercial, or revenue-generating purposes, yes, a Business Licence is required. It's £50/year per seat. The app is identical to the free version. The licence is just permission to use it commercially. Personal use, education, and non-profits are free.",
+      "If you're using InnerZero for business, commercial, or revenue-generating purposes, yes, a Business Licence is required. Per seat: £19.99/month, or £149.99/year (£129.99/year from 5 seats). The app is identical to the free version. The licence is just permission to use it commercially. Personal use, education, and non-profits are free.",
   },
   {
     question: "Do I need a Business Licence?",

@@ -73,7 +73,7 @@ export default function TermsPage() {
                 <li><strong>One-off donations:</strong> Optional one-time contributions of any amount via Ko-fi.</li>
               </ul>
               <p className="mt-2">
-                InnerZero does not process payments directly. All transactions are handled by Ko-fi and PayPal (for supporter memberships and donations) or Stripe (for cloud plans). Refund requests for supporter memberships and donations must be directed to Ko-fi or PayPal per their respective refund policies. Summers Solutions Ltd has no ability to issue refunds for transactions processed by third-party payment processors.
+                InnerZero does not process payments directly. All transactions are handled by Ko-fi and PayPal (for supporter memberships and donations) or Stripe (for cloud plans and Business Licences). Refund requests for supporter memberships and donations must be directed to Ko-fi or PayPal per their respective refund policies. Summers Solutions Ltd has no ability to issue refunds for transactions processed by third-party payment processors.
               </p>
               <p className="mt-2">
                 Paid services auto-renew where applicable unless cancelled before the next billing date. You may cancel at any time.
@@ -111,7 +111,7 @@ export default function TermsPage() {
                 &quot;Commercial use&quot; means: use by or on behalf of a business, company, organisation, government body, or any entity engaged in revenue-generating activity; use by employees or contractors in a work capacity; use to provide services to clients or customers; or use in any context where the user or their organisation derives a commercial benefit from the software.
               </p>
               <p className="mt-2">
-                Commercial use requires an active InnerZero Business Licence at £50 per user per year. Each individual using InnerZero commercially requires one seat licence. The licence is annual and may be cancelled at any time; no refund is issued for the current licence period.
+                Commercial use requires an active InnerZero Business Licence on a per-seat basis. Self-serve cadences are £19.99 per seat per month, or £149.99 per seat per year (dropping to £129.99 per seat per year at 5 or more seats). 25 or more seats are arranged by sales contact. Each individual using InnerZero commercially requires one seat licence. The licence may be cancelled at any time; no refund is issued for the current billing period.
               </p>
               <p className="mt-2">
                 The Business Licence grants permission to use InnerZero in commercial environments. It does not grant additional features beyond the free application.
@@ -120,9 +120,10 @@ export default function TermsPage() {
                 Educational institutions, charities, and non-profit organisations are considered personal use and do not require a Business Licence. Sole traders and freelancers using InnerZero in the course of their business require a Business Licence.
               </p>
               <p className="mt-2">
-                Until the Business Licence purchase system is live on innerzero.com, commercial users must contact{" "}
-                <a href="mailto:help@innerzero.com" className="text-accent-gold hover:text-accent-gold-hover transition-colors">help@innerzero.com</a>
-                {" "}to arrange licensing before using InnerZero commercially.
+                Self-serve Business Licence purchase is available on the{" "}
+                <a href="https://innerzero.com/pricing" className="text-accent-gold hover:text-accent-gold-hover transition-colors">pricing page</a>
+                {" "}for 1 to 24 seats. For 25 or more seats, contact{" "}
+                <a href="mailto:help@innerzero.com" className="text-accent-gold hover:text-accent-gold-hover transition-colors">help@innerzero.com</a>.
               </p>
               <p className="mt-2">
                 Summers Solutions Ltd reserves the right to change Business Licence pricing with 30 days&apos; written notice. Existing licences are honoured at the price agreed until their renewal date.
