@@ -54,3 +54,6 @@ next-env.d.ts
 # transient. Tools that need scratch space create files here at run
 # time and clean up after themselves; nothing here should be tracked.
 /scratch/
+
+# Per-phase local packet drafted by the architect subagent; never committed.
+WEBCLAUDE.local.md
