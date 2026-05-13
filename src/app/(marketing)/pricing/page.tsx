@@ -5,7 +5,13 @@ import { FAQ_DATA, CLOUD_FAQ } from "@/lib/constants";
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/pricing" },
-  title: "Pricing | InnerZero: Free AI, Business Licence, Optional Cloud",
+  // Absolute title bypasses the "%s | InnerZero..." template in
+  // src/lib/metadata.ts. Without absolute, the brand appears twice in
+  // the rendered <title> because this page's title already contains
+  // "InnerZero". Same pattern as the home page and /about.
+  title: {
+    absolute: "Pricing | InnerZero: Free AI, Business Licence, Optional Cloud",
+  },
   description:
     "InnerZero is free for personal use. Business licence £50/year. Optional cloud AI plans from £9.99/month. Add your own API keys for free.",
   openGraph: {

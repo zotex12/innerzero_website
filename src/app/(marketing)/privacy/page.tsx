@@ -6,7 +6,13 @@ import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/privacy" },
-  title: "Privacy Policy | InnerZero: Private AI Assistant",
+  // Absolute title bypasses the "%s | InnerZero..." template in
+  // src/lib/metadata.ts. Without absolute, the brand appears twice in
+  // the rendered <title> because this page's title already contains
+  // "InnerZero". Same pattern as the home page and /about.
+  title: {
+    absolute: "Privacy Policy | InnerZero: Private AI Assistant",
+  },
   description:
     "InnerZero keeps your data on your machine. No accounts, no tracking, no data collection. ICO registered (ZC122497). Read our full privacy policy.",
   openGraph: {

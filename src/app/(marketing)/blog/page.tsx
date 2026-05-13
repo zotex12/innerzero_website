@@ -8,7 +8,13 @@ import { TimeAgo } from "@/components/ui/TimeAgo";
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/blog" },
-  title: "Learn | InnerZero: Private AI Guides & Updates",
+  // Absolute title bypasses the "%s | InnerZero..." template in
+  // src/lib/metadata.ts. Without absolute, the brand appears twice in
+  // the rendered <title> because this page's title already contains
+  // "InnerZero". Same pattern as the home page and /about.
+  title: {
+    absolute: "Learn | InnerZero: Private AI Guides & Updates",
+  },
   description:
     "Guides, tutorials, and updates on running AI privately on your PC. Learn about local AI models, memory systems, voice assistants, and more.",
   openGraph: {

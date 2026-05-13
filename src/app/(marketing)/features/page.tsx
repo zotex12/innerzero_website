@@ -23,7 +23,13 @@ import { absoluteUrl, createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/features" },
-  title: "Features | InnerZero: Private AI Assistant",
+  // Absolute title bypasses the "%s | InnerZero..." template in
+  // src/lib/metadata.ts. Without absolute, the brand appears twice in
+  // the rendered <title> because this page's title already contains
+  // "InnerZero". Same pattern as the home page and /about.
+  title: {
+    absolute: "Features | InnerZero: Private AI Assistant",
+  },
   description:
     "Explore everything InnerZero can do. AI chat, voice, memory, 30+ tools, knowledge packs, screen automation, cloud AI, and more. All free, all private, all on your PC.",
   openGraph: {

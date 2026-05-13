@@ -15,7 +15,13 @@ import { DownloadCards } from "./DownloadCards";
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/download" },
-  title: "Download Free | InnerZero: Private AI Assistant",
+  // Absolute title bypasses the "%s | InnerZero..." template in
+  // src/lib/metadata.ts. Without absolute, the brand appears twice in
+  // the rendered <title> because this page's title already contains
+  // "InnerZero". Same pattern as the home page and /about.
+  title: {
+    absolute: "Download Free | InnerZero: Private AI Assistant",
+  },
   description:
     "Download InnerZero for free on Windows, macOS, and Linux. A private AI assistant that runs on your machine with no subscription, no account, and no cloud required.",
   openGraph: {

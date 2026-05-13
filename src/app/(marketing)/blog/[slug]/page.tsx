@@ -24,8 +24,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {};
 
   const url = absoluteUrl(`/blog/${post.slug}`);
+  // Frontmatter titles that already include "InnerZero" must use the
+  // absolute form so the "%s | InnerZero..." template in
+  // src/lib/metadata.ts does not duplicate the brand. Same pattern as
+  // the home page and /about. Posts without "InnerZero" in the title
+  // keep the template suffix for SEO.
+  const titleField = post.title.includes("InnerZero")
+    ? { absolute: post.title }
+    : post.title;
   return {
-    title: post.title,
+    title: titleField,
     description: post.description,
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
