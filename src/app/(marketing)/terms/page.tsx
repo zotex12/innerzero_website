@@ -492,7 +492,7 @@ export default function TermsPage() {
                 23. Contact
               </h2>
               <p>
-                For questions about these terms, to report misuse, or to arrange a Business Licence, contact:{" "}
+                For questions about these terms, to report misuse, or to enquire about Business Licence purchases at 25 or more seats, contact:{" "}
                 <a
                   href="mailto:help@innerzero.com"
                   className="text-accent-gold hover:text-accent-gold-hover transition-colors"
