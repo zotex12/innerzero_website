@@ -1,20 +1,25 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { stripe } from "@/lib/stripe";
+import { stripe } from "@/lib/stripe-server";
+import {
+  MAX_SELF_SERVE_SEATS,
+  priceIdForCadence,
+  type BusinessCadence,
+} from "@/lib/stripe";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { getCloudPlanById } from "@/lib/cloud-plans";
 
-// Whitelist of allowed Stripe price IDs for business licence
-const ALLOWED_PRICES = new Set(
-  [process.env.STRIPE_PRICE_BUSINESS_LICENCE, process.env.NEXT_PUBLIC_STRIPE_PRICE_BUSINESS_LICENCE]
-    .filter(Boolean)
-);
-
 interface CheckoutBody {
-  priceId?: string;
-  quantity?: number;
+  // Cloud subscription / PAYG flow: client sends plan_id, server looks up
+  // stripe_price_id in cloud_plans.
   plan_id?: string;
+  // Business Licence flow: client sends cadence + quantity. Server resolves
+  // cadence to the allowlisted Stripe price ID; the client never sees a
+  // Stripe price identifier. quantity is required and must be a positive
+  // integer in [1, MAX_SELF_SERVE_SEATS]; everything else returns 400.
+  cadence?: unknown;
+  quantity?: unknown;
 }
 
 function generateCorrelationId(): string {
@@ -135,18 +140,45 @@ export async function POST(request: Request) {
       return NextResponse.json({ url: session.url });
     }
 
-    // Business licence checkout (existing flow, priceId provided)
-    const { priceId, quantity } = body;
+    // Business Licence flow. The client sends only { cadence, quantity };
+    // the server resolves cadence to the allowlisted Stripe price ID. Cadence
+    // and quantity are both strictly validated: anything other than an
+    // integer in [1, MAX_SELF_SERVE_SEATS] returns 400 with no silent
+    // fallback (round-2 hardening). Defence in depth on top of the UI gates.
+    const { cadence, quantity } = body;
 
-    if (!priceId || !ALLOWED_PRICES.has(priceId)) {
-      return NextResponse.json({ message: "Invalid price." }, { status: 400 });
+    if (cadence !== "annual" && cadence !== "monthly") {
+      return NextResponse.json(
+        {
+          error: "invalid_cadence",
+          message: "cadence must be 'annual' or 'monthly'.",
+        },
+        { status: 400 }
+      );
     }
+
+    if (
+      typeof quantity !== "number" ||
+      !Number.isInteger(quantity) ||
+      quantity < 1 ||
+      quantity > MAX_SELF_SERVE_SEATS
+    ) {
+      return NextResponse.json(
+        {
+          error: "invalid_quantity",
+          message: `quantity must be an integer between 1 and ${MAX_SELF_SERVE_SEATS}. Contact sales for ${MAX_SELF_SERVE_SEATS + 1}+ seats.`,
+        },
+        { status: 400 }
+      );
+    }
+
+    const priceId = priceIdForCadence(cadence as BusinessCadence);
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       customer: customerId,
       client_reference_id: user.id,
-      line_items: [{ price: priceId, quantity: quantity || 1 }],
+      line_items: [{ price: priceId, quantity }],
       success_url: `${siteUrl}/account?checkout=success`,
       cancel_url: `${siteUrl}/pricing`,
       subscription_data: {

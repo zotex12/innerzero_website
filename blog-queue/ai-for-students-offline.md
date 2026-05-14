@@ -32,7 +32,7 @@ InnerZero is a different shape. The desktop app is free to download, runs on you
 
 Free AI is loud. Genuinely free AI for students is rare. ChatGPT, Claude, and Gemini each ship a free tier, but each comes with usage caps, account requirements, and conversation logging. They also stop working without internet, which is the thing students need most. Quillbot is closer in shape but is a writing-only tool with its own paywall above the free tier.
 
-The wording on the [pricing page](/pricing) is exact: free to download. InnerZero is a complete AI assistant that runs on your PC, no subscription required. There is no time limit on the local app, no usage cap on chat, no feature gate, and no point at which a card is requested for the core experience. Optional paid extras exist (an optional cloud AI subscription for users who want frontier-model access, a business licence at £50/year for commercial use), but nothing in the student-shaped use case is behind a paywall.
+The wording on the [pricing page](/pricing) is exact: free to download. InnerZero is a complete AI assistant that runs on your PC, no subscription required. There is no time limit on the local app, no usage cap on chat, no feature gate, and no point at which a card is requested for the core experience. Optional paid extras exist (an optional cloud AI subscription for users who want frontier-model access, a per-seat Business Licence for commercial use), but nothing in the student-shaped use case is behind a paywall.
 
 ## What does InnerZero give a student that ChatGPT free does not?
 

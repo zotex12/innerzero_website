@@ -146,7 +146,7 @@ export default async function AccountPage() {
                   href="/pricing"
                   className="text-accent-gold hover:text-accent-gold-hover transition-colors"
                 >
-                  Get one for £50/year
+                  See Business Licence pricing
                 </Link>
               </p>
             </div>

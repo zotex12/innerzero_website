@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { stripe } from "@/lib/stripe-server";
+import { isBusinessLicencePriceId } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCloudPlanByPriceId, grantUsage } from "@/lib/cloud-plans";
 import { applySecurityHeaders } from "@/lib/security-headers";
@@ -7,8 +8,6 @@ import crypto from "crypto";
 import type Stripe from "stripe";
 
 export const runtime = "nodejs";
-
-const BUSINESS_PRICE = process.env.STRIPE_PRICE_BUSINESS_LICENCE!;
 
 function generateLicenceKey(): string {
   return (
@@ -77,8 +76,12 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId
       ? fullSession.subscription
       : null;
 
-  // Check if this is a business licence purchase
-  if (priceId === BUSINESS_PRICE) {
+  // Check if this is a business licence purchase. Routes both the annual
+  // (volume-tiered) and the monthly price into the same licence-creation
+  // handler. The licence record is price-agnostic; the renewal cadence is
+  // implicit via the subscription's current_period_end which we already
+  // mirror onto licences.expires_at below.
+  if (isBusinessLicencePriceId(priceId)) {
     const subscriptionId = session.subscription as string;
     if (!expandedSubscription) return;
     const subscription = expandedSubscription;

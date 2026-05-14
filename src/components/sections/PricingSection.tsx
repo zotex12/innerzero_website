@@ -8,8 +8,15 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { PRICING_FREE, SUPPORTER, BUSINESS_LICENCE, FAQ_DATA, CLOUD_FAQ, type FAQItem } from "@/lib/constants";
+import { PRICING_FREE, SUPPORTER, FAQ_DATA, CLOUD_FAQ, type FAQItem } from "@/lib/constants";
 import { BusinessLicenceButton } from "@/components/sections/BusinessLicenceButton";
+import {
+  computeBusinessTotal,
+  computeYearlySavings,
+  MAX_SELF_SERVE_SEATS,
+  VOLUME_THRESHOLD,
+  type BusinessCadence,
+} from "@/lib/stripe";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -70,6 +77,277 @@ function FAQAccordionItem({ item }: { item: FAQItem }) {
             {item.answer}
           </p>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function formatPounds(pence: number): string {
+  return (pence / 100).toFixed(2);
+}
+
+function smoothScrollTo(id: string) {
+  if (typeof window === "undefined") return;
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  // Update the URL hash without re-triggering the native scroll. Lets users
+  // share the anchored URL after clicking, and keeps the back/forward stack
+  // in sync with the visual position.
+  if (history.replaceState) {
+    history.replaceState(null, "", `#${id}`);
+  }
+}
+
+function PricingAnchorNav() {
+  const links: { id: string; label: string }[] = [
+    { id: "free", label: "Free" },
+    { id: "business-licence", label: "Business Licence" },
+    { id: "cloud-ai", label: "Cloud AI" },
+  ];
+  return (
+    <nav aria-label="Pricing section navigation" className="py-6">
+      <Container>
+        <div className="mx-auto flex max-w-2xl flex-wrap items-center justify-center gap-2">
+          {links.map((link) => (
+            <button
+              key={link.id}
+              type="button"
+              onClick={() => smoothScrollTo(link.id)}
+              className="inline-flex items-center justify-center rounded-full border border-border-default bg-bg-card px-4 py-2 text-sm font-medium text-text-secondary transition-colors duration-150 hover:border-accent-gold hover:text-accent-gold cursor-pointer"
+            >
+              {link.label}
+            </button>
+          ))}
+        </div>
+      </Container>
+    </nav>
+  );
+}
+
+function BusinessLicenceCard() {
+  const [cadence, setCadence] = useState<BusinessCadence>("annual");
+  const [seats, setSeats] = useState<number>(1);
+  // Track the raw numeric-input string so a user mid-type doesn't get
+  // their cursor stomped by clamping (e.g. typing "10" briefly passes
+  // through "1" then "10"; we only commit on blur or valid input).
+  const [seatsInput, setSeatsInput] = useState<string>("1");
+
+  const isEnterprise = seats > MAX_SELF_SERVE_SEATS;
+  const total = computeBusinessTotal(seats, cadence);
+  const savings = computeYearlySavings();
+
+  function commitSeats(raw: string) {
+    const parsed = parseInt(raw, 10);
+    if (Number.isNaN(parsed)) {
+      setSeats(1);
+      setSeatsInput("1");
+      return;
+    }
+    const clamped = Math.max(1, Math.min(parsed, 999));
+    setSeats(clamped);
+    setSeatsInput(String(clamped));
+  }
+
+  function handleSliderChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const v = parseInt(e.target.value, 10);
+    setSeats(v);
+    setSeatsInput(String(v));
+  }
+
+  function handleNumberChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSeatsInput(e.target.value);
+    const parsed = parseInt(e.target.value, 10);
+    if (!Number.isNaN(parsed) && parsed >= 1) {
+      setSeats(Math.min(parsed, 999));
+    }
+  }
+
+  return (
+    <div className="rounded-xl border-2 border-accent-gold bg-bg-card p-6 md:p-8 shadow-[0_0_30px_rgba(212,168,67,0.08)]">
+      <h3 className="text-2xl font-bold text-text-primary text-center">
+        Business Licence
+      </h3>
+
+      {/* Cadence toggle */}
+      <div
+        role="radiogroup"
+        aria-label="Billing frequency"
+        className="mt-6 inline-flex w-full items-center justify-center"
+      >
+        <div className="inline-flex rounded-full border border-border-default bg-bg-secondary p-1">
+          <button
+            type="button"
+            role="radio"
+            aria-checked={cadence === "monthly"}
+            onClick={() => setCadence("monthly")}
+            className={cn(
+              "rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150 cursor-pointer",
+              cadence === "monthly"
+                ? "bg-accent-gold text-[#0a0a0f]"
+                : "text-text-secondary hover:text-text-primary"
+            )}
+          >
+            Monthly
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={cadence === "annual"}
+            onClick={() => setCadence("annual")}
+            className={cn(
+              "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150 cursor-pointer",
+              cadence === "annual"
+                ? "bg-accent-gold text-[#0a0a0f]"
+                : "text-text-secondary hover:text-text-primary"
+            )}
+          >
+            Yearly
+            <span
+              className={cn(
+                "inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold",
+                cadence === "annual"
+                  ? "bg-[#0a0a0f]/10 text-[#0a0a0f]"
+                  : "bg-accent-teal-muted text-accent-teal"
+              )}
+            >
+              Save {savings.percent}%
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {/* Price display */}
+      <div className="mt-6 text-center">
+        {isEnterprise ? (
+          <>
+            <span className="text-3xl font-bold text-text-primary">
+              Custom pricing
+            </span>
+            <p className="mt-2 text-sm text-text-secondary">
+              25+ seats are handled by our sales team.
+            </p>
+          </>
+        ) : (
+          <>
+            <div className="flex items-end justify-center gap-1">
+              <span className="text-4xl font-bold text-text-primary">
+                £{formatPounds(total.perSeatPence)}
+              </span>
+              <span className="pb-1 text-text-secondary">
+                /seat/{cadence === "annual" ? "year" : "month"}
+              </span>
+            </div>
+            {total.isVolume && (
+              <div className="mt-2 inline-flex items-center justify-center">
+                <Badge variant="default" className="text-[11px]">
+                  Volume rate ({VOLUME_THRESHOLD}+ seats)
+                </Badge>
+              </div>
+            )}
+            {cadence === "annual" && !total.isVolume && (
+              <p className="mt-2 text-sm text-text-muted">
+                Save £{savings.poundsPerYearRounded}/year vs monthly
+              </p>
+            )}
+            {cadence === "annual" && total.isVolume && (
+              <p className="mt-2 text-sm text-text-muted">
+                Volume rate active. Save £{savings.poundsPerYearRounded}+/seat/year vs monthly.
+              </p>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Seat selector */}
+      <div className="mt-6">
+        <div className="flex items-center justify-between mb-3">
+          <label htmlFor="biz-seat-slider" className="text-sm font-medium text-text-primary">
+            Seats
+          </label>
+          <input
+            id="biz-seat-number"
+            type="number"
+            inputMode="numeric"
+            min={1}
+            max={999}
+            value={seatsInput}
+            onChange={handleNumberChange}
+            onBlur={(e) => commitSeats(e.target.value)}
+            aria-label="Seat count"
+            className="w-20 rounded-lg border border-border-default bg-bg-secondary px-3 py-1.5 text-right text-sm font-semibold text-text-primary focus:border-accent-gold focus:outline-none"
+          />
+        </div>
+        <input
+          id="biz-seat-slider"
+          type="range"
+          min={1}
+          max={30}
+          step={1}
+          value={Math.min(seats, 30)}
+          onChange={handleSliderChange}
+          aria-label="Seat count slider"
+          aria-valuemin={1}
+          aria-valuemax={30}
+          aria-valuenow={Math.min(seats, 30)}
+          aria-valuetext={`${seats} seat${seats === 1 ? "" : "s"} at £${formatPounds(total.perSeatPence)} per seat per ${cadence === "annual" ? "year" : "month"}`}
+          className="w-full accent-accent-gold cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold focus-visible:ring-offset-2"
+        />
+        <div className="mt-1 flex justify-between text-[11px] text-text-muted">
+          <span>1</span>
+          <span>{VOLUME_THRESHOLD}+ (volume rate)</span>
+          <span>{MAX_SELF_SERVE_SEATS}</span>
+          <span>30+</span>
+        </div>
+      </div>
+
+      {/* Live total */}
+      {!isEnterprise && (
+        <div className="mt-6 rounded-lg border border-border-default bg-bg-secondary px-4 py-3 text-center">
+          <p className="text-xs uppercase tracking-wide text-text-muted">
+            Total
+          </p>
+          <p className="mt-1 text-lg font-semibold text-text-primary">
+            £{formatPounds(total.totalPence)}
+            <span className="text-sm font-normal text-text-secondary">
+              {cadence === "annual" ? "/year" : "/month"}
+            </span>
+          </p>
+          {seats > 1 && (
+            <p className="mt-1 text-[11px] text-text-muted">
+              {seats} seats &times; £{formatPounds(total.perSeatPence)}/seat
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Features list */}
+      <ul className="mt-6 flex flex-col gap-3 text-left">
+        <li className="flex items-center gap-3 text-sm text-text-secondary">
+          <Check className="h-4 w-4 shrink-0 text-success" />
+          Use InnerZero at work
+        </li>
+        <li className="flex items-center gap-3 text-sm text-text-secondary">
+          <Check className="h-4 w-4 shrink-0 text-success" />
+          Commercial projects and client work
+        </li>
+        <li className="flex items-center gap-3 text-sm text-text-secondary">
+          <Check className="h-4 w-4 shrink-0 text-success" />
+          Sole traders, freelancers, and companies
+        </li>
+        <li className="flex items-center gap-3 text-sm text-text-secondary">
+          <Check className="h-4 w-4 shrink-0 text-success" />
+          Cancel anytime, no hidden fees
+        </li>
+        <li className="flex items-center gap-3 text-sm text-text-secondary">
+          <Check className="h-4 w-4 shrink-0 text-success" />
+          Same free app, no extra features
+        </li>
+      </ul>
+
+      {/* CTA */}
+      <div className="mt-8">
+        <BusinessLicenceButton seats={seats} cadence={cadence} />
       </div>
     </div>
   );
@@ -229,8 +507,11 @@ export function PricingSection({ className }: PricingSectionProps) {
 
   return (
     <div className={cn("", className)}>
-      {/* Section A: Free Local */}
-      <section className="py-12 md:py-20">
+      <PricingAnchorNav />
+
+      {/* Section A: Free Local. scroll-mt-20 offsets the fixed h-16 header so
+          deep links and anchor-nav clicks don't land under the nav. */}
+      <section id="free" className="scroll-mt-20 py-12 md:py-20">
         <Container>
           <ScrollReveal>
             <div className="mx-auto max-w-xl">
@@ -276,35 +557,15 @@ export function PricingSection({ className }: PricingSectionProps) {
         </Container>
       </section>
 
-      {/* Section B: Business Licence */}
-      <section className="bg-bg-secondary py-12 md:py-20">
+      {/* Section B: Business Licence (interactive: cadence toggle + seat slider) */}
+      <section id="business-licence" className="scroll-mt-20 bg-bg-secondary py-12 md:py-20">
         <Container>
           <ScrollReveal>
             <div className="mx-auto max-w-xl">
-              <div className="rounded-xl border-2 border-accent-gold bg-bg-card p-8 text-center shadow-[0_0_30px_rgba(212,168,67,0.08)]">
-                <h3 className="text-2xl font-bold text-text-primary">
-                  {BUSINESS_LICENCE.planName}
-                </h3>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold text-text-primary">
-                    {BUSINESS_LICENCE.price}
-                  </span>
-                  <span className="text-text-secondary">{BUSINESS_LICENCE.period} per user</span>
-                </div>
-                <p className="mt-4 text-sm text-text-secondary">
-                  Required for commercial use of InnerZero. One seat per user.
-                </p>
-                <ul className="mt-6 flex flex-col gap-3 text-left">
-                  <li className="flex items-center gap-3 text-sm text-text-secondary"><Check className="h-4 w-4 shrink-0 text-success" />Use InnerZero at work</li>
-                  <li className="flex items-center gap-3 text-sm text-text-secondary"><Check className="h-4 w-4 shrink-0 text-success" />Commercial projects and client work</li>
-                  <li className="flex items-center gap-3 text-sm text-text-secondary"><Check className="h-4 w-4 shrink-0 text-success" />Sole traders, freelancers, and companies</li>
-                  <li className="flex items-center gap-3 text-sm text-text-secondary"><Check className="h-4 w-4 shrink-0 text-success" />Annual licence, cancel anytime</li>
-                  <li className="flex items-center gap-3 text-sm text-text-secondary"><Check className="h-4 w-4 shrink-0 text-success" />Same free app, no extra features</li>
-                </ul>
-                <div className="mt-8">
-                  <BusinessLicenceButton />
-                </div>
-              </div>
+              <p className="mb-4 text-center text-sm text-text-muted">
+                Required for commercial use of InnerZero. One seat per user.
+              </p>
+              <BusinessLicenceCard />
               <p className="mt-4 text-center text-sm text-text-muted">
                 Educational institutions, charities, and non-profits are exempt.
               </p>

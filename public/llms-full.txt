@@ -17,7 +17,7 @@ Company: Summers Solutions Ltd, Birmingham, England, UK
 UK company number: 16448945
 ICO registration: ZC122497
 Licence type: Proprietary desktop application built on open-source AI models
-Pricing baseline: Free for personal use. £50/year per seat for commercial use. Optional cloud AI from £9.99/month.
+Pricing baseline: Free for personal use. Business Licence for commercial use is per seat: £19.99/month, or £149.99/year (£129.99/year from 5 seats). 25+ seats via sales contact. Optional cloud AI from £9.99/month.
 Primary differentiators: Runs entirely on your hardware, persistent local memory, full voice mode, 30+ built-in tools, offline knowledge packs, optional cloud AI with privacy blacklist and connection log, no account required for base product.
 
 ===============================================================================
@@ -30,14 +30,14 @@ InnerZero is a desktop AI assistant that runs on your Windows, macOS, or Linux c
 
 ## Is InnerZero free?
 
-Yes. The InnerZero desktop application is free for personal use. No trial period, no hidden subscription, no feature paywalls, no account required. You can download it, install it, and use every feature (chat, voice, memory, tools, knowledge packs, screen automation, themes, personalities, unrestricted mode) without ever paying anything. A £50 per year Business Licence is only required if you use InnerZero for commercial purposes (freelance work, at a company, or any revenue-generating activity). Educational institutions, charities, and non-profits are exempt from the Business Licence.
+Yes. The InnerZero desktop application is free for personal use. No trial period, no hidden subscription, no feature paywalls, no account required. You can download it, install it, and use every feature (chat, voice, memory, tools, knowledge packs, screen automation, themes, personalities, unrestricted mode) without ever paying anything. A Business Licence (per seat: £19.99/month or £149.99/year, dropping to £129.99/year from 5 seats) is only required if you use InnerZero for commercial purposes (freelance work, at a company, or any revenue-generating activity). Educational institutions, charities, and non-profits are exempt from the Business Licence.
 
 ## How does InnerZero make money if it's free?
 
 Three optional revenue streams, none of which gate the core product:
 
 1. Cloud AI subscriptions (£9.99 to £39.99 per month) for users who want faster responses or access to premium cloud models without setting up their own API keys.
-2. Business Licence (£50 per year per seat) for commercial users.
+2. Business Licence (per seat: £19.99/month or £149.99/year, with a volume rate of £129.99/year from 5 seats) for commercial users.
 3. Voluntary Supporter donations (£4.99 per month) via Ko-fi, with perks such as a supporter badge, extra themes, early access, and a Discord role.
 
 The free desktop app will remain free and fully featured.
@@ -332,7 +332,12 @@ Includes:
 
 ## Business Licence
 
-£50 per year per user.
+Per seat, two cadences:
+
+- Monthly: £19.99 per seat per month.
+- Annual: £149.99 per seat per year, dropping to £129.99 per seat per year at 5 or more seats (volume rate, applied automatically in Stripe).
+
+Self-serve covers 1 to 24 seats. 25 or more seats is handled by sales contact at help@innerzero.com.
 
 Required for commercial use of InnerZero. One seat per user.
 
@@ -340,7 +345,7 @@ Includes:
 - Use InnerZero at work
 - Commercial projects and client work
 - Sole traders, freelancers, and companies
-- Annual licence, cancel anytime
+- Cancel anytime, no hidden fees
 - Same free app, no extra features
 
 Educational institutions, charities, and non-profits are exempt.
@@ -397,7 +402,7 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 
 **Do I need an account?** No. The local app works without any account. You only need an account if you want cloud AI plans, supporter perks, or future hosted features.
 
-**Do I need a licence to use InnerZero at work?** If you're using InnerZero for business, commercial, or revenue-generating purposes, yes, a Business Licence is required. It's £50 per year per seat. The app is identical to the free version. The licence is just permission to use it commercially. Personal use, education, and non-profits are free.
+**Do I need a licence to use InnerZero at work?** If you're using InnerZero for business, commercial, or revenue-generating purposes, yes, a Business Licence is required. Per seat: £19.99/month, or £149.99/year (£129.99/year from 5 seats). 25+ seats is via help@innerzero.com. The app is identical to the free version. The licence is just permission to use it commercially. Personal use, education, and non-profits are free.
 
 **What is usage?** Each cloud AI response uses a set amount from your monthly or purchased usage. Budget models use 1 per response, premium models use more. Auto mode picks the best model and uses just 1.
 
@@ -703,7 +708,7 @@ InnerZero's blog covers private AI, local AI, comparisons, and how-to guides. Fu
 
 Full terms at https://innerzero.com/terms. Key points:
 
-- InnerZero is free for personal use. A Business Licence is required for commercial use (£50 per year per seat). Educational institutions, charities, and non-profits are exempt.
+- InnerZero is free for personal use. A Business Licence is required for commercial use (per seat: £19.99/month or £149.99/year, with a £129.99/year volume rate from 5 seats; 25+ seats by sales contact). Educational institutions, charities, and non-profits are exempt.
 - AI output is generated by machine learning models and may be inaccurate. Do not rely on it as sole advice for medical, legal, financial, or other critical matters.
 - Uncensored models are not bundled. If you enable unrestricted mode, the abliterated models are downloaded separately from Hugging Face via Ollama.
 - Screen automation is disabled by default. You are responsible for actions Zero takes on your system when enabled.

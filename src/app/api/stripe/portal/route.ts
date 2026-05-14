@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { stripe } from "@/lib/stripe";
+import { stripe } from "@/lib/stripe-server";
 import { checkRateLimit } from "@/lib/rate-limit";
 
 function generateCorrelationId(): string {
