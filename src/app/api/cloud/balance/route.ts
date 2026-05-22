@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   const { data: profile } = await admin
     .from("profiles")
     .select(
-      "plan, usage_balance, usage_monthly_allowance, billing_cycle_end, overage_enabled, spending_cap_pence, spending_this_cycle_pence, cancel_at_period_end, subscription_end"
+      "plan, usage_balance, usage_monthly_allowance, billing_cycle_end, overage_enabled, spending_cap_pence, spending_this_cycle_pence, cancel_at_period_end, subscription_end, business_licence"
     )
     .eq("id", auth.user.id)
     .single();
@@ -73,6 +73,14 @@ export async function GET(request: Request) {
     spending_this_cycle_pence: profile.spending_this_cycle_pence ?? 0,
     cancel_at_period_end: profile.cancel_at_period_end ?? false,
     subscription_end: profile.subscription_end ?? null,
+    // InnerZero Pro app-membership entitlement flags (P1 of innerzero-pro-membership).
+    // business_licence is a real profiles column. pro is synthesized false here
+    // until the P2 phase adds the profiles.pro column + Pro Stripe webhook branch;
+    // at that point this line sources pro from profile.pro. The desktop derives
+    // effective Pro as (pro OR business_licence OR local licence), so Business
+    // Licence holders already unlock Pro from this response today.
+    pro: false,
+    business_licence: profile.business_licence ?? false,
     tier_access: tierAccess,
     // null (not []) when the query actually failed, so clients can
     // distinguish a read error from a genuinely empty pack list.
