@@ -111,3 +111,47 @@ export function priceIdForCadence(cadence: BusinessCadence): string {
     ? BUSINESS_LICENCE_ANNUAL_PRICE_ID
     : BUSINESS_LICENCE_MONTHLY_PRICE_ID;
 }
+
+// ── InnerZero Pro: app-membership pricing (client-safe constants and helpers) ──
+//
+// Pro is a flat app-membership subscription. It is NOT a usage-bearing cloud
+// plan (no entry in cloud_plans, no allowance) and NOT seat-based. Two prices
+// on one Stripe Pro product, created in P2 of the innerzero-pro-membership plan:
+//   Monthly: GBP 4.99
+//   Annual:  GBP 39.99
+//
+// Unlike the Business Licence constants above, these default to an obviously
+// invalid PLACEHOLDER rather than a live price ID. The Pro product/prices are
+// created during the P2 build and their IDs are wired in via env per
+// environment. A missing env var must FAIL CLOSED (isProPriceId returns false)
+// rather than silently matching a real ID. A real Stripe price ID is never
+// equal to the placeholder string, so an unconfigured environment correctly
+// matches nothing. Set STRIPE_PRO_MONTHLY_PRICE_ID / STRIPE_PRO_ANNUAL_PRICE_ID
+// once the prices exist (Vercel env + local .env for test mode).
+
+export const PRO_MONTHLY_PRICE_ID =
+  process.env.STRIPE_PRO_MONTHLY_PRICE_ID ?? "price_pro_monthly_PLACEHOLDER";
+
+export const PRO_ANNUAL_PRICE_ID =
+  process.env.STRIPE_PRO_ANNUAL_PRICE_ID ?? "price_pro_annual_PLACEHOLDER";
+
+export const PRO_MONTHLY_PENCE = 499;
+export const PRO_ANNUAL_PENCE = 3999;
+
+export type ProCadence = "annual" | "monthly";
+
+// Used by the checkout API allowlist and the webhook routing predicate.
+export const PRO_PRICE_IDS: ReadonlySet<string> = new Set([
+  PRO_MONTHLY_PRICE_ID,
+  PRO_ANNUAL_PRICE_ID,
+]);
+
+export function isProPriceId(priceId: string | null | undefined): boolean {
+  return typeof priceId === "string" && PRO_PRICE_IDS.has(priceId);
+}
+
+// Server-only helper used by the checkout API to map a client-supplied Pro
+// cadence to the matching Stripe price ID.
+export function priceIdForProCadence(cadence: ProCadence): string {
+  return cadence === "annual" ? PRO_ANNUAL_PRICE_ID : PRO_MONTHLY_PRICE_ID;
+}

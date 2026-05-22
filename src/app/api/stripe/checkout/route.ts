@@ -5,7 +5,9 @@ import { stripe } from "@/lib/stripe-server";
 import {
   MAX_SELF_SERVE_SEATS,
   priceIdForCadence,
+  priceIdForProCadence,
   type BusinessCadence,
+  type ProCadence,
 } from "@/lib/stripe";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { getCloudPlanById } from "@/lib/cloud-plans";
@@ -14,6 +16,9 @@ interface CheckoutBody {
   // Cloud subscription / PAYG flow: client sends plan_id, server looks up
   // stripe_price_id in cloud_plans.
   plan_id?: string;
+  // InnerZero Pro flow: client sends product: "pro" + cadence. Flat
+  // subscription, no quantity. Server resolves cadence to the Pro price ID.
+  product?: unknown;
   // Business Licence flow: client sends cadence + quantity. Server resolves
   // cadence to the allowlisted Stripe price ID; the client never sees a
   // Stripe price identifier. quantity is required and must be a positive
@@ -137,6 +142,33 @@ export async function POST(request: Request) {
       }
 
       const session = await stripe.checkout.sessions.create(sessionParams);
+      return NextResponse.json({ url: session.url });
+    }
+
+    // InnerZero Pro app-membership checkout. Distinct from the cloud-plan
+    // (plan_id) and business-licence (cadence + quantity) flows: Pro is a flat
+    // subscription with no usage and no seats. Client sends { product: "pro",
+    // cadence }. The pricing-page button that calls this lands in P6.
+    if (body.product === "pro") {
+      if (body.cadence !== "annual" && body.cadence !== "monthly") {
+        return NextResponse.json(
+          { error: "invalid_cadence", message: "cadence must be 'annual' or 'monthly'." },
+          { status: 400 }
+        );
+      }
+      const proPriceId = priceIdForProCadence(body.cadence as ProCadence);
+      const session = await stripe.checkout.sessions.create({
+        mode: "subscription",
+        customer: customerId,
+        client_reference_id: user.id,
+        line_items: [{ price: proPriceId, quantity: 1 }],
+        success_url: `${siteUrl}/account?checkout=success`,
+        cancel_url: `${siteUrl}/pricing`,
+        subscription_data: {
+          metadata: { user_id: user.id, product: "pro" },
+        },
+        allow_promotion_codes: false,
+      });
       return NextResponse.json({ url: session.url });
     }
 

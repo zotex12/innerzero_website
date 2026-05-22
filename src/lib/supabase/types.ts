@@ -21,6 +21,7 @@ export type Database = {
           usage_balance: number;
           usage_monthly_allowance: number;
           founder: boolean;
+          pro: boolean;
           billing_cycle_end: string | null;
           overage_enabled: boolean;
           spending_cap_pence: number | null;
@@ -55,6 +56,7 @@ export type Database = {
           spending_this_cycle_pence?: number;
           usage_alerts_sent?: string[];
           cancel_at_period_end?: boolean;
+          pro?: boolean;
         };
         Update: {
           id?: string;
@@ -82,6 +84,7 @@ export type Database = {
           usage_alerts_sent?: string[];
           cancel_at_period_end?: boolean;
           updated_at?: string;
+          pro?: boolean;
         };
         Relationships: [];
       };

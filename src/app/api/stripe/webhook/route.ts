@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe-server";
-import { isBusinessLicencePriceId } from "@/lib/stripe";
+import { isBusinessLicencePriceId, isProPriceId } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCloudPlanByPriceId, grantUsage } from "@/lib/cloud-plans";
 import { applySecurityHeaders } from "@/lib/security-headers";
@@ -75,6 +75,39 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, eventId
     fullSession.subscription && typeof fullSession.subscription !== "string"
       ? fullSession.subscription
       : null;
+
+  // InnerZero Pro app-membership checkout. Pro is a standalone boolean flag,
+  // NOT a usage-bearing cloud plan and NOT seat-based. It deliberately does NOT
+  // write stripe_subscription_id / subscription_status / plan / subscription_end
+  // (the Cloud and Business flows own those single columns; a customer can hold
+  // Pro alongside them, so writing the shared columns here would clobber the
+  // other product's state). Effective Pro on the desktop is derived as
+  // pro OR business_licence OR local licence, so Business stays a separate path.
+  if (isProPriceId(priceId)) {
+    // Out-of-order guard: only grant Pro if the linked subscription is
+    // currently live. A delayed or replayed checkout.session.completed that
+    // arrives AFTER a customer.subscription.deleted would otherwise resurrect
+    // entitlement with no live Pro subscription. Statuses other than
+    // active/trialing/past_due (canceled, incomplete_expired, ...) do not grant.
+    const proLiveStatuses = ["active", "trialing", "past_due"];
+    if (
+      !expandedSubscription ||
+      !proLiveStatuses.includes(expandedSubscription.status)
+    ) {
+      return;
+    }
+    // Idempotency: a boolean flip writes no usage_transactions row, so the
+    // global event-id pre-check in POST does not guard Pro events. Use a
+    // state-already-matches short-circuit instead.
+    const { data: proProfile } = await admin
+      .from("profiles")
+      .select("pro")
+      .eq("id", profile.id)
+      .single();
+    if (proProfile?.pro === true) return;
+    await admin.from("profiles").update({ pro: true }).eq("id", profile.id);
+    return;
+  }
 
   // Check if this is a business licence purchase. Routes both the annual
   // (volume-tiered) and the monthly price into the same licence-creation
@@ -282,6 +315,13 @@ async function handleSubscriptionUpdated(
   const status = mapStripeStatus(subscription.status);
   const priceId = subscription.items.data[0]?.price?.id;
 
+  // InnerZero Pro: no-op on subscription updates. Pro is a standalone boolean
+  // cleared only by customer.subscription.deleted (D-3). Returning here also
+  // prevents the business-licence fallback below from writing the shared
+  // subscription_status / subscription_end columns for a Pro subscription
+  // (past-due and cancel-at-period-end keep Pro until actual deletion).
+  if (isProPriceId(priceId)) return;
+
   // Check if this is a cloud plan subscription
   const cloudPlan = priceId ? await getCloudPlanByPriceId(priceId) : null;
 
@@ -396,6 +436,42 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   const customerId = subscription.customer as string;
   const priceId = subscription.items.data[0]?.price?.id;
 
+  // InnerZero Pro cancellation. Routed by the price ID off the event (the
+  // shared stripe_subscription_id column is never used for routing). Clears
+  // only the standalone pro flag; Cloud/Business state is left untouched.
+  if (isProPriceId(priceId)) {
+    // A customer can hold more than one Pro subscription (monthly + annual, or
+    // a duplicate checkout). Only clear pro after confirming no OTHER still-live
+    // Pro subscription remains, so deleting one does not revoke entitlement that
+    // another active subscription still pays for.
+    const customerSubs = await stripe.subscriptions.list({
+      customer: customerId,
+      status: "all",
+      limit: 100,
+    });
+    const otherLivePro = customerSubs.data.some(
+      (s) =>
+        s.id !== subscription.id &&
+        (s.status === "active" ||
+          s.status === "trialing" ||
+          s.status === "past_due") &&
+        isProPriceId(s.items.data[0]?.price?.id)
+    );
+    if (otherLivePro) return; // another live Pro subscription remains; keep pro
+
+    const { data: proProfile } = await admin
+      .from("profiles")
+      .select("pro")
+      .eq("stripe_customer_id", customerId)
+      .single();
+    if (!proProfile || proProfile.pro === false) return; // idempotent
+    await admin
+      .from("profiles")
+      .update({ pro: false })
+      .eq("stripe_customer_id", customerId);
+    return;
+  }
+
   // Check if this is a cloud plan subscription
   const cloudPlan = priceId ? await getCloudPlanByPriceId(priceId) : null;
 
@@ -479,6 +555,18 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice, eventId: s
   const subscriptionId = getSubscriptionIdFromInvoice(invoice);
   const billingReason = invoice.billing_reason;
 
+  // InnerZero Pro: skip ALL invoice handling (initial subscription_create AND
+  // subscription_cycle renewal). Pro is set on checkout and cleared only on
+  // deletion (D-3); a Pro invoice must never write the shared
+  // subscription_status / subscription_end columns via the business fallback
+  // below. This guard MUST sit before the billing-reason branch: a first
+  // invoice carries billing_reason "subscription_create", which would otherwise
+  // skip the cycle branch and fall straight through to the business fallback.
+  if (subscriptionId) {
+    const invoiceSub = await stripe.subscriptions.retrieve(subscriptionId);
+    if (isProPriceId(invoiceSub.items.data[0]?.price?.id)) return;
+  }
+
   // Handle cloud plan renewal (subscription_cycle only, not first payment)
   if (billingReason === "subscription_cycle" && subscriptionId) {
     const sub = await stripe.subscriptions.retrieve(subscriptionId);
@@ -558,6 +646,16 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice, eventId: s
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
   const admin = createAdminClient();
   const customerId = invoice.customer as string;
+
+  // InnerZero Pro: skip. A failed Pro payment must not write the shared
+  // subscription_status column (Cloud/Business own it); Pro is cleared only on
+  // customer.subscription.deleted (D-3). Resolve the invoice's subscription to
+  // its price and bail if it is a Pro subscription.
+  const proSubId = getSubscriptionIdFromInvoice(invoice);
+  if (proSubId) {
+    const proSub = await stripe.subscriptions.retrieve(proSubId);
+    if (isProPriceId(proSub.items.data[0]?.price?.id)) return;
+  }
 
   // Idempotency: skip if already past_due
   const { data: profile } = await admin
