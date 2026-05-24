@@ -174,15 +174,28 @@ export const CLOUD_PLANS: CloudPlan[] = [
   },
 ];
 
-/* ── Pricing: Supporter ── */
+/* ── Pricing: InnerZero Pro (optional app membership, billed via Stripe) ──
 
-export const SUPPORTER = {
-  price: "£4.99",
-  period: "/month",
+Distinct from the "Cloud Pro" cloud-AI plan (online compute). InnerZero Pro is a
+local-features membership. The pricing card (ProMembershipCard) owns the
+monthly/annual toggle and the Stripe checkout call; the server resolves the price
+ID from { product: "pro", cadence }. */
+
+export const INNERZERO_PRO = {
+  monthlyPrice: "£4.99",
+  monthlyPeriod: "/month",
+  annualPrice: "£39.99",
+  annualPeriod: "/year",
   description:
-    "Fund development and get perks: supporter badge, extra themes, early access, Discord role, roadmap voting.",
-  cta: "Become a Supporter",
-  ctaHref: "https://ko-fi.com/innerzero",
+    "An optional membership that unlocks premium local extras. Works fully offline. Separate from Cloud AI plans.",
+  perks: [
+    "Premium themes (Golden Pro and more)",
+    "Premium personalities",
+    "Early access to new features",
+    "Pro badge",
+  ],
+  cta: "Get InnerZero Pro",
+  note: "Pro is a local membership, not cloud compute. Cloud AI plans are separate.",
 } as const;
 
 /* ── Pricing: Business Licence ──
@@ -217,9 +230,9 @@ export const FAQ_DATA: FAQItem[] = [
       "Yes. Add your own API keys from any supported provider: DeepSeek, OpenAI, Anthropic, and more. Zero markup. We never touch your keys.",
   },
   {
-    question: "What does the Supporter tier include?",
+    question: "What is InnerZero Pro?",
     answer:
-      "Supporter is a monthly donation to fund InnerZero development. You get a supporter badge, extra themes, early access to new features, and a Discord role. It does not include cloud AI credits.",
+      "InnerZero Pro is an optional membership, £4.99/month or £39.99/year, that unlocks premium local extras: premium themes, premium personalities, early access to new features, and a Pro badge. It runs offline and is separate from Cloud AI plans, which add online compute.",
   },
   {
     question: "Is my data private?",
@@ -229,7 +242,7 @@ export const FAQ_DATA: FAQItem[] = [
   {
     question: "Do I need an account?",
     answer:
-      "No. The local app works without any account. You only need an account if you want cloud AI plans, supporter perks, or future hosted features.",
+      "No. The local app works without any account. You only need an account if you want cloud AI plans, InnerZero Pro, or future hosted features.",
   },
   {
     question: "Are cloud plans available?",

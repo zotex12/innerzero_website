@@ -67,6 +67,12 @@ export default async function AccountPage() {
       })
     : "Unknown";
 
+  // Effective Pro per D8: a direct profiles.pro flag OR a Business Licence grants
+  // Pro. Only a direct Pro subscription is managed via the Stripe billing portal;
+  // a Business-Licence-derived Pro is managed through the licence.
+  const hasProDirect = !!profile?.pro;
+  const hasPro = hasProDirect || !!profile?.business_licence;
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-text-primary">Account Dashboard</h1>
@@ -147,6 +153,49 @@ export default async function AccountPage() {
                   className="text-accent-gold hover:text-accent-gold-hover transition-colors"
                 >
                   See Business Licence pricing
+                </Link>
+              </p>
+            </div>
+          )}
+        </section>
+
+        {/* InnerZero Pro */}
+        <section className="rounded-xl border border-border-default bg-bg-card p-6">
+          <h2 className="text-lg font-semibold text-text-primary mb-4">
+            InnerZero Pro
+          </h2>
+          {hasPro ? (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center rounded-full bg-success/15 px-2.5 py-0.5 text-xs font-medium text-success">
+                  Active
+                </span>
+              </div>
+              {hasProDirect ? (
+                <>
+                  <p className="text-sm text-text-secondary">
+                    Your InnerZero Pro membership unlocks premium local features in
+                    the desktop app.
+                  </p>
+                  <div className="pt-2">
+                    <ManageBillingButton />
+                  </div>
+                </>
+              ) : (
+                <p className="text-sm text-text-secondary">
+                  Included with your Business Licence.
+                </p>
+              )}
+            </div>
+          ) : (
+            <div>
+              <p className="text-sm text-text-secondary">
+                Not active.{" "}
+                <Link
+                  href="/pricing"
+                  className="text-accent-gold hover:text-accent-gold-hover transition-colors"
+                >
+                  See InnerZero Pro
                 </Link>
               </p>
             </div>

@@ -13,6 +13,17 @@ export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isDesktop = searchParams.get("desktop") === "true";
+  // Post-login destination. Only same-origin relative paths are honoured so a
+  // crafted ?redirect= cannot become an open redirect ("//host", "/\\host", or
+  // an absolute URL all fall back to /account).
+  const redirectParam = searchParams.get("redirect");
+  const safeRedirect =
+    redirectParam &&
+    redirectParam.startsWith("/") &&
+    !redirectParam.startsWith("//") &&
+    !redirectParam.startsWith("/\\")
+      ? redirectParam
+      : "/account";
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [desktopToken, setDesktopToken] = useState("");
@@ -63,7 +74,7 @@ export function LoginForm() {
       return;
     }
 
-    router.push("/account");
+    router.push(safeRedirect);
     router.refresh();
   }
 

@@ -2,14 +2,15 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Check, Heart, Coffee, ExternalLink, ChevronDown, Zap, Info } from "lucide-react";
+import { Check, Coffee, ExternalLink, ChevronDown, Zap, Info } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { PRICING_FREE, SUPPORTER, FAQ_DATA, CLOUD_FAQ, type FAQItem } from "@/lib/constants";
+import { PRICING_FREE, FAQ_DATA, CLOUD_FAQ, type FAQItem } from "@/lib/constants";
 import { BusinessLicenceButton } from "@/components/sections/BusinessLicenceButton";
+import { ProMembershipCard } from "@/components/sections/ProMembershipCard";
 import {
   computeBusinessTotal,
   computeYearlySavings,
@@ -827,33 +828,8 @@ export function PricingSection({ className }: PricingSectionProps) {
             </div>
 
             <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 md:grid-cols-2">
-              {/* Supporter card */}
-              <div className="rounded-xl border border-border-default bg-bg-card p-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <Heart className="h-5 w-5 text-accent-gold" />
-                  <h3 className="text-lg font-semibold text-text-primary">
-                    Supporter
-                  </h3>
-                </div>
-                <div className="mb-3">
-                  <span className="text-2xl font-bold text-text-primary">
-                    {SUPPORTER.price}
-                  </span>
-                  <span className="text-text-secondary">{SUPPORTER.period}</span>
-                </div>
-                <p className="text-sm text-text-secondary mb-6">
-                  {SUPPORTER.description}
-                </p>
-                <a
-                  href={SUPPORTER.ctaHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-gold px-6 py-3 text-[15px] font-medium text-[#0a0a0f] transition-all duration-150 hover:bg-accent-gold-hover"
-                >
-                  {SUPPORTER.cta}
-                  <ExternalLink className="h-3.5 w-3.5" />
-                </a>
-              </div>
+              {/* InnerZero Pro card */}
+              <ProMembershipCard />
 
               {/* Donation card */}
               <div className="rounded-xl border border-border-default bg-bg-card p-6">

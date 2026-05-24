@@ -68,12 +68,12 @@ export default function TermsPage() {
                 InnerZero offers optional paid support and services that are entirely separate from the free desktop software:
               </p>
               <ul className="mt-2 list-disc pl-6 space-y-1">
-                <li><strong>Supporter membership:</strong> A voluntary monthly contribution of £4.99/month to support InnerZero development, processed through Ko-fi and PayPal. Includes a supporter badge, extra themes, early access to new features, and a Discord role. Supporter membership does not include cloud AI credits or compute.</li>
+                <li><strong>InnerZero Pro membership:</strong> An optional £4.99/month or £39.99/year subscription that unlocks premium local app features, including premium themes, premium personalities, early access to new features, and a Pro badge, processed through Stripe. InnerZero Pro is a membership for local features and does not include cloud AI credits or compute.</li>
                 <li><strong>Cloud AI plans:</strong> Optional monthly subscriptions for access to premium cloud AI models, starting at £9.99/month. See <a href="https://innerzero.com/pricing" className="text-accent-gold hover:text-accent-gold-hover transition-colors">innerzero.com/pricing</a> for current tiers and pricing.</li>
                 <li><strong>One-off donations:</strong> Optional one-time contributions of any amount via Ko-fi.</li>
               </ul>
               <p className="mt-2">
-                InnerZero does not process payments directly. All transactions are handled by Ko-fi and PayPal (for supporter memberships and donations) or Stripe (for cloud plans and Business Licences). Refund requests for supporter memberships and donations must be directed to Ko-fi or PayPal per their respective refund policies. Summers Solutions Ltd has no ability to issue refunds for transactions processed by third-party payment processors.
+                InnerZero does not process payments directly. InnerZero Pro, cloud AI plans, cloud credit packs, and Business Licences are handled by Stripe. One-off donations are handled by Ko-fi and PayPal. For Stripe-billed payments, refund requests should be sent to Summers Solutions Ltd at help@innerzero.com, and any eligible refund is processed through Stripe. For one-off donations, refund requests must be directed to Ko-fi or PayPal per their respective refund policies; Summers Solutions Ltd cannot issue refunds for donations processed by those third parties.
               </p>
               <p className="mt-2">
                 Paid services auto-renew where applicable unless cancelled before the next billing date. You may cancel at any time.

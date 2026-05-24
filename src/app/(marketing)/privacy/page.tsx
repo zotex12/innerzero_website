@@ -277,7 +277,7 @@ export default function PrivacyPage() {
                     8. What Data the Website Collects
                   </h3>
                   <p>
-                    When you create an account on innerzero.com, we collect your email address. If you join our waitlist, we store your email address. Payment information for supporter memberships and donations is processed by Ko-fi and PayPal; we do not receive or store your payment card details. If future cloud plans are offered via Stripe, Stripe will process payments; we will never store card details directly.
+                    When you create an account on innerzero.com, we collect your email address. If you join our waitlist, we store your email address. Payment information for InnerZero Pro, cloud plans, and Business Licences is processed by Stripe, and payment information for one-off donations is processed by Ko-fi and PayPal; we never receive or store your payment card details.
                   </p>
                 </div>
 
@@ -361,8 +361,8 @@ export default function PrivacyPage() {
                     <li>Supabase: authentication and database hosting (EU region)</li>
                     <li>Vercel: website hosting and deployment</li>
                     <li>Cloudflare Turnstile: bot-detection challenge on form submissions (United States); processes IP address and ephemeral challenge signals per Cloudflare&apos;s privacy policy. The challenge is essential for form security and is not used to track or profile you across the site.</li>
-                    <li>Ko-fi and PayPal: supporter membership and donation payment processing</li>
-                    <li>Stripe: cloud AI subscription and credit pack payment processing</li>
+                    <li>Ko-fi and PayPal: one-off donation payment processing</li>
+                    <li>Stripe: InnerZero Pro, cloud AI subscription, Business Licence, and credit pack payment processing</li>
                     <li>Formspree: contact form submissions</li>
                   </ul>
                 </div>

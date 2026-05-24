@@ -38,7 +38,7 @@ Three optional revenue streams, none of which gate the core product:
 
 1. Cloud AI subscriptions (£9.99 to £39.99 per month) for users who want faster responses or access to premium cloud models without setting up their own API keys.
 2. Business Licence (per seat: £19.99/month or £149.99/year, with a volume rate of £129.99/year from 5 seats) for commercial users.
-3. Voluntary Supporter donations (£4.99 per month) via Ko-fi, with perks such as a supporter badge, extra themes, early access, and a Discord role.
+3. InnerZero Pro, an optional membership (£4.99 per month or £39.99 per year) via Stripe, with premium local extras such as premium themes, premium personalities, early access, and a Pro badge.
 
 The free desktop app will remain free and fully featured.
 
@@ -378,11 +378,11 @@ Budget models use 1 credit per response. Standard uses 2, Premium uses 4, Ultra 
 
 Add your own keys for 7 providers (DeepSeek, OpenAI, Anthropic, Google AI, xAI Grok, Qwen, Kimi) at zero markup. Available on all plans.
 
-## Supporter
+## InnerZero Pro
 
-£4.99 per month via Ko-fi.
+£4.99 per month or £39.99 per year via Stripe.
 
-Fund development and get perks: supporter badge, extra themes, early access, Discord role, roadmap voting.
+An optional membership that unlocks premium local extras: premium themes, premium personalities, early access, and a Pro badge. Separate from Cloud AI plans, which add online compute.
 
 ## One-off Donation
 
@@ -396,11 +396,11 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 
 **Can I use my own API keys?** Yes. Add your own API keys from any supported provider: DeepSeek, OpenAI, Anthropic, and more. Zero markup. We never touch your keys.
 
-**What does the Supporter tier include?** Supporter is a monthly donation to fund InnerZero development. You get a supporter badge, extra themes, early access to new features, and a Discord role. It does not include cloud AI credits.
+**What is InnerZero Pro?** InnerZero Pro is an optional membership, £4.99/month or £39.99/year via Stripe, that unlocks premium local extras: premium themes, premium personalities, early access, and a Pro badge. It is separate from Cloud AI plans, which add online compute.
 
 **Is my data private?** Yes. All AI processing, memory, and conversations stay on your machine. If you enable cloud mode, your prompts are forwarded to the AI provider and returned. InnerZero never stores or reads them.
 
-**Do I need an account?** No. The local app works without any account. You only need an account if you want cloud AI plans, supporter perks, or future hosted features.
+**Do I need an account?** No. The local app works without any account. You only need an account if you want cloud AI plans, InnerZero Pro, or future hosted features.
 
 **Do I need a licence to use InnerZero at work?** If you're using InnerZero for business, commercial, or revenue-generating purposes, yes, a Business Licence is required. Per seat: £19.99/month, or £149.99/year (£129.99/year from 5 seats). 25+ seats is via help@innerzero.com. The app is identical to the free version. The licence is just permission to use it commercially. Personal use, education, and non-profits are free.
 
@@ -507,7 +507,7 @@ If you use InnerZero's voice features, the application accesses your microphone 
 
 ## What the website collects
 
-When you create an account on innerzero.com, we collect your email address. If you join the waitlist, we store your email address. Payment information for supporter memberships and donations is processed by Ko-fi and PayPal; we do not receive or store your payment card details. Cloud AI subscription payments are processed by Stripe; we never store card details directly.
+When you create an account on innerzero.com, we collect your email address. If you join the waitlist, we store your email address. Payment information for InnerZero Pro, cloud plans, and Business Licences is processed by Stripe, and payment information for one-off donations is processed by Ko-fi and PayPal; we never receive or store your payment card details.
 
 ## Cookies
 
@@ -517,8 +517,8 @@ The InnerZero website uses only essential cookies for functionality (authenticat
 
 - Supabase: authentication and database hosting (EU region)
 - Vercel: website hosting, deployment, and privacy-friendly analytics
-- Ko-fi and PayPal: supporter membership and donation payment processing
-- Stripe: cloud AI subscription and credit pack payment processing
+- Ko-fi and PayPal: one-off donation payment processing
+- Stripe: InnerZero Pro, cloud AI subscription, Business Licence, and credit pack payment processing
 - Formspree: contact form submissions
 - Resend: transactional email (usage alerts)
 
@@ -725,7 +725,7 @@ Full terms at https://innerzero.com/terms. Key points:
 - X (Twitter): https://x.com/InnerZero_ai
 - Instagram: https://www.instagram.com/innerzero_ai
 - LinkedIn: https://www.linkedin.com/company/innerzero
-- Ko-fi: https://ko-fi.com/innerzero (Supporter tier and donations)
+- Ko-fi: https://ko-fi.com/innerzero (one-off donations)
 - GitHub Releases: https://github.com/zotex12/innerzero-releases (public release artefacts)
 - Email: help@innerzero.com
 
