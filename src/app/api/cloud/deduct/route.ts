@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDesktopUser } from "@/lib/auth-desktop";
 import { deductUsage } from "@/lib/cloud-plans";
-import { checkRateLimit, getRateLimitKey } from "@/lib/rate-limit";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
 import { PENCE_PER_USAGE_UNIT } from "@/lib/spending-cap";
 
@@ -16,11 +16,17 @@ interface DeductBody {
 }
 
 export async function POST(request: Request) {
-  const rateLimited = checkRateLimit(request, "cloudDeduct", getRateLimitKey(request));
-  if (rateLimited) return rateLimited;
+  // Coarse pre-auth IP guard against unauthenticated abuse of the auth check.
+  const ipLimited = checkRateLimit(request, "cloudAbuse");
+  if (ipLimited) return ipLimited;
 
   const auth = await getDesktopUser(request);
   if ("error" in auth) return auth.error;
+
+  // Real per-user limit, keyed by the verified user id so a forged token cannot
+  // pick a bucket and users behind a shared NAT do not throttle each other.
+  const rateLimited = checkRateLimit(request, "cloudDeduct", `user:${auth.user.id}`);
+  if (rateLimited) return rateLimited;
 
   let body: DeductBody;
   try {

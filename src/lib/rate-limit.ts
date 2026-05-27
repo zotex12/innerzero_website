@@ -1,10 +1,14 @@
 /**
  * In-memory token bucket rate limiter.
  * Tracks request timestamps per identifier (typically IP address).
- * Automatic cleanup of expired entries every 60 seconds.
+ * Cleanup runs every 60 seconds and prunes timestamps older than each store's
+ * own configured window, so it never evicts entries inside an active window.
  */
 
 const stores = new Map<string, Map<string, number[]>>();
+// Largest window (ms) seen per store, used by cleanup so a long window (for
+// example the 1 hour newsletter limit) is not reset early by a fixed threshold.
+const storeWindows = new Map<string, number>();
 
 // Global cleanup interval: removes expired entries from all stores
 let cleanupStarted = false;
@@ -14,9 +18,10 @@ function startCleanup() {
   cleanupStarted = true;
   setInterval(() => {
     const now = Date.now();
-    for (const [, store] of stores) {
+    for (const [name, store] of stores) {
+      const windowMs = storeWindows.get(name) ?? 120_000;
       for (const [key, timestamps] of store) {
-        const recent = timestamps.filter((t) => now - t < 120_000);
+        const recent = timestamps.filter((t) => now - t < windowMs);
         if (recent.length === 0) {
           store.delete(key);
         } else {
@@ -44,6 +49,7 @@ export function rateLimit(
   storeName = "default"
 ): { success: boolean; remaining: number; retryAfter: number } {
   const store = getStore(storeName);
+  storeWindows.set(storeName, Math.max(storeWindows.get(storeName) ?? 0, windowMs));
   const now = Date.now();
   const timestamps = store.get(identifier) ?? [];
   const recent = timestamps.filter((t) => now - t < windowMs);
@@ -68,37 +74,6 @@ export function getClientIp(request: Request): string {
   return "unknown";
 }
 
-/**
- * Preferred rate-limit identifier.
- * If the request carries an Authorization: Bearer <jwt> header whose middle
- * segment decodes to JSON with a string `sub` claim, return "user:<sub>".
- * Otherwise fall back to "ip:<ip>". Signature is NOT verified here — Supabase
- * verifies later in auth-desktop. Any parse failure silently falls through.
- */
-export function getRateLimitKey(request: Request): string {
-  try {
-    const authHeader = request.headers.get("authorization");
-    if (authHeader?.startsWith("Bearer ")) {
-      const token = authHeader.slice(7);
-      const parts = token.split(".");
-      if (parts.length === 3) {
-        // Base64url → base64
-        const b64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
-        const padded = b64 + "=".repeat((4 - (b64.length % 4)) % 4);
-        const payload = JSON.parse(
-          Buffer.from(padded, "base64").toString("utf8")
-        );
-        if (payload && typeof payload.sub === "string" && payload.sub.length > 0) {
-          return `user:${payload.sub}`;
-        }
-      }
-    }
-  } catch {
-    // fall through to IP
-  }
-  return `ip:${getClientIp(request)}`;
-}
-
 /** Preset rate limiters for common endpoint types. */
 export const LIMITS = {
   waitlist:        { limit: 5,   windowMs: 60_000, store: "waitlist" },
@@ -110,13 +85,14 @@ export const LIMITS = {
   cloudDeduct:     { limit: 10,  windowMs: 60_000, store: "cloud-deduct" },
   cloudProxy:      { limit: 10,  windowMs: 60_000, store: "cloud-proxy" },
   spendingCap:     { limit: 5,   windowMs: 60_000, store: "spending-cap" },
+  cloudAbuse:      { limit: 120, windowMs: 60_000, store: "cloud-abuse" },
   themeRedeem:     { limit: 5,   windowMs: 60_000, store: "theme-redeem" },
   newsletter:      { limit: 3,   windowMs: 3_600_000, store: "newsletter" },
 } as const;
 
 /** Check rate limit and return 429 response if exceeded, or null if OK.
- *  Pass an explicit `identifier` to key the bucket on user_id (preferred for
- *  authenticated cloud routes via getRateLimitKey); omit to fall back to IP. */
+ *  Pass an explicit `identifier` (for example the verified user id after auth)
+ *  to key the bucket on the user; omit to fall back to client IP. */
 export function checkRateLimit(
   request: Request,
   preset: keyof typeof LIMITS,

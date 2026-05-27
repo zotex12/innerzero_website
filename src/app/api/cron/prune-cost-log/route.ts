@@ -7,8 +7,13 @@ import { createAdminClient } from "@/lib/supabase/admin";
 // bounded. Runs daily at 04:00 UTC (one hour after the 03:00 jobs).
 
 export async function GET(request: Request) {
+  const secret = process.env.CRON_SECRET;
+  if (!secret) {
+    // Fail closed: a missing or empty CRON_SECRET must never authorize the job.
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const authHeader = request.headers.get("authorization") ?? "";
-  const expected = `Bearer ${process.env.CRON_SECRET ?? ""}`;
+  const expected = `Bearer ${secret}`;
   const a = Buffer.from(authHeader);
   const b = Buffer.from(expected);
   if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {

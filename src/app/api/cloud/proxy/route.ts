@@ -7,7 +7,7 @@ import {
   estimateCostPence,
   ProviderUnavailableError,
 } from "@/lib/cloud-providers";
-import { checkRateLimit, getRateLimitKey } from "@/lib/rate-limit";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
 import { applySecurityHeaders } from "@/lib/security-headers";
 
@@ -48,11 +48,17 @@ interface ProxyBody {
 }
 
 export async function POST(request: Request) {
-  const rateLimited = checkRateLimit(request, "cloudProxy", getRateLimitKey(request));
-  if (rateLimited) return rateLimited;
+  // Coarse pre-auth IP guard against unauthenticated abuse of the auth check.
+  const ipLimited = checkRateLimit(request, "cloudAbuse");
+  if (ipLimited) return ipLimited;
 
   const auth = await getDesktopUser(request);
   if ("error" in auth) return auth.error;
+
+  // Real per-user limit, keyed by the verified user id so a forged token cannot
+  // pick a bucket and users behind a shared NAT do not throttle each other.
+  const rateLimited = checkRateLimit(request, "cloudProxy", `user:${auth.user.id}`);
+  if (rateLimited) return rateLimited;
 
   let body: ProxyBody;
   try {
@@ -170,7 +176,7 @@ export async function POST(request: Request) {
   const alertsSent = (profile.usage_alerts_sent as string[] | null) ?? [];
 
   // Check user has active plan or PAYG packs
-  let hasPlan = profile.plan && profile.plan !== "free";
+  const hasPlan = profile.plan && profile.plan !== "free";
   let hasPayg = false;
 
   if (!hasPlan) {
