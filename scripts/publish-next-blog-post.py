@@ -4,9 +4,15 @@ Weekly blog auto-publisher (date-based scheduling).
 
 Phase 2026-05-03: switched from NN-prefix ordering to frontmatter `date:`
 field so the queue is visually schedulable in Front Matter CMS. Each queue
-file now carries a real publish date in its frontmatter; the script picks
-the file with the earliest `date <= today UTC` (filename alphabetical
-tie-break) and publishes it.
+file now carries a real publish date in its frontmatter.
+
+Phase 2026-05-31: catch-up publishing. The script now publishes EVERY queue
+file whose `date <= today UTC` in a single run, oldest first (filename
+alphabetical tie-break), each as its own commit. Previously it published
+only the single earliest-due file per run; combined with best-effort cron
+scheduling (GitHub skips/delays scheduled workflows under load) that left
+the queue permanently behind whenever a run was missed. Draining all due
+files per run self-heals after any skipped or delayed cron firing.
 
 Behaviour per file selected:
   - Strip the leading QUICK-EDIT CHECKLIST HTML comment if present.
@@ -31,9 +37,12 @@ Environment:
   DRY_RUN=1 / true / yes / on  -- print actions without writing or committing
 
 Exit codes:
-  0  published one post, OR no candidates due today (clean no-op)
-  1  any error (target collision, git failure, date-format mismatch with
-     live posts, live blog dir missing, queue dir missing, etc.)
+  0  published all due posts (zero or more), OR no candidates due today
+     (clean no-op). A single file skipped for a recoverable reason
+     (target collision, frontmatter regression) is warned and does not
+     fail the run.
+  1  fatal error (git failure, date-format mismatch with live posts, live
+     blog dir missing, queue dir missing, etc.)
 """
 
 from __future__ import annotations
@@ -202,12 +211,14 @@ def _extract_frontmatter_date(raw: str) -> _dt.date | None:
         return None
 
 
-def _select_next_queue_file(today_utc: _dt.date) -> Path | None:
-    """Pick the queue file with the earliest date <= today UTC.
+def _select_due_queue_files(today_utc: _dt.date) -> list[Path]:
+    """Return every queue file with date <= today UTC, oldest first.
 
-    Tie-break on filename (alphabetical). Returns None if no candidate is
-    due. Files with missing or malformed frontmatter are skipped with a
-    warning.
+    Sorted by (date, filename) so catch-up order is chronological and
+    deterministic: a run that fires after one or more cron firings were
+    skipped or delayed drains the whole backlog in scheduled order rather
+    than publishing one post and falling permanently behind. Files with
+    missing or malformed frontmatter are skipped with a warning.
     """
     if not QUEUE_DIR.is_dir():
         raise RuntimeError(f"queue dir missing: {QUEUE_DIR}")
@@ -240,13 +251,10 @@ def _select_next_queue_file(today_utc: _dt.date) -> Path | None:
 
         candidates.append((date_value, path.name, path))
 
-    if not candidates:
-        return None
-
     # Earliest date wins; alphabetical filename breaks ties so behaviour
     # is deterministic when two files share the same date.
     candidates.sort(key=lambda c: (c[0], c[1]))
-    return candidates[0][2]
+    return [c[2] for c in candidates]
 
 
 def _split_frontmatter_and_body(raw: str) -> tuple[str, str, str]:
@@ -319,25 +327,15 @@ def _run_git(*args: str) -> None:
         raise RuntimeError(f"git command failed with code {result.returncode}: {' '.join(cmd)}")
 
 
-def main() -> int:
-    try:
-        _verify_date_format_against_live()
-    except Exception as e:
-        err(str(e))
-        return 1
+def _publish_one(queue_file: Path, today_utc: _dt.date) -> bool:
+    """Publish a single due queue file as its own commit.
 
-    today_utc = _dt.datetime.now(_dt.timezone.utc).date()
-
-    try:
-        queue_file = _select_next_queue_file(today_utc)
-    except Exception as e:
-        err(str(e))
-        return 1
-
-    if queue_file is None:
-        print("queue empty or all future-dated, exiting cleanly")
-        return 0
-
+    Returns True if the post was published (or, under DRY_RUN, would be);
+    False if the file was skipped for a recoverable reason (target
+    collision, frontmatter regression, file-system error) so the rest of
+    the batch can still proceed. Raises on a fatal git failure so the
+    caller can abort the run loudly.
+    """
     slug = queue_file.stem  # filename without the .md extension
     target_name = f"{slug}.mdx"
     target_path = LIVE_DIR / target_name
@@ -345,28 +343,29 @@ def main() -> int:
     if target_path.exists():
         err(
             f"refusing to overwrite existing live post at "
-            f"{target_path.relative_to(ROOT).as_posix()}. Resolve manually."
+            f"{target_path.relative_to(ROOT).as_posix()}. Skipping "
+            f"{queue_file.name}; resolve manually."
         )
-        return 1
+        return False
 
     try:
         raw = _normalise_text(queue_file.read_text(encoding="utf-8"))
         # The frontmatter date is the source of truth (set by the human
-        # editor when scheduling). _select_next_queue_file already
+        # editor when scheduling). _select_due_queue_files already
         # validated it parses correctly; re-extract here for body
         # substitution.
         publish_date_value = _extract_frontmatter_date(raw)
         if publish_date_value is None:
-            err(
-                f"unexpected: {queue_file.name} parsed as a candidate but "
-                "frontmatter date no longer extracts. Refusing to publish."
+            warn(
+                f"{queue_file.name}: parsed as a candidate but frontmatter "
+                "date no longer extracts. Skipping."
             )
-            return 1
+            return False
         publish_date = publish_date_value.strftime(DATE_FORMAT)
         new_content = _transform_content(raw, publish_date)
     except Exception as e:
-        err(str(e))
-        return 1
+        warn(f"{queue_file.name}: failed to prepare for publish ({e}). Skipping.")
+        return False
 
     log(f"Selected queue file: {queue_file.relative_to(ROOT).as_posix()}")
     log(f"Frontmatter date:    {publish_date}")
@@ -379,13 +378,13 @@ def main() -> int:
         print(preview)
         log(f"Would delete:  {queue_file.relative_to(ROOT).as_posix()}")
         log(f'Would commit: "Auto-publish: {slug}"')
-        return 0
+        return True
 
     try:
         target_path.write_text(new_content, encoding="utf-8")
         queue_file.unlink()
     except Exception as e:
-        err(f"file operation failed: {e}")
+        err(f"file operation failed for {queue_file.name}: {e}")
         # Attempt to roll back a partial write if we created the live file
         # but failed before unlinking the queue file.
         try:
@@ -393,18 +392,56 @@ def main() -> int:
                 target_path.unlink()
         except Exception:
             pass
-        return 1
+        return False
 
+    # git failures here are fatal: a half-staged batch must not be pushed.
+    # `git add` on a deleted path stages the deletion in git 2.0+.
+    _run_git("add", target_path.relative_to(ROOT).as_posix())
+    _run_git("add", queue_file.relative_to(ROOT).as_posix())
+    _run_git("commit", "-m", f"Auto-publish: {slug}")
+
+    print(f"Published: {slug}")
+    return True
+
+
+def main() -> int:
     try:
-        _run_git("add", target_path.relative_to(ROOT).as_posix())
-        # `git add` on a deleted path stages the deletion in git 2.0+.
-        _run_git("add", queue_file.relative_to(ROOT).as_posix())
-        _run_git("commit", "-m", f"Auto-publish: {slug}")
+        _verify_date_format_against_live()
     except Exception as e:
         err(str(e))
         return 1
 
-    print(f"Published: {slug}")
+    today_utc = _dt.datetime.now(_dt.timezone.utc).date()
+
+    try:
+        due_files = _select_due_queue_files(today_utc)
+    except Exception as e:
+        err(str(e))
+        return 1
+
+    if not due_files:
+        print("queue empty or all future-dated, exiting cleanly")
+        return 0
+
+    log(
+        f"{len(due_files)} post(s) due (date <= "
+        f"{today_utc.strftime(DATE_FORMAT)}). Publishing oldest first."
+    )
+
+    published = 0
+    try:
+        for queue_file in due_files:
+            if _publish_one(queue_file, today_utc):
+                published += 1
+    except Exception as e:
+        # Fatal git error mid-batch. Any commits already made stay on the
+        # runner's HEAD, but returning non-zero fails this step so the
+        # workflow's separate push step never runs; the unpushed commits
+        # are discarded with the runner and retried on the next firing.
+        err(str(e))
+        return 1
+
+    log(f"Published {published} of {len(due_files)} due post(s) this run.")
     return 0
 
 

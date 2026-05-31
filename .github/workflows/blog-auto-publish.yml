@@ -1,11 +1,14 @@
 name: Blog auto-publish from queue
 
-# Weekly auto-publish of the next queued blog post.
+# Daily auto-publish of every queued blog post that is due.
 #
 # Isolation notes:
-# - Triggers ONLY on cron (Tuesday 09:00 UTC) and workflow_dispatch
+# - Triggers ONLY on cron (daily 09:00 UTC) and workflow_dispatch
 # - Never triggers on push to main, so regular development commits are
 #   unaffected
+# - The publish script drains ALL posts with date <= today in one run
+#   (one commit each), so a skipped or delayed cron firing self-heals on
+#   the next run instead of leaving the queue permanently behind
 # - Rebases onto origin/main before pushing to avoid race with concurrent
 #   commits
 # - Fails loudly (non-zero exit, GitHub emails the repo owner) rather than
@@ -19,8 +22,9 @@ name: Blog auto-publish from queue
 
 on:
   schedule:
-    # Tuesday + Friday 09:00 UTC
-    - cron: "0 9 * * 2,5"
+    # Daily 09:00 UTC. The publish script only acts on posts whose date is
+    # due, so days with nothing scheduled are clean no-ops.
+    - cron: "0 9 * * *"
   workflow_dispatch:
     inputs:
       dry_run:

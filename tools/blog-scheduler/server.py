@@ -35,10 +35,11 @@ QUEUE_DIR = REPO_ROOT / "blog-queue"
 LIVE_BASE_URL = "https://innerzero.com/blog/"
 
 # Publishing schedule: matches `.github/workflows/blog-auto-publish.yml`
-# (Tuesday + Friday 09:00 UTC). Hardcoded here as a single source of truth
-# for the UI; if the cron ever changes, update both the workflow file and
-# these two constants.
-CRON_EXPRESSION = "0 9 * * 2,5"
+# (daily 09:00 UTC; the publish script drains every post that is due, so
+# posts go live on their scheduled date). Hardcoded here as a single source
+# of truth for the UI; if the cron ever changes, update both the workflow
+# file and these two constants.
+CRON_EXPRESSION = "0 9 * * *"
 PUBLISH_TIME_UTC = "09:00"
 
 DATE_FORMAT = "%Y-%m-%d"
