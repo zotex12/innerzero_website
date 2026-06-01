@@ -5,7 +5,6 @@ import {
   MonitorCog,
   Shield,
   HardDrive,
-  MessageSquare,
   Wrench,
   Moon as MoonIcon,
   Download,
@@ -14,6 +13,8 @@ import {
   Mail,
   Key,
   Gift,
+  Languages,
+  Bell,
   type LucideIcon,
 } from "lucide-react";
 
@@ -61,6 +62,12 @@ export const FEATURE_CARDS: FeatureCardData[] = [
       "All AI processing happens on your PC. No cloud servers, no uploads, no tracking. Your conversations stay yours.",
   },
   {
+    icon: Languages,
+    title: "Speaks Your Language",
+    description:
+      "The whole interface is available in 26 languages, and Zero replies in the one you pick. Change it any time in Settings, with right-to-left support and no internet needed.",
+  },
+  {
     icon: Brain,
     title: "Learns and Remembers",
     description:
@@ -77,6 +84,12 @@ export const FEATURE_CARDS: FeatureCardData[] = [
     title: "Hardware Aware",
     description:
       "InnerZero detects your PC's specs and picks the right AI model automatically. Or point it at a remote Ollama server on your network.",
+  },
+  {
+    icon: Bell,
+    title: "Connected and Proactive",
+    description:
+      "Sync Google Calendar two ways, read Gmail metadata (sender, subject, snippet), and get briefings and reminders on your schedule. Every connector is opt-in and revocable.",
   },
 ];
 
@@ -129,10 +142,12 @@ export const PRICING_FREE = {
   subtitle: "Free to download. No account, no subscription, no trial.",
   features: [
     "AI chat with streaming responses",
+    "Full app interface in 26 languages",
     "Full voice mode (speech + TTS)",
     "Persistent memory system",
     "30+ built-in tools",
     "Document upload and Q&A",
+    "Gmail and Google Calendar connectors",
     "Knowledge packs (offline Wikipedia)",
     "Screen automation",
     "6 themes and AI personality",
@@ -371,8 +386,9 @@ export const COMING_SOON_FEATURES: ComingSoonFeature[] = [
   },
   {
     icon: Mail,
-    title: "Email Integration",
-    description: "Let Zero manage and draft emails directly. Coming soon.",
+    title: "Email Drafting",
+    description:
+      "Zero already reads Gmail headers. Drafting and sending emails is coming soon.",
   },
   {
     icon: Shield,
@@ -386,16 +402,16 @@ export const COMING_SOON_FEATURES: ComingSoonFeature[] = [
 
 export const SYSTEM_REQUIREMENTS = {
   minimum: [
-    "Windows 10 (64-bit) or later",
+    "Windows 10 (64-bit), macOS 14 Sonoma, or Linux x86_64 (glibc 2.31+)",
     "8GB RAM",
     "10GB free disk space",
-    "Modern CPU (Intel i5 / AMD Ryzen 5 or equivalent)",
+    "Modern CPU (Intel i5 / AMD Ryzen 5 / Apple Silicon or equivalent)",
   ],
   recommended: [
-    "Windows 10/11 (64-bit)",
+    "Windows 10/11, macOS 14+, or Linux x86_64",
     "16GB+ RAM",
     "20GB+ free disk space",
-    "NVIDIA GPU with 6GB+ VRAM",
+    "NVIDIA GPU with 6GB+ VRAM, or Apple Silicon",
     "SSD for faster model loading",
   ],
 } as const;

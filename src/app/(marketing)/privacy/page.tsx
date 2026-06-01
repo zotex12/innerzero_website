@@ -130,6 +130,15 @@ export default function PrivacyPage() {
                     If you use BYO (Bring Your Own) API keys, requests go directly from your machine to the provider. InnerZero is not involved at all. Keys are encrypted and stored locally.
                   </p>
                 </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-1">
+                    Action Hub is opt-in and yours to approve
+                  </h3>
+                  <p className="text-text-secondary leading-relaxed">
+                    The optional Action Hub uses your own Apify API key for web research and can help you fill in job applications. Research parameters go to Apify under your own account. Application details you save are sent from your machine straight to the job site you choose, and only after you approve each submission. InnerZero does not receive, store, or proxy any of it.
+                  </p>
+                </div>
               </div>
             </section>
           </ScrollReveal>
@@ -141,7 +150,7 @@ export default function PrivacyPage() {
                 Privacy Policy
               </h2>
               <p className="mt-2 text-sm text-text-muted">
-                Last updated: 2026-05-10
+                Last updated: 2026-06-01
               </p>
 
               <div className="mt-6 space-y-6 text-text-secondary leading-relaxed text-sm">
@@ -269,6 +278,21 @@ export default function PrivacyPage() {
                   </h3>
                   <p>
                     Proactive Assistant briefings may pull from your local memory, connected mail (if Gmail is enabled), and knowledge packs to compose briefing output. Composition happens on your machine. If you have routed automation tasks to a cloud model, that routing is covered by the Cloud Mode disclosures above.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-base font-semibold text-text-primary mb-2">
+                    Action Hub: web research and job applications (optional)
+                  </h3>
+                  <p>
+                    The optional Action Hub has two parts, both off by default and both run from your machine.
+                  </p>
+                  <p className="mt-2">
+                    <span className="font-semibold text-text-primary">Web research.</span> Research uses your own Apify API key. When you start a research task, only your run parameters (such as search terms or target URLs) and your Apify token are sent to Apify&apos;s servers to run the scraper. Your memory database, files, and profile are never sent. Your Apify token is encrypted and stored locally on your device. Apify processes your request under its own terms of service and privacy policy. You are responsible for what you choose to research and for complying with the terms of any site you target.
+                  </p>
+                  <p className="mt-2">
+                    <span className="font-semibold text-text-primary">Job applications.</span> If you use the job-application assistant, the profile details you enter (such as your name, contact details, CV information, answers, and an optional AI-tailored note) are submitted directly from your machine to the third-party job or company website you choose. InnerZero does not receive, store, or proxy this information. Each submission requires your explicit approval, and you can keep the assistant to draft-only and review everything first. The destination website processes your details under its own privacy policy.
                   </p>
                 </div>
 

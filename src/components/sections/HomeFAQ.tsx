@@ -2,7 +2,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
 // Server-rendered FAQ for the homepage. Native <details>/<summary>
-// disclosure: zero JS, keyboard-accessible by default. The 5-item
+// disclosure: zero JS, keyboard-accessible by default. The 6-item
 // array is exported so the homepage page.tsx can build matching
 // FAQPage JSON-LD from the same source — keeps the schema text in
 // lockstep with the displayed copy with no risk of drift.
@@ -26,7 +26,12 @@ export const HOME_FAQ: HomeFAQItem[] = [
   {
     question: "What platforms does it run on?",
     answer:
-      "Windows, macOS, and Linux. Download the installer for your platform from the download page.",
+      "Windows, macOS, and Linux. Download the installer for your platform from the download page. The macOS build is signed and notarised by Apple, so it opens with no Gatekeeper warning.",
+  },
+  {
+    question: "Can I use InnerZero in my language?",
+    answer:
+      "Yes. The interface is available in 26 languages and Zero replies in the one you pick. Choose your language in Settings; it applies instantly, with right-to-left support for Arabic, Hebrew, Persian, and Urdu, and it works fully offline.",
   },
   {
     question: "Do I need a high-end PC?",

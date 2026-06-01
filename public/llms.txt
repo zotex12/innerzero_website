@@ -9,16 +9,16 @@ Website: https://innerzero.com
 Download: https://innerzero.com/download
 Company: Summers Solutions Ltd, a UK company based in Birmingham, England (Company No. 16448945)
 Data protection: ICO registered (registration ZC122497)
-Current version: v0.1.6 (May 2026)
-Install sizes: 1.32 GB (Windows), 654 MB (macOS), 1.24 GB (Linux)
+Current version: v0.1.7 (June 2026)
+Install sizes: 1.18 GB (Windows), 722 MB (macOS), 1.31 GB (Linux)
 Minimum requirements: 8 GB RAM, 10 GB free disk, modern 64-bit CPU (AVX2)
 Recommended: 16+ GB RAM, NVIDIA GPU with 6+ GB VRAM, SSD
 
 ## Start here
 
 - [Home](https://innerzero.com): Product overview, tagline, primary download CTAs.
-- [Download InnerZero (free)](https://innerzero.com/download): Free installers for Windows 10/11, macOS 14+, and Linux x86_64. Windows installer is code-signed by Summers Solutions Ltd.
-- [Features](https://innerzero.com/features): Full capability breakdown: AI chat, voice, memory, 30+ tools, knowledge packs, screen automation, cloud AI, customisation, and unrestricted mode.
+- [Download InnerZero (free)](https://innerzero.com/download): Free installers for Windows 10/11, macOS 14+, and Linux x86_64. The Windows installer is code-signed by Summers Solutions Ltd and the macOS app is signed with Developer ID and notarised by Apple, so it opens with no Gatekeeper warning.
+- [Features](https://innerzero.com/features): Full capability breakdown: a 26-language interface, AI chat, voice, memory, 30+ tools, Gmail and Google Calendar connectors, proactive briefings, the Action Hub, knowledge packs, screen automation, cloud AI, customisation, and unrestricted mode.
 - [Pricing](https://innerzero.com/pricing): Free for personal use. Business Licence: £19.99/seat/month, or £149.99/seat/year (£129.99/seat/year from 5 seats). 25+ seats by contact. Optional cloud AI from £9.99/month or bring your own API keys.
 - [Privacy](https://innerzero.com/privacy): Full privacy policy, ICO registration details, what stays local, and how cloud mode handles data.
 - [About](https://innerzero.com/about): Mission, company background, and why InnerZero is local-first.
@@ -28,12 +28,16 @@ Recommended: 16+ GB RAM, NVIDIA GPU with 6+ GB VRAM, SSD
 InnerZero is a private AI assistant desktop application. It provides:
 
 - Private AI chat with streaming responses, markdown rendering, and two thinking modes (Quick for fast answers, Thorough for deeper reasoning).
+- A 26-language interface. Pick your language in Settings and the whole app, its menus, and the assistant's replies follow, with right-to-left support for Arabic, Hebrew, Persian, and Urdu. A one-time upgrade keeps saved memories searchable across every language. Works fully offline.
 - Full voice mode: local speech-to-text via faster-whisper on GPU, local text-to-speech via Kokoro, voice shortcuts for quick actions, and optional cloud voices from OpenAI (13 options).
 - A persistent memory system that learns your name, preferences, projects, and facts across sessions. All memory stored in a local SQLite database.
 - 30+ built-in tools: web search, document Q&A (.txt, .md, .pdf, .docx, .xlsx, .csv), calculator, file operations, timers, alarms, reminders, notes, dictionary, text transforms, system info, hash/JSON/base64 utilities, clipboard, URL fetching, and more.
 - Knowledge packs: optional offline Wikipedia databases for factual answers without internet. Best of Wikipedia (95K articles) and Simple English Wikipedia (280K articles) available.
 - Screen automation: Zero can read what is on your screen, click, type, and scroll other applications. Off by default, opt-in only, emergency stop via Escape key.
 - Cloud AI (optional): bring your own API keys for 7 providers (DeepSeek, OpenAI, Anthropic, Google AI, xAI Grok, Qwen, Kimi) with zero markup, or subscribe to a managed cloud plan.
+- Connectors: read-only Gmail and two-way Google Calendar, both opt-in and revocable, with tokens stored encrypted on your machine.
+- Proactive briefings: scheduled summaries and reminders (daily news, learning, evening wind-down, and more) delivered to chat on your schedule. Off by default.
+- Action Hub: an opt-in research and apply assistant. With your own Apify API key it gathers sources from the web, and with your saved job profile it can help fill in and submit job applications, with your approval on every action.
 - Sleep and reflection: overnight processing that extracts facts from conversations, prunes duplicates, and strengthens important memories.
 - AI personality system: Professional, Friendly, Concise, or custom personalities that adjust Zero's tone without overriding core behaviour.
 - 6 themes: Dark Zero, Light Zero, Classic Carbon, Soft Pink, Dark Teal, and Neon Tokyo.
@@ -46,7 +50,8 @@ InnerZero is a private AI assistant desktop application. It provides:
 - **Do I need an account to use InnerZero?** No. The local app works with no sign-up, login, or email. Accounts are only needed for optional cloud AI subscriptions, InnerZero Pro, or account-based features.
 - **Does InnerZero send my data to the cloud?** No, not by default. All AI processing, memory, voice, and documents stay on your PC. Cloud mode is off by default. When you opt in, only the current prompt is forwarded to your chosen provider. Your memory database, files, profile facts, and past conversations are never sent.
 - **What AI models does InnerZero use?** Open-source models via Ollama or LM Studio. Default is the Qwen3 family for reasoning and Gemma3 family for voice. Model size is chosen automatically based on your hardware. Cloud mode adds access to DeepSeek, GPT, Claude, Gemini, Grok, Qwen Plus, and Kimi.
-- **What platforms does InnerZero run on?** Windows 10/11 (64-bit), macOS 14+ (Apple Silicon), and Linux x86_64 (glibc 2.31+). Mobile is not supported.
+- **What platforms does InnerZero run on?** Windows 10/11 (64-bit), macOS 14+ (Apple Silicon, signed and notarised by Apple), and Linux x86_64 (glibc 2.31+). Mobile is not supported.
+- **What languages does InnerZero support?** The interface is available in 26 languages, including English, French, Spanish, German, Italian, Portuguese, Dutch, Polish, Russian, Ukrainian, Chinese (Simplified and Traditional), Japanese, Korean, Arabic, Hebrew, Hindi, Turkish, Vietnamese, Thai, Swedish, Indonesian, Persian, and Urdu, with right-to-left support for Arabic, Hebrew, Persian, and Urdu. Pick your language in Settings and the whole app and the assistant's replies follow.
 - **Does InnerZero work offline?** Yes. Once models are downloaded, the entire app works with no internet connection. Knowledge packs provide offline reference content. Offline mode can disable all outbound network activity with one toggle.
 - **Can I use my own API keys?** Yes. Bring your own keys for DeepSeek, OpenAI, Anthropic, Google AI, xAI Grok, Qwen, or Kimi. Zero markup. Keys are encrypted locally using a machine-derived key.
 - **Who built InnerZero?** Summers Solutions Ltd, a UK software company based in Birmingham, England. Company number 16448945. ICO registered (ZC122497).
@@ -134,6 +139,7 @@ InnerZero is a private AI assistant desktop application. It provides:
 - ICO registered (ZC122497).
 - Data processors (cloud mode only): Microsoft Azure (DeepSeek, EU region), Google (Gemini), Anthropic (Claude), Stripe (payments), Supabase (account data), Resend (emails). Full DPA details in the privacy policy.
 - GDPR account deletion is supported from the account settings page.
+- Action Hub (optional): web research runs on Apify using your own Apify API key, and the job-apply assistant submits the profile details you enter directly from your machine to the job sites you choose. InnerZero does not receive, store, or proxy that data.
 
 ## Company
 

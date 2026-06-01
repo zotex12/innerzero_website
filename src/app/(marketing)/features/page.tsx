@@ -12,7 +12,7 @@ import {
   Palette, Sparkles, ToggleLeft, FolderOpen, Cpu,
   ShieldAlert, ShieldCheck, UserCheck, User,
   Rocket, Code, PenTool, Package, Cog,
-  Shield, List, LayoutDashboard,
+  Shield, List, LayoutDashboard, Languages, AlignRight,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -69,9 +69,21 @@ const SECTIONS: FeatureSection[] = [
     ],
   },
   {
+    title: "Languages",
+    subtitle: "Use InnerZero in your own language.",
+    bg: "secondary",
+    lead:
+      "Pick your language in Settings and the whole app follows: every menu, button, and label, plus the assistant's replies. Switching is instant, with no restart and no internet needed.",
+    items: [
+      { icon: Languages, title: "26 languages", desc: "A searchable language picker covering English, French, Spanish, German, Italian, Portuguese, Dutch, Polish, Russian, Ukrainian, Chinese, Japanese, Korean, Arabic, Hebrew, Hindi, Turkish, Vietnamese, Thai, Swedish, Indonesian, Persian, Urdu, and more." },
+      { icon: MessageSquare, title: "Replies in your language", desc: "Choose a language and Zero answers in it too, not just the menus. English stays the default until you change it." },
+      { icon: AlignRight, title: "Right-to-left support", desc: "Full right-to-left layout for Arabic, Hebrew, Persian, and Urdu." },
+      { icon: BrainIcon, title: "Multilingual memory", desc: "A one-time upgrade keeps your saved memories searchable across every language you use." },
+    ],
+  },
+  {
     title: "Voice",
     subtitle: "Talk naturally. Zero listens and responds.",
-    bg: "secondary",
     items: [
       { icon: Mic, title: "Full voice mode", desc: "Press mic and talk. Zero responds with natural speech." },
       { icon: AudioLines, title: "Local speech recognition", desc: "Your voice is transcribed on your machine. No audio leaves your PC." },
@@ -83,6 +95,7 @@ const SECTIONS: FeatureSection[] = [
   {
     title: "Memory",
     subtitle: "Zero remembers you.",
+    bg: "secondary",
     items: [
       { icon: BrainIcon, title: "Persistent memory", desc: "Zero learns from every conversation and remembers across sessions." },
       { icon: User, title: "Core profile", desc: "Store personal facts (name, preferences, work) that Zero always knows." },
@@ -95,7 +108,6 @@ const SECTIONS: FeatureSection[] = [
   {
     title: "Tools",
     subtitle: "30+ built-in tools. No plugins needed.",
-    bg: "secondary",
     items: [
       { icon: Search, title: "Web search", desc: "Search and summarise web pages without tracking." },
       { icon: FileText, title: "Document Q&A", desc: "Upload .txt, .md, .pdf, .docx, .xlsx, .csv files and ask questions." },
@@ -114,18 +126,18 @@ const SECTIONS: FeatureSection[] = [
   {
     title: "Specialists",
     subtitle: "Agents with their own model, dedicated to one kind of work.",
+    bg: "secondary",
     lead:
       "Specialists are dedicated agent personas with their own model, separate from the main assistant. Each one is purpose-built for a specific kind of work, with approval gates around the actions it can take.",
     items: [
       { icon: Code, title: "Coding Specialist", desc: "Live. Hands code tasks to a separate model and asks before any file changes." },
-      { icon: Rocket, title: "Automation Specialist", desc: "Live in v0.1.6. Routes automation tasks to a small local model, your main assistant, or a dedicated cloud model." },
+      { icon: Rocket, title: "Automation Specialist", desc: "Live. Routes automation tasks to a small local model, your main assistant, or a dedicated cloud model." },
       { icon: Sparkles, title: "Art Specialist", desc: "A specialist for image and creative work.", comingSoon: true },
     ],
   },
   {
     title: "Proactive Assistant",
     subtitle: "Briefings and reminders that arrive when you want them.",
-    bg: "secondary",
     lead:
       "Schedule briefings, daily summaries, and reminders. Optional and off by default. Composed locally from your memory, connected mail, and knowledge packs.",
     items: [
@@ -134,6 +146,19 @@ const SECTIONS: FeatureSection[] = [
       { icon: Power, title: "Quiet hours", desc: "Pause briefings during set windows of the day. They resume automatically when the window ends." },
       { icon: Send, title: "Multi-channel notifications", desc: "Desktop chat, system notification, and an optional Telegram bridge if you want briefings on your phone." },
       { icon: ToggleLeft, title: "Off by default", desc: "The Proactive Assistant only runs once you turn it on. Schedules and channels are yours to configure." },
+    ],
+  },
+  {
+    title: "Action Hub",
+    subtitle: "Hand Zero a goal and approve every step.",
+    bg: "secondary",
+    lead:
+      "An optional research and apply assistant on the Tasks page. It uses your own keys and saved profile, runs in the background, and asks for your approval before it acts. Off by default.",
+    items: [
+      { icon: Search, title: "Web research", desc: "With your own Apify API key, Zero gathers and summarises sources from the web for a goal you set." },
+      { icon: FileText, title: "Job profile", desc: "Save a reusable profile of CV details and answers that Zero can draw on when you ask it to help with an application." },
+      { icon: MousePointer, title: "Apply assist", desc: "Zero can help fill in job application forms in a fresh, isolated browser that never reuses your logins or cookies. The apply flow works best on Windows in this release." },
+      { icon: ShieldCheck, title: "Approval before it acts", desc: "Submitting an application is gated behind your explicit approval. Keep it to draft-only and review everything first." },
     ],
   },
   {
@@ -168,6 +193,8 @@ const SECTIONS: FeatureSection[] = [
       { icon: Shield, title: "Privacy blacklist", desc: "Scrub sensitive terms (names, addresses, company info) from cloud messages before they leave your machine. Reversed on response." },
       { icon: List, title: "Connection log", desc: "See every outbound connection InnerZero makes. Filterable inline log with daily rotation." },
       { icon: LayoutDashboard, title: "My Privacy page", desc: "Centralised privacy dashboard. Toggle Offline, Private, or Cloud mode. Manage blacklist, view connections, see privacy stats." },
+      { icon: ShieldCheck, title: "Egress guard", desc: "Every outbound connection passes through a single fail-closed guard. Offline and Private modes hold even if a tool tries to reach out." },
+      { icon: Router, title: "Proxy support", desc: "Behind a corporate or university proxy? Enter your HTTP or HTTPS proxy in Settings. Local AI traffic is never proxied." },
     ],
   },
   {
@@ -197,7 +224,6 @@ const SECTIONS: FeatureSection[] = [
     subtitle: "What's next.",
     bg: "secondary",
     items: [
-      { icon: Code, title: "Mac notarisation", desc: "The macOS installer is signed with Developer ID and runs under hardened runtime. On first launch, right-click the app and select Open, then click Open again to bypass Gatekeeper. Notarisation returns in a future release." },
       { icon: BookOpen, title: "More knowledge packs", desc: "Science, history, and specialised reference databases." },
       { icon: PenTool, title: "More connectors", desc: "Outlook, Discord, and LinkedIn on the same connector framework that powers Gmail and Google Calendar." },
     ],
@@ -349,7 +375,7 @@ export default function FeaturesPage() {
             applicationCategory: "DesktopApplication",
             offers: { "@type": "Offer", price: "0", priceCurrency: "GBP" },
             description:
-              "Free private AI assistant with chat, voice, memory, 30+ tools, knowledge packs, and screen automation. Runs entirely on your PC.",
+              "Free private AI assistant with a 26-language interface, chat, voice, memory, 30+ tools, Gmail and Google Calendar connectors, proactive briefings, an Action Hub for web research and job applications, knowledge packs, and screen automation. Runs entirely on your PC.",
             url: absoluteUrl("/"),
           }),
         }}

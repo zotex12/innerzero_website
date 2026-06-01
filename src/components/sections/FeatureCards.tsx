@@ -15,7 +15,7 @@ export function FeatureCards({ className }: FeatureCardsProps) {
       <Container>
         <SectionHeader title="Why InnerZero?" subtitle="AI that respects your privacy by design." />
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {FEATURE_CARDS.map((feature, i) => (
             <ScrollReveal key={feature.title} delay={i * 100}>
               <Card className="h-full">

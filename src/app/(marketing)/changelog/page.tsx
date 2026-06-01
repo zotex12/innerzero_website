@@ -36,10 +36,40 @@ export interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.7",
+    date: "June 2026",
+    releaseDate: "2026-06-01",
+    latest: true,
+    groups: [
+      {
+        label: "New",
+        entries: [
+          { text: "Multi-language interface: use InnerZero in 26 languages. Pick yours in Settings and the whole app, its menus, and the assistant's replies follow, with right-to-left support for Arabic, Hebrew, Persian, and Urdu. A one-time upgrade keeps your saved memories searchable across every language, and it all works offline." },
+          { text: "Action Hub: an opt-in research and apply assistant on the Tasks page. With your own Apify key, Zero can gather sources from the web; with your saved job profile, it can help fill in and submit job applications. Every action is gated behind your approval, and the apply browser runs in a fresh, isolated session." },
+          { text: "Proxy support: behind a corporate or university proxy? Enter your HTTP or HTTPS proxy in Settings and InnerZero routes model downloads, cloud calls, and connector traffic through it. Local AI traffic is never proxied." },
+        ],
+      },
+      {
+        label: "Improved",
+        entries: [
+          { text: "Privacy egress guard: every outbound connection now passes through a single fail-closed guard, so Offline and Private modes hold even if a tool tries to reach out." },
+          { text: "Smaller, faster Windows install: dev-only tooling is excluded from the shipped runtime and the heavier components now download on first run." },
+        ],
+      },
+      {
+        label: "Fixed",
+        entries: [
+          { text: "macOS now opens cleanly. The v0.1.7 DMG is signed with Developer ID, notarised by Apple, and stapled, which fixes the \"InnerZero is damaged and can't be opened\" message some macOS users saw on v0.1.6. No right-click workaround is needed." },
+          { text: "Project-scoped memory isolation: memories saved under one project no longer surface in another project's context." },
+          { text: "Voice reliability: the text-to-speech button no longer hangs on a slow first load, and it now shows clear loading and stop states." },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.6",
     date: "May 2026",
     releaseDate: "2026-05-09",
-    latest: true,
     groups: [
       {
         label: "New",

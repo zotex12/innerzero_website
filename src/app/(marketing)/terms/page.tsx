@@ -22,7 +22,7 @@ export default function TermsPage() {
           <h1 className="text-3xl font-bold text-text-primary md:text-[2.5rem] md:leading-[1.2]">
             Terms of Service
           </h1>
-          <p className="mt-2 text-sm text-text-muted">Last updated: May 2026</p>
+          <p className="mt-2 text-sm text-text-muted">Last updated: June 2026</p>
 
           {/* Solicitor review notice */}
           <div className="mt-6 rounded-lg border-l-4 border-[#f59e0b] bg-[rgba(245,158,11,0.1)] p-4">
@@ -248,7 +248,7 @@ export default function TermsPage() {
             {/* Section 10 */}
             <section>
               <h2 className="text-lg font-semibold text-text-primary mb-3">
-                10. Screen Automation
+                10. Screen Automation and the Action Hub
               </h2>
               <p>
                 InnerZero includes an optional Screen Automation feature that can read your screen, identify on-screen elements, click, type, scroll, and interact with other applications on your computer. This feature is disabled by default and must be explicitly enabled in Settings.
@@ -268,6 +268,12 @@ export default function TermsPage() {
               <p className="mt-2">
                 We strongly recommend saving all open work before enabling Screen Automation and using the emergency stop (Escape key) immediately if any action appears incorrect or unintended.
               </p>
+              <p className="mt-2">
+                <strong>Action Hub automation.</strong> InnerZero includes an optional Action Hub that can carry out web research using your own Apify account and can help you complete and submit job applications using a separate, automated browser. The Action Hub is off by default, runs from your machine, and requires your own Apify API key for research. You are solely responsible for what you choose to research, for the accuracy and content of any application the Action Hub helps prepare or submit, and for complying with the terms of service of Apify and of every website the Action Hub accesses, scrapes, or applies to on your behalf.
+              </p>
+              <p className="mt-2">
+                Submitting an application is gated behind your explicit approval, and you may keep the Action Hub in a draft-only mode that prepares applications for your review without submitting them. AI interpretation may be incorrect and automated submissions may be wrong, duplicated, or unintended. You must supervise the Action Hub and must not use it to submit fraudulent, misrepresentative, or unauthorised applications, to misstate your qualifications, or to access any system or site you are not authorised to use. Summers Solutions Ltd accepts no liability for any incorrect, duplicate, or unintended submission, for any consequence of an automated application, or for any other loss arising from the Action Hub, whether or not it results from AI error, misinterpretation, or unexpected behaviour.
+              </p>
             </section>
 
             {/* Section 11 */}
@@ -286,6 +292,7 @@ export default function TermsPage() {
                 <li>Engage in fraud, deception, phishing, impersonation, or the creation of disinformation intended to deceive others.</li>
                 <li>Facilitate unauthorised access to computer systems, networks, databases, or accounts, including through the use of InnerZero&apos;s file operations, URL fetch, or automation tools.</li>
                 <li>Scrape, harvest, or extract data from third-party services in a manner that violates those services&apos; terms of service.</li>
+                <li>Use the Action Hub or the in-app proxy to circumvent any website&apos;s access controls, rate limits, or terms of service, or to submit fraudulent, misrepresentative, or unauthorised job applications.</li>
                 <li>Generate content designed to manipulate, coerce, or exploit vulnerable individuals, including but not limited to content designed to facilitate grooming, financial fraud, or abuse.</li>
                 <li>Redistribute InnerZero AI-generated output in a way that misrepresents it as human-authored professional, clinical, legal, or financial advice.</li>
                 <li>Attempt to circumvent, disable, or bypass any safety mechanism within InnerZero beyond those explicitly offered as features (such as Unrestricted Mode).</li>
@@ -314,7 +321,11 @@ export default function TermsPage() {
                 <li>PyTorch (BSD-3-Clause)</li>
                 <li>Python Build Standalone (Astral, MPL-2.0; bundled CPython under PSF License v2)</li>
                 <li>Unrestricted models (optional, user-installed): huihui.ai, Apache 2.0. These models are not distributed by Summers Solutions Ltd and must be downloaded independently from Hugging Face.</li>
+                <li>Playwright and Chromium (Microsoft and The Chromium Authors, Apache 2.0 and BSD-3-Clause). The Action Hub&apos;s apply browser engine is downloaded on demand from the Playwright content delivery network when you choose to use it; it is not bundled with InnerZero.</li>
               </ul>
+              <p className="mt-2">
+                The optional Action Hub web research feature uses Apify (apify.com) under your own Apify account and API key. Apify is a third-party service, not software distributed by Summers Solutions Ltd, and your use of it is governed by Apify&apos;s own terms of service and privacy policy.
+              </p>
               <p className="mt-2">
                 The bundled Ollama distribution includes additional runtime components (Vulkan, OneAPI, CUDA runtime libraries, Apple Metal) under their respective vendor licences. Full attribution and licence details are available within the desktop application under Settings &gt; General &gt; Third-Party Licences &amp; Notices.
               </p>
@@ -374,7 +385,7 @@ export default function TermsPage() {
                 <li>Any loss of profits, revenue, data, business, goodwill, or anticipated savings.</li>
                 <li>Any harm or damage arising from reliance on AI-generated output.</li>
                 <li>Any damage to your computer hardware, software, operating system, GPU, or data arising from installing, running, or uninstalling InnerZero, including but not limited to data loss, file corruption, system instability, hardware damage, driver conflicts, or overheating.</li>
-                <li>Any loss or damage arising from use of Screen Automation, Cloud Mode, BYO API keys, or Unrestricted Mode.</li>
+                <li>Any loss or damage arising from use of Screen Automation, the Action Hub, Cloud Mode, BYO API keys, or Unrestricted Mode.</li>
                 <li>Any charges, costs, or consequences imposed by third-party AI providers.</li>
               </ul>
               <p className="mt-2">
@@ -403,7 +414,7 @@ export default function TermsPage() {
                 <li>Your use of InnerZero in any manner.</li>
                 <li>Your use of Unrestricted Mode and any content generated therein.</li>
                 <li>Any content you generate, store, distribute, or act upon using InnerZero.</li>
-                <li>Your use of Screen Automation, Cloud Mode, or BYO API keys.</li>
+                <li>Your use of Screen Automation, the Action Hub, Cloud Mode, or BYO API keys.</li>
                 <li>Your violation of these terms or any applicable law or regulation.</li>
                 <li>Your violation of any third-party rights, including intellectual property rights, privacy rights, or contractual rights.</li>
                 <li>Any misrepresentation you make, including any misrepresentation regarding your age.</li>
