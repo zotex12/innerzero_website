@@ -101,8 +101,8 @@ InnerZero is a private AI assistant desktop application. It provides:
 - [Knowledge packs explained: offline Wikipedia in your AI](https://innerzero.com/blog/knowledge-packs-explained): Using Kiwix-sourced packs for factual answers.
 - [Unrestricted mode explained](https://innerzero.com/blog/unrestricted-mode-explained): What uncensored local AI means and the safety guardrails that remain.
 - [Customise InnerZero: themes, personalities, and output folder](https://innerzero.com/blog/customise-innerzero): Configuration guide.
-- [Local vs cloud AI: full comparison](https://innerzero.com/blog/local-vs-cloud-ai): Privacy, cost, speed, and model quality.
-- [Open-source AI models explained](https://innerzero.com/blog/open-source-models-explained): Qwen, Gemma, DeepSeek, and how they compare.
+- [Local vs cloud AI: full comparison](https://innerzero.com/blog/local-ai-vs-cloud-ai): Privacy, cost, speed, and model quality.
+- [Open-source AI models explained](https://innerzero.com/blog/open-source-ai-models-explained): Qwen, Gemma, DeepSeek, and how they compare.
 
 ## How InnerZero compares
 
