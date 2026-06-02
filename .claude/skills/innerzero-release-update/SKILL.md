@@ -53,9 +53,19 @@ After a new InnerZero desktop version `vX.Y.Z` is built and published, update th
 
 - Stage explicit paths only (never `git add -A`). One commit, no em dashes, no emojis. Push to `main`. If the blog auto-publisher cron raced the push (rejected), `git fetch origin main` then `git rebase origin/main` then push; it is clean because the files differ.
 
-## Step 7 — Discord announcement
+## Step 7 — Discord announcement (post it via Postiz)
 
-- Use the template at `.ai/templates/discord-release-announcement.md` (under 2000 characters, `@everyone`, bullets, British English, no em dashes or emojis, modest accurate framing, honest platform caveats). Return it in a fenced code block.
+- Build the announcement from the template at `.ai/templates/discord-release-announcement.md` (under 2000 characters, `@everyone`, bullets, British English, no em dashes or emojis, modest accurate framing, honest platform caveats).
+- The operator's local Postiz MCP server is connected (tools `mcp__postiz__integrationList`, `mcp__postiz__integrationSchema`, `mcp__postiz__integrationSchedulePostTool`, and others), and the Discord announcements bot is wired into it (integration `platform: "discord"`, currently named "pantheon"). So post the announcement straight to Discord through Postiz, not just as a copy-paste block.
+- Posting goes to a public channel, so show the operator the final message and get a go-ahead before publishing, unless they tell you to just post it.
+- Flow to post:
+  1. `mcp__postiz__integrationList` and pick the entry with `platform: "discord"` (currently "pantheon"). Resolve the `id` dynamically; do NOT hardcode it (it changes if the integration is reconnected).
+  2. `mcp__postiz__integrationSchema` with `platform: "discord"`, `isPremium: false` to learn the required `settings` (for example the target channel).
+  3. `mcp__postiz__integrationSchedulePostTool` with one `socialPost`: `integrationId` = the discord id, `isPremium: false`, `date` = the current UTC time for an immediate post, `shortLink: false`, `type: "now"` (or `"schedule"` with a future UTC `date`, or `"draft"`), `settings` from the schema, and `postsAndComments: [{ content: <HTML>, attachments: [] }]`.
+  4. The content must be HTML: wrap each line in `<p>`, render bullets as `<ul><li>...</li></ul>` (or `<p>` lines). Allowed tags only: h1, h2, h3, u, strong, li, ul, p (never combine u and strong). Whether `@everyone` actually pings depends on the Postiz / Discord webhook config, so confirm that with the operator.
+  5. Report the result (post id and status).
+- If Postiz is unavailable (server not running at localhost:4007, or the tools error), fall back to returning the message in a fenced code block for manual posting. Always keep the plain copy-paste block available so the operator can review or post by hand.
+- Optional: the same flow can cross-post a shorter version to X, Mastodon, or Bluesky using their integrations from `integrationList`.
 
 ## Hard conventions
 
