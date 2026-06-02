@@ -24,6 +24,8 @@ Phase 5 desktop app integration (account.py, cloud routing, BYO API key UI) is c
 
 The repo ships a Claude Code skill at `.claude/skills/authoring-innerzero-blog-post/SKILL.md` that auto-triggers on blog authoring tasks. It encodes the rules empirically validated across 18+ shipped batch posts: em-dash ban, banned AI phrases, tag taxonomy, structure conventions, internal linking discipline, AEO patterns, encryption claim discipline, architecture moat boundaries, and gotchas. New blog post work loads this skill automatically. No manual invocation needed.
 
+The repo also ships `.claude/skills/innerzero-release-update/SKILL.md`, a runbook that auto-triggers when updating the site, the GitHub releases README, and the Discord announcement for a new InnerZero desktop version. It lists every page and file to change, the desktop version-surface check, the exact-asset-name download caveat, validation, review, and the announcement template.
+
 Skill iteration: skills are living documents per Anthropic's authoring guidance. If a future blog post exposes a gap or a wrong rule, that is a skill-patch phase, not a one-off prompt fix.
 
 ---

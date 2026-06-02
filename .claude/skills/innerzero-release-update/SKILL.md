@@ -1,0 +1,74 @@
+---
+name: innerzero-release-update
+description: Use when updating the InnerZero marketing website, the GitHub releases README, and the Discord announcement for a new desktop version release. Triggers on requests like "update the site for v0.1.8", "a new version is out, update everything", "refresh the website for the release", or "update the releases README". A full runbook covering which pages and files to change, the desktop version-surface check, the exact-asset-name download caveat, validation, review, and the announcement.
+---
+
+# InnerZero release update runbook
+
+After a new InnerZero desktop version `vX.Y.Z` is built and published, update three surfaces: the marketing website (`C:\Users\sumlu\Documents\innerzero_website`), the GitHub releases README (`zotex12/innerzero-releases`), and the Discord announcement. This is cross-repo. Do the steps in order.
+
+## Step 0 — Ground truth (do this first)
+
+- Confirm the version `vX.Y.Z`.
+- Read the ACTUAL GitHub release so you use real values, not assumptions. GitHub MCP `get_latest_release` (or `get_release_by_tag`) on `zotex12/innerzero-releases`. Record the EXACT asset filenames and byte sizes:
+  - `InnerZero-Setup-X.Y.Z.exe`, `InnerZero-Setup-X.Y.Z-mac.dmg`, `InnerZero-X.Y.Z-x86_64.AppImage` (convert bytes to GB/MB, GiB-based: bytes / 1073741824).
+- **Exact-filename caveat (critical):** the website `/download/thanks` resolver matches the release asset by EXACT `name`. Any filename mismatch silently falls back to the releases page, so every website filename must equal the real asset name.
+- Verify the desktop version surfaces in `C:\Users\sumlu\Documents\InnerZero`: `VERSION` (the next dev cycle, e.g. X.Y.Z+1), `installer/innerzero.iss` `MyAppVersion`, and `BUILDLOG.md` (`--- Unreleased (vX.Y.Z+1) ---` marker plus the `vX.Y.Z Released` row). `version_gate.py` `MINIMUM_VERSION` is the forced-update FLOOR, not the current version, so leave it unless a forced update is intended. The desktop "cut the released row and open the next dev cycle" is a desktop-side step documented in the desktop `.claude/rules/build-and-install.md` "Version tracking" section; if it has not been done, flag it as a separate desktop task.
+
+## Step 1 — Get the FULL feature list (do not under-scope)
+
+- A release bundles EVERYTHING shipped since the previous public release, not just the headline. Read the desktop `BUILDLOG.md` release row plus `git -C <desktop> log --oneline` since the prior release to enumerate every user-facing feature.
+- Cross-check with a review pass (the `codex:codex-rescue` agent, or the `opencode-reviewer` DeepSeek agent) asked specifically to "find user-facing features missing from the website". This catches what the first pass misses.
+- Verify each feature actually SHIPPED via git log; a "deferred" plan note can be stale (a feature marked deferred may in fact have shipped later in the cycle).
+
+## Step 2 — Website pages to update
+
+- `src/app/(marketing)/download/DownloadCards.tsx`: the `VERSION` const, the three `size` fields, and the macOS `note` (signing / notarisation status).
+- `src/app/(marketing)/download/page.tsx`: the "see what's new in vX" hero link, the size-note callout, the JSON-LD `softwareVersion`, the three JSON-LD offer URLs (must be the exact asset filenames), and the macOS offer `operatingSystem`.
+- `src/app/(marketing)/page.tsx`: the home JSON-LD `softwareVersion` and `featureList` (add new headline features).
+- `src/app/(marketing)/changelog/page.tsx`: PREPEND a new `Release` object (`version`, `date`, `releaseDate`, `latest: true`) with New / Improved / Fixed groups, and REMOVE `latest: true` from the previous entry. The `changelog.xml` RSS route reads the same `RELEASES` array, so this updates the page and the feed together. Make the entry comprehensive (the full feature list from Step 1).
+- `src/lib/constants.ts`: `FEATURE_CARDS` (home cards; keep the `FeatureCards.tsx` grid balanced for the card count), `PRICING_FREE.features`, `SYSTEM_REQUIREMENTS` (keep it cross-platform), and `COMING_SOON_FEATURES` (move any now-shipped items out).
+- `src/app/(marketing)/features/page.tsx`: add `SECTIONS` items or sections for the new features; keep the primary / secondary `bg` ALTERNATION correct (inserting a section flips the `bg` of every following section, so re-balance); update the features JSON-LD description; import any new lucide icons.
+- `src/components/sections/HomeFAQ.tsx`: add or adjust FAQ entries (this array also feeds the FAQPage JSON-LD; keep the item-count comment accurate).
+- `public/llms.txt` and `public/llms-full.txt`: the version label, install sizes, download URLs (exact filenames), and the new features in the feature lists. These are AEO files for AI crawlers.
+- `src/app/(marketing)/privacy/page.tsx` and `terms/page.tsx`: ONLY if the release adds NEW third-party data flows or processors (a new connector, a scraping or automation service, new PII egress). Add interim copy flagged "pending solicitor review". Do NOT renumber Terms sections; house new clauses in an existing adjacent section plus the liability and indemnification carve-out lists plus the third-party-software inventory. Note any controllership position for the operator's solicitor to confirm.
+- `src/content/blog/*.mdx` (optional): sweep for stale facts (old version, "Windows only", theme counts).
+
+## Step 3 — GitHub releases README (`zotex12/innerzero-releases`)
+
+- GitHub MCP `get_file_contents` on `README.md` to get its blob SHA; `get_latest_release` for the exact asset names and sizes.
+- Update: the version line, the download table (filenames, `/releases/download/vX/...` URLs, sizes), the macOS install note (signing / notarisation), a SHA256 checksums note, a "What's New in vX" section, and fold the new headline features into Key Features.
+- Write back via `create_or_update_file` (path `README.md`, branch `main`, `sha` = the blob SHA, em-dash-free commit message).
+
+## Step 4 — Validate
+
+- `npm run lint` and `npm run build`. Next 16 runs TypeScript at build time, not ESLint, so the pre-existing `Turnstile.tsx` `react-hooks/refs` lint errors are not yours and do not block the build.
+- Greps: no stray old version (except historical changelog rows and a deliberate "fixes the vPREV issue" sentence); no em dashes or emojis in customer copy; exactly one changelog `latest: true`; every download asset filename equals the real release asset.
+
+## Step 5 — Audit + review
+
+- Run the repo's `/pre-audit` (if not folded into planning) and `/post-audit`. Run a diff review (`codex:codex-rescue` or `opencode-reviewer` / DeepSeek). Apply non-blocking fixes, re-validate. `/codex:adversarial-review` is user-triggered only and cannot be launched by the model.
+
+## Step 6 — Commit + push
+
+- Stage explicit paths only (never `git add -A`). One commit, no em dashes, no emojis. Push to `main`. If the blog auto-publisher cron raced the push (rejected), `git fetch origin main` then `git rebase origin/main` then push; it is clean because the files differ.
+
+## Step 7 — Discord announcement
+
+- Use the template at `.ai/templates/discord-release-announcement.md` (under 2000 characters, `@everyone`, bullets, British English, no em dashes or emojis, modest accurate framing, honest platform caveats). Return it in a fenced code block.
+
+## Hard conventions
+
+- British English. No em dashes. No emojis. No invented stats, ratings, or download counts. No "free forever" / "always free" / "permanent" for the local app.
+- Tailwind utilities and existing design tokens only. No new packages. Server components by default.
+- Modest, accurate feature framing with honest platform caveats (for example "(Windows for now)" where a feature is not yet cross-platform).
+- New legal copy is interim and flagged pending solicitor review.
+
+## Known gotchas (learned the hard way)
+
+- The exact-filename download resolver (Step 0) is the single biggest functional risk.
+- Do not under-scope the feature list (Step 1); a release equals everything since the last public release. The first pass tends to miss things like the Prompt Library, voice STT/TTS panels, file/image attach, and artifacts/export.
+- "Deferred" plan notes can be stale; verify shipped via git log.
+- Keep the `features/page.tsx` background alternation correct when inserting sections.
+- The blog auto-publisher cron may race your push; rebase and re-push.
+- Check the GitHub release-notes body against the site for version-string consistency (for example the macOS minimum OS) and flag mismatches to the operator.
