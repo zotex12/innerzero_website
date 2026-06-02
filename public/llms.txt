@@ -29,9 +29,11 @@ InnerZero is a private AI assistant desktop application. It provides:
 
 - Private AI chat with streaming responses, markdown rendering, and two thinking modes (Quick for fast answers, Thorough for deeper reasoning).
 - A 26-language interface. Pick your language in Settings and the whole app, its menus, and the assistant's replies follow, with right-to-left support for Arabic, Hebrew, Persian, and Urdu. A one-time upgrade keeps saved memories searchable across every language. Works fully offline.
-- Full voice mode: local speech-to-text via faster-whisper on GPU, local text-to-speech via Kokoro, voice shortcuts for quick actions, and optional cloud voices from OpenAI (13 options).
+- Full voice mode: local speech-to-text via faster-whisper on GPU, local text-to-speech via Kokoro, voice shortcuts for quick actions, and optional cloud voices from OpenAI (13 options). The Voice page also has standalone speech-to-text and text-to-speech panels, and you can dictate into the chat box with a microphone button.
 - A persistent memory system that learns your name, preferences, projects, and facts across sessions. All memory stored in a local SQLite database.
 - 30+ built-in tools: web search, document Q&A (.txt, .md, .pdf, .docx, .xlsx, .csv), calculator, file operations, timers, alarms, reminders, notes, dictionary, text transforms, system info, hash/JSON/base64 utilities, clipboard, URL fetching, and more.
+- Prompt Library: save and reuse your best prompts, organised in folders with favourites, and send them to chat in one click.
+- Attach files and images to chat (with local text recognition on images), plus an artifacts panel that opens document-style answers full screen for reading, AI editing, and export to PDF, Word, Markdown, HTML, and more with real selectable text.
 - Knowledge packs: optional offline Wikipedia databases for factual answers without internet. Best of Wikipedia (95K articles) and Simple English Wikipedia (280K articles) available.
 - Screen automation: Zero can read what is on your screen, click, type, and scroll other applications. Off by default, opt-in only, emergency stop via Escape key.
 - Cloud AI (optional): bring your own API keys for 7 providers (DeepSeek, OpenAI, Anthropic, Google AI, xAI Grok, Qwen, Kimi) with zero markup, or subscribe to a managed cloud plan.

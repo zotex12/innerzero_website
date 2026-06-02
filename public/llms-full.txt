@@ -18,7 +18,7 @@ UK company number: 16448945
 ICO registration: ZC122497
 Licence type: Proprietary desktop application built on open-source AI models
 Pricing baseline: Free for personal use. Business Licence for commercial use is per seat: £19.99/month, or £149.99/year (£129.99/year from 5 seats). 25+ seats via sales contact. Optional cloud AI from £9.99/month.
-Primary differentiators: Runs entirely on your hardware, a 26-language interface, persistent local memory, full voice mode, 30+ built-in tools, Gmail and Google Calendar connectors, proactive briefings, the Action Hub for web research and job applications, offline knowledge packs, optional cloud AI with privacy blacklist and connection log, no account required for base product.
+Primary differentiators: Runs entirely on your hardware, a 26-language interface, persistent local memory, full voice mode with standalone speech-to-text and text-to-speech panels, a prompt library, file and image attachments with an artifacts panel and document export, 30+ built-in tools, Gmail and Google Calendar connectors, proactive briefings, the Action Hub for web research and job applications, offline knowledge packs, optional cloud AI with privacy blacklist and connection log, no account required for base product.
 
 ===============================================================================
 # SECTION 1: DIRECT ANSWERS (Q&A for AI search)

@@ -12,7 +12,7 @@ import {
   Palette, Sparkles, ToggleLeft, FolderOpen, Cpu,
   ShieldAlert, ShieldCheck, UserCheck, User,
   Rocket, Code, PenTool, Package, Cog,
-  Shield, List, LayoutDashboard, Languages, AlignRight,
+  Shield, List, LayoutDashboard, Languages, AlignRight, Library, Paperclip, FileDown, Crown,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -66,6 +66,10 @@ const SECTIONS: FeatureSection[] = [
       { icon: Settings2, title: "Multiple thinking modes", desc: "Quick for fast answers, Thorough for deeper reasoning." },
       { icon: FileEdit, title: "Markdown rendering", desc: "Formatted responses with code blocks, lists, tables, and more." },
       { icon: MessageSquare, title: "Slash commands", desc: "Type / in chat for built-in commands like /help and /clear. Deterministic routing, not AI-interpreted." },
+      { icon: Library, title: "Prompt Library", desc: "Save your best prompts in folders, mark favourites, and drop any of them into chat with one click." },
+      { icon: Mic, title: "Dictate in chat", desc: "Press the mic in the chat box and speak. Your words appear as editable text before you send." },
+      { icon: Paperclip, title: "Attach files and images", desc: "Add documents or images with the paperclip, or paste a screenshot. Zero reads them, runs local text recognition on images, and answers over their content." },
+      { icon: FileDown, title: "Artifacts and export", desc: "Document-style answers open in a side panel you can read full screen and edit with the AI, then export to PDF, Word, Markdown, and more with real selectable text." },
     ],
   },
   {
@@ -88,6 +92,8 @@ const SECTIONS: FeatureSection[] = [
       { icon: Mic, title: "Full voice mode", desc: "Press mic and talk. Zero responds with natural speech." },
       { icon: AudioLines, title: "Local speech recognition", desc: "Your voice is transcribed on your machine. No audio leaves your PC." },
       { icon: Volume2, title: "Local text-to-speech", desc: "Natural spoken responses via Kokoro TTS. No internet needed." },
+      { icon: AudioLines, title: "Speech-to-text panel", desc: "A standalone transcribe panel on the Voice page. Speak and your words land in an editable box to copy or save." },
+      { icon: Volume2, title: "Text-to-speech panel", desc: "Type or paste any text and Zero reads it aloud locally. Keep the model warm with a toggle, with clear loading and stop controls." },
       { icon: Timer, title: "Voice shortcuts", desc: "Ask the time, set a timer, or do quick math instantly by voice." },
       { icon: Cloud, title: "Cloud voice (optional)", desc: "Enable OpenAI voices for premium spoken responses. 13 voice options." },
     ],
@@ -195,6 +201,7 @@ const SECTIONS: FeatureSection[] = [
       { icon: LayoutDashboard, title: "My Privacy page", desc: "Centralised privacy dashboard. Toggle Offline, Private, or Cloud mode. Manage blacklist, view connections, see privacy stats." },
       { icon: ShieldCheck, title: "Egress guard", desc: "Every outbound connection passes through a single fail-closed guard. Offline and Private modes hold even if a tool tries to reach out." },
       { icon: Router, title: "Proxy support", desc: "Behind a corporate or university proxy? Enter your HTTP or HTTPS proxy in Settings. Local AI traffic is never proxied." },
+      { icon: Eye, title: "Cloud vision (optional)", desc: "With cloud mode and vision enabled, an attached image can be sent to a vision model for a closer look. Off by default and fail-closed." },
     ],
   },
   {
@@ -202,8 +209,9 @@ const SECTIONS: FeatureSection[] = [
     subtitle: "Make it yours.",
     bg: "secondary",
     items: [
-      { icon: Palette, title: "6 themes", desc: "Dark Zero, Light Zero, Classic Carbon, Soft Pink, Dark Teal, and Neon Tokyo (exclusive)." },
-      { icon: Sparkles, title: "AI personality", desc: "Professional, Friendly, Concise, or create your own custom personality." },
+      { icon: Palette, title: "Themes", desc: "Dark Zero, Light Zero, Classic Carbon, Soft Pink, Dark Teal, and Neon Tokyo, plus premium Pro themes like Golden Pro with an animated starfield." },
+      { icon: Sparkles, title: "AI personality", desc: "Professional, Friendly, Concise, or create your own. InnerZero Pro adds premium personality presets." },
+      { icon: Crown, title: "InnerZero Pro", desc: "An optional membership unlocks premium themes, personalities, and extra proactive briefing types. Works fully offline and is separate from cloud plans." },
       { icon: ToggleLeft, title: "Tool preferences", desc: "Enable or disable individual tools." },
       { icon: FolderOpen, title: "Configurable output folder", desc: "Choose where Zero saves files." },
       { icon: Cog, title: "Hardware profiles", desc: "Auto-detected or manually overridden." },

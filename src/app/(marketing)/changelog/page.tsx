@@ -45,8 +45,15 @@ export const RELEASES: Release[] = [
         label: "New",
         entries: [
           { text: "Multi-language interface: use InnerZero in 26 languages. Pick yours in Settings and the whole app, its menus, and the assistant's replies follow, with right-to-left support for Arabic, Hebrew, Persian, and Urdu. A one-time upgrade keeps your saved memories searchable across every language, and it all works offline." },
+          { text: "Prompt Library on the Chat page: save your best prompts in folders, mark favourites, and drop any of them into chat with a single click." },
+          { text: "Voice page panels: a standalone speech-to-text panel that turns what you say into editable text, and a text-to-speech panel that reads any typed or pasted text aloud, both running locally with keep-warm and stop controls." },
+          { text: "Attach files and images to chat: add documents (.pdf, .docx, .xlsx, .csv, .txt, .md) or images with the paperclip, or paste a screenshot. Zero reads them, runs local text recognition on images, and answers over their content." },
+          { text: "Artifacts and export: document-style answers open in a side panel you can read full screen and edit with the AI, then export to PDF, Word, Markdown, HTML, and more. PDFs keep real, selectable text." },
+          { text: "Dictate in chat: press the microphone in the chat box and speak; your words appear as editable text before you send." },
           { text: "Action Hub: an opt-in research and apply assistant on the Tasks page. With your own Apify key, Zero can gather sources from the web; with your saved job profile, it can help fill in and submit job applications. Every action is gated behind your approval, and the apply browser runs in a fresh, isolated session." },
           { text: "Proxy support: behind a corporate or university proxy? Enter your HTTP or HTTPS proxy in Settings and InnerZero routes model downloads, cloud calls, and connector traffic through it. Local AI traffic is never proxied." },
+          { text: "One-button first-run setup: a single, friendly setup screen with one progress bar covering the AI model, components, and memory upgrade, with clear states for offline or slow connections." },
+          { text: "InnerZero Pro: an optional membership that unlocks premium themes (including Golden Pro with an animated starfield), premium personalities, and extra proactive briefing types. It works fully offline and is separate from cloud plans." },
         ],
       },
       {
@@ -54,6 +61,8 @@ export const RELEASES: Release[] = [
         entries: [
           { text: "Privacy egress guard: every outbound connection now passes through a single fail-closed guard, so Offline and Private modes hold even if a tool tries to reach out." },
           { text: "Smaller, faster Windows install: dev-only tooling is excluded from the shipped runtime and the heavier components now download on first run." },
+          { text: "Faster responses and startup: cloud engines and local model connections are reused across calls, memory search is cached within a session, and hardware details are prewarmed at launch so Settings opens instantly." },
+          { text: "Action Hub now runs on macOS and Linux, not just Windows." },
         ],
       },
       {
@@ -62,6 +71,9 @@ export const RELEASES: Release[] = [
           { text: "macOS now opens cleanly. The v0.1.7 DMG is signed with Developer ID, notarised by Apple, and stapled, which fixes the \"InnerZero is damaged and can't be opened\" message some macOS users saw on v0.1.6. No right-click workaround is needed." },
           { text: "Project-scoped memory isolation: memories saved under one project no longer surface in another project's context." },
           { text: "Voice reliability: the text-to-speech button no longer hangs on a slow first load, and it now shows clear loading and stop states." },
+          { text: "Calendar sync correctness: private events are reliably kept off Google, events you make private after syncing are removed from Google, and multi-day all-day events now cover the correct days." },
+          { text: "Windows launch no longer briefly flashes a black console window." },
+          { text: "Speaker recognition data now lives in your protected user data folder rather than the app install directory." },
         ],
       },
     ],
