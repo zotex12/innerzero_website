@@ -1,0 +1,102 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale (26 languages, RTL list)
+- [ ] Re-check ChatGPT pricing/behaviour claims if the comparison table cites them
+- [ ] Confirm the offline and local-storage claims still match what ships
+-->
+---
+title: "A Private AI Assistant for Non-English Speakers"
+description: "Cloud AI assistants send everything you type to a server. InnerZero runs locally in 26 languages, so your words and your language preference stay on your machine, even offline."
+date: "2026-07-24"
+author: "Louie"
+authorRole: "Founder"
+slug: "private-ai-for-non-english-speakers"
+tags: ["local ai", "privacy", "comparison"]
+readingTime: "7 min read"
+featured: false
+---
+
+If English is not your first language, the popular AI assistants put you in an awkward spot. They work in your language, more or less, but every word you type still travels to a company server to be read and processed. The things you are most likely to write in your own language are often the things you would least like to send away. InnerZero takes the other path: a capable assistant in 26 languages that runs on your own machine.
+
+> **Quick summary**
+> - Cloud AI assistants send everything you type to a server, including notes in your own language.
+> - InnerZero runs locally in 26 languages, so your words and your language preference stay on your machine.
+> - The interface and the AI's replies are both in the language you pick, and it all works offline.
+> - For anyone whose first language is not English, that means a capable assistant without the privacy cost.
+
+## Do cloud AI assistants send my words to a server?
+
+Yes. Cloud assistants such as ChatGPT and Gemini process every message on a remote server. That is how they work: your text leaves your device, the model runs in a data centre, and the answer comes back. It does not matter which language you write in. Spanish, Arabic, Hindi, or Japanese all make the same trip.
+
+For a quick factual question that is no great worry. For the writing people tend to do in their first language, it is a different calculation. InnerZero runs the model on your own hardware instead, so the words never leave in the first place. If you want the wider picture, [local AI vs cloud AI](/blog/local-ai-vs-cloud-ai) lays out the trade-offs.
+
+## Why does this matter more in your own language?
+
+Your first language is usually where you are most personal. It is the language of messages to family, health questions, money worries, and the half-formed thoughts you would never write out in a second language you are still careful in. People often hold back in English precisely because it is the language strangers read.
+
+That is the case for keeping your own language on your own machine. The assistant should be most useful exactly where you are most open, and that is rarely your second language. A local assistant lets you write the way you actually think without weighing up who might read it later.
+
+## Can a local AI assistant work as well in my language?
+
+Yes, for everyday use. InnerZero ships with 26 interface languages, and the assistant replies in the one you choose rather than answering in English. The local model generates the response in your language directly, so it reads like the language instead of like a translation of an English answer.
+
+Right-to-left scripts are handled properly too. Arabic, Hebrew, Persian, and Urdu render with a full right-to-left layout following the [Unicode bidirectional algorithm](https://www.unicode.org/reports/tr9/), not translated text forced into a left-to-right design. Quality varies a little between languages, as it does with any model, but the widely spoken European and Asian languages are well covered.
+
+## Can I switch between languages?
+
+Yes, at any time. If you work across two languages, you can change the interface and the reply language in Settings whenever you need to, and the change applies straight away with no restart. There is also a one-time upgrade that keeps your saved memories searchable across every language you use, so the assistant can still recall something you told it in one language when you later ask about it in another. For people who live between two languages, that means one assistant that follows you across both, rather than two separate sessions that each forget half of what you said.
+
+## Do non-English users miss out on any features?
+
+Almost none. The full app works in your chosen language: chat, memory, the built-in tools, document handling, and the settings. The one caveat is voice. Where a language has built-in voice support you can speak and listen in it, and where it does not yet, the voice features fall back to text so nothing breaks. Everything else behaves the same as it does in English, so choosing your own language gives you the whole app, not a cut-down version of it.
+
+## How does InnerZero compare for non-English use?
+
+The short version: both can work in your language, but only one keeps your language on your machine.
+
+| | InnerZero | Cloud AI assistant |
+|---|---|---|
+| Runs on your own device | Yes | No, server only |
+| Your words leave your machine | No, by default | Yes, every message |
+| Interface languages | 26 | Varies by product |
+| AI replies in your language | Yes | Usually yes |
+| Right-to-left layout | Yes | Varies |
+| Works offline | Yes, after model download | No |
+| Account required | No | Usually yes |
+| Price for the core app | Free | Free tier or paid |
+
+A cloud assistant is the better tool when you need the absolute top of model quality for a heavy one-off task. A local assistant is the better tool for daily, personal use in your own language, and for working with no connection.
+
+## Which languages are covered?
+
+InnerZero covers 26 languages at the time of writing, including English, French, Spanish, German, Italian, Portuguese, Dutch, Polish, Russian, Ukrainian, Chinese in both Simplified and Traditional, Japanese, Korean, Arabic, Hebrew, Hindi, Turkish, Vietnamese, Thai, Swedish, Indonesian, Persian, and Urdu. More are added over time. You set your language in Settings, and the whole app and the assistant's replies follow at once. For a closer look at how local AI works in general, see [what is a local AI assistant](/what-is-local-ai).
+
+## Is it free, and does it work offline?
+
+Yes to both. InnerZero is free to download, with no account and no subscription for the core app. Once your AI model is installed, the assistant runs fully offline, including in your chosen language, so you can use it on a train, on a plane, or anywhere the connection is poor. For more on the no-connection experience, see [how to use AI offline](/blog/use-ai-offline).
+
+## Frequently asked questions
+
+### Does my language data leave my machine?
+
+No. InnerZero runs locally, so your conversations and your language preference stay on your own device. Nothing is uploaded unless you turn on an optional cloud feature yourself.
+
+### Which languages does InnerZero support?
+
+InnerZero supports 26 interface languages, covering most widely spoken European and Asian languages including Spanish, French, German, Chinese, Japanese, Korean, Hindi, Arabic, and more. The assistant replies in your chosen language, not only the menus.
+
+### Does the assistant actually answer in my language?
+
+Yes. When you select a language, the local model generates its replies in that language. It is not only a translation of the buttons and menus.
+
+### Is it free for non-English speakers?
+
+Yes. All 26 languages are part of the free InnerZero download. There is no separate charge for language support.
+
+### Do I need an internet connection?
+
+Only for the one-time model download. After that, the assistant runs offline in your language.
+
+## The point
+
+If your first language is not English, you should not have to choose between an assistant that understands you and one that respects your privacy. InnerZero runs locally in 26 languages, replies in the one you pick, supports right-to-left scripts, and keeps every word on your machine. [Download InnerZero](/download) and use an assistant in your own language, on your own terms.
