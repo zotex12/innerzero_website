@@ -1,0 +1,94 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale (Msty is now "Msty Studio" at msty.ai; desktop app; local + online models; no Docker; Split Chats, Knowledge Stacks, Personas, agent mode)
+- [ ] Re-check whether Msty has added built-in long-term memory, voice, or proactive briefings before stating it does not
+- [ ] Confirm InnerZero's own feature descriptions still match what ships
+-->
+---
+title: "InnerZero vs Msty: Local AI Desktop Apps Compared"
+description: "Msty is a polished desktop app for running local and online models side by side. InnerZero is a local-first personal assistant with memory and voice. A factual comparison of the two."
+date: "2026-08-21"
+author: "Louie"
+authorRole: "Founder"
+slug: "innerzero-vs-msty"
+tags: ["comparison", "local ai", "features"]
+readingTime: "7 min read"
+featured: false
+---
+
+Msty and InnerZero are both desktop apps that run AI on your own machine with no Docker and no command line. They feel different in use. Msty is built as a flexible workspace for running many models side by side and querying your documents. InnerZero is built as a personal assistant that remembers you and talks back. Both are good at what they aim for, so the choice is really about what you want the app to be.
+
+> **Quick summary**
+> - Msty (now Msty Studio) is a desktop app for running local and online models side by side, with no setup.
+> - InnerZero is a local-first personal assistant built around memory, voice, and proactive help.
+> - Both run fully local models, work offline, and keep your data on your machine.
+> - Pick Msty for a multi-model workbench; pick InnerZero for a daily assistant that knows you.
+
+## What is Msty?
+
+Msty, now presented as Msty Studio, is a privacy-first desktop AI app for macOS, Windows, and Linux that runs local and online models with one-click installs and no Docker ([msty.ai](https://msty.ai/studio/)). You can run local models offline or connect online providers with your own API keys.
+
+Its standout features lean toward power use: Split Chats for comparing several models side by side, Knowledge Stacks for asking questions over your own documents and folders, web search, a prompt library, Personas, workflow automations, and an agent mode. It offers a free desktop plan and a paid tier for advanced extras ([msty.ai pricing](https://msty.ai/studio/pricing)).
+
+## What is InnerZero built for?
+
+InnerZero is a desktop app that runs a private AI assistant on your own machine, built around being a companion rather than a model workbench. It carries persistent [memory](/blog/why-your-ai-should-remember-you) that learns about you across conversations, local [voice mode](/blog/voice-mode-innerzero) with speech recognition and spoken replies, document and image handling, connectors for calendar and mail, and proactive briefings you can schedule. Setup is one click and includes downloading and tuning a model to your hardware.
+
+Where Msty gives you a flexible surface to drive many models, InnerZero gives you one assistant that gets to know you and can reach out on a schedule rather than only answering on demand.
+
+## How do they line up?
+
+Both are no-setup local desktop apps. The difference is workbench versus assistant.
+
+| | InnerZero | Msty |
+|---|---|---|
+| Form factor | Desktop app | Desktop app |
+| Local models, offline | Yes, model included in setup | Yes |
+| Online models via your keys | Yes | Yes |
+| Run many models side by side | No | Yes, Split Chats |
+| Document Q&A | Yes | Yes, Knowledge Stacks |
+| Long-term personal memory | Yes, built in | Not a documented feature |
+| Local voice (STT and TTS) | Yes | Not a documented feature |
+| Proactive briefings and reminders | Yes | Not a documented feature |
+
+Both keep data local. They point their strengths in different directions.
+
+## Which one is better for running and comparing models?
+
+Msty, clearly. Its Split Chats feature is designed to run a prompt against several models at once and compare the answers side by side, which is genuinely useful if you like testing models against each other, mixing local and online providers, and tuning your own document retrieval setup. As a workbench for getting the most out of many models, that is its home turf.
+
+InnerZero takes the opposite approach: it picks and tunes one model to your hardware so you do not have to think about it. You can point it at a [remote Ollama server](/blog/remote-ollama-innerzero) or bring your own API keys, but the design goal is a single assistant that just works, not a multi-model comparison surface. If side-by-side model testing is your thing, Msty fits better.
+
+## Which one is better as a personal assistant?
+
+InnerZero leans into this. The memory system means it remembers your projects and preferences across conversations, the local voice lets you talk to it and hear replies, and the proactive briefings let it bring you a morning summary or a reminder on a schedule you set rather than waiting to be asked. Msty's official feature set centres on the model workbench and document stacks, and does not advertise built-in long-term personal memory, voice, or proactive scheduling, so on those it is worth checking the current site if they matter to you. For what a daily assistant feels like, see [5 things you can do right now](/blog/things-you-can-do-with-innerzero).
+
+A simple way to picture the difference: Msty is the cockpit, with dials for every model and a panel for comparing them, while InnerZero is the co-pilot that already knows the route. One rewards tinkering and gives you control over every model and document setting. The other hides that machinery and aims to feel like a person you talk to. Neither is wrong; they suit different temperaments.
+
+Both keep your AI local and offline-capable, so privacy is a shared strength. The wider trade-offs of running locally at all are covered in [how InnerZero stays private](/blog/how-innerzero-stays-private).
+
+## Frequently asked questions
+
+### Is Msty free?
+
+Msty has a free desktop plan and a paid tier for advanced features. InnerZero is free to download with optional paid extras. Check current pricing on each site before deciding.
+
+### Do both run AI locally and offline?
+
+Yes. Both are desktop apps that can run local models offline, and both can connect to online providers if you choose.
+
+### Does Msty have built-in voice and memory?
+
+Its official feature set centres on a multi-model workspace and document stacks. Built-in long-term personal memory and voice are not documented features, so verify on its site if you need them. InnerZero ships both.
+
+### Which one is better for running many models?
+
+Msty, with its Split Chats feature for side-by-side model comparison. InnerZero picks and tunes a single model for you instead.
+
+### Do I need Docker or the command line for either?
+
+No. Both are one-click desktop apps with no Docker and no terminal required.
+
+## The point
+
+Msty and InnerZero are both well-made local AI desktop apps that respect your privacy, aimed at different users. Msty is a flexible workbench for running and comparing many models. InnerZero is a daily assistant that remembers you, talks back, and can reach out on a schedule. If that assistant is what you want, [download InnerZero](/download) and read more on [what a local AI assistant is](/what-is-local-ai).

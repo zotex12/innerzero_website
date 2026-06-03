@@ -1,0 +1,99 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale (local OCR, image bytes stay on device, optional cloud vision off by default)
+- [ ] Confirm image attach + paste still work on the Chat page
+- [ ] Re-check that the cloud vision option is still opt-in and off by default
+-->
+---
+title: "Can a Private AI Read Text From Your Screenshots and Images?"
+description: "InnerZero can read the text out of a screenshot or photo on your own machine, with the image itself never leaving your computer. How local image text extraction works and why it stays private."
+date: "2026-08-07"
+author: "Louie"
+authorRole: "Founder"
+slug: "private-ai-read-text-from-images"
+tags: ["features", "privacy", "local ai"]
+readingTime: "6 min read"
+featured: false
+---
+
+You screenshot a receipt, a slide, an error message, or a paragraph from a book, and you want the text out of it so the AI can work with it. Most tools that do this upload your image to a server first. That is a lot of trust to hand over for what is often a private document. InnerZero reads the text out of an image on your own machine, so the picture never leaves your computer.
+
+> **Quick summary**
+> - InnerZero can pull the text out of an attached or pasted image on your own hardware.
+> - The image itself stays on your machine. Only you decide if anything is sent anywhere.
+> - It works across receipts, screenshots, slides, error messages, and photos of text.
+> - An optional cloud vision feature exists for richer image understanding, but it is off by default.
+
+## Can AI read text from an image without uploading it?
+
+Yes. InnerZero uses a local [optical character recognition](https://en.wikipedia.org/wiki/Optical_character_recognition) engine to read the text out of an image directly on your computer. You attach or paste a picture into the chat, and the text inside it becomes something the assistant can read, quote, and work with. The image bytes are processed on the spot and are not sent to a server to do it.
+
+That is the part most people do not check. Plenty of "scan this photo" tools quietly send the image to the cloud, where it can be stored or logged. Doing the reading on your own machine removes that step entirely.
+
+## How do I get text out of a screenshot in InnerZero?
+
+You attach the image to the chat the same way you would attach a file, or paste it straight in from your clipboard. InnerZero reads the text out of it and makes that text available to the assistant, so you can ask it to summarise the slide, fix the code in the error message, or pull the figures off the receipt.
+
+From there it behaves like any other text in the conversation. You can ask follow-up questions, have it rewritten, or save it. The picture stays a picture on your machine, and the words inside it become usable text.
+
+## What kinds of images does this work on?
+
+Printed and on-screen text is where it shines. A few everyday cases:
+
+- A screenshot of an error message you want explained or fixed.
+- A photo of a receipt or invoice you want the numbers from.
+- A slide or diagram with text you want summarised.
+- A page from a book or document you only have on paper.
+- A screenshot of a chat or email you want drafted a reply to.
+
+Handwriting and very low-quality photos are harder for any text-reading tool, so results there vary. Clear printed or on-screen text reads well.
+
+## Does the image leave my computer?
+
+No, not for reading the text. The text extraction runs locally, so the image is processed on your own hardware and is not uploaded to read it. This is the same local-first approach behind the rest of the app, explained in [what is a local AI assistant](/what-is-local-ai).
+
+There is one thing worth being clear about. If you have turned on an optional cloud feature and are using a cloud model, the extracted text can be part of the prompt you send, the same as any text you type. The picture itself still stays on your machine on the local reading path. And InnerZero also offers an optional cloud vision feature for cases where you want a cloud model to actually look at an image rather than just read its text. That one does send the image, which is exactly why it is off by default and only ever runs when you choose it for that message.
+
+## How is this different from a cloud scanning app?
+
+The difference is where the picture goes. A cloud scanning app or a web-based image-to-text tool sends your image to a server to read it, which means a copy of that receipt, contract, or screenshot lands somewhere you do not control. InnerZero reads the text on your own machine, so there is no upload in the loop for the everyday case.
+
+| | InnerZero | Cloud scan tool |
+|---|---|---|
+| Where the image is read | On your machine | On a remote server |
+| Image uploaded to read text | No | Yes |
+| Works offline | Yes | No |
+| Account required | No | Often yes |
+| Sends image only if you choose | Yes, optional cloud vision | Always |
+
+For genuinely sensitive paperwork, that gap matters. The text you most want help with is often the text you would least like to upload.
+
+## Why does on-device text reading matter for privacy?
+
+Because the image is the sensitive part. A receipt has your card details, a payslip has your salary, a medical letter has your health, and a screenshot of a chat has someone else's words. Reading those on a server means trusting that server to handle them well, store them safely, and not use them. Reading them on your own machine means there is nothing to trust with them, because they never left. For the wider case on keeping confidential material off the cloud, see [offline AI for sensitive work](/blog/offline-ai-for-sensitive-work) and [how InnerZero stays private](/blog/how-innerzero-stays-private).
+
+## Frequently asked questions
+
+### Does InnerZero upload my image to read the text?
+
+No. The text is read on your own machine. The image is not uploaded to extract its text. Only if you turn on the optional cloud vision feature for a message does the picture itself get sent.
+
+### What image formats can I use?
+
+You can attach or paste common image types straight into the chat, such as screenshots and photos. The assistant reads the text out of them locally.
+
+### Does it work offline?
+
+Yes. Reading text out of an image runs on your own hardware, so it works with no internet connection once the app is set up.
+
+### Can it read handwriting?
+
+Clear printed and on-screen text reads best. Handwriting and low-quality photos are harder for any text-reading tool, so results vary there.
+
+### Is this free?
+
+Yes. Attaching images and reading text out of them is part of the free InnerZero download.
+
+## The point
+
+Getting the text out of a screenshot or photo should not mean uploading a private document to a stranger's server. InnerZero reads it on your own machine, keeps the image with you, and only sends anything if you decide to. For more of what the app does out of the box, see [5 things you can do right now](/blog/things-you-can-do-with-innerzero), or [download InnerZero](/download) and try it on your next screenshot.
