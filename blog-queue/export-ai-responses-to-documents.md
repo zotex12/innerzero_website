@@ -1,0 +1,112 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify the export format list still matches the app (PDF, Word, Markdown, HTML, Excel, CSV, JSON)
+- [ ] Confirm PDFs still export with selectable text
+- [ ] Re-check the artifact panel edit behaviour still matches what ships
+-->
+---
+title: "How to Export AI Answers to PDF, Word, and Markdown"
+description: "InnerZero opens document-style AI answers in an artifacts panel and exports them to PDF, Word, Markdown, and more, with real selectable text. All built locally on your machine."
+date: "2026-06-09"
+author: "Louie"
+authorRole: "Founder"
+slug: "export-ai-responses-to-documents"
+tags: ["features", "local ai", "guide"]
+readingTime: "6 min read"
+featured: false
+---
+
+You ask an AI to draft a report, a cover letter, or a set of meeting notes, and then you are stuck copying it into another app to actually use it. InnerZero closes that gap. Document-style answers open in a panel you can read, edit, and export straight to a real file, and the whole thing happens on your own machine.
+
+> **Quick summary**
+> - InnerZero opens document-style AI answers in a side panel you can read full screen and edit.
+> - Export to PDF, Word, Markdown, HTML, Excel, CSV, or JSON with a normal save dialog.
+> - PDFs keep real, selectable text, not a screenshot of the words.
+> - The file is built locally, so nothing is uploaded to create it.
+
+## Can I export AI responses to a document?
+
+Yes. When the assistant produces something that reads like a document, InnerZero opens it in an artifacts panel, and from there you can export it to one of several file formats with a standard save dialog. You do not copy and paste into Word or a Markdown editor. The file comes out finished.
+
+This matters because most of the useful things you ask an AI to write are meant to leave the chat: a letter you will send, a spreadsheet you will fill in, notes you will file. An assistant that can only show you text in a chat bubble leaves the last step to you.
+
+## What is the artifacts panel?
+
+The artifacts panel is a side view for answers that are really documents. Instead of a long answer scrolling past in the chat, a draft report or a structured list opens in its own space next to the conversation. You can read it full screen, which is far easier on the eyes for anything longer than a paragraph or two.
+
+If you have used a canvas-style view in a cloud AI tool, the idea will be familiar. The difference is that this one runs locally as part of a [private AI assistant](/what-is-local-ai), so the document never has to leave your computer to exist.
+
+## Which file formats can I export to?
+
+InnerZero exports an artifact to any of these formats:
+
+| Format | Good for |
+|---|---|
+| PDF | Sharing a finished, fixed-layout document. Keeps selectable text. |
+| Word (.docx) | Editing further in Microsoft Word or Google Docs. |
+| Markdown (.md) | Notes, documentation, and anything you keep in plain text. |
+| HTML | Publishing to the web or pasting into a CMS. |
+| Excel (.xlsx) | Tables and structured data you will calculate on. |
+| CSV | Importing data into another tool or database. |
+| JSON | Structured data for code or automation. |
+
+You pick the format, choose where to save, and the file is written to your machine.
+
+## Do exported PDFs have selectable text?
+
+Yes. The PDF export produces real, selectable text, not an image of the words. That sounds like a small detail, but it is the difference between a document you can search, copy from, and read with a screen reader, and a flat picture you cannot do anything with.
+
+A lot of "export to PDF" features in other apps simply render a screenshot of the page. InnerZero builds the PDF from the text itself, so it behaves like a proper document.
+
+## Can I ask the AI to edit the document?
+
+Yes. From inside the artifacts panel you can ask the assistant to rewrite or extend the document, and it works on the artifact directly. Tighten a paragraph, change the tone, add a section, or fix a list, and the panel updates.
+
+Keeping the edits in the panel, separate from the main chat, keeps the conversation clean. The chat stays a conversation, and the document stays a document.
+
+## What kinds of answers work well as documents?
+
+Anything you would otherwise rewrite into another app. A few common ones:
+
+- **Letters and applications.** A cover letter or a formal email you will send, exported to Word or PDF.
+- **Reports and summaries.** Meeting notes, a research summary, or a project brief you will keep or share.
+- **Study and reference notes.** Revision notes or documentation, exported to Markdown so they slot into your existing notes.
+- **Data and tables.** A list the assistant has structured for you, exported to Excel or CSV to work on further.
+
+If the answer is a paragraph of conversation, it stays in the chat. If it is a document, the panel gives you somewhere to finish it and a way to take it with you.
+
+## Is this like Claude Artifacts or ChatGPT Canvas?
+
+The idea is similar. Claude's Artifacts and ChatGPT's Canvas both give long, document-style answers their own editing space instead of a chat bubble, and InnerZero's artifacts panel does the same job. The difference is where it runs. Those are cloud features tied to an account and a subscription. InnerZero's panel runs locally as part of a free desktop app, and it exports to real files on your own machine.
+
+## Where does the exported file go, and does it work offline?
+
+The file is saved wherever you choose in the save dialog, on your own machine. Because InnerZero runs locally, building and exporting the document does not need an internet connection, and the content is never uploaded to a server to be turned into a file. This is the same local-first model that makes the rest of the app private. For how local AI compares to the cloud approach, see [local AI vs cloud AI](/blog/local-ai-vs-cloud-ai).
+
+If you are new to the app, [5 things you can do right now](/blog/things-you-can-do-with-innerzero) is a good place to see what else it handles.
+
+## Frequently asked questions
+
+### What formats can InnerZero export AI answers to?
+
+InnerZero can export a document-style answer to PDF, Word (.docx), Markdown, HTML, Excel (.xlsx), CSV, or JSON, using a standard save dialog.
+
+### Do the exported PDFs have real selectable text?
+
+Yes. PDF export builds the file from the text, so you can search it, copy from it, and read it with a screen reader. It is not a screenshot of the page.
+
+### Can I edit the document before exporting?
+
+Yes. Document-style answers open in an artifacts panel where you can ask the AI to rewrite or extend the content, then export the result.
+
+### Do I need an internet connection to export?
+
+No. InnerZero runs locally, so building and exporting the document works offline and nothing is uploaded to create the file.
+
+### Is the export feature free?
+
+Yes. The artifacts panel and document export are part of the free InnerZero download.
+
+## The point
+
+Most of the writing you ask an AI to do is meant to become a file you actually use. InnerZero treats it that way. Document answers open in a panel, you edit them in place, and you export to PDF, Word, Markdown, and more, with real text and nothing leaving your machine. [Download InnerZero](/download) and try it on your next draft.
