@@ -1,0 +1,109 @@
+---
+title: "Use llama.cpp with InnerZero: Bring Your Own llama-server"
+description: "InnerZero v0.1.8 adds llama.cpp as a third local AI engine. Point InnerZero at your own llama-server and chat, voice, and memory all run through it, with a picker for your GGUF models."
+date: "2026-06-10"
+author: "Louie"
+authorRole: "Founder"
+slug: "use-llama-cpp-with-innerzero"
+tags: ["local ai", "features", "guide"]
+readingTime: "7 min read"
+featured: false
+---
+
+> **Quick summary**
+>
+> - InnerZero v0.1.8 adds llama.cpp as a third local AI engine, alongside Ollama and LM Studio.
+> - You run your own llama-server, point InnerZero at it in Settings, and everything local routes through it: chat, voice, memory processing, and the coding agent.
+> - InnerZero lists the GGUF models your server exposes and shows their full names, quantisation tags included.
+> - This release is bring-your-own-server. InnerZero does not download or manage llama.cpp for you yet.
+
+If you already run llama.cpp, you know why you run it. It is the leanest way to serve a GGUF model on your own terms: your build flags, your context size, your offload settings, no wrapper deciding things for you. Until now, using InnerZero meant letting Ollama manage models or pointing at LM Studio. From v0.1.8, your existing llama-server can be the engine underneath the whole assistant.
+
+## What is llama.cpp and why does it matter?
+
+llama.cpp is the open-source inference engine that most of the local AI world is built on. Ollama and LM Studio both use it under the hood. When you run it directly, you cut out the management layer and talk straight to the engine.
+
+The project ships a small HTTP server called llama-server. You hand it a GGUF model file, it loads the model and exposes an OpenAI-compatible API on your machine. Anything that can talk to that API can use your model. From v0.1.8, InnerZero is one of those things.
+
+Running the engine directly appeals to a specific kind of user. You pick the exact build for your hardware. You set your own context length, GPU offload, and batch parameters. You serve a model file from anywhere on disk, including fine-tunes and quantisations that model managers do not carry. If that sounds like you, you no longer have to give any of it up to get an assistant with [memory](/blog/ai-that-remembers), voice, and tools on top.
+
+## How do I connect InnerZero to my llama-server?
+
+Start your llama-server as you normally do, then connect InnerZero to it from Settings. The whole thing takes about a minute.
+
+1. Run llama-server with your GGUF model. By default it listens on port 8080 on your own machine.
+2. Open InnerZero and go to Settings, then the AI & Models tab.
+3. Pick llama.cpp as your engine.
+4. Enter your server address and press Connect.
+5. InnerZero asks the server what models it is serving and fills the model picker for you. Choose which model handles chat and which handles voice, and you are done.
+
+The connection panel works the same way as the LM Studio one, so if you have used that flow before, this one will feel familiar. InnerZero shows the full model filename in the picker, including the quantisation tag, so a Q4_K_M and a Q8_0 of the same model are easy to tell apart. That detail matters more than it sounds: v0.1.8 also fixed a display bug where quantisation suffixes were mangled in menus.
+
+Everything stays on your machine. The connection is local, between InnerZero and your server, and the standard privacy behaviour applies: a llama.cpp server running on your own machine counts as on-device, so Offline and Private modes treat it exactly like bundled Ollama.
+
+## What routes through llama.cpp once connected?
+
+All of it. This is the part that makes the integration useful rather than a checkbox. When llama.cpp is your active engine, InnerZero routes its full local stack through your server:
+
+- Chat, including streaming responses
+- Voice conversations, which use your chosen voice model
+- Memory processing, the overnight work that extracts facts from your conversations
+- The coding agent
+- Model warm-up and the speed benchmark
+
+So this is not a side channel where one feature happens to use your server. Your llama-server becomes the reasoning engine for the assistant, and InnerZero supplies what the raw engine does not have: a [persistent memory](/blog/why-your-ai-should-remember-you), voice in and out, tools, knowledge packs, and a desktop interface.
+
+## How does llama.cpp compare with Ollama and LM Studio in InnerZero?
+
+All three engines do the same job in the end: serve a local model over a local API. They differ in how much they manage for you, and how much they let you decide.
+
+| | Ollama (default) | LM Studio | llama.cpp |
+|---|---|---|---|
+| Setup effort | None, bundled with InnerZero | Install the app, load a model | Run your own llama-server |
+| Model management | InnerZero manages downloads | LM Studio's model browser | You, entirely |
+| Model format | Ollama registry models | GGUF via the app | Any GGUF you can serve |
+| Control over inference settings | Limited | Some, via the app | Full: your flags, your build |
+| Best for | Most people | People who already use LM Studio | People who already run llama.cpp |
+
+The honest recommendation has not changed: if you just want a private assistant that works, the bundled Ollama path is the right choice, and InnerZero picks appropriate [model families](/blog/what-models-does-innerzero-use) for your hardware automatically. The llama.cpp option exists for people who have already made their choice at the engine level and want the assistant layer to respect it. If you are weighing up the middle option, the [InnerZero and LM Studio comparison](/blog/innerzero-vs-lm-studio) covers when that pairing makes sense.
+
+Switching engines is a Settings change, not a reinstall, and you can go back at any time.
+
+## Does InnerZero download llama.cpp for me?
+
+No, not in this release, and that is deliberate. v0.1.8 supports connecting to a llama-server that you run yourself. The groundwork for a managed mode, where InnerZero would fetch a llama-server build for your hardware and run it for you, is in the codebase but switched off until we can verify the binaries for every platform and GPU combination properly. Shipping unverified executables to people is not a corner worth cutting.
+
+In practice this is not much of a limitation for the audience this feature serves. If you want llama.cpp specifically, you almost certainly already have it built or downloaded, and InnerZero meeting your server where it is tends to be exactly the behaviour you want. If you do not have llama.cpp and do not want to set it up, the bundled Ollama engine needs no setup at all.
+
+## What else shipped in v0.1.8?
+
+The llama.cpp engine is part of a wider release that landed today. The short version:
+
+- A new AI & Models tab in Settings that gathers your engine, hardware, models, performance, and cloud API keys in one place
+- Open at login on Windows, macOS, and Linux, off by default, no admin rights needed
+- Saved actions and scheduling in the Action Hub, with scheduled runs always stopping at a draft for your review
+- Plain-language voice settings in all 26 interface languages, and real error messages when a model download fails
+
+The full list is on the [changelog](/changelog), and if you are new to local AI in general, the [what is local AI guide](/what-is-local-ai) is the best place to start.
+
+## Frequently asked questions
+
+### Do I need llama.cpp to use InnerZero?
+
+No. InnerZero ships with Ollama bundled and manages models for you out of the box. llama.cpp support is an option for people who already run their own llama-server and want InnerZero to use it, not a requirement for anyone.
+
+### Which models can I use through llama.cpp?
+
+Any GGUF model your llama-server can load, including fine-tunes and custom quantisations that model managers do not carry. InnerZero asks the server what it is serving and lists the models by their full filenames, so you choose exactly what handles chat and what handles voice.
+
+### Is a llama.cpp server private? Does anything leave my machine?
+
+The connection between InnerZero and your llama-server is local. InnerZero treats a llama.cpp server on your own machine as on-device AI, so Offline and Private modes apply to it the same way they apply to bundled Ollama. Nothing about your conversations leaves your machine unless you separately turn on cloud mode.
+
+### Can I switch between Ollama, LM Studio, and llama.cpp?
+
+Yes. The engine is a choice in Settings under the AI & Models tab, and switching does not require a reinstall. Your memory, conversations, and settings stay put; only the engine serving the model changes.
+
+### Does this replace remote Ollama support?
+
+No, both exist. You can still point InnerZero at an [Ollama server on another machine](/blog/remote-ollama-innerzero) on your network. llama.cpp support is about running your own llama-server, typically on the same machine.
