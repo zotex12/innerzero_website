@@ -17,7 +17,7 @@ export const metadata: Metadata = createMetadata({
   // exactly the copy the task asked for.
   title: { absolute: "Supported AI Models - InnerZero" },
   description:
-    "InnerZero supports Qwen 3, Gemma 3, and gpt-oss local model families via Ollama or LM Studio. Optional cloud support covers seven providers including Anthropic, OpenAI, and Google.",
+    "InnerZero supports Qwen 3, Gemma 3, and gpt-oss local model families via Ollama, LM Studio, or your own llama.cpp server. Optional cloud support covers seven providers including Anthropic, OpenAI, and Google.",
   openGraph: {
     title: "Supported AI Models - InnerZero",
     description:
@@ -166,7 +166,7 @@ export default function ModelsPage() {
             </h1>
             <p className="mt-5 max-w-3xl text-lg text-text-secondary">
               InnerZero runs open-source language models directly on your PC
-              via Ollama or LM Studio. The main families are Qwen 3, Gemma 3,
+              via Ollama, LM Studio, or your own llama.cpp server. The main families are Qwen 3, Gemma 3,
               and gpt-oss, covering everything from a 1B voice model on a
               basic laptop to a 235B reasoning model on a datacenter-class
               workstation. Local AI is free, no subscription, no account
@@ -210,7 +210,7 @@ export default function ModelsPage() {
             <p className="mt-4 max-w-3xl text-base text-text-secondary">
               Supported local families run reliably on consumer hardware,
               ship under permissive licences, are actively maintained by their
-              upstream teams, and work cleanly through Ollama or LM Studio
+              upstream teams, and work cleanly through Ollama, LM Studio, or llama.cpp
               without custom glue. We prefer families with a range of sizes so
               the same recipe scales from a budget laptop up to a frontier
               workstation. Models that satisfy those constraints land in the

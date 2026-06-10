@@ -121,6 +121,11 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
       "LM Studio is a desktop application that does the same job as Ollama (downloading and serving local language models) with a built-in chat UI and model browser. InnerZero works with either backend, so you can pick whichever you already have installed.",
   },
   {
+    question: "What is llama.cpp?",
+    answer:
+      "llama.cpp is the open-source inference engine that much of the local AI world is built on; Ollama and LM Studio both use it under the hood. If you run your own llama-server from llama.cpp directly, InnerZero can connect to it as a backend: pick llama.cpp in Settings, point it at your server, and chat, voice, and memory all route through it, with a picker for your GGUF model files.",
+  },
+  {
     question: "Is local AI safe to use for sensitive documents?",
     answer:
       "Yes. Local AI never sends document contents to a third-party server. Your files stay on your disk, your prompts stay in local memory, and the model weights are static files that cannot phone home. This makes local AI well suited to confidential work such as legal drafts, medical notes, or private journals.",
@@ -128,7 +133,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Can I run local AI on a Mac or Linux?",
     answer:
-      "Ollama and LM Studio both run on macOS, Linux, and Windows. Open-source models run anywhere those runtimes run. InnerZero ships on Windows, macOS, and Linux, so the local AI stack is cross-platform end to end.",
+      "Ollama, LM Studio, and llama.cpp all run on macOS, Linux, and Windows. Open-source models run anywhere those runtimes run. InnerZero ships on Windows, macOS, and Linux, so the local AI stack is cross-platform end to end.",
   },
 ];
 
@@ -297,7 +302,7 @@ export default function WhatIsLocalAiPage() {
             How does local AI work?
           </SectionHeading>
           <Answer>
-            You install a local runtime (Ollama or LM Studio), download an
+            You install a local runtime (Ollama, LM Studio, or llama.cpp), download an
             open-source model file once, and from then on every prompt runs
             inference locally. The model never phones home and no request
             leaves your device.
@@ -312,7 +317,8 @@ export default function WhatIsLocalAiPage() {
             CPU (slower but workable) if the model is larger than your VRAM.
             InnerZero is the front end: it handles the chat window, memory,
             voice, knowledge packs, and tools. The heavy lifting happens in
-            Ollama or LM Studio, which we treat as swappable engines.
+            Ollama, LM Studio, or llama.cpp, which we treat as swappable
+            engines.
           </Body>
 
           {/* 3. Comparison */}
@@ -584,8 +590,8 @@ export default function WhatIsLocalAiPage() {
             How does InnerZero fit?
           </SectionHeading>
           <Answer>
-            InnerZero is a desktop app that turns a local runtime (Ollama or
-            LM Studio) into a polished daily assistant. It adds memory,
+            InnerZero is a desktop app that turns a local runtime (Ollama,
+            LM Studio, or llama.cpp) into a polished daily assistant. It adds memory,
             voice, tools, knowledge packs, and an optional cloud layer for
             when you want a frontier model.
           </Answer>
