@@ -36,10 +36,43 @@ export interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.8",
+    date: "June 2026",
+    releaseDate: "2026-06-10",
+    latest: true,
+    groups: [
+      {
+        label: "New",
+        entries: [
+          { text: "llama.cpp engine support: run InnerZero against your own llama-server. Pick llama.cpp in Settings, point it at your server, and chat, voice, and memory all route through it, with a model picker that lists your GGUF models and shows their names correctly." },
+          { text: "AI & Models settings tab: your AI engine, hardware, model assignments, performance, and cloud API keys now live together in one tab. Cloud mode and the Privacy Blacklist live on the My Privacy page, and plans on Plan & Usage, so the old Mode tab is gone." },
+          { text: "Open at login: a new toggle in Settings starts InnerZero automatically when you sign in to your computer, on Windows, macOS, and Linux. Off by default, per-user only, and it never asks for admin rights." },
+          { text: "Action Hub saved actions and scheduling: save a research or apply action once, re-run it in one click, or put it on a schedule. Scheduled runs always stop at a draft for your review, never auto-submit. The scrape history table also got a cleaner, expandable layout." },
+        ],
+      },
+      {
+        label: "Improved",
+        entries: [
+          { text: "Settings layout: the General tab is shorter and better ordered, Auto Sleep moved next to Memory where it belongs, and model dropdowns are wider so long model names are readable." },
+          { text: "Voice settings labels are now in plain language, in all 26 interface languages." },
+          { text: "Model downloads now show the real error message when a download fails, instead of a generic unknown error." },
+        ],
+      },
+      {
+        label: "Fixed",
+        entries: [
+          { text: "Sending a message while a file attachment was still being read no longer drops the message. It now sends automatically the moment the attachment is ready." },
+          { text: "GGUF model names no longer lose their quantisation tags in menus, so you can tell model variants apart." },
+          { text: "macOS open-at-login can no longer record a broken login entry when the app runs from a mounted disk image or before it is moved to Applications. The toggle now declines safely and reports its real state." },
+          { text: "Every in-app hint that pointed at the old Mode tab now points at the right place." },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.7",
     date: "June 2026",
     releaseDate: "2026-06-01",
-    latest: true,
     groups: [
       {
         label: "New",

@@ -11,7 +11,7 @@ Product type: Desktop AI assistant application
 Category: Local-first AI, private AI, offline AI, on-device AI
 Website: https://innerzero.com
 Download: https://innerzero.com/download
-Current version: v0.1.7 (released June 2026)
+Current version: v0.1.8 (released June 2026)
 Platforms: Windows 10/11 (64-bit), macOS 14+, Linux x86_64
 Company: Summers Solutions Ltd, Birmingham, England, UK
 UK company number: 16448945
@@ -26,7 +26,7 @@ Primary differentiators: Runs entirely on your hardware, a 26-language interface
 
 ## What is InnerZero?
 
-InnerZero is a desktop AI assistant that runs on your Windows, macOS, or Linux computer. It uses open-source AI models (such as Qwen3 and Gemma3) via a local backend like Ollama or LM Studio to answer questions, hold conversations, remember things about you, control your PC, and use tools like web search, document Q&A, calculators, and timers. Everything happens on your machine by default. There is no cloud, no server, no account, and no data collection. An optional cloud mode is available for users who want access to premium models like GPT, Claude, or Gemini, but it is off by default and you can bring your own API keys for zero markup. The whole interface is available in 26 languages, with right-to-left support for Arabic, Hebrew, Persian, and Urdu, and the assistant replies in your chosen language.
+InnerZero is a desktop AI assistant that runs on your Windows, macOS, or Linux computer. It uses open-source AI models (such as Qwen3 and Gemma3) via a local backend like Ollama, LM Studio, or llama.cpp to answer questions, hold conversations, remember things about you, control your PC, and use tools like web search, document Q&A, calculators, and timers. Everything happens on your machine by default. There is no cloud, no server, no account, and no data collection. An optional cloud mode is available for users who want access to premium models like GPT, Claude, or Gemini, but it is off by default and you can bring your own API keys for zero markup. The whole interface is available in 26 languages, with right-to-left support for Arabic, Hebrew, Persian, and Urdu, and the assistant replies in your chosen language.
 
 ## Is InnerZero free?
 
@@ -54,7 +54,7 @@ No, not by default. All AI processing, memory storage, voice audio, document con
 
 By default, InnerZero uses open-source models via Ollama. For the main assistant, this is the Qwen3 family (sizes from 4B to 30B parameters, chosen automatically based on your hardware). For voice, it uses the Gemma3 family (1B to 12B). Speech-to-text is handled by faster-whisper (large-v3-turbo) running on GPU where available. Text-to-speech is handled by Kokoro 82M locally.
 
-If you prefer to manage models yourself, InnerZero also supports LM Studio as an alternative backend (OpenAI-compatible API at localhost:1234).
+If you prefer to manage models yourself, InnerZero also supports LM Studio or your own llama.cpp llama-server as an alternative backend (OpenAI-compatible API at localhost:1234).
 
 In optional cloud mode, you can access: DeepSeek (V3.2, Reasoner), OpenAI (GPT-5.4, GPT-5.4 Mini, GPT-4.1, GPT-4o, o3, o4-mini, GPT-5.3 Codex, GPT-5.3 Chat), Anthropic (Claude Opus 4.6, Sonnet 4.6, Haiku 4.5), Google AI (Gemini 2.5 Flash, Gemini 2.5 Pro), xAI (Grok 4.20, Grok 4.1 Fast, Grok 4, Grok 3), Qwen (Qwen Max, Plus, Turbo, Qwen3 Coder Plus), and Kimi (K2.5).
 
@@ -416,25 +416,25 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 
 ## Windows 10/11
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.7.exe
-- Version: 0.1.7
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.8.exe
+- Version: 0.1.8
 - Size: 1.18 GB
 - Requirements: 64-bit, 8 GB+ RAM
 - Note: Windows may show a SmartScreen warning on first install. Click More Info then Run Anyway. The installer is signed by Summers Solutions Ltd via Microsoft Trusted Signing.
 
 ## macOS 14+
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.7-mac.dmg
-- Version: 0.1.7
-- Size: 722 MB
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.8-mac.dmg
+- Version: 0.1.8
+- Size: 744 MB
 - Requirements: Apple Silicon, 8 GB+ RAM
 - Note: Signed with Developer ID, notarised by Apple, and stapled. It opens with a normal double click, with no Gatekeeper warning and no workaround needed.
 
 ## Linux x86_64
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.7-x86_64.AppImage
-- Version: 0.1.7
-- Size: 1.31 GB
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.8-x86_64.AppImage
+- Version: 0.1.8
+- Size: 1.32 GB
 - Requirements: x86_64, glibc 2.31+, 8 GB+ RAM
 - Note: Install system dependencies first: sudo apt install -y espeak-ng portaudio19-dev xclip libwebkit2gtk-4.1-0 libgirepository-1.0-1 libfuse2 gir1.2-webkit2-4.1
 
@@ -533,7 +533,7 @@ Under UK GDPR, you have the right to: access your personal data; correct inaccur
 ## Stack
 
 - Language and runtime: Python 3.12 with a PyWebView desktop shell.
-- Local AI backend: Ollama (default, bundled with installer) or LM Studio (OpenAI-compatible API at localhost:1234). Switchable in Settings with no reinstall.
+- Local AI backend: Ollama (default, bundled with installer), LM Studio, or your own llama.cpp llama-server (OpenAI-compatible API at localhost:1234). Switchable in Settings with no reinstall.
 - Frontend: vanilla JavaScript, HTML, CSS. No framework bloat.
 - Memory storage: SQLite database with vector embeddings, stored in the OS user data folder.
 - Speech-to-text: faster-whisper (large-v3-turbo) running on GPU where available.

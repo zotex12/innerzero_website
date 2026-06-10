@@ -165,6 +165,7 @@ const SECTIONS: FeatureSection[] = [
       { icon: FileText, title: "Job profile", desc: "Save a reusable profile of CV details and answers that Zero can draw on when you ask it to help with an application." },
       { icon: MousePointer, title: "Apply assist", desc: "Zero can help fill in job application forms in a fresh, isolated browser that never reuses your logins or cookies. The apply flow works best on Windows in this release." },
       { icon: ShieldCheck, title: "Approval before it acts", desc: "Submitting an application is gated behind your explicit approval. Keep it to draft-only and review everything first." },
+      { icon: Timer, title: "Saved actions and scheduling", desc: "Save an action once, re-run it in one click, or put it on a schedule. Scheduled runs always stop at a draft for your review." },
     ],
   },
   {
@@ -215,6 +216,8 @@ const SECTIONS: FeatureSection[] = [
       { icon: ToggleLeft, title: "Tool preferences", desc: "Enable or disable individual tools." },
       { icon: FolderOpen, title: "Configurable output folder", desc: "Choose where Zero saves files." },
       { icon: Cog, title: "Hardware profiles", desc: "Auto-detected or manually overridden." },
+      { icon: Cpu, title: "Choice of local engine", desc: "Ollama by default, or connect LM Studio or your own llama.cpp server. Switch in Settings, no reinstall." },
+      { icon: Power, title: "Open at login", desc: "Start InnerZero automatically when you sign in, on Windows, macOS, and Linux. Off by default, no admin rights needed." },
     ],
   },
   {

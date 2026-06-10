@@ -92,7 +92,7 @@ export default function Home() {
               applicationCategory: "UtilitiesApplication",
               applicationSubCategory: "AI Assistant",
               operatingSystem: "Windows, macOS, Linux",
-              softwareVersion: "0.1.7",
+              softwareVersion: "0.1.8",
               description:
                 "A free private AI assistant that runs entirely on your PC. No cloud. No tracking. No subscription.",
               url: absoluteUrl("/"),
@@ -110,6 +110,8 @@ export default function Home() {
                 "Offline Wikipedia knowledge packs",
                 "Screen automation",
                 "Optional cloud AI via BYO API keys",
+                "Choice of local AI engine: Ollama, LM Studio, or llama.cpp",
+                "Open at login option on Windows, macOS, and Linux",
               ],
               publisher: {
                 "@id": `${absoluteUrl("/")}#organization`,
