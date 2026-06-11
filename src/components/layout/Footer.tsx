@@ -6,6 +6,11 @@ import { DiscordIcon } from "@/components/icons/DiscordIcon";
 import { XIcon } from "@/components/icons/XIcon";
 import { InstagramIcon } from "@/components/icons/InstagramIcon";
 import { LinkedInIcon } from "@/components/icons/LinkedInIcon";
+import { RedditIcon } from "@/components/icons/RedditIcon";
+import { BlueskyIcon } from "@/components/icons/BlueskyIcon";
+import { MastodonIcon } from "@/components/icons/MastodonIcon";
+import { TikTokIcon } from "@/components/icons/TikTokIcon";
+import { FacebookIcon } from "@/components/icons/FacebookIcon";
 import { KoFiIcon } from "@/components/icons/KoFiIcon";
 import { Container } from "@/components/ui/Container";
 import { FOOTER_COLUMNS } from "@/lib/constants";
@@ -39,6 +44,13 @@ const COMMUNITY_LINKS: CommunityLink[] = [
     hoverClass: "hover:text-[#5865F2]",
   },
   {
+    label: "Reddit",
+    href: "https://www.reddit.com/r/InnerZero/",
+    ariaLabel: "Join the InnerZero community on Reddit",
+    icon: RedditIcon,
+    hoverClass: "hover:text-[#FF4500]",
+  },
+  {
     label: "X",
     href: "https://x.com/InnerZero_ai",
     ariaLabel: "Follow InnerZero on X",
@@ -46,11 +58,39 @@ const COMMUNITY_LINKS: CommunityLink[] = [
     hoverClass: "hover:text-text-primary",
   },
   {
+    label: "Bluesky",
+    href: "https://bsky.app/profile/innerzero.bsky.social",
+    ariaLabel: "Follow InnerZero on Bluesky",
+    icon: BlueskyIcon,
+    hoverClass: "hover:text-[#1185FE]",
+  },
+  {
+    label: "Mastodon",
+    href: "https://mastodon.social/@innerzero",
+    ariaLabel: "Follow InnerZero on Mastodon",
+    icon: MastodonIcon,
+    hoverClass: "hover:text-[#6364FF]",
+  },
+  {
     label: "Instagram",
     href: "https://www.instagram.com/innerzero_ai",
     ariaLabel: "Follow InnerZero on Instagram",
     icon: InstagramIcon,
     hoverClass: "hover:text-[#E4405F]",
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@innerzero",
+    ariaLabel: "Follow InnerZero on TikTok",
+    icon: TikTokIcon,
+    hoverClass: "hover:text-[#FE2C55]",
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/innerzeroai/",
+    ariaLabel: "Follow InnerZero on Facebook",
+    icon: FacebookIcon,
+    hoverClass: "hover:text-[#1877F2]",
   },
   {
     label: "LinkedIn",

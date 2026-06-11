@@ -77,6 +77,11 @@ export default function Home() {
                 "https://www.linkedin.com/company/innerzero",
                 "https://discord.gg/rn9SPXgThT",
                 "https://github.com/zotex12/innerzero-releases",
+                "https://www.reddit.com/r/InnerZero/",
+                "https://bsky.app/profile/innerzero.bsky.social",
+                "https://mastodon.social/@innerzero",
+                "https://www.tiktok.com/@innerzero",
+                "https://www.facebook.com/innerzeroai/",
               ],
               parentOrganization: {
                 "@type": "Organization",
