@@ -289,6 +289,18 @@ body {
   color: var(--accent-gold-hover);
 }
 
+/* === Inline content links (WCAG 1.4.1 Use of Color) === */
+/* A gold link sitting inside a text block (paragraph, list item, address)
+   must not rely on colour alone to stand out from the body text around it.
+   Underline these persistently. Standalone CTA and card links are not in a
+   text block and keep their existing treatment. Mirrors .blog-prose a. */
+main p a.text-accent-gold,
+main li a.text-accent-gold,
+main address a.text-accent-gold {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .blog-prose strong {
   font-weight: 600;
   color: var(--text-primary);

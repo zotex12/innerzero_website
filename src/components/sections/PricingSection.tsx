@@ -521,6 +521,11 @@ export function PricingSection({ className }: PricingSectionProps) {
     <div className={cn("", className)}>
       <PricingAnchorNav />
 
+      {/* Visually hidden section heading so the document outline runs
+          h1 (page) -> h2 here -> h3 plan cards, instead of jumping from
+          h1 straight to the h3 card titles (WCAG heading-order). */}
+      <h2 className="sr-only">InnerZero plans</h2>
+
       {/* Section A: Free Local. scroll-mt-20 offsets the fixed h-16 header so
           deep links and anchor-nav clicks don't land under the nav. */}
       <section id="free" className="scroll-mt-20 py-12 md:py-20">
