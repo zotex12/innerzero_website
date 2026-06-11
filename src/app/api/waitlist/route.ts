@@ -11,11 +11,11 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    // Honeypot. A real browser leaves the off-screen "company" field
-    // empty. Bots that auto-fill every field trip it. Return a
-    // success-shaped response without inserting so the bot does not
-    // learn it was filtered.
-    if (typeof body.company === "string" && body.company.trim() !== "") {
+    // Honeypot. A real browser leaves the off-screen "iz_hp" field empty
+    // (opaque name so autofill does not populate it). Bots that auto-fill
+    // every field trip it. Return a success-shaped response without
+    // inserting so the bot does not learn it was filtered.
+    if (typeof body.iz_hp === "string" && body.iz_hp.trim() !== "") {
       return NextResponse.json(
         { success: true, message: "You're on the list!" },
         { status: 200 }

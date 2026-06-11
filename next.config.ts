@@ -86,9 +86,12 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: "/:path*",
+        // Exclude /api/* so API clients and webhooks that might use the
+        // www host are never 308-redirected (some clients do not follow
+        // redirects on POST). Page routes still canonicalise to the apex.
+        source: "/:path((?!api/).*)",
         has: [{ type: "host", value: "www.innerzero.com" }],
-        destination: "https://innerzero.com/:path*",
+        destination: "https://innerzero.com/:path",
         permanent: true,
       },
     ];

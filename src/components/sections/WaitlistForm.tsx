@@ -11,7 +11,10 @@ interface WaitlistFormProps {
 export function WaitlistForm({ className }: WaitlistFormProps) {
   const [email, setEmail] = useState("");
   // Honeypot value. Real users never see this field, so it stays empty.
-  const [company, setCompany] = useState("");
+  // Uses an opaque name (not a semantic one like "company") so browser
+  // autofill and password managers do not populate it and silently drop
+  // a real signup.
+  const [hp, setHp] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
 
@@ -24,7 +27,7 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, company }),
+        body: JSON.stringify({ email, iz_hp: hp }),
       });
 
       const data = await res.json();
@@ -66,15 +69,15 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
           aria-hidden="true"
           style={{ position: "absolute", left: "-9999px", height: 0, width: 0, overflow: "hidden" }}
         >
-          <label htmlFor="wl-company">Company</label>
+          <label htmlFor="wl-iz-hp">Leave this field empty</label>
           <input
-            id="wl-company"
+            id="wl-iz-hp"
             type="text"
-            name="company"
+            name="iz_hp"
             tabIndex={-1}
             autoComplete="off"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
+            value={hp}
+            onChange={(e) => setHp(e.target.value)}
           />
         </div>
         <div className="flex-1">
