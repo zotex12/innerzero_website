@@ -67,7 +67,14 @@ function UsageBar({ used, total }: { used: number; total: number }) {
         </span>
         <span className="text-xs text-text-muted">{pct}% used</span>
       </div>
-      <div className="h-3 w-full rounded-full bg-bg-secondary overflow-hidden">
+      <div
+        role="progressbar"
+        aria-valuenow={pct}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={`Cloud usage: ${pct}% used`}
+        className="h-3 w-full rounded-full bg-bg-secondary overflow-hidden"
+      >
         <div
           className={cn("h-full rounded-full transition-all duration-500", barColor)}
           style={{ width: `${pct}%` }}
@@ -87,10 +94,12 @@ function QuickTopUpButton({
   price: string;
 }) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   async function handleClick() {
     setLoading(true);
+    setError("");
     try {
       const supabase = createClient();
       const {
@@ -112,24 +121,31 @@ function QuickTopUpButton({
       if (data.url) {
         window.location.href = data.url;
       } else {
-        alert(data.message ?? "Something went wrong.");
+        setError(data.message ?? "Something went wrong. Please try again.");
         setLoading(false);
       }
     } catch {
-      alert("Failed to start checkout.");
+      setError("Failed to start checkout. Please try again.");
       setLoading(false);
     }
   }
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={loading}
-      className="flex flex-col items-center gap-1 rounded-lg border border-border-default bg-bg-secondary px-4 py-3 text-center transition-all duration-150 hover:border-accent-gold hover:text-accent-gold disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-    >
-      <span className="text-sm font-medium text-text-primary">{label}</span>
-      <span className="text-xs text-text-muted">{price}</span>
-    </button>
+    <div className="flex flex-col gap-1">
+      <button
+        onClick={handleClick}
+        disabled={loading}
+        className="flex flex-col items-center gap-1 rounded-lg border border-border-default bg-bg-secondary px-4 py-3 text-center transition-all duration-150 hover:border-accent-gold hover:text-accent-gold disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+      >
+        <span className="text-sm font-medium text-text-primary">{label}</span>
+        <span className="text-xs text-text-muted">{price}</span>
+      </button>
+      {error && (
+        <p className="text-xs text-error" role="alert">
+          {error}
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -147,6 +163,7 @@ export function CloudUsageCard({
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [billingLoading, setBillingLoading] = useState(false);
+  const [billingError, setBillingError] = useState("");
 
   const hasPlan = plan && plan !== "free";
   const used = usageMonthlyAllowance - usageBalance;
@@ -196,12 +213,19 @@ export function CloudUsageCard({
 
   async function handleManageBilling() {
     setBillingLoading(true);
+    setBillingError("");
     try {
       const res = await fetch("/api/stripe/portal", { method: "POST" });
       const data = (await res.json()) as { url?: string };
-      if (data.url) window.open(data.url, "_blank");
-      else setBillingLoading(false);
+      if (data.url) {
+        window.open(data.url, "_blank");
+        setBillingLoading(false);
+      } else {
+        setBillingError("Could not open the billing portal. Please try again.");
+        setBillingLoading(false);
+      }
     } catch {
+      setBillingError("Could not open the billing portal. Please try again.");
       setBillingLoading(false);
     }
   }
@@ -394,6 +418,12 @@ export function CloudUsageCard({
         </a>
       </div>
 
+      {billingError && (
+        <p className="mt-3 text-sm text-error" role="alert">
+          {billingError}
+        </p>
+      )}
+
       {/* Quick Top Up */}
       {paygPlans.length > 0 && (
         <div className="mt-6 pt-4 border-t border-border-default">
@@ -417,6 +447,7 @@ export function CloudUsageCard({
       <div className="mt-6 pt-4 border-t border-border-default">
         <button
           onClick={loadHistory}
+          aria-expanded={historyOpen}
           className="flex w-full items-center justify-between text-left cursor-pointer"
         >
           <span className="text-sm font-medium text-text-secondary">

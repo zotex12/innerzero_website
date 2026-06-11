@@ -109,7 +109,11 @@ export function MobileNav({ open, onOpenChange: setOpen }: MobileNavProps) {
         aria-label="Mobile navigation"
         aria-modal="true"
         role="dialog"
-        aria-hidden={!open}
+        // When closed the drawer is only translated off-screen (still in the
+        // DOM), so `inert` is what actually removes its links from the tab
+        // order and the accessibility tree. Replaces a bare aria-hidden,
+        // which left focusable children reachable while hidden.
+        inert={!open}
       >
         <div className="flex items-center justify-end h-16 px-4 sm:px-6">
           <button

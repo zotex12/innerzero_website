@@ -49,7 +49,10 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
   if (status === "success") {
     return (
       <div className={className}>
-        <div className="rounded-xl border border-success/30 bg-success/10 p-6 text-center">
+        <div
+          role="status"
+          className="rounded-xl border border-success/30 bg-success/10 p-6 text-center"
+        >
           <p className="text-lg font-medium text-success">{message}</p>
           <p className="mt-2 text-sm text-text-secondary">
             We&apos;ll let you know when InnerZero is ready.

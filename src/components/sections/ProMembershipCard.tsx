@@ -18,10 +18,12 @@ import { cn } from "@/lib/utils";
 export function ProMembershipCard() {
   const [cadence, setCadence] = useState<ProCadence>("annual");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   async function handleClick() {
     setLoading(true);
+    setError("");
 
     try {
       const supabase = createClient();
@@ -45,11 +47,11 @@ export function ProMembershipCard() {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        alert(data.message ?? "Something went wrong. Please try again.");
+        setError(data.message ?? "Something went wrong. Please try again.");
         setLoading(false);
       }
     } catch (err) {
-      alert(
+      setError(
         err instanceof Error
           ? err.message
           : "Failed to start checkout. Please try again."
@@ -81,7 +83,7 @@ export function ProMembershipCard() {
           aria-checked={cadence === "monthly"}
           onClick={() => setCadence("monthly")}
           className={cn(
-            "rounded-md px-3 py-1 text-sm font-medium transition-colors",
+            "rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold",
             cadence === "monthly"
               ? "bg-accent-gold-solid text-[#0a0a0f]"
               : "text-text-secondary hover:text-text-primary"
@@ -95,7 +97,7 @@ export function ProMembershipCard() {
           aria-checked={cadence === "annual"}
           onClick={() => setCadence("annual")}
           className={cn(
-            "rounded-md px-3 py-1 text-sm font-medium transition-colors",
+            "rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold",
             cadence === "annual"
               ? "bg-accent-gold-solid text-[#0a0a0f]"
               : "text-text-secondary hover:text-text-primary"
@@ -137,6 +139,12 @@ export function ProMembershipCard() {
         {loading ? "Processing..." : INNERZERO_PRO.cta}
         {!loading && <ExternalLink className="h-3.5 w-3.5" />}
       </button>
+
+      {error && (
+        <p className="mt-3 text-sm text-error" role="alert">
+          {error}
+        </p>
+      )}
 
       <p className="mt-3 text-xs text-text-secondary">{INNERZERO_PRO.note}</p>
     </div>

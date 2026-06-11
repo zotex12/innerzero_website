@@ -218,7 +218,7 @@ export default function WhatIsLocalAiPage() {
       "@type": "WebPage",
       "@id": `${SITE_URL}/what-is-local-ai`,
     },
-    image: `${SITE_URL}/og-default.png`,
+    image: `${SITE_URL}/banner.png`,
   };
 
   const faqJsonLd = {

@@ -41,11 +41,21 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="mt-8 rounded-xl border border-success/30 bg-success/10 p-6 text-center">
+      <div
+        role="status"
+        className="mt-8 rounded-xl border border-success/30 bg-success/10 p-6 text-center"
+      >
         <p className="text-lg font-medium text-success">Message sent!</p>
         <p className="mt-2 text-sm text-text-secondary">
           Thank you for reaching out. We&apos;ll get back to you soon.
         </p>
+        <button
+          type="button"
+          onClick={() => setStatus("idle")}
+          className="mt-4 rounded text-sm font-medium text-accent-gold transition-colors hover:text-accent-gold-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary cursor-pointer"
+        >
+          Send another message
+        </button>
       </div>
     );
   }

@@ -194,7 +194,7 @@ export function NewsletterSignup({
                 type="submit"
                 disabled={isSubmitDisabled}
                 aria-disabled={isSubmitDisabled}
-                className="rounded-lg bg-accent-gold-solid px-6 py-3 font-medium text-[#141410] transition-colors duration-150 hover:bg-accent-gold-solid-hover disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-lg bg-accent-gold-solid px-6 py-3 font-medium text-[#0a0a0f] transition-colors duration-150 hover:bg-accent-gold-solid-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isBusy ? "Subscribing..." : "Subscribe"}
               </button>

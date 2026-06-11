@@ -76,7 +76,7 @@ function ChangeNameForm({
           <p className="text-sm text-error" role="alert">{error}</p>
         )}
         {message && (
-          <p className="text-sm text-success">{message}</p>
+          <p className="text-sm text-success" role="status">{message}</p>
         )}
         <Button type="submit" disabled={loading}>
           {loading ? "Saving..." : "Save Name"}
@@ -175,7 +175,7 @@ function ChangePasswordForm({ email }: { email: string }) {
           <p className="text-sm text-error" role="alert">{error}</p>
         )}
         {message && (
-          <p className="text-sm text-success">{message}</p>
+          <p className="text-sm text-success" role="status">{message}</p>
         )}
         <Button type="submit" disabled={loading}>
           {loading ? "Updating..." : "Update Password"}

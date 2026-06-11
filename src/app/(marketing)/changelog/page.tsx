@@ -6,7 +6,7 @@ export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/changelog" },
   title: "Changelog",
   description:
-    "Release notes and updates for InnerZero. See what's new in each version of your private AI assistant.",
+    "Release notes for InnerZero, the free private AI assistant for Windows, macOS, and Linux. See new features, model engine support, and fixes in every version.",
   openGraph: {
     title: "Changelog | InnerZero",
     description:
@@ -424,7 +424,7 @@ export default function ChangelogPage() {
                   <span
                     className={`rounded-full px-3.5 py-1 text-sm font-semibold ${
                       release.latest
-                        ? "bg-accent-gold-solid text-[#111]"
+                        ? "bg-accent-gold-solid text-[#0a0a0f]"
                         : "border border-border-default text-text-secondary"
                     }`}
                   >

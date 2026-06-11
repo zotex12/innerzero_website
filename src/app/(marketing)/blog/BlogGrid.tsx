@@ -23,12 +23,17 @@ export function BlogGrid({ posts, tags }: Props) {
   return (
     <>
       {/* Tag filter bar */}
-      <div className="flex flex-wrap gap-2 mb-8">
+      <div
+        role="group"
+        aria-label="Filter posts by tag"
+        className="flex flex-wrap gap-2 mb-8"
+      >
         <button
           onClick={() => { setActiveTag(null); setShowAll(false); }}
-          className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
+          aria-pressed={activeTag === null}
+          className={`shrink-0 rounded-full px-4 py-2 text-xs font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary ${
             activeTag === null
-              ? "bg-accent-gold-solid text-[#111] font-semibold"
+              ? "bg-accent-gold-solid text-[#0a0a0f] font-semibold"
               : "bg-bg-card text-text-secondary hover:text-text-primary border border-border-default"
           }`}
         >
@@ -38,9 +43,10 @@ export function BlogGrid({ posts, tags }: Props) {
           <button
             key={tag}
             onClick={() => { setActiveTag(tag); setShowAll(false); }}
-            className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
+            aria-pressed={activeTag === tag}
+            className={`shrink-0 rounded-full px-4 py-2 text-xs font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary ${
               activeTag === tag
-                ? "bg-accent-gold-solid text-[#111] font-semibold"
+                ? "bg-accent-gold-solid text-[#0a0a0f] font-semibold"
                 : "bg-bg-card text-text-secondary hover:text-text-primary border border-border-default"
             }`}
           >

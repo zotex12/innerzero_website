@@ -24,14 +24,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {};
 
   const url = absoluteUrl(`/blog/${post.slug}`);
-  // Frontmatter titles that already include "InnerZero" must use the
-  // absolute form so the "%s | InnerZero..." template in
-  // src/lib/metadata.ts does not duplicate the brand. Same pattern as
-  // the home page and /about. Posts without "InnerZero" in the title
-  // keep the template suffix for SEO.
+  // Blog titles are already long and keyword-rich, so the default
+  // "%s | InnerZero: Private AI Assistant" template (a 35-char suffix)
+  // pushes the rendered <title> well past Google's ~60-char display limit
+  // and truncates the keyword tail. Use an absolute title with at most a
+  // short " | InnerZero" brand suffix. Titles that already contain
+  // "InnerZero" stand alone so the brand never doubles up.
   const titleField = post.title.includes("InnerZero")
     ? { absolute: post.title }
-    : post.title;
+    : { absolute: `${post.title} | InnerZero` };
   return {
     title: titleField,
     description: post.description,

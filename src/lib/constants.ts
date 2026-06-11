@@ -451,7 +451,6 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       { label: "About", href: "/about" },
       { label: "Learn", href: "/blog" },
       { label: "Contact", href: "/contact" },
-      { label: "Waitlist", href: "/waitlist" },
     ],
   },
   // Community is a placeholder. Footer.tsx detects an empty links

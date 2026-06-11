@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { SocialProofStrip } from "@/components/sections/SocialProofStrip";
@@ -44,7 +45,11 @@ export function Hero() {
       </div>
 
       <Container className="relative z-10 text-center">
-        <h1 className="animate-fade-up text-4xl font-bold leading-[1.1] text-text-primary md:text-5xl lg:text-[3.5rem]">
+        {/* No entrance animation on the H1: it is the LCP element, so it
+            must be paintable on first frame. An opacity-0 fade would push
+            Largest Contentful Paint out by the animation duration for every
+            motion-enabled visitor. The supporting copy below still fades. */}
+        <h1 className="text-4xl font-bold leading-[1.1] text-text-primary md:text-5xl lg:text-[3.5rem]">
           {HERO.headline}
         </h1>
 
@@ -63,7 +68,13 @@ export function Hero() {
           </Button>
         </div>
 
-        <SocialProofStrip className="mt-8" />
+        {/* Streamed in a Suspense boundary so the hero (and the LCP H1)
+            flush immediately. SocialProofStrip awaits a GitHub stats fetch
+            with an 8s timeout; without this boundary a stats cache miss
+            would block the whole page render on that third-party call. */}
+        <Suspense fallback={<div className="mt-8 min-h-9" aria-hidden="true" />}>
+          <SocialProofStrip className="mt-8" />
+        </Suspense>
       </Container>
     </section>
   );

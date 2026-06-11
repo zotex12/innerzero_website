@@ -34,7 +34,7 @@ export default async function RootLayout({
 }>) {
   const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
-    <html lang="en" className={`${inter.variable} h-full`} suppressHydrationWarning>
+    <html lang="en-GB" className={`${inter.variable} h-full`} suppressHydrationWarning>
       <head>
         {/* Prevent flash of wrong theme */}
         <script

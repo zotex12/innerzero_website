@@ -30,7 +30,6 @@ const STATIC_PATHS: {
   { path: "/changelog", priority: 0.6, changeFrequency: "weekly" },
   { path: "/about", priority: 0.6, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.5, changeFrequency: "yearly" },
-  { path: "/waitlist", priority: 0.5, changeFrequency: "monthly" },
   { path: "/for/writers", priority: 0.6, changeFrequency: "monthly" },
   { path: "/for/students", priority: 0.6, changeFrequency: "monthly" },
   { path: "/for/developers", priority: 0.6, changeFrequency: "monthly" },

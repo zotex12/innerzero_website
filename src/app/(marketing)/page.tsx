@@ -137,14 +137,6 @@ export default function Home() {
               publisher: {
                 "@id": `${absoluteUrl("/")}#organization`,
               },
-              potentialAction: {
-                "@type": "SearchAction",
-                target: {
-                  "@type": "EntryPoint",
-                  urlTemplate: `${absoluteUrl("/blog")}?q={search_term_string}`,
-                },
-                "query-input": "required name=search_term_string",
-              },
             },
           ]),
         }}

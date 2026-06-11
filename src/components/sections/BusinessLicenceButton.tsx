@@ -22,6 +22,7 @@ interface Props {
 // know any Stripe identifier.
 export function BusinessLicenceButton({ seats, cadence }: Props) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   if (seats > MAX_SELF_SERVE_SEATS) {
@@ -39,6 +40,7 @@ export function BusinessLicenceButton({ seats, cadence }: Props) {
 
   async function handleClick() {
     setLoading(true);
+    setError("");
 
     try {
       const supabase = createClient();
@@ -62,11 +64,11 @@ export function BusinessLicenceButton({ seats, cadence }: Props) {
       if (data.url) {
         window.location.href = data.url;
       } else {
-        alert(data.message ?? "Something went wrong. Please try again.");
+        setError(data.message ?? "Something went wrong. Please try again.");
         setLoading(false);
       }
     } catch (err) {
-      alert(
+      setError(
         err instanceof Error
           ? err.message
           : "Failed to start checkout. Please try again."
@@ -81,13 +83,20 @@ export function BusinessLicenceButton({ seats, cadence }: Props) {
       : `Buy ${seats} Business Licences`;
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={loading}
-      className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-gold-solid px-6 py-3 text-[15px] font-medium text-[#0a0a0f] transition-all duration-150 hover:bg-accent-gold-solid-hover disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-    >
-      {loading ? "Processing..." : label}
-      {!loading && <ExternalLink className="h-3.5 w-3.5" />}
-    </button>
+    <div className="flex flex-col gap-2">
+      <button
+        onClick={handleClick}
+        disabled={loading}
+        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-gold-solid px-6 py-3 text-[15px] font-medium text-[#0a0a0f] transition-all duration-150 hover:bg-accent-gold-solid-hover disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+      >
+        {loading ? "Processing..." : label}
+        {!loading && <ExternalLink className="h-3.5 w-3.5" />}
+      </button>
+      {error && (
+        <p className="text-sm text-error" role="alert">
+          {error}
+        </p>
+      )}
+    </div>
   );
 }

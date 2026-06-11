@@ -1,0 +1,6 @@
+# The theme-flash inline script in src/app/layout.tsx is hashed (SHA-256)
+# into the CSP script-src in src/middleware.ts (THEME_SCRIPT_HASH). Pin both
+# to LF so a CRLF commit can never desync the committed hash from the bytes
+# Next.js renders. See the maintenance note in src/middleware.ts.
+src/app/layout.tsx text eol=lf
+src/middleware.ts text eol=lf

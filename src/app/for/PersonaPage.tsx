@@ -94,7 +94,7 @@ export function PersonaPage(props: PersonaPageProps) {
     datePublished: publishedDate,
     dateModified: modifiedDate,
     mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
-    image: `${SITE_URL}/og-default.png`,
+    image: `${SITE_URL}/banner.png`,
   };
 
   const faqSchema = {

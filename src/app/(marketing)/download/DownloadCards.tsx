@@ -101,7 +101,7 @@ export function DownloadCards() {
               href={p.url}
               className={`block w-full rounded-lg py-2.5 text-center text-sm font-semibold transition-colors ${
                 isPrimary
-                  ? "bg-accent-gold-solid text-[#111] hover:bg-accent-gold-solid-hover"
+                  ? "bg-accent-gold-solid text-[#0a0a0f] hover:bg-accent-gold-solid-hover"
                   : "border border-border-default text-text-primary hover:border-accent-gold hover:text-accent-gold"
               }`}
             >
@@ -119,6 +119,7 @@ export function DownloadCards() {
             {/* CLI collapsible */}
             <button
               onClick={() => setOpenCli(openCli === p.id ? null : p.id)}
+              aria-expanded={openCli === p.id}
               className="mt-3 flex items-center gap-1 text-[11px] text-text-muted hover:text-accent-gold transition-colors"
             >
               <ChevronDown

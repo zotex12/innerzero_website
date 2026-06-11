@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useId } from "react";
 import { useRouter } from "next/navigation";
 import { Check, Coffee, ExternalLink, ChevronDown, Zap, Info } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -54,13 +54,15 @@ function formatUsage(amount: number): string {
 
 function FAQAccordionItem({ item }: { item: FAQItem }) {
   const [open, setOpen] = useState(false);
+  const panelId = useId();
 
   return (
     <div className="border-b border-border-default">
       <button
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between py-4 text-left cursor-pointer"
+        className="flex w-full items-center justify-between py-4 text-left cursor-pointer rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
         aria-expanded={open}
+        aria-controls={panelId}
       >
         <span className="pr-4 text-sm font-medium text-text-primary md:text-base">
           {item.question}
@@ -72,7 +74,7 @@ function FAQAccordionItem({ item }: { item: FAQItem }) {
           )}
         />
       </button>
-      <div className={cn("faq-content", open && "open")}>
+      <div id={panelId} aria-hidden={!open} className={cn("faq-content", open && "open")}>
         <div className="overflow-hidden">
           <p className="pb-4 text-sm leading-relaxed text-text-secondary">
             {item.answer}
@@ -364,10 +366,12 @@ function CloudCheckoutButton({
   variant: "primary" | "secondary";
 }) {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   async function handleClick() {
     setLoading(true);
+    setError("");
 
     try {
       const supabase = createClient();
@@ -391,11 +395,11 @@ function CloudCheckoutButton({
       if (data.url) {
         window.location.href = data.url;
       } else {
-        alert(data.message ?? "Something went wrong. Please try again.");
+        setError(data.message ?? "Something went wrong. Please try again.");
         setLoading(false);
       }
     } catch {
-      alert("Failed to start checkout. Please try again.");
+      setError("Failed to start checkout. Please try again.");
       setLoading(false);
     }
   }
@@ -403,18 +407,25 @@ function CloudCheckoutButton({
   const isPrimary = variant === "primary";
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={loading}
-      className={cn(
-        "inline-flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3 text-[15px] font-medium transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer",
-        isPrimary
-          ? "bg-accent-gold-solid text-[#0a0a0f] hover:bg-accent-gold-solid-hover"
-          : "border border-border-default text-text-primary hover:border-accent-gold hover:text-accent-gold"
+    <div className="w-full">
+      <button
+        onClick={handleClick}
+        disabled={loading}
+        className={cn(
+          "inline-flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3 text-[15px] font-medium transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer",
+          isPrimary
+            ? "bg-accent-gold-solid text-[#0a0a0f] hover:bg-accent-gold-solid-hover"
+            : "border border-border-default text-text-primary hover:border-accent-gold hover:text-accent-gold"
+        )}
+      >
+        {loading ? "Processing..." : label}
+      </button>
+      {error && (
+        <p className="mt-2 text-sm text-error" role="alert">
+          {error}
+        </p>
       )}
-    >
-      {loading ? "Processing..." : label}
-    </button>
+    </div>
   );
 }
 
@@ -774,7 +785,9 @@ export function PricingSection({ className }: PricingSectionProps) {
             <div className="mx-auto max-w-2xl">
               <button
                 onClick={() => setUsageInfoOpen(!usageInfoOpen)}
-                className="flex w-full items-center justify-between rounded-xl border border-border-default bg-bg-card px-6 py-4 text-left transition-colors hover:border-border-hover cursor-pointer"
+                aria-expanded={usageInfoOpen}
+                aria-controls="usage-info-panel"
+                className="flex w-full items-center justify-between rounded-xl border border-border-default bg-bg-card px-6 py-4 text-left transition-colors hover:border-border-hover cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
               >
                 <span className="flex items-center gap-2 text-sm font-medium text-text-secondary">
                   <Info className="h-4 w-4 text-accent-teal" />
@@ -787,7 +800,11 @@ export function PricingSection({ className }: PricingSectionProps) {
                   )}
                 />
               </button>
-              <div className={cn("faq-content", usageInfoOpen && "open")}>
+              <div
+                id="usage-info-panel"
+                aria-hidden={!usageInfoOpen}
+                className={cn("faq-content", usageInfoOpen && "open")}
+              >
                 <div className="overflow-hidden">
                   <div className="px-6 pt-3 pb-5">
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

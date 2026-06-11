@@ -1,6 +1,22 @@
+import type { Metadata } from "next";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { NOT_FOUND } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "Page not found",
+  robots: { index: false, follow: true },
+};
+
+// Secondary recovery links: a bare single-CTA 404 is a dead end on a
+// content-heavy site, so offer the most likely destinations.
+const RECOVERY_LINKS = [
+  { label: "Download", href: "/download" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
+];
 
 export default function NotFound() {
   return (
@@ -15,6 +31,20 @@ export default function NotFound() {
           <div className="mt-8">
             <Button href="/">{NOT_FOUND.cta}</Button>
           </div>
+          <nav
+            aria-label="Popular pages"
+            className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm"
+          >
+            {RECOVERY_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="rounded text-text-secondary transition-colors hover:text-accent-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-gold focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </Container>
     </div>

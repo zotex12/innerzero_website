@@ -93,7 +93,11 @@ export default function BlogPage() {
                 headline: p.title,
                 description: p.description,
                 datePublished: p.date,
-                author: { "@type": "Person", name: p.author },
+                author: {
+                  "@type": "Organization",
+                  "@id": "https://innerzero.com#organization",
+                  name: "InnerZero",
+                },
                 url: `https://innerzero.com/blog/${p.slug}`,
               })),
             }),

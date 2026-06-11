@@ -37,6 +37,7 @@ export function Button({
 }: ButtonProps) {
   const classes = cn(
     "inline-flex items-center justify-center rounded-lg px-6 py-3 text-[0.9375rem] font-medium transition-all duration-150 outline-none cursor-pointer",
+    "disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0",
     variantClasses[variant],
     className
   );

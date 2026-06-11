@@ -121,7 +121,7 @@ export function HeroScreenshots() {
                           alt={item.alt}
                           fill
                           sizes="(max-width: 768px) 100vw, 33vw"
-                          priority={i === 0}
+                          loading="lazy"
                           className="object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                         />
                       </div>

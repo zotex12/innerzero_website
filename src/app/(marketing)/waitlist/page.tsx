@@ -5,6 +5,10 @@ import { createMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/waitlist" },
+  // The product has shipped, so this pre-launch page is kept out of search
+  // (and unlinked from the footer + sitemap) to avoid surfacing stale
+  // "coming soon" messaging for a live app.
+  robots: { index: false, follow: true },
   title: "Join the Waitlist",
   description:
     "Be the first to experience InnerZero, a private AI assistant that runs entirely on your PC. Join the waitlist for early access.",

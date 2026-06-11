@@ -21,7 +21,7 @@ export default function AuthLayout({
           <span className="text-accent-gold-solid">Zero</span>
         </span>
       </Link>
-      <div className="w-full max-w-sm">{children}</div>
+      <main id="main-content" className="w-full max-w-sm">{children}</main>
       <nav
         aria-label="Legal and home"
         className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-text-muted"
