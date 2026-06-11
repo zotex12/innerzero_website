@@ -393,7 +393,7 @@ export function CloudUsageCard({
                 top-up credits
               </>
             )}{" "}
-            to use. Subscription credits don&apos;t renew &mdash; top up or
+            to use. Subscription credits don&apos;t renew. Top up or
             resubscribe to continue past them.
           </p>
         </div>

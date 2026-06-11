@@ -41,9 +41,9 @@ function buildEmail(
         subject: "InnerZero Cloud: 50% usage remaining",
         html: `<p>Hi there,</p>
 <p>You've used half of your monthly Cloud AI allowance. You have <strong>${remaining.toLocaleString("en-GB")}</strong> of ${monthlyAllowance.toLocaleString("en-GB")} usage remaining this cycle.</p>
-<p>No action needed — just a heads up.</p>
+<p>No action needed, just a heads up.</p>
 <p><a href="${ACCOUNT_URL}">View your account</a> · <a href="${PRICING_URL}">Top up</a></p>
-<p>— InnerZero</p>`,
+<p>The InnerZero team</p>`,
       };
     case "20":
       return {
@@ -52,7 +52,7 @@ function buildEmail(
 <p>You're running low on Cloud AI usage. You have <strong>${remaining.toLocaleString("en-GB")}</strong> of ${monthlyAllowance.toLocaleString("en-GB")} usage remaining this cycle.</p>
 <p>Consider topping up with a credit pack to avoid interruption.</p>
 <p><a href="${PRICING_URL}">Top up now</a> · <a href="${ACCOUNT_URL}">View your account</a></p>
-<p>— InnerZero</p>`,
+<p>The InnerZero team</p>`,
       };
     case "5":
       return {
@@ -61,17 +61,17 @@ function buildEmail(
 <p>You have <strong>${remaining.toLocaleString("en-GB")}</strong> of ${monthlyAllowance.toLocaleString("en-GB")} Cloud AI usage remaining. Cloud AI will stop when this runs out.</p>
 <p>Top up now to keep using Cloud AI without interruption.</p>
 <p><a href="${PRICING_URL}">Top up now</a> · <a href="${ACCOUNT_URL}">View your account</a></p>
-<p>— InnerZero</p>`,
+<p>The InnerZero team</p>`,
       };
     case "0":
       return {
         subject: "InnerZero Cloud: Usage exhausted",
         html: `<p>Hi there,</p>
 <p>Your Cloud AI usage for this billing cycle has been exhausted. Cloud AI requests will not work until your balance is replenished.</p>
-<p>Your local AI is still fully functional — no interruption there.</p>
+<p>Your local AI is still fully functional, no interruption there.</p>
 <p>Top up with a credit pack or upgrade your plan to continue using Cloud AI.</p>
 <p><a href="${PRICING_URL}">Top up or upgrade</a> · <a href="${ACCOUNT_URL}">View your account</a></p>
-<p>— InnerZero</p>`,
+<p>The InnerZero team</p>`,
       };
     default:
       return { subject: "", html: "" };

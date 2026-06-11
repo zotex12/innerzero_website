@@ -68,7 +68,7 @@ export async function POST(request: Request) {
   };
   if (cap === 0) {
     body_response.warning =
-      "Cap set to 0 — all further cloud deductions will be rejected until you raise it or send null to clear.";
+      "Cap set to 0. All further cloud deductions will be rejected until you raise it or send null to clear.";
   }
 
   return NextResponse.json(body_response);
