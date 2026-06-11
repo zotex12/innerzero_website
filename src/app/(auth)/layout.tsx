@@ -17,7 +17,8 @@ export default function AuthLayout({
         />
         <span className="text-2xl font-bold tracking-tight">
           <span className="text-text-primary">Inner</span>
-          <span className="text-accent-gold">Zero</span>
+          {/* Fixed brand gold to match the logo icon (see Logo.tsx). */}
+          <span className="text-[#d4a843]">Zero</span>
         </span>
       </Link>
       <div className="w-full max-w-sm">{children}</div>
