@@ -19,11 +19,12 @@ export function Logo({ className, imageSize = 32 }: LogoProps) {
       />
       <span>
         <span className="text-text-primary">Inner</span>
-        {/* Fixed brand gold so the "Zero" wordmark matches the gold logo
-            icon in both themes. Not the theme token --accent-gold, which
-            deepens in light mode for body-text contrast (logo text is
-            exempt from the WCAG contrast rule). */}
-        <span className="text-[#d4a843]">Zero</span>
+        {/* Use the solid brand accent so the "Zero" wordmark matches the
+            bright yellow used on buttons in light mode (and the gold in
+            dark mode). Not --accent-gold, which deepens in light mode for
+            body-text contrast. Logo text is exempt from the WCAG contrast
+            rule. */}
+        <span className="text-accent-gold-solid">Zero</span>
       </span>
     </Link>
   );
