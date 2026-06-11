@@ -52,6 +52,17 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+      {/* Honeypot. Formspree silently discards any submission where
+          _gotcha is non-empty. Hidden from real users and assistive
+          tech; bots that fill every field trip it. */}
+      <input
+        type="text"
+        name="_gotcha"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="hidden"
+      />
       <Input label="Name" name="name" placeholder="Your name" required />
       <Input
         label="Email"

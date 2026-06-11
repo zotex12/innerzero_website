@@ -28,7 +28,7 @@ export function BlogGrid({ posts, tags }: Props) {
           onClick={() => { setActiveTag(null); setShowAll(false); }}
           className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
             activeTag === null
-              ? "bg-accent-gold text-[#111] font-semibold"
+              ? "bg-accent-gold-solid text-[#111] font-semibold"
               : "bg-bg-card text-text-secondary hover:text-text-primary border border-border-default"
           }`}
         >
@@ -40,7 +40,7 @@ export function BlogGrid({ posts, tags }: Props) {
             onClick={() => { setActiveTag(tag); setShowAll(false); }}
             className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
               activeTag === tag
-                ? "bg-accent-gold text-[#111] font-semibold"
+                ? "bg-accent-gold-solid text-[#111] font-semibold"
                 : "bg-bg-card text-text-secondary hover:text-text-primary border border-border-default"
             }`}
           >

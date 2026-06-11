@@ -424,7 +424,7 @@ export default function ChangelogPage() {
                   <span
                     className={`rounded-full px-3.5 py-1 text-sm font-semibold ${
                       release.latest
-                        ? "bg-accent-gold text-[#111]"
+                        ? "bg-accent-gold-solid text-[#111]"
                         : "border border-border-default text-text-secondary"
                     }`}
                   >

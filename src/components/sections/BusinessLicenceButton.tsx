@@ -29,7 +29,7 @@ export function BusinessLicenceButton({ seats, cadence }: Props) {
     return (
       <a
         href={`mailto:${SALES_CONTACT_EMAIL}?subject=${subject}`}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-lg border-2 border-accent-gold px-6 py-3 text-[15px] font-medium text-accent-gold transition-all duration-150 hover:bg-accent-gold hover:text-[#0a0a0f]"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-lg border-2 border-accent-gold px-6 py-3 text-[15px] font-medium text-accent-gold transition-all duration-150 hover:bg-accent-gold-solid hover:text-[#0a0a0f]"
       >
         Contact sales: {SALES_CONTACT_EMAIL}
         <Mail className="h-3.5 w-3.5" />
@@ -84,7 +84,7 @@ export function BusinessLicenceButton({ seats, cadence }: Props) {
     <button
       onClick={handleClick}
       disabled={loading}
-      className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-gold px-6 py-3 text-[15px] font-medium text-[#0a0a0f] transition-all duration-150 hover:bg-accent-gold-hover disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+      className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-gold-solid px-6 py-3 text-[15px] font-medium text-[#0a0a0f] transition-all duration-150 hover:bg-accent-gold-solid-hover disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
     >
       {loading ? "Processing..." : label}
       {!loading && <ExternalLink className="h-3.5 w-3.5" />}

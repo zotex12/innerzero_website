@@ -39,7 +39,7 @@ Skill iteration: skills are living documents per Anthropic's authoring guidance.
 | Fonts | Inter (Google Fonts) | Latin subset only, swap display |
 | Icons | Lucide React | Or inline SVGs — no icon font libraries |
 | Forms | Native + server actions | Formspree for contact, API route for waitlist |
-| Sitemap | next-sitemap | Auto-generated on build |
+| Sitemap | app/sitemap.ts | Native App Router route served at /sitemap.xml |
 | Auth | Supabase Auth (@supabase/ssr) | Cookie-based session management |
 | Database | Supabase (Postgres + RLS) | Row Level Security on all tables |
 | Hosting | Vercel | Deploy from GitHub, auto HTTPS |
@@ -87,10 +87,12 @@ All colours are defined as CSS custom properties in `globals.css` on `:root` (da
 --bg-card-hover: #22222e
 --text-primary: #f0f0f5
 --text-secondary: #8888a0
---text-muted: #55556a
+--text-muted: #85859d
 --accent-gold: #d4a843
 --accent-gold-hover: #f0c040
 --accent-gold-muted: rgba(212, 168, 67, 0.15)
+--accent-gold-solid: #d4a843
+--accent-gold-solid-hover: #f0c040
 --accent-teal: #00c9b7
 --accent-teal-hover: #0ed3cf
 --accent-teal-muted: rgba(0, 201, 183, 0.15)
@@ -109,12 +111,14 @@ All colours are defined as CSS custom properties in `globals.css` on `:root` (da
 --bg-card-hover: #e4e4ea
 --text-primary: #1a1a2e
 --text-secondary: #5a5a72
---text-muted: #8888a0
---accent-gold: #b8922e
---accent-gold-hover: #d4a843
+--text-muted: #686880
+--accent-gold: #785900
+--accent-gold-hover: #5f4800
 --accent-gold-muted: rgba(184, 146, 46, 0.12)
---accent-teal: #009e90
---accent-teal-hover: #00c9b7
+--accent-gold-solid: #ffc93a
+--accent-gold-solid-hover: #f2b519
+--accent-teal: #006a5d
+--accent-teal-hover: #00544a
 --accent-teal-muted: rgba(0, 158, 144, 0.12)
 --border: #d0d0da
 --border-hover: #b8b8c8
@@ -124,6 +128,7 @@ All colours are defined as CSS custom properties in `globals.css` on `:root` (da
 - **Gold** is the primary action colour — CTAs, buttons, links, highlights
 - **Teal** is the secondary accent — badges, secondary actions, feature highlights, hover states
 - **Never** use both gold and teal on the same element
+- **Light-mode accent split (WCAG AA)**: use `--accent-gold-solid` (bright yellow) for solid FILLS such as buttons, toggles, and step markers, always paired with dark text; use `--accent-gold` (deep gold) for TEXT, links, borders, and on the faint `-muted` tints. Dark mode keeps gold for both fill and text. The light-mode `--accent-gold`, `--accent-teal`, and `--text-muted` values are tuned to pass 4.5:1 on white and card backgrounds, so re-verify contrast (including small badge text sitting on card-tinted backgrounds) before changing them.
 - **Cards** use `--bg-card` with `--border` and subtle hover lift
 - **Gradients** are subtle: gold-to-teal used sparingly for hero glow effects only, never on text or buttons
 - **Glass-morphism**: light `backdrop-blur` on cards in dark mode only, optional

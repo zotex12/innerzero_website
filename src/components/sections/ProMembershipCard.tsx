@@ -83,7 +83,7 @@ export function ProMembershipCard() {
           className={cn(
             "rounded-md px-3 py-1 text-sm font-medium transition-colors",
             cadence === "monthly"
-              ? "bg-accent-gold text-[#0a0a0f]"
+              ? "bg-accent-gold-solid text-[#0a0a0f]"
               : "text-text-secondary hover:text-text-primary"
           )}
         >
@@ -97,7 +97,7 @@ export function ProMembershipCard() {
           className={cn(
             "rounded-md px-3 py-1 text-sm font-medium transition-colors",
             cadence === "annual"
-              ? "bg-accent-gold text-[#0a0a0f]"
+              ? "bg-accent-gold-solid text-[#0a0a0f]"
               : "text-text-secondary hover:text-text-primary"
           )}
         >
@@ -132,7 +132,7 @@ export function ProMembershipCard() {
       <button
         onClick={handleClick}
         disabled={loading}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-gold px-6 py-3 text-[15px] font-medium text-[#0a0a0f] transition-all duration-150 hover:bg-accent-gold-hover disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-accent-gold-solid px-6 py-3 text-[15px] font-medium text-[#0a0a0f] transition-all duration-150 hover:bg-accent-gold-solid-hover disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
       >
         {loading ? "Processing..." : INNERZERO_PRO.cta}
         {!loading && <ExternalLink className="h-3.5 w-3.5" />}

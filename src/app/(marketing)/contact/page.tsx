@@ -7,7 +7,7 @@ export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/contact" },
   title: "Contact",
   description:
-    "Get in touch with the InnerZero team. Questions, feedback, or support. We aim to respond within 48 hours.",
+    "Get in touch with the InnerZero team for help with the private AI assistant. Send questions, feedback, or support and we aim to reply within 48 hours.",
   openGraph: {
     title: "Contact | InnerZero. Private AI Assistant",
     description: "Get in touch with the InnerZero team.",

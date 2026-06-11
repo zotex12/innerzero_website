@@ -22,7 +22,7 @@ type ButtonProps = ButtonAsButton | ButtonAsLink;
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-accent-gold text-[#0a0a0f] hover:bg-accent-gold-hover hover:-translate-y-[1px] active:translate-y-0 focus-visible:ring-2 focus-visible:ring-accent-gold focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary",
+    "bg-accent-gold-solid text-[#0a0a0f] hover:bg-accent-gold-solid-hover hover:-translate-y-[1px] active:translate-y-0 focus-visible:ring-2 focus-visible:ring-accent-gold focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary",
   secondary:
     "border border-border-default text-text-primary hover:border-accent-gold hover:text-accent-gold focus-visible:ring-2 focus-visible:ring-accent-gold focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary",
   ghost:

@@ -1,13 +1,13 @@
 # Current State
 
-Last updated: 2026-04-28
+Last updated: 2026-06-11
 
 This is a short working summary only.
 Do not trust this file over the project guide or current code.
 
 ## Phase
 
-None active. Last shipped phase was Phase 7C (hero CTA descriptive text + Cross-Origin-Opener-Policy header), commit 34cfad6.
+None active. Last shipped phase was audit-remediation (2026-06-11): SEO sitemap rebuilt as app/sitemap.ts (next-sitemap retired), home/contact/about meta descriptions lengthened, /models link aria-labels, light-mode accent redesign (new --accent-gold-solid yellow fill + readable gold/teal text + WCAG AA muted contrast, dark mode unchanged), accessibility fixes (heading order, link underlines, auth-page privacy/terms links), contact/waitlist honeypots, and a www to apex 308 redirect. Prior shipped phase was Phase 7C (hero CTA descriptive text + Cross-Origin-Opener-Policy header), commit 34cfad6.
 
 ## Branch
 

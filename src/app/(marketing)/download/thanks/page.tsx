@@ -120,8 +120,8 @@ export default async function DownloadThanksPage({
           <header className="text-center">
             <div className="flex justify-center" aria-hidden="true">
               <span className="relative inline-flex h-3 w-3">
-                <span className="absolute inset-0 animate-ping rounded-full bg-accent-gold opacity-60" />
-                <span className="relative inline-flex h-3 w-3 rounded-full bg-accent-gold" />
+                <span className="absolute inset-0 animate-ping rounded-full bg-accent-gold-solid opacity-60" />
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-accent-gold-solid" />
               </span>
             </div>
             <h1 className="mt-5 text-3xl font-bold text-text-primary md:text-[2.5rem] md:leading-[1.2]">
@@ -194,14 +194,14 @@ export default async function DownloadThanksPage({
             Questions? Check the{" "}
             <Link
               href="/#faq"
-              className="text-text-secondary underline-offset-4 transition-colors hover:text-accent-gold hover:underline"
+              className="text-text-secondary underline underline-offset-4 transition-colors hover:text-accent-gold"
             >
               FAQ
             </Link>{" "}
             or email{" "}
             <a
               href="mailto:help@innerzero.com"
-              className="text-text-secondary underline-offset-4 transition-colors hover:text-accent-gold hover:underline"
+              className="text-text-secondary underline underline-offset-4 transition-colors hover:text-accent-gold"
             >
               help@innerzero.com
             </a>

@@ -10,6 +10,18 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
+
+    // Honeypot. A real browser leaves the off-screen "company" field
+    // empty. Bots that auto-fill every field trip it. Return a
+    // success-shaped response without inserting so the bot does not
+    // learn it was filtered.
+    if (typeof body.company === "string" && body.company.trim() !== "") {
+      return NextResponse.json(
+        { success: true, message: "You're on the list!" },
+        { status: 200 }
+      );
+    }
+
     const email =
       typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
 

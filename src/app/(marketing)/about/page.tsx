@@ -15,7 +15,7 @@ export const metadata: Metadata = createMetadata({
       "About InnerZero: The Team and Mission Behind Your Private AI",
   },
   description:
-    "About InnerZero: a private AI assistant built by Summers Solutions. Our mission is AI that is personal and private.",
+    "About InnerZero, a private AI assistant built by Summers Solutions, a UK software company. Our mission is AI that stays personal, private, and on your PC.",
   openGraph: {
     title: "About | InnerZero. Private AI Assistant",
     description:

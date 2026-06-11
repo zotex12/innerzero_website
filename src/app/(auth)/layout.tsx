@@ -21,14 +21,29 @@ export default function AuthLayout({
         </span>
       </Link>
       <div className="w-full max-w-sm">{children}</div>
-      <p className="mt-8 text-sm text-text-muted">
+      <nav
+        aria-label="Legal and home"
+        className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-text-muted"
+      >
         <Link
           href="/"
           className="text-text-secondary hover:text-text-primary transition-colors"
         >
           &larr; Back to home
         </Link>
-      </p>
+        <Link
+          href="/privacy"
+          className="text-text-secondary hover:text-text-primary transition-colors"
+        >
+          Privacy
+        </Link>
+        <Link
+          href="/terms"
+          className="text-text-secondary hover:text-text-primary transition-colors"
+        >
+          Terms
+        </Link>
+      </nav>
     </div>
   );
 }

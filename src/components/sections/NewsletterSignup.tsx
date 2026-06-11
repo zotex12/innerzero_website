@@ -194,7 +194,7 @@ export function NewsletterSignup({
                 type="submit"
                 disabled={isSubmitDisabled}
                 aria-disabled={isSubmitDisabled}
-                className="rounded-lg bg-accent-gold px-6 py-3 font-medium text-bg-primary transition-colors duration-150 hover:bg-accent-gold-hover disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-lg bg-accent-gold-solid px-6 py-3 font-medium text-[#141410] transition-colors duration-150 hover:bg-accent-gold-solid-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isBusy ? "Subscribing..." : "Subscribe"}
               </button>
@@ -222,7 +222,7 @@ export function NewsletterSignup({
           Unsubscribe anytime. Read our{" "}
           <Link
             href="/privacy"
-            className="text-text-secondary underline-offset-4 transition-colors hover:text-accent-gold hover:underline"
+            className="text-text-secondary underline underline-offset-4 transition-colors hover:text-accent-gold"
           >
             Privacy Policy
           </Link>

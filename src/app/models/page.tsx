@@ -81,6 +81,7 @@ function LocalCard({ model }: { model: LocalModel }) {
         href={model.officialUrl}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label={`Official page for ${model.displayName}`}
         className="mt-4 inline-flex text-sm text-accent-gold transition-colors hover:text-accent-gold-hover"
       >
         Official page
@@ -115,6 +116,7 @@ function CloudRow({ model }: { model: CloudModel }) {
           href={model.providerPricingUrl}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label={`Pricing for ${model.displayName}`}
           className="text-xs text-text-secondary underline decoration-border-default underline-offset-2 transition-colors hover:text-text-primary hover:decoration-accent-gold"
         >
           Pricing

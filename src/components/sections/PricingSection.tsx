@@ -185,7 +185,7 @@ function BusinessLicenceCard() {
             className={cn(
               "rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150 cursor-pointer",
               cadence === "monthly"
-                ? "bg-accent-gold text-[#0a0a0f]"
+                ? "bg-accent-gold-solid text-[#0a0a0f]"
                 : "text-text-secondary hover:text-text-primary"
             )}
           >
@@ -199,7 +199,7 @@ function BusinessLicenceCard() {
             className={cn(
               "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150 cursor-pointer",
               cadence === "annual"
-                ? "bg-accent-gold text-[#0a0a0f]"
+                ? "bg-accent-gold-solid text-[#0a0a0f]"
                 : "text-text-secondary hover:text-text-primary"
             )}
           >
@@ -409,7 +409,7 @@ function CloudCheckoutButton({
       className={cn(
         "inline-flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3 text-[15px] font-medium transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer",
         isPrimary
-          ? "bg-accent-gold text-[#0a0a0f] hover:bg-accent-gold-hover"
+          ? "bg-accent-gold-solid text-[#0a0a0f] hover:bg-accent-gold-solid-hover"
           : "border border-border-default text-text-primary hover:border-accent-gold hover:text-accent-gold"
       )}
     >

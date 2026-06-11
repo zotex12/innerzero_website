@@ -222,7 +222,7 @@ export function CloudUsageCard({
         <div className="mt-4 flex flex-wrap gap-3">
           <a
             href="/pricing"
-            className="inline-flex items-center rounded-lg bg-accent-gold px-4 py-2 text-sm font-medium text-[#0a0a0f] transition-all duration-150 hover:bg-accent-gold-hover"
+            className="inline-flex items-center rounded-lg bg-accent-gold-solid px-4 py-2 text-sm font-medium text-[#0a0a0f] transition-all duration-150 hover:bg-accent-gold-solid-hover"
           >
             View Cloud Plans
           </a>

@@ -10,6 +10,8 @@ interface WaitlistFormProps {
 
 export function WaitlistForm({ className }: WaitlistFormProps) {
   const [email, setEmail] = useState("");
+  // Honeypot value. Real users never see this field, so it stays empty.
+  const [company, setCompany] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
 
@@ -22,7 +24,7 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, company }),
       });
 
       const data = await res.json();
@@ -57,6 +59,24 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
   return (
     <div className={className}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
+        {/* Honeypot: off-screen and aria-hidden so real users and
+            assistive tech never reach it. Bots that auto-fill every
+            field get dropped server-side. */}
+        <div
+          aria-hidden="true"
+          style={{ position: "absolute", left: "-9999px", height: 0, width: 0, overflow: "hidden" }}
+        >
+          <label htmlFor="wl-company">Company</label>
+          <input
+            id="wl-company"
+            type="text"
+            name="company"
+            tabIndex={-1}
+            autoComplete="off"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+          />
+        </div>
         <div className="flex-1">
           <Input
             type="email"

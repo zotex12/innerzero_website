@@ -27,7 +27,7 @@ export function HowItWorks({ className }: HowItWorksProps) {
           {HOW_IT_WORKS.map((step, i) => (
             <ScrollReveal key={step.number} delay={i * 100}>
               <div className="relative text-center">
-                <div className="relative z-10 mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent-gold text-[#0a0a0f] text-lg font-bold">
+                <div className="relative z-10 mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent-gold-solid text-[#0a0a0f] text-lg font-bold">
                   {step.number}
                 </div>
                 <h3 className="mb-2 text-xl font-semibold text-text-primary">

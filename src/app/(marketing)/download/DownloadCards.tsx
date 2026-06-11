@@ -101,7 +101,7 @@ export function DownloadCards() {
               href={p.url}
               className={`block w-full rounded-lg py-2.5 text-center text-sm font-semibold transition-colors ${
                 isPrimary
-                  ? "bg-accent-gold text-[#111] hover:bg-accent-gold/90"
+                  ? "bg-accent-gold-solid text-[#111] hover:bg-accent-gold-solid-hover"
                   : "border border-border-default text-text-primary hover:border-accent-gold hover:text-accent-gold"
               }`}
             >

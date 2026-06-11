@@ -11,7 +11,7 @@ export function Hero() {
         className="animate-hero-glow pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 h-[600px] w-[800px] rounded-full"
         style={{
           background:
-            "radial-gradient(ellipse at center, var(--accent-gold) 0%, var(--accent-teal) 40%, transparent 70%)",
+            "radial-gradient(ellipse at center, var(--accent-gold-solid) 0%, var(--accent-teal) 40%, transparent 70%)",
           opacity: 0.06,
           filter: "blur(80px)",
         }}
@@ -30,7 +30,7 @@ export function Hero() {
         ].map((dot, i) => (
           <div
             key={i}
-            className="animate-float absolute rounded-full bg-accent-gold opacity-[0.15]"
+            className="animate-float absolute rounded-full bg-accent-gold-solid opacity-[0.15]"
             style={{
               top: dot.top,
               left: dot.left,

@@ -90,8 +90,14 @@ export function HeroScreenshots() {
 
   return (
     <>
-      <section className="mt-0 mb-20 md:mt-2 md:mb-28">
+      <section className="mt-0 mb-20 md:mt-2 md:mb-28" aria-labelledby="screenshots-heading">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Visually hidden section heading: keeps the document outline
+              correct (H1 hero -> H2 here -> H3 card labels) so heading
+              levels are not skipped. */}
+          <h2 id="screenshots-heading" className="sr-only">
+            What InnerZero looks like
+          </h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
             {SCREENSHOTS.map((item, i) => (
               <ScrollReveal key={item.src} delay={i * 100}>

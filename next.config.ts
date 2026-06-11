@@ -80,6 +80,19 @@ const PERMISSIONS_POLICY = [
 const nextConfig: NextConfig = {
   // Phase 7A: stop leaking the framework name.
   poweredByHeader: false,
+  // Canonical host. The www variant 308s to the apex so the two hosts do
+  // not serve duplicate content. Production only: preview deploys run on
+  // their own *.vercel.app host and never match www.innerzero.com.
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.innerzero.com" }],
+        destination: "https://innerzero.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

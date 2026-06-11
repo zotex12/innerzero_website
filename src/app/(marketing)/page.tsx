@@ -22,11 +22,11 @@ export const metadata: Metadata = createMetadata({
     absolute: "InnerZero: Free Private AI Assistant That Runs on Your PC",
   },
   description:
-    "InnerZero is a free private AI assistant that runs entirely on your PC. No cloud. No tracking. Just you and your AI.",
+    "InnerZero is a free private AI assistant that runs entirely on your PC. No cloud, no tracking, no subscription. Just you, your AI, and your data.",
   openGraph: {
     title: "InnerZero. Free Private AI Assistant That Runs on Your PC",
     description:
-      "InnerZero is a free private AI assistant that runs entirely on your PC. No cloud. No tracking. Just you and your AI.",
+      "InnerZero is a free private AI assistant that runs entirely on your PC. No cloud, no tracking, no subscription. Just you, your AI, and your data.",
   },
 });
 

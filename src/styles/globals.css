@@ -8,10 +8,14 @@
   --bg-card-hover: #22222e;
   --text-primary: #f0f0f5;
   --text-secondary: #8888a0;
-  --text-muted: #55556a;
+  --text-muted: #85859d;
   --accent-gold: #d4a843;
   --accent-gold-hover: #f0c040;
   --accent-gold-muted: rgba(212, 168, 67, 0.15);
+  /* Solid fill accent (buttons, toggles, step markers). Dark mode keeps
+     the existing gold so the dark theme is unchanged. */
+  --accent-gold-solid: #d4a843;
+  --accent-gold-solid-hover: #f0c040;
   --accent-teal: #00c9b7;
   --accent-teal-hover: #0ed3cf;
   --accent-teal-muted: rgba(0, 201, 183, 0.15);
@@ -30,12 +34,20 @@
   --bg-card-hover: #e4e4ea;
   --text-primary: #1a1a2e;
   --text-secondary: #5a5a72;
-  --text-muted: #8888a0;
-  --accent-gold: #b8922e;
-  --accent-gold-hover: #d4a843;
+  /* Muted text darkened to meet WCAG AA (4.5:1) on white and card backgrounds. */
+  --text-muted: #686880;
+  /* Gold used as TEXT (links, badges, labels): deepened so it stays
+     readable on white and light cards. The bright fill lives in
+     --accent-gold-solid below. */
+  --accent-gold: #785900;
+  --accent-gold-hover: #5f4800;
   --accent-gold-muted: rgba(184, 146, 46, 0.12);
-  --accent-teal: #009e90;
-  --accent-teal-hover: #00c9b7;
+  /* Solid fill accent: a bright, friendly yellow for buttons and toggles,
+     always paired with dark text. Light mode only; dark mode keeps gold. */
+  --accent-gold-solid: #ffc93a;
+  --accent-gold-solid-hover: #f2b519;
+  --accent-teal: #006a5d;
+  --accent-teal-hover: #00544a;
   --accent-teal-muted: rgba(0, 158, 144, 0.12);
   --border: #d0d0da;
   --border-hover: #b8b8c8;
@@ -56,6 +68,8 @@
   --color-accent-gold: var(--accent-gold);
   --color-accent-gold-hover: var(--accent-gold-hover);
   --color-accent-gold-muted: var(--accent-gold-muted);
+  --color-accent-gold-solid: var(--accent-gold-solid);
+  --color-accent-gold-solid-hover: var(--accent-gold-solid-hover);
   --color-accent-teal: var(--accent-teal);
   --color-accent-teal-hover: var(--accent-teal-hover);
   --color-accent-teal-muted: var(--accent-teal-muted);
@@ -231,7 +245,7 @@ body {
   top: 0;
   z-index: 100;
   padding: 0.5rem 1rem;
-  background: var(--accent-gold);
+  background: var(--accent-gold-solid);
   color: #0a0a0f;
   font-weight: 500;
 }
@@ -266,12 +280,12 @@ body {
 
 .blog-prose a {
   color: var(--accent-gold);
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
   transition: color 0.15s;
 }
 
 .blog-prose a:hover {
-  text-decoration: underline;
   color: var(--accent-gold-hover);
 }
 

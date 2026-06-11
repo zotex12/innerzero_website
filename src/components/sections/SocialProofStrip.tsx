@@ -48,7 +48,7 @@ export async function SocialProofStrip({ className }: SocialProofStripProps) {
         href={DISCORD_URL}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Join InnerZero Discord community"
+        aria-label="Join our Discord community"
         className={cn(
           "inline-flex items-center gap-2 rounded-full border border-border-default bg-bg-card/40 px-3 py-1.5",
           "text-sm font-medium text-text-secondary no-underline transition-colors duration-150",

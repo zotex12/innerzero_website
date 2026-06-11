@@ -87,7 +87,7 @@ export function VideoEmbed({
                     />
                     <span
                       aria-hidden="true"
-                      className="relative flex h-[72px] w-[72px] items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-all duration-200 ease-out motion-safe:group-hover:scale-105 motion-safe:group-hover:bg-accent-gold motion-safe:group-hover:text-black"
+                      className="relative flex h-[72px] w-[72px] items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-all duration-200 ease-out motion-safe:group-hover:scale-105 motion-safe:group-hover:bg-accent-gold-solid motion-safe:group-hover:text-black"
                     >
                       <svg
                         viewBox="0 0 24 24"
