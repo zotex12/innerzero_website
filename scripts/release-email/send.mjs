@@ -133,54 +133,58 @@ function buildMessage(toEmail, unsubscribeToken) {
   };
 }
 
-// --- TEST: one real email to a single address ---
+// One real-send path. Both branches let the process end naturally so the
+// HTTPS connection to Resend closes cleanly. Calling process.exit() here
+// while that socket is still open aborts it and triggers a libuv
+// assertion on Windows (the email still sends, but the exit code is
+// non-zero, which would confuse callers checking it).
 if (testEmail) {
+  // --- TEST: one real email to a single address ---
   const msg = buildMessage(testEmail, "PREVIEW_TOKEN");
   const { error } = await resend.emails.send(msg);
   if (error) fail(`Resend error: ${JSON.stringify(error)}`);
   console.log(`\n[test] Sent "${msg.subject}" to ${testEmail}. Check that inbox.\n`);
-  process.exit(0);
-}
+} else {
+  // --- SEND: the whole active list ---
+  const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
+  const { data: subscribers, error: dbError } = await supabase
+    .from("newsletter_subscribers")
+    .select("email, unsubscribe_token")
+    .is("unsubscribed_at", null);
 
-// --- SEND: the whole active list ---
-const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
-const { data: subscribers, error: dbError } = await supabase
-  .from("newsletter_subscribers")
-  .select("email, unsubscribe_token")
-  .is("unsubscribed_at", null);
-
-if (dbError) fail(`Supabase error: ${dbError.message}`);
-if (!subscribers || subscribers.length === 0) {
-  fail("No active subscribers found. Nothing to send.");
-}
-
-console.log(`\n[send] Version ${version}: ${subscribers.length} active subscriber(s).`);
-
-let sent = 0;
-for (let i = 0; i < subscribers.length; i += BATCH_SIZE) {
-  const chunk = subscribers.slice(i, i + BATCH_SIZE);
-  const batch = chunk.map((s) => buildMessage(s.email, s.unsubscribe_token));
-  const { data, error } = await resend.batch.send(batch);
-  if (error) fail(`Resend batch error at row ${i}: ${JSON.stringify(error)}`);
-  // batch.send returns the accepted messages under data.data. If Resend
-  // accepted fewer than we sent, record the real number and warn rather
-  // than logging a partial batch as a clean success.
-  const ids = data && Array.isArray(data.data) ? data.data : null;
-  const accepted = ids ? ids.length : chunk.length;
-  if (accepted < chunk.length) {
-    console.warn(
-      `[send] WARNING: Resend accepted ${accepted}/${chunk.length} in this batch. Check the Resend dashboard.`,
-    );
+  if (dbError) fail(`Supabase error: ${dbError.message}`);
+  if (!subscribers || subscribers.length === 0) {
+    fail("No active subscribers found. Nothing to send.");
   }
-  sent += accepted;
-  console.log(`[send] ${sent}/${subscribers.length} sent`);
-}
 
-// --- Record the send so we cannot double-send by accident ---
-sentLog[version] = {
-  sentAt: new Date().toISOString(),
-  recipients: sent,
-  subject: release.subject || `InnerZero ${version} is out`,
-};
-writeFileSync(sentLogPath, JSON.stringify(sentLog, null, 2), "utf8");
-console.log(`\n[send] Done. ${sent} email(s) sent for version ${version}.\n`);
+  console.log(`\n[send] Version ${version}: ${subscribers.length} active subscriber(s).`);
+
+  let sent = 0;
+  for (let i = 0; i < subscribers.length; i += BATCH_SIZE) {
+    const chunk = subscribers.slice(i, i + BATCH_SIZE);
+    const batch = chunk.map((s) => buildMessage(s.email, s.unsubscribe_token));
+    const { data, error } = await resend.batch.send(batch);
+    if (error) fail(`Resend batch error at row ${i}: ${JSON.stringify(error)}`);
+    // batch.send returns the accepted messages under data.data. If Resend
+    // accepted fewer than we sent, record the real number and warn rather
+    // than logging a partial batch as a clean success.
+    const ids = data && Array.isArray(data.data) ? data.data : null;
+    const accepted = ids ? ids.length : chunk.length;
+    if (accepted < chunk.length) {
+      console.warn(
+        `[send] WARNING: Resend accepted ${accepted}/${chunk.length} in this batch. Check the Resend dashboard.`,
+      );
+    }
+    sent += accepted;
+    console.log(`[send] ${sent}/${subscribers.length} sent`);
+  }
+
+  // --- Record the send so we cannot double-send by accident ---
+  sentLog[version] = {
+    sentAt: new Date().toISOString(),
+    recipients: sent,
+    subject: release.subject || `InnerZero ${version} is out`,
+  };
+  writeFileSync(sentLogPath, JSON.stringify(sentLog, null, 2), "utf8");
+  console.log(`\n[send] Done. ${sent} email(s) sent for version ${version}.\n`);
+}
