@@ -88,6 +88,7 @@ export const LIMITS = {
   cloudAbuse:      { limit: 120, windowMs: 60_000, store: "cloud-abuse" },
   themeRedeem:     { limit: 5,   windowMs: 60_000, store: "theme-redeem" },
   newsletter:      { limit: 3,   windowMs: 3_600_000, store: "newsletter" },
+  unsubscribe:     { limit: 10,  windowMs: 60_000, store: "unsubscribe" },
 } as const;
 
 /** Check rate limit and return 429 response if exceeded, or null if OK.

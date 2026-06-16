@@ -4,10 +4,12 @@ import { checkRateLimit } from "@/lib/rate-limit";
 
 // POST /api/newsletter/subscribe
 //
-// Storage-only newsletter signup endpoint. Email automation, double
-// opt-in, and the unsubscribe flow are deferred. The unsubscribe
-// token is generated up-front by the DB default so the future
-// /unsubscribe route can rely on it without a backfill.
+// Newsletter signup endpoint. Stores the subscriber; the release
+// email is sent separately by scripts/release-email (run locally
+// during /release-update), and the unsubscribe flow lives at
+// /unsubscribe + /api/newsletter/unsubscribe, keyed on the
+// unsubscribe_token generated up-front by the DB default. Double
+// opt-in is still deferred.
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ALLOWED_SOURCES = new Set(["homepage", "download_page"] as const);

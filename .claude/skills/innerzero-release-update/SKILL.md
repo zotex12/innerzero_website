@@ -1,6 +1,6 @@
 ---
 name: innerzero-release-update
-description: Use when updating the InnerZero marketing website, the GitHub releases README, and the Discord announcement for a new desktop version release. Triggers on requests like "update the site for v0.1.8", "a new version is out, update everything", "refresh the website for the release", or "update the releases README". A full runbook covering which pages and files to change, the desktop version-surface check, the exact-asset-name download caveat, validation, review, and the announcement.
+description: Use when updating the InnerZero marketing website, the GitHub releases README, the Discord announcement, and the newsletter release email for a new desktop version release. Triggers on requests like "update the site for v0.1.8", "a new version is out, update everything", "refresh the website for the release", or "update the releases README". A full runbook covering which pages and files to change, the desktop version-surface check, the exact-asset-name download caveat, validation, review, the announcement, and the email to subscribers.
 ---
 
 # InnerZero release update runbook
@@ -68,6 +68,18 @@ After a new InnerZero desktop version `vX.Y.Z` is built and published, update th
   5. Report the result (post id and status).
 - If Postiz is unavailable (server not running at localhost:4007, or the tools error), fall back to returning the message in a fenced code block for manual posting. Always keep the plain copy-paste block available so the operator can review or post by hand.
 - Optional: the same flow can cross-post a shorter version to X, Mastodon, or Bluesky using their integrations from `integrationList`.
+
+## Step 8 — Email the newsletter list (release-update email)
+
+- After the site, the README, and Discord are done, send the "new version is out" email to the `newsletter_subscribers` list via Resend. The sender is `updates@innerzero.com` (domain `innerzero.com` is verified in Resend). The runner lives at `scripts/release-email/` and runs LOCALLY (no public send endpoint on the live site).
+- Prerequisite (one-time): `RESEND_API_KEY` must be in `.env.local`. If a send command reports it missing, stop and ask the operator to add it; do NOT edit `.env.local` yourself.
+- Flow:
+  1. Edit `scripts/release-email/release.json` for this release: `version`, `dateLabel`, `subject`, `preheader`, `intro`, and the `New` / `Improved` / `Fixed` highlight arrays. Keep it to the highlights, not the full changelog. Same copy rules as the site (British English, no em dashes, no emojis, no "forever / always free / permanent").
+  2. Dry run and eyeball the preview, then show the operator: `node --env-file=.env.local scripts/release-email/send.mjs` (writes `scripts/release-email/preview.html`, sends nothing).
+  3. Send a single real test to the operator: `node --env-file=.env.local scripts/release-email/send.mjs --test louie@innerzero.com`.
+  4. Only after the operator approves, send to everyone: `node --env-file=.env.local scripts/release-email/send.mjs --send`. A `.sent-log.json` guard blocks a second send of the same version unless `--force` is passed.
+- Every email carries a working unsubscribe link (`/unsubscribe?token=...`) and a one-click `List-Unsubscribe` header handled by `/api/newsletter/unsubscribe`. Do not remove these.
+- To change the email DESIGN edit `scripts/release-email/template.mjs`; to change the WORDS edit `release.json`. See `scripts/release-email/README.md`.
 
 ## Hard conventions
 

@@ -1,0 +1,35 @@
+{
+  "_comment": "Email content for the latest release. Update this each release as part of /release-update, then run send.mjs. Keep it to the highlights; this is an email, not the full changelog. British English, no em dashes, no emojis, no permanence words.",
+  "version": "0.1.8",
+  "dateLabel": "June 2026",
+  "subject": "InnerZero 0.1.8 is out",
+  "preheader": "llama.cpp engine support, a unified AI and Models tab, open at login, and more.",
+  "intro": "Version 0.1.8 of InnerZero is now available. Here are the highlights.",
+  "groups": [
+    {
+      "label": "New",
+      "items": [
+        "llama.cpp engine support: point InnerZero at your own llama-server and chat, voice, and memory all route through it.",
+        "A single AI and Models settings tab that brings your engine, hardware, model assignments, and cloud keys together.",
+        "Open at login: an optional toggle that starts InnerZero when you sign in, on Windows, macOS, and Linux.",
+        "Action Hub saved actions and scheduling: save an action once, re-run it in a click, or put it on a schedule that always stops at a draft for your review."
+      ]
+    },
+    {
+      "label": "Improved",
+      "items": [
+        "A shorter, better ordered Settings layout with wider model dropdowns so long names are readable.",
+        "Voice settings labels are now in plain language across all 26 interface languages.",
+        "Model downloads now show the real error message when something fails."
+      ]
+    },
+    {
+      "label": "Fixed",
+      "items": [
+        "Sending a message while a file attachment is still loading no longer drops the message.",
+        "GGUF model names keep their quantisation tags in menus, so you can tell variants apart.",
+        "Every in-app hint that pointed at the old Mode tab now points at the right place."
+      ]
+    }
+  ]
+}
