@@ -1,0 +1,47 @@
+name: Keepalive (keep scheduled publishing enabled)
+
+# Why this exists: GitHub automatically disables a repository's scheduled
+# workflows after ~60 days with no repository activity. If the blog queue ever
+# drains and no commits land for 60 days, the daily blog-auto-publish cron would
+# be silently paused. This job runs roughly every 10 days and, only when the repo
+# has been idle for 50+ days, makes a single empty commit to reset that 60-day
+# clock - which keeps BOTH this workflow and blog-auto-publish alive. During
+# normal activity it does nothing, so it adds no commit noise.
+
+on:
+  schedule:
+    - cron: '23 7 */10 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: keepalive
+  cancel-in-progress: false
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Empty keepalive commit when idle 50+ days
+        shell: bash
+        run: |
+          set -euo pipefail
+          last=$(git log -1 --format=%ct)
+          now=$(date +%s)
+          age=$(( (now - last) / 86400 ))
+          echo "Most recent commit was ${age} day(s) ago."
+          if [ "$age" -ge 50 ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit --allow-empty -m "chore: keepalive - keep scheduled blog publishing enabled"
+            git push
+            echo "Idle 50+ days: pushed an empty keepalive commit to reset the 60-day timer."
+          else
+            echo "Repo active within the last 50 days: nothing to do."
+          fi
