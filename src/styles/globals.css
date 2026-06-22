@@ -366,6 +366,37 @@ main address a.text-accent-gold {
   margin: 2rem 0;
 }
 
+.blog-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  font-size: 0.9375rem;
+}
+
+.blog-prose th,
+.blog-prose td {
+  border: 1px solid var(--border);
+  padding: 0.625rem 0.875rem;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.blog-prose th {
+  background: var(--bg-card);
+  font-weight: 600;
+}
+
+/* Wide comparison tables scroll horizontally on small screens
+   instead of breaking the page layout. */
+@media (max-width: 640px) {
+  .blog-prose table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
 /* Hide scrollbar on tag filter */
 .scrollbar-hide {
   -ms-overflow-style: none;
