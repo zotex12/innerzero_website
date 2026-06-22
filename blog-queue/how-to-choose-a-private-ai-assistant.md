@@ -1,0 +1,96 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale (privacy law references, vendor data handling, pricing)
+- [ ] Re-check the GDPR / ICO links resolve and the cited rights still apply
+- [ ] Confirm InnerZero's claims (local inference, local voice, no account, ICO ZC122497) still match what ships
+- [ ] Confirm the link to /blog/local-ai-assistants-compared-2026 is already live (it publishes earlier)
+- [ ] Confirm all external links go to official or authoritative sources only
+-->
+---
+title: "How to Choose a Private AI Assistant: What to Compare in 2026"
+description: "A practical checklist for choosing a private AI assistant in 2026. The seven things that actually matter, how to test any tool against them, and where InnerZero lands on each."
+date: "2026-07-01"
+author: "Louie"
+authorRole: "Founder"
+slug: "how-to-choose-a-private-ai-assistant"
+tags: ["privacy", "local ai", "guide"]
+readingTime: "7 min read"
+featured: false
+---
+
+"Private" is the most overused word in AI marketing. Almost every assistant claims it, and very few mean the same thing by it. This guide gives you a checklist of the seven things that actually decide whether an AI assistant is private, so you can test any tool yourself instead of trusting the label. InnerZero is used as the worked example throughout.
+
+> **Quick summary**
+> - A private AI assistant keeps your prompts and data on hardware you control, with no account and no tracking by default.
+> - The seven things worth comparing are: where inference runs, what leaves your machine, where history is stored, memory control, voice handling, open weights, and true cost.
+> - Use the checklist below to test any tool, including cloud products that market themselves as private.
+> - InnerZero is the worked example: local inference, local voice, no account required, free to download.
+
+## What does "private" actually mean for an AI assistant?
+
+Private means your data stays under your control. In practice that comes down to a simple test: when you send a message, does it leave your computer, and if so, where does it go and who can read it?
+
+A cloud assistant sends every message to a remote server, where it may be logged, used for training, or retained under that company's policy. A local assistant runs the model on your own machine, so the default is that nothing leaves at all. The gap between those two is the whole story, and the rest of this checklist is just how to check which side a given tool is on. For the broader picture, see [local AI vs cloud AI](/blog/local-ai-vs-cloud-ai).
+
+## Does the AI run on your machine or in the cloud?
+
+This is the first and most important question. If the model runs on your own CPU or GPU, your prompts are processed locally and there is no server to leak them. If it runs in the cloud, privacy depends entirely on a company's policy, which can change.
+
+How to test it: turn off your internet and try to chat. A genuinely local assistant keeps working once the model is downloaded. A cloud tool stops. InnerZero runs models locally through engines like [Ollama](https://ollama.com), so it keeps working offline. For the full list of local tools and how they compare, see [local AI assistants compared](/blog/local-ai-assistants-compared-2026).
+
+## What data leaves your computer?
+
+Even a local assistant can send some data out, for optional features like web search or an update check. The question is what, and whether you can see it. A private tool is clear about every outbound connection and lets you turn optional ones off.
+
+How to test it: look for a connection log or a network setting in the app, and read what the tool says it sends. With InnerZero, your data stays on your device by default, and any optional online feature is exactly that, optional. If you choose to use a cloud model, only the current prompt with its context is forwarded, never your whole memory database or file history.
+
+## Where is your conversation history stored?
+
+Your history is often more sensitive than any single message, because it builds a profile of you over time. The key question is whether that history lives on your disk or on someone else's server.
+
+How to test it: find out where the app stores its data and whether you can open, back up, or delete that file yourself. A private assistant keeps history in a local file you own. InnerZero stores conversations and memory in a local database on your machine. Protection comes from your operating system's disk encryption, such as BitLocker on Windows or FileVault on macOS, which you should keep switched on.
+
+## Can you see, edit, and delete what it remembers?
+
+Memory is what makes an assistant useful over time, but it only counts as private if you control it. You should be able to view what the assistant has stored, correct it, and delete any of it on demand.
+
+How to test it: open the memory or settings view and try to delete a single fact. Under the UK GDPR, the [right to erasure](https://ico.org.uk/for-the-public/your-right-to-get-your-data-deleted/) gives you the right to have personal data deleted, and a local tool makes that trivial because the data is already in your hands. InnerZero keeps an editable [memory](/blog/ai-that-remembers) you can review and prune yourself, rather than a black box on a server.
+
+## Does it work without an account or tracking?
+
+An account ties your activity to an identity and usually means a server is involved. Tracking, even just analytics, sends behaviour data out. A private assistant should run without forcing either.
+
+How to test it: see whether you can install and use the tool without signing up, and check the privacy policy for analytics or telemetry. InnerZero requires no account to use, and the company is registered with the UK Information Commissioner's Office (registration ZC122497), so its data handling is on the public register.
+
+## Is the model open, and can you change it?
+
+Open weight models can be inspected, swapped, and run by anyone, which removes lock in and lets you choose a model that suits your hardware and needs. A tool tied to one closed model gives you less control.
+
+How to test it: check whether you can pick from different models and whether those models are open weight. InnerZero runs open model families such as Qwen3 and Gemma3 locally, so you are not locked to a single vendor. For more on the models themselves, see [open source AI models explained](/blog/open-source-ai-models-explained).
+
+## What does it really cost over a year?
+
+Cost is part of the comparison because a subscription is a recurring relationship with a company, while a local tool is a one time download. Work out the yearly figure, not the monthly headline.
+
+How to test it: add up twelve months of any subscription and compare it to free local options. A cloud plan at twenty pounds a month is two hundred and forty pounds a year. InnerZero is free to download, with optional cloud features you can add only if you want them, never required. See [InnerZero vs ChatGPT](/blog/innerzero-vs-chatgpt) for a worked cost comparison.
+
+## Frequently asked questions
+
+### What makes an AI assistant private?
+An AI assistant is private when the model runs on your own hardware, your conversation history stays on your device, it works without an account, and you can see, edit, and delete what it remembers. If any message is sent to a remote server by default, privacy depends on that company's policy rather than on you.
+
+### Is a local AI assistant more private than ChatGPT?
+Yes, by default. A local assistant processes prompts on your own machine, so nothing is sent to a server unless you choose a cloud feature. ChatGPT sends every message to OpenAI's servers, where it is subject to that company's data and retention policies.
+
+### How can I test whether an AI tool is really private?
+Turn off your internet and see if it still works, check where it stores your history, look for a connection log, and confirm you can use it without an account. A genuinely private tool passes all four. A tool that stops working offline is running in the cloud.
+
+### Does a private AI assistant cost money?
+Many are free to download, including InnerZero. The recurring cost of cloud assistants comes from monthly subscriptions, which add up over a year. With a local tool the model runs on hardware you already own, so there is no subscription required.
+
+### Can I delete what a private AI assistant knows about me?
+With a local assistant, yes. Because the data lives in a file on your own machine, you can view and delete it directly. InnerZero gives you an editable memory you can review and prune, which also makes the GDPR right to erasure straightforward to exercise.
+
+## Get started
+
+[Download InnerZero](/download) for free on Windows, macOS, and Linux. No account required, and you can test every item on this checklist yourself in about five minutes.

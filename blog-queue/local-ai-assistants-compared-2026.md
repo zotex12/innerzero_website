@@ -1,0 +1,118 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale (competitor feature sets, open-source status, pricing tiers)
+- [ ] Re-check each tool's official site: Ollama, LM Studio, Jan, GPT4All, Open WebUI, AnythingLLM, Msty, LibreChat
+- [ ] Confirm the comparison table still matches each tool's default behaviour
+- [ ] Confirm InnerZero's feature claims (memory, local voice, 30+ tools, ICO ZC122497) still match what ships
+- [ ] Confirm all external links resolve and go to official project sites only
+-->
+---
+title: "Local AI Assistants Compared: The 2026 Field Guide"
+description: "A neutral side-by-side comparison of the main local AI assistants in 2026: InnerZero, Jan, LM Studio, GPT4All, Ollama, Open WebUI, AnythingLLM, Msty, and LibreChat. What each one does and how to pick."
+date: "2026-06-24"
+author: "Louie"
+authorRole: "Founder"
+slug: "local-ai-assistants-compared-2026"
+tags: ["comparison", "local ai", "privacy"]
+readingTime: "7 min read"
+featured: false
+---
+
+A local AI assistant runs on your own computer, not on a company's servers. In 2026 there are more of these tools than ever, and they vary widely in what they actually do. This guide compares the main options side by side, with a link to each project's official site, so you can see where every tool fits and where InnerZero sits among them.
+
+> **Quick summary**
+> - A local AI assistant runs a language model on your own machine, so your conversations stay on your device by default.
+> - The main local tools in 2026 are InnerZero, Jan, LM Studio, GPT4All, Ollama, Open WebUI, AnythingLLM, Msty, and LibreChat.
+> - They split into two groups: model runners (the engine) and full assistants (memory, voice, and tools on top).
+> - InnerZero is the option built around persistent memory, local voice, and built in tools. It is free to download on Windows, macOS, and Linux.
+
+## What counts as a local AI assistant?
+
+A local AI assistant is software that runs a language model on your own hardware, so your prompts and data never leave your machine by default. The model weights sit on your disk, inference happens on your CPU or GPU, and no account or internet connection is required once the model is downloaded.
+
+This is different from a cloud assistant like ChatGPT or Microsoft Copilot, where every message is sent to a remote server. For a fuller breakdown of that distinction, see [local AI vs cloud AI](/blog/local-ai-vs-cloud-ai) and the pillar guide on [what a local AI assistant is](/what-is-local-ai).
+
+The category splits into two groups that often get confused: tools that run models (the engine) and tools that give you a full assistant experience, with memory, voice, tools, and a polished interface on top. Both are useful, but they solve different problems, and a lot of confusion online comes from comparing one against the other as if they were the same kind of thing.
+
+## Which local AI assistants are worth comparing in 2026?
+
+The field has settled around a handful of well maintained projects. The ones most people compare are:
+
+- **[Ollama](https://ollama.com)**: a command line model runner that downloads and serves open models. It is the engine many other tools build on.
+- **[LM Studio](https://lmstudio.ai)**: a desktop app for browsing, downloading, and chatting with local models, with a built in model catalogue.
+- **[Jan](https://jan.ai)**: an open source desktop chat app with an extension system and a local API server.
+- **[GPT4All](https://www.nomic.ai/gpt4all)**: an open source desktop app from Nomic with local document search.
+- **[Open WebUI](https://openwebui.com)**: a self hosted web interface that usually pairs with Ollama.
+- **[AnythingLLM](https://anythingllm.com)**: a document focused app built around workspaces and retrieval.
+- **[Msty](https://msty.app)**: a polished desktop client for local and remote models.
+- **[LibreChat](https://www.librechat.ai)**: a self hosted chat interface, mainly used as a front end for many model providers.
+- **InnerZero**: a desktop assistant built around persistent memory, local voice, and built in tools.
+
+Each link above goes to the project's official site so you can check current features yourself.
+
+## How do the main local AI assistants compare?
+
+The table below summarises default behaviour as of mid 2026. Features change quickly in this space, so treat it as a snapshot and confirm specifics on each project's own site before you decide.
+
+| Tool | Type | Runs fully local | Persistent memory | Local voice | Built-in tools | Open source | Price |
+|------|------|------------------|-------------------|-------------|----------------|-------------|-------|
+| InnerZero | Full assistant | Yes | Yes | Yes | 30+ | No | Free to download |
+| Jan | Full assistant | Yes | No | No | Via extensions | Yes | Free |
+| LM Studio | Runner plus chat | Yes | No | No | Limited | No | Free |
+| GPT4All | Full assistant | Yes | Limited (local docs) | No | Limited | Yes | Free |
+| Ollama | Model runner | Yes | No | No | No (API only) | Yes | Free |
+| Open WebUI | Web interface | Yes (self hosted) | Limited | No | Some | Yes | Free |
+| AnythingLLM | Document app | Yes (optional) | Workspace based | No | Some | Yes | Free or paid |
+| Msty | Desktop client | Yes | No | No | Some | No | Free or paid |
+| LibreChat | Web interface | Self hosted | Per conversation | No | Via plugins | Yes | Free |
+
+Cloud products such as ChatGPT, Microsoft Copilot, and Google's [NotebookLM](https://notebooklm.google) are not in this table because they run on remote servers, not your machine. They are worth knowing about as a baseline, but they are a different category.
+
+## What is the difference between a model runner and a full assistant?
+
+A model runner loads a language model and answers prompts. That is the core engine, and Ollama and LM Studio do it well. What they do not give you is the layer on top: remembering you between sessions, talking out loud, or taking actions on your computer.
+
+A full assistant adds that layer. InnerZero, Jan, and GPT4All sit here, though they emphasise different things. Jan focuses on a clean chat experience and extensibility. GPT4All focuses on local document search. InnerZero focuses on long term memory, voice, and an agent that can use tools on your behalf.
+
+If you only want to chat with a model, a runner is enough. If you want something that behaves like an assistant over weeks and months, you want the second group. This is the single most useful question to answer before you compare anything else.
+
+## How does InnerZero fit into the field?
+
+InnerZero is a full assistant that runs models locally through engines like Ollama, so it benefits from the same open model ecosystem as the rest of the field. What sets it apart is what it builds on top of that engine.
+
+It keeps [persistent memory](/blog/ai-that-remembers) in a local database, so it remembers your projects, preferences, and past conversations instead of starting fresh each session. It has [local voice](/blog/voice-mode-innerzero), with speech recognition and text to speech running on your own machine. And it ships with built in tools the assistant can use on its own, from web search to file handling, without you wiring up an extension for each one.
+
+On privacy, InnerZero keeps your data on your device by default and requires no account to use it. The company is registered with the UK Information Commissioner's Office (registration ZC122497). For the specifics of what stays local, see [how InnerZero stays private](/blog/how-innerzero-stays-private). For direct one to one comparisons, see [InnerZero vs Jan](/blog/innerzero-vs-jan) and [InnerZero vs LM Studio](/blog/innerzero-vs-lm-studio).
+
+## Which local AI assistant should you pick?
+
+It depends on what you want the tool to do.
+
+- For a pure model engine to build on: Ollama or LM Studio.
+- For a clean, open source chat app: Jan.
+- For local document question answering: GPT4All or AnythingLLM.
+- For a self hosted web interface: Open WebUI or LibreChat.
+- For an assistant that remembers you, talks, and uses tools: InnerZero.
+
+Many people run more than one. A model runner and a full assistant can sit side by side without conflict, and switching between them is simple. The best approach is to install two or three, use them for a week, and keep the ones that fit how you actually work.
+
+## Frequently asked questions
+
+### What is the best local AI assistant in 2026?
+There is no single best tool, because they solve different problems. Ollama and LM Studio are strong model runners. Jan is a clean open source chat app. InnerZero is the option built for persistent memory, local voice, and built in tools. Pick based on whether you want an engine or a full assistant.
+
+### Are local AI assistants free?
+Most are free to download, including InnerZero, Jan, LM Studio, GPT4All, and Ollama. Some, such as AnythingLLM and Msty, offer paid tiers for extra features. None of the core local tools require a subscription to run models on your own machine.
+
+### Do local AI assistants work offline?
+Yes. Once a model is downloaded, a local assistant runs without an internet connection, because inference happens on your own hardware. Some tools add optional online features, but the core chat works offline.
+
+### Which local AI assistants are open source?
+Jan, GPT4All, Ollama, Open WebUI, AnythingLLM, and LibreChat are open source. LM Studio, Msty, and InnerZero are not open source, though all three are free to download and run models locally.
+
+### Can I use more than one local AI tool at once?
+Yes. A model runner like Ollama can serve several front ends, and a full assistant like InnerZero can run alongside other apps. They do not conflict, so you can test a few and keep the ones that suit you.
+
+## Get started
+
+[Download InnerZero](/download) for free on Windows, macOS, and Linux. No account required, and setup takes about five minutes.
