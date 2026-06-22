@@ -79,9 +79,9 @@ Field reference:
 | ogImage | string | no | Falls back to `/banner.png`. Omit unless a custom image exists. |
 | draft | boolean | no | Only honoured by RSS/JSON feed (excludes from feed). Not used in shipped corpus. |
 
-## Approved tag taxonomy (14 entries)
+## Approved tag taxonomy (15 entries)
 
-The corpus uses SPACES, not hyphens. Audited via `grep -h "^tags:" src/content/blog/*.mdx` across all 28 published posts. New tags require explicit Louie approval. Pick 2-4 per post.
+The corpus uses SPACES, not hyphens. Audited via `grep -h "^tags:" src/content/blog/*.mdx`. New tags require explicit Louie approval. Pick 2-4 per post. (`hardware` was formalised in the 2026-06-22 blog audit; the one-off `pricing` tag was retired to `guide`.)
 
 - `announcement`
 - `automation`
@@ -92,6 +92,7 @@ The corpus uses SPACES, not hyphens. Audited via `grep -h "^tags:" src/content/b
 - `features`
 - `getting started`
 - `guide`
+- `hardware`
 - `innerzero`
 - `local ai`
 - `memory`
