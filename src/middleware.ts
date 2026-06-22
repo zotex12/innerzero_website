@@ -58,6 +58,37 @@ import { updateSession } from "@/lib/supabase/middleware";
 // touch their session. CSP is suppressed for /api/* — those routes return
 // JSON, not HTML, and a script-src directive is meaningless there.
 
+// Phase CSP-split. Routes that handle credentials or user-specific data keep
+// the strong per-request nonce CSP and stay dynamically rendered. All other
+// (public, content) routes use a static, nonce-less CSP so Next.js can
+// prerender them at build time and the CDN can serve cached HTML without
+// invoking a render function per request. This is the documented Next.js
+// trade-off: nonces require dynamic rendering and disable static/CDN caching
+// (see node_modules/next/dist/docs/01-app/02-guides/content-security-policy.md
+// "Static vs Dynamic Rendering with CSP"). Public content pages reflect no
+// user input, so 'unsafe-inline' on those pages is an acceptable posture; the
+// nonce posture is preserved where it matters (auth + account).
+//
+// Path prefixes that KEEP the nonce CSP and force dynamic rendering. Kept in
+// sync with the (auth) and (account) route groups, which set
+// `export const dynamic = "force-dynamic"` so the nonce can be injected at
+// SSR time. Matching is exact-or-segment-prefixed so "/accountant" never
+// matches "/account".
+const NONCE_ROUTE_PREFIXES = [
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/account",
+  "/auth",
+];
+
+function isNonceRoute(pathname: string): boolean {
+  return NONCE_ROUTE_PREFIXES.some(
+    (p) => pathname === p || pathname.startsWith(p + "/"),
+  );
+}
+
 const THEME_SCRIPT_HASH = "'sha256-f7LAjRiK+uoAyu7rUwSbVvtnehpB2z0d+hr4fBMjsds='";
 
 const SUPABASE_URL_RAW =
@@ -78,22 +109,48 @@ function generateNonce(): string {
   return btoa(s);
 }
 
+// Directives shared by both CSP variants. Only script-src differs between the
+// nonce (dynamic) and static (cached) builders, so everything else lives here
+// to prevent the two policies drifting apart.
+const COMMON_DIRECTIVES = [
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data:",
+  `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://challenges.cloudflare.com https://formspree.io https://va.vercel-scripts.com`,
+  "frame-src https://challenges.cloudflare.com https://www.youtube-nocookie.com",
+  "frame-ancestors 'none'",
+  "form-action 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "upgrade-insecure-requests",
+  "report-uri /api/csp-report",
+  "report-to csp-endpoint",
+];
+
+// Strong CSP for credential/account routes. Per-request nonce + 'strict-dynamic'
+// means CSP3 browsers trust only nonce/hash-tagged scripts and their propagated
+// chain. The theme-flash inline script is authorised by THEME_SCRIPT_HASH (it
+// no longer carries the nonce prop after the layout stopped reading headers()).
 function buildCsp(nonce: string): string {
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${THEME_SCRIPT_HASH}`,
-    "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob: https:",
-    "font-src 'self' data:",
-    `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://challenges.cloudflare.com https://formspree.io https://va.vercel-scripts.com`,
-    "frame-src https://challenges.cloudflare.com https://www.youtube-nocookie.com",
-    "frame-ancestors 'none'",
-    "form-action 'self'",
-    "base-uri 'self'",
-    "object-src 'none'",
-    "upgrade-insecure-requests",
-    "report-uri /api/csp-report",
-    "report-to csp-endpoint",
+    ...COMMON_DIRECTIVES,
+  ].join("; ");
+}
+
+// Static CSP for public content routes (marketing, blog, /for, /models, etc.).
+// No nonce and no 'strict-dynamic', so 'unsafe-inline' actually takes effect
+// (a nonce or hash in the same directive would make CSP3 browsers ignore
+// 'unsafe-inline'). This is what lets these routes be statically prerendered
+// and CDN-cached. va.vercel-scripts.com is allowed explicitly because, without
+// 'strict-dynamic', host allowlists in script-src apply again and the Vercel
+// Analytics / Speed Insights script must be permitted.
+function buildStaticCsp(): string {
+  return [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
+    ...COMMON_DIRECTIVES,
   ].join("; ");
 }
 
@@ -108,6 +165,19 @@ export async function middleware(request: NextRequest) {
     return await updateSession(request);
   }
 
+  // Public content routes: static, nonce-less CSP so the page can be
+  // prerendered and CDN-cached. No nonce work, no forwarded request headers,
+  // so the downstream render is not pushed into dynamic mode by middleware.
+  if (!isNonceRoute(request.nextUrl.pathname)) {
+    const response = await updateSession(request);
+    response.headers.set("Content-Security-Policy", buildStaticCsp());
+    response.headers.set("Report-To", REPORT_TO);
+    return response;
+  }
+
+  // Credential/account routes: per-request nonce CSP. These route groups pin
+  // themselves to dynamic rendering (force-dynamic) so Next.js injects the
+  // nonce at SSR time.
   const nonce = generateNonce();
   const csp = buildCsp(nonce);
 

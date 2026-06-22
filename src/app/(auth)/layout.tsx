@@ -1,6 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 
+// Phase CSP-split. Auth pages handle credentials and keep the strong
+// per-request nonce CSP from src/middleware.ts. Nonces inject only during
+// dynamic rendering, so this group must render dynamically. Without this pin
+// these pages would prerender as static (this layout reads no dynamic APIs),
+// the nonce would be absent, and 'strict-dynamic' would block Turnstile and
+// the login scripts.
+export const dynamic = "force-dynamic";
+
 export default function AuthLayout({
   children,
 }: {

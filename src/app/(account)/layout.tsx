@@ -17,6 +17,12 @@ const SIDEBAR_LINKS = [
   { href: "/account/settings", label: "Settings", icon: Settings },
 ];
 
+// Phase CSP-split. Account pages keep the strong per-request nonce CSP and
+// must render dynamically for the nonce to inject. This layout already reads
+// the session via getUser(), so it is dynamic in practice; the explicit pin
+// guarantees it and keeps parity with the (auth) group.
+export const dynamic = "force-dynamic";
+
 export default async function AccountLayout({
   children,
 }: {

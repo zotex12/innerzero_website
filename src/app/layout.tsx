@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -19,26 +18,32 @@ export const metadata: Metadata = {
   },
 };
 
-// Phase 7B-2. Reading the request headers() in the root layout is what
-// opts the entire app into dynamic rendering — Next.js's nonce
-// auto-propagation only applies during SSR, so static pages cannot carry
-// the per-request nonce that the CSP middleware emits. The trade-off is
-// SSG → Edge SSR for marketing pages; HTML edge-cache hits go away, asset
-// cache is unaffected. Reading the nonce here also lets us pass it to the
-// theme-flash inline script as a defence-in-depth path alongside the
-// SHA-256 hash already in script-src.
-export default async function RootLayout({
+// Phase CSP-split. The root layout deliberately does NOT read headers() any
+// more. Reading the per-request nonce here previously forced the ENTIRE app
+// into dynamic rendering (Next.js applies nonces only during SSR), which
+// disabled static generation and CDN caching for every public page and drove
+// up Fluid Active CPU. The theme-flash inline script below no longer carries a
+// nonce; it is authorised by its SHA-256 hash in the middleware nonce CSP
+// (auth/account routes) and by 'unsafe-inline' in the static CSP (public
+// routes). Keeping this layout free of dynamic APIs lets marketing/blog pages
+// prerender. Auth and account route groups opt back into dynamic rendering
+// locally via `export const dynamic = "force-dynamic"` so their nonce still
+// injects. See src/middleware.ts for the per-route CSP split.
+//
+// THEME-SCRIPT HASH TRAP: the inline script below is covered by
+// 'sha256-f7LAjRiK+uoAyu7rUwSbVvtnehpB2z0d+hr4fBMjsds=' in src/middleware.ts.
+// Any edit to its bytes (even whitespace) invalidates the hash and breaks the
+// theme script on auth/account routes. Regenerate the hash if you touch it.
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
     <html lang="en-GB" className={`${inter.variable} h-full`} suppressHydrationWarning>
       <head>
         {/* Prevent flash of wrong theme */}
         <script
-          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
