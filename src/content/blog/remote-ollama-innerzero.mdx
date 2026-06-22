@@ -12,7 +12,7 @@ featured: false
 
 Maybe you have a beefy GPU in a desktop tower but prefer working on a laptop. Maybe you have a home server with an NVIDIA card sitting idle. Maybe you just picked up a DGX Spark and want to use it with InnerZero.
 
-Good news: you can run [Ollama](/blog/ollama-desktop-app) on one machine and InnerZero on another. The AI runs on the powerful hardware. The interface runs wherever you want.
+Good news: you can run [Ollama](/blog/ollama-desktop-app) on one machine and InnerZero on another. The AI runs on the hardware with the GPU. The interface runs wherever you want.
 
 ## How do I set up remote Ollama with InnerZero?
 
@@ -37,7 +37,7 @@ ollama pull qwen3:8b
 ollama pull gemma3:1b
 ```
 
-Pick models based on the remote machine's [hardware capabilities](/blog/hardware-for-local-ai). Since it has the GPU, you can potentially run larger models than your local machine would support.
+Pick models based on the remote machine's hardware capabilities. Since it has the GPU, you can potentially run larger models than your local machine would support.
 
 ### 4. Configure InnerZero to use the remote host
 

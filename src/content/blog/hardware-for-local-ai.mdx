@@ -32,7 +32,7 @@ The GPU is the single biggest factor in how fast your AI responds. Specifically,
 
 **No GPU (CPU only).** It works. InnerZero supports CPU-only mode. But responses take longer, maybe 10 to 30 seconds depending on the question. Fine for casual use, not ideal for extended conversations.
 
-AMD GPUs are not currently supported for local AI inference in InnerZero. NVIDIA's CUDA platform is what the AI runtime relies on.
+InnerZero runs best on NVIDIA GPUs through CUDA. AMD and Intel GPUs are supported on an opt-in basis through Vulkan, and Apple Silicon Macs use Metal. The NVIDIA path is the most mature.
 
 ## What CPU is enough for local AI?
 
