@@ -1070,6 +1070,7 @@ Verified post-deploy on `/` (28/28 inline scripts nonce-tagged, zero without), `
 - All new files go in the correct directory per the file structure above
 - No files outside of the defined structure without explicit reason
 - Keep the `/data/` directory in `.gitignore` (legacy waitlist data)
+- Transient e2e / verification / MCP screenshots go in `scratch/screenshots/` (relative to the project root). `scratch/` is gitignored so these are never committed. Playwright MCP also dumps screenshots and page artifacts into `.playwright-mcp/`, which is gitignored too. On phase close, `/close-phase` deletes `scratch/screenshots/`, `scratch/*.png`, and `.playwright-mcp/*.png` for the current worktree only, before staging — using worktree-relative paths so it never deletes tracked files, anything outside `scratch/` and `.playwright-mcp/`, or another worktree's artifacts.
 
 ### Testing changes
 - Run `npm run build` after significant changes to catch build errors

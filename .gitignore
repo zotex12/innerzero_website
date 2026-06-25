@@ -50,10 +50,14 @@ next-env.d.ts
 .frontmatter/database/
 .frontmatter/content/
 
-# Scratch directory: throwaway smoke scripts, server logs, anything
+# Scratch directory: throwaway smoke scripts, server logs, transient
+# e2e / verification / MCP screenshots (scratch/screenshots/), anything
 # transient. Tools that need scratch space create files here at run
 # time and clean up after themselves; nothing here should be tracked.
 /scratch/
+
+# Playwright MCP run artifacts (screenshots, page dumps, console logs).
+.playwright-mcp/
 
 # Per-phase local packet drafted by the architect subagent; never committed.
 WEBCLAUDE.local.md
