@@ -1202,3 +1202,20 @@ No. The local app works without any account. You only need an account if you wan
 ```
 
 Stripe, gray-matter, and next-mdx-remote are already installed. Do not add any other packages without explicit instruction.
+
+## Architecture discipline (anti god-file)
+
+Universal rules: `C:\Users\sumlu\AI_WORKSPACE\architecture-discipline.md` (born from the
+InnerZero desktop launch.py 22k-line lesson). For this repo:
+
+- One component or route = one job. New page sections get NEW files under
+  `src/components/sections/`, never appended into an existing big section.
+- Watch files (budgets are current size plus headroom; growing past them needs a stated
+  reason in the commit, or split instead): `src/components/sections/PricingSection.tsx`
+  (~910, budget 1100), `src/app/api/stripe/webhook/route.ts` (~775, budget 1000),
+  `src/app/api/cloud/proxy/route.ts` (~695, budget 900).
+- The Stripe webhook grows one event handler at a time (classic accretion point). When it
+  nears its budget, extract per-event handlers into `src/lib/stripe/` modules and keep the
+  route as a thin dispatcher.
+- New files aim for under ~800 lines; needing 1,500+ at creation means it is more than one
+  module.
