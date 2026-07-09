@@ -210,8 +210,8 @@ export const config = {
      * - favicon.ico, robots.txt, sitemap files, og images, banner image,
      *   /public/images/*
      * - llms.txt, llms-full.txt (AI-discovery feeds)
-     * - feed.xml, changelog.xml (RSS routes — they are SSG'd HTML/XML and
-     *   do not need session cookies or CSP)
+     * - feed.xml, changelog.xml, feed.json (feed routes — they are SSG'd
+     *   XML/JSON and do not need session cookies or CSP)
      *
      * Static assets that bypass middleware:
      *   - keep CDN cache hits (no edge-function invocation per request)
@@ -219,6 +219,6 @@ export const config = {
      *     headers() because that array applies to '/(.*)'
      *   - do NOT receive CSP — they are not HTML and do not execute
      */
-    "/((?!_next/static|_next/image|favicon.ico|robots\\.txt|sitemap.*\\.xml|og-.*\\.png|banner\\.png|images/|llms.*\\.txt|feed\\.xml|changelog\\.xml).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots\\.txt|sitemap.*\\.xml|og-.*\\.png|banner\\.png|images/|llms.*\\.txt|feed\\.xml|feed\\.json|changelog\\.xml).*)",
   ],
 };

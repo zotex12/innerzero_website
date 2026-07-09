@@ -94,6 +94,18 @@ const nextConfig: NextConfig = {
         destination: "https://innerzero.com/:path",
         permanent: true,
       },
+      {
+        // The JSON Feed moved off the robots-blocked /api/* namespace to a
+        // clean top-level /feed.json (consistent with /feed.xml and
+        // /changelog.xml), which cleared the Google Search Console
+        // "Indexed, though blocked by robots.txt" warning. This 308 keeps
+        // existing feed-reader subscribers on the old /api/feed URL working
+        // and lets Googlebot (re-allowed for this one path in robots.txt)
+        // follow the redirect and drop the stale blocked-but-indexed entry.
+        source: "/api/feed",
+        destination: "/feed.json",
+        permanent: true,
+      },
     ];
   },
   async headers() {

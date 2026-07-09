@@ -202,7 +202,7 @@ export function Footer() {
           </a>
           <span className="mx-2">&middot;</span>
           <a
-            href="/api/feed"
+            href="/feed.json"
             className="transition-colors hover:text-text-secondary"
           >
             JSON

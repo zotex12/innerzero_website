@@ -6,6 +6,12 @@ import { applySecurityHeaders } from "@/lib/security-headers";
 //
 // Blog posts only. Changelog has its own RSS endpoint. Excerpt-only per
 // the project rule; full post content requires visiting the site.
+//
+// Served at /feed.json (top-level, sibling to /feed.xml and /changelog.xml).
+// It previously lived at /api/feed, but robots.txt Disallow: /api/* blocked
+// it there while layout.tsx advertised it to crawlers, tripping the Google
+// Search Console "Indexed, though blocked by robots.txt" warning. /api/feed
+// now 308-redirects here (next.config.ts) so existing subscribers still work.
 
 export const revalidate = 3600;
 
@@ -82,7 +88,7 @@ export async function GET() {
     title: FEED_TITLE,
     description: FEED_DESCRIPTION,
     home_page_url: `${SITE_URL}/blog`,
-    feed_url: `${SITE_URL}/api/feed`,
+    feed_url: `${SITE_URL}/feed.json`,
     language: "en-gb",
     icon: `${SITE_URL}/images/logo.png`,
     items,

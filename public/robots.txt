@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /account/*
+Allow: /api/feed
 Disallow: /api/*
 
 Sitemap: https://innerzero.com/sitemap.xml

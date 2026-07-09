@@ -72,7 +72,7 @@ export default function RootLayout({
         <link
           rel="alternate"
           type="application/feed+json"
-          href="/api/feed"
+          href="/feed.json"
           title="InnerZero Blog JSON"
         />
       </head>
