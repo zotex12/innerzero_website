@@ -1077,6 +1077,14 @@ Verified post-deploy on `/` (28/28 inline scripts nonce-tagged, zero without), `
 - Run `npm run build` after significant changes to catch build errors
 - Check all pages render without errors
 - Verify responsive layout at 375px, 768px, and 1280px widths
+- **Renamed or deleted a route? Clear `.next` first.** After moving/deleting a `route.ts`/`page.tsx`, `npm run build` can fail the TypeScript step with `Cannot find module '.../old/route.js'` from the stale generated `.next/dev/types/validator.ts`. Fix: `rm -rf .next && npm run build`. The lint/build source is fine; only the cached route-type validator is stale. (Next.js 16 + Turbopack.)
+- Route/header/redirect changes are only truly verified against a running server: `npx next start -p <port>` then `curl -sI` the paths (feeds, redirects, robots) for status + `Content-Type` + `Location`. `next.config.ts` `redirects()` and `headers()` do NOT apply under `next dev` route handlers the same way — check them on a production `next start` or the live deploy.
+
+### Git and pushing
+- **Expect push to `main` to reject — rebase first.** The blog-scheduler GitHub Actions cron auto-commits published posts to `main` daily and independently of this PC (see the blog-scheduler notes), so `git push` often fails with "fetch first". Resolve with `git pull --rebase origin main` then push; the cron only touches `src/content/blog/*.mdx`, so it never conflicts with app/code changes.
+- `AGENTS.md` frequently sits with a pre-existing unstaged modification. It blocks a rebase ("cannot pull with rebase: You have unstaged changes"). Stash just that file — `git stash push AGENTS.md` — rebase, then `git stash pop`. Never stage or commit AGENTS.md as part of an unrelated phase.
+- Stage explicit paths only (never `git add -A`); a git-detected rename (`R old -> new`) is fine and preferred over separate add+delete.
+- Adding a BUILDLOG row? Escape any literal `|` inside a table cell as `\|` (e.g. inside a regex code span), or the markdown table column count breaks and trailing cell text is dropped.
 
 ### Progress updates
 - After completing a group of tasks, update the build log table above
