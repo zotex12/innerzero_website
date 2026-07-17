@@ -9,16 +9,28 @@ import {
 } from "@/lib/cloud-providers";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
+import { checkSpendingCap } from "@/lib/spending-cap";
 import { applySecurityHeaders } from "@/lib/security-headers";
+import {
+  hashProxyPayload,
+  reserveCloudRequest,
+  finalizeCloudRequest,
+} from "@/lib/cloud-reservations";
+import { randomUUID } from "node:crypto";
 
-// Known limitation: the idempotency check for request_id runs BEFORE the
-// provider call, so two concurrent retries of the same request_id can each
-// reach the provider (both get billed by the upstream AI vendor). The
-// deduct step is race-safe (unique index on request_id + atomic RPC), so
-// only one deduction lands — the second concurrent call will see 23505 on
-// the transaction insert or insufficient_usage at deduct time. Closing this
-// duplicate-provider-call window requires caching the provider response in
-// usage_transactions, which is a schema change deferred to a future batch.
+// Pre-call reservation (phase cloud-prebill-reservation, 2026-07-17).
+// When CLOUD_PROXY_RESERVATION_ENABLED=true, every request places an atomic
+// reservation of (user_id, request_id, payload_hash, cost) BEFORE any
+// provider call (migration 005). This closes BOTH billing exploits from the
+// 2026-07-17 plan review: the sequential request_id replay (the old
+// idempotency check ran only AFTER the provider call, so a reused successful
+// id skipped deduction but still returned fresh content) and the
+// concurrent-overdraft window (N in-flight requests with 1 unit left all
+// used to reach the provider; holds are now serialised under the profile
+// row lock). Default OFF so deploys are inert until the operator applies
+// migration 005 and sets the env var.
+const RESERVATION_ENABLED =
+  process.env.CLOUD_PROXY_RESERVATION_ENABLED === "true";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -163,7 +175,9 @@ export async function POST(request: Request) {
   // Get profile with plan info
   const { data: profile } = await admin
     .from("profiles")
-    .select("plan, usage_balance, usage_monthly_allowance, usage_alerts_sent")
+    .select(
+      "plan, usage_balance, usage_monthly_allowance, usage_alerts_sent, spending_cap_pence"
+    )
     .eq("id", userId)
     .single();
 
@@ -302,6 +316,87 @@ export async function POST(request: Request) {
     deductSource = "payg";
   }
 
+  // Pre-call reservation (kill-switch gated). MUST run before any provider
+  // call. Fail CLOSED on RPC error: no provider spend without a hold.
+  let reservationActive = false;
+  let reservationId = requestId ?? "";
+  if (RESERVATION_ENABLED) {
+    if (!reservationId) reservationId = randomUUID();
+
+    // Advisory spending-cap pre-check (Codex review fix). The AUTHORITATIVE
+    // cap check stays inside atomic_deduct_sub_with_cap post-call; this
+    // read-only pre-check exists so a cap-blocked account cannot loop
+    // provider calls that always fail deduction afterwards (unbounded
+    // provider spend with zero deduction). TOCTOU here is safe-direction
+    // only: a stale read can never over-deduct, at worst it lets one
+    // request through to the authoritative check.
+    const capMsg = await checkSpendingCap(
+      admin, userId, profile.spending_cap_pence ?? null, null, cost
+    );
+    if (capMsg) {
+      console.debug("[proxy 402] spending_cap_exceeded (pre-call advisory)");
+      return NextResponse.json(
+        { error: "spending_cap_exceeded" },
+        { status: 402 }
+      );
+    }
+
+    const payloadHash = hashProxyPayload(messages, systemPrompt, requestedTier);
+    const reserved = await reserveCloudRequest(
+      admin, userId, reservationId, payloadHash, cost
+    );
+    if ("rpcError" in reserved) {
+      console.error("[cloud/proxy] reservation rpc failed:", reserved.rpcError);
+      return NextResponse.json(
+        {
+          error: "reservation_failed",
+          message: "Temporary error reserving credits. Please retry.",
+        },
+        { status: 500 }
+      );
+    }
+    switch (reserved.verdict) {
+      case "ok":
+        reservationActive = true;
+        break;
+      case "insufficient":
+        console.debug("[proxy 402] insufficient_usage (reservation hold)");
+        return NextResponse.json(
+          { error: "insufficient_usage", usage_balance: subscriptionBalance },
+          { status: 402 }
+        );
+      case "duplicate_completed":
+      case "duplicate_pending":
+        // A completed or in-flight request_id may NOT buy another provider
+        // call. The desktop never legitimately replays an id (fresh uuid4
+        // per call; its only same-id retry is the 401 auth refresh, which
+        // fails before this point).
+        console.debug(
+          "[proxy 409] duplicate_request, verdict=", reserved.verdict
+        );
+        return NextResponse.json(
+          { error: "duplicate_request" },
+          { status: 409 }
+        );
+      case "payload_mismatch":
+        console.debug("[proxy 409] request_id_reuse");
+        return NextResponse.json(
+          { error: "request_id_reuse" },
+          { status: 409 }
+        );
+      case "no_profile":
+        return NextResponse.json({ error: "Profile not found." }, { status: 404 });
+      default:
+        console.error(
+          "[cloud/proxy] unexpected reservation verdict:", reserved.verdict
+        );
+        return NextResponse.json(
+          { error: "reservation_failed" },
+          { status: 500 }
+        );
+    }
+  }
+
   // Select models from tier config.
   // model_tiers.models is a JSONB array of {model_id, provider, priority?,
   // display_name?} objects. Sorted by priority ascending with fallback to
@@ -318,12 +413,18 @@ export async function POST(request: Request) {
       "[cloud/proxy] tier.models is not an array, typeof=", typeof models,
       "tier=", requestedTier,
     );
+    if (reservationActive) {
+      await finalizeCloudRequest(admin, userId, reservationId, "failed");
+    }
     return NextResponse.json(
       { error: "Invalid tier configuration." },
       { status: 500 }
     );
   }
   if (models.length === 0) {
+    if (reservationActive) {
+      await finalizeCloudRequest(admin, userId, reservationId, "failed");
+    }
     return NextResponse.json(
       { error: "No models configured for this tier." },
       { status: 500 }
@@ -360,6 +461,9 @@ export async function POST(request: Request) {
     .map(({ entry }) => ({ provider: entry.provider, modelId: entry.model_id }));
 
   if (candidates.length === 0) {
+    if (reservationActive) {
+      await finalizeCloudRequest(admin, userId, reservationId, "failed");
+    }
     return NextResponse.json(
       { error: "Invalid model configuration." },
       { status: 500 }
@@ -406,9 +510,21 @@ export async function POST(request: Request) {
         })
       );
 
-      // Idempotency: skip deduction if this request_id was already processed
+      // Legacy idempotency: skip deduction if this request_id was already
+      // processed. ONLY runs with the reservation feature OFF (Codex review
+      // fix): the lookup matches request_id GLOBALLY without user_id, so
+      // with reservations on it would let a historical or cross-account id
+      // pass the (per-user) reservation, reach the provider, then skip
+      // deduction and serve free content. With reservations enabled, any
+      // request that reaches this point is first-of-its-id for this user by
+      // construction, so deduction ALWAYS proceeds: the atomic decrement
+      // lands BEFORE the audit-row insert, so a deliberate global
+      // request_id collision (or a replay of an id pruned after 30 days)
+      // still PAYS full price and only the secondary usage_transactions row
+      // is lost - logged loudly on both the sub and PAYG paths for
+      // reconciliation. Never free content.
       let alreadyDeducted = false;
-      if (requestId) {
+      if (requestId && !RESERVATION_ENABLED) {
         const { data: existing } = await admin
           .from("usage_transactions")
           .select("id")
@@ -447,6 +563,9 @@ export async function POST(request: Request) {
               "tier=", requestedTier,
               "provider=", provider,
             );
+            if (reservationActive) {
+              await finalizeCloudRequest(admin, userId, reservationId, "failed");
+            }
             return NextResponse.json(
               { error: "spending_cap_exceeded" },
               { status: 402 }
@@ -497,17 +616,35 @@ export async function POST(request: Request) {
           }
 
           if (packDeducted) {
-            await admin.from("usage_transactions").insert({
-              user_id: userId,
-              type: "usage",
-              amount: -cost,
-              balance_after: subscriptionBalance,
-              description: `${provider}/${modelId} (PAYG pack)`,
-              model_tier: requestedTier,
-              provider,
-              model_id: modelId,
-              ...(requestId ? { request_id: requestId } : {}),
-            });
+            // The pack decrement has already landed atomically; this audit
+            // row is secondary. A failed insert (e.g. 23505 on a global
+            // request_id collision after a >30-day reservation prune) must
+            // not roll back the deduction or block the response, but it MUST
+            // be loud so ops can reconcile the missing tx row.
+            const { error: paygTxError } = await admin
+              .from("usage_transactions")
+              .insert({
+                user_id: userId,
+                type: "usage",
+                amount: -cost,
+                balance_after: subscriptionBalance,
+                description: `${provider}/${modelId} (PAYG pack)`,
+                model_tier: requestedTier,
+                provider,
+                model_id: modelId,
+                ...(requestId ? { request_id: requestId } : {}),
+              });
+            if (paygTxError) {
+              console.error(
+                "[cloud/proxy] usage_transactions insert failed after atomic_deduct_pack",
+                {
+                  user_id: userId,
+                  request_id: requestId ?? null,
+                  code: paygTxError.code,
+                  message: paygTxError.message,
+                }
+              );
+            }
             anyDeduction = true;
           } else {
             console.error(
@@ -543,6 +680,9 @@ export async function POST(request: Request) {
               reason: "no_eligible_pack_remaining",
             })
           );
+          if (reservationActive) {
+            await finalizeCloudRequest(admin, userId, reservationId, "failed");
+          }
           return NextResponse.json(
             {
               error: "deduction_failed",
@@ -595,6 +735,13 @@ export async function POST(request: Request) {
             );
           }
         });
+      }
+
+      // Settle the reservation: the provider responded and accounting
+      // landed (or was a pre-verified idempotent skip). Await so the row
+      // cannot be left pending by a cold-stop after the response returns.
+      if (reservationActive) {
+        await finalizeCloudRequest(admin, userId, reservationId, "completed");
       }
 
       // Get updated balance for header
@@ -674,6 +821,11 @@ export async function POST(request: Request) {
       error_type: errorType,
     })
   );
+
+  // Release the hold: no provider attempt succeeded, nothing was deducted.
+  if (reservationActive) {
+    await finalizeCloudRequest(admin, userId, reservationId, "failed");
+  }
 
   // Do NOT deduct usage on failure.
   // Non-production envs (dev + Vercel preview) include the truncated error
