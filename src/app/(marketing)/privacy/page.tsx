@@ -227,18 +227,19 @@ export default function PrivacyPage() {
                     <li>Your IP address is not included in the data sent to AI providers and is not stored in InnerZero application logs</li>
                   </ul>
                   <p className="mt-2">
-                    Your prompts are forwarded to the selected AI provider and the response is returned to you. InnerZero does not store, read, or log the content of your prompts or AI responses.
+                    Your prompts are routed to one of our AI subprocessors according to your plan tier, and the response is returned to you. If the primary model is unavailable, your request may be automatically retried with a fallback subprocessor from the list below to try to keep your chat working. When that happens, a provider-switch event is recorded for reliability monitoring; it contains provider and status information, not your message content. InnerZero does not store or log the content of your prompts or AI responses, and does not access them for human review.
                   </p>
                   <p className="mt-2">
-                    Proxy logs are limited to: timestamp, plan tier, model used, and usage count deducted. These are retained for 30 days for billing dispute resolution only, then automatically deleted.
+                    Proxy logs are limited to: timestamp, plan tier, model used, and usage count deducted. To prevent duplicate billing and abuse, the proxy may also retain billing-integrity records consisting of a request identifier, a one-way fingerprint of the request (a cryptographic hash that is not designed to be reversible and does not contain a copy of your text), the usage units charged, and timestamps. All of these records are retained for up to 30 days for billing dispute resolution and abuse prevention, then automatically deleted.
                   </p>
                   <p className="mt-2">
-                    AI providers process your data under their own privacy policies and our Data Processing Agreements (DPAs):
+                    Your prompts may be processed by one or more of the following AI subprocessors. The exact provider depends on your plan, current model availability, and our routing configuration at the time of your request. Each processes data under its own privacy policy and, where applicable, a data processing agreement:
                   </p>
                   <ul className="mt-2 list-disc pl-6 space-y-1">
-                    <li>Microsoft Azure (DeepSeek): EU West Europe region, covered by Microsoft DPA</li>
-                    <li>Google: covered by Google Cloud Data Processing Addendum</li>
-                    <li>Anthropic: covered by Anthropic DPA</li>
+                    <li>Microsoft Azure (DeepSeek models): EU West Europe region, covered by Microsoft DPA</li>
+                    <li>DeepSeek (direct API): covered by DeepSeek&apos;s privacy policy and API terms</li>
+                    <li>Google (Gemini models): covered by Google Cloud Data Processing Addendum</li>
+                    <li>Anthropic (Claude models): covered by Anthropic DPA</li>
                   </ul>
                   <p className="mt-2">
                     When using BYO (Bring Your Own) API keys, your prompts are sent directly to the provider from your device. InnerZero&apos;s servers are not involved.
