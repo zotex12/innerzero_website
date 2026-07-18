@@ -17,7 +17,7 @@ import {
   reportProviderSuccess,
   recordFallbackEvent,
 } from "@/lib/cloud-failover";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimit, checkRateLimitShared } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
 import { checkSpendingCap } from "@/lib/spending-cap";
 import { applySecurityHeaders } from "@/lib/security-headers";
@@ -92,7 +92,13 @@ export async function POST(request: Request) {
 
   // Real per-user limit, keyed by the verified user id so a forged token cannot
   // pick a bucket and users behind a shared NAT do not throttle each other.
-  const rateLimited = checkRateLimit(request, "cloudProxy", `user:${auth.user.id}`);
+  // Shared Postgres counter when CLOUD_PROXY_SHARED_RATELIMIT_ENABLED is on
+  // (B5: the in-memory cap multiplies by warm serverless instances); fails
+  // open to the in-memory limiter, and is byte-identical to it with the
+  // flag off.
+  const rateLimited = await checkRateLimitShared(
+    request, "cloudProxy", `user:${auth.user.id}`
+  );
   if (rateLimited) return rateLimited;
 
   let body: ProxyBody;

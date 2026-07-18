@@ -16,7 +16,10 @@ let cleanupStarted = false;
 function startCleanup() {
   if (cleanupStarted) return;
   cleanupStarted = true;
-  setInterval(() => {
+  // unref (when available) so the cleanup timer never holds the process
+  // open: irrelevant on serverless, but required for the node:test runner
+  // to exit after importing this module (B5 test hang fix).
+  const timer = setInterval(() => {
     const now = Date.now();
     for (const [name, store] of stores) {
       const windowMs = storeWindows.get(name) ?? 120_000;
@@ -30,6 +33,9 @@ function startCleanup() {
       }
     }
   }, 60_000);
+  if (typeof (timer as { unref?: () => void }).unref === "function") {
+    (timer as unknown as { unref: () => void }).unref();
+  }
 }
 
 function getStore(name: string): Map<string, number[]> {
@@ -90,6 +96,87 @@ export const LIMITS = {
   newsletter:      { limit: 3,   windowMs: 3_600_000, store: "newsletter" },
   unsubscribe:     { limit: 10,  windowMs: 60_000, store: "unsubscribe" },
 } as const;
+
+// ── B5: shared per-user limiter (2026-07-18) ──────────────────────────
+// The in-memory limiter above is per serverless instance, so its real cap
+// is limit x warm instances. For the MONEY-relevant per-user cloud-proxy
+// check, this shared variant counts in Postgres (migration 008) so the
+// cap is global. Default OFF via the env kill switch; with the flag off,
+// or on ANY rpc error/unexpected shape, it FAILS OPEN to the in-memory
+// limiter with a loud log: the limiter is defence-in-depth (billing
+// reservation holds are the money gate) and a database blip must never
+// take chat down.
+
+const SHARED_RATELIMIT_ENABLED =
+  process.env.CLOUD_PROXY_SHARED_RATELIMIT_ENABLED === "true";
+
+// Exported for tests: the shared-counter key namespace. Capped so a
+// future call site with a longer identifier cannot grow unbounded rows
+// (current identifiers are store constants + a verified UUID, ~60 chars).
+export function sharedRateLimitKey(store: string, identifier: string): string {
+  return `${store}:${identifier}`.slice(0, 128);
+}
+
+function build429(retryAfter: number): Response {
+  return new Response(
+    JSON.stringify({
+      error: "Too many requests. Please try again later.",
+      retryAfter,
+    }),
+    {
+      status: 429,
+      headers: {
+        "Content-Type": "application/json",
+        "Retry-After": String(retryAfter),
+      },
+    }
+  );
+}
+
+export async function checkRateLimitShared(
+  request: Request,
+  preset: keyof typeof LIMITS,
+  identifier: string
+): Promise<Response | null> {
+  if (SHARED_RATELIMIT_ENABLED) {
+    try {
+      const { createAdminClient } = await import("@/lib/supabase/admin");
+      const admin = createAdminClient() as unknown as {
+        rpc: (
+          fn: string,
+          args: Record<string, unknown>
+        ) => PromiseLike<{ data: unknown; error: { message: string } | null }>;
+      };
+      const { limit, windowMs, store } = LIMITS[preset];
+      const { data, error } = await admin.rpc("rate_limit_hit", {
+        p_key: sharedRateLimitKey(store, identifier),
+        p_limit: limit,
+        p_window_ms: windowMs,
+      });
+      if (!error && data && typeof data === "object") {
+        const verdict = data as { allowed?: unknown; retry_after?: unknown };
+        if (verdict.allowed === false) {
+          const retryAfter =
+            typeof verdict.retry_after === "number" && verdict.retry_after > 0
+              ? verdict.retry_after
+              : 60;
+          return build429(retryAfter);
+        }
+        if (verdict.allowed === true) return null;
+      }
+      console.error(
+        "[rate-limit] shared rpc failed or returned unexpected shape; failing open to in-memory:",
+        error?.message ?? "unexpected_shape"
+      );
+    } catch (err) {
+      console.error(
+        "[rate-limit] shared limiter threw; failing open to in-memory:",
+        err instanceof Error ? err.message : "unknown"
+      );
+    }
+  }
+  return checkRateLimit(request, preset, identifier);
+}
 
 /** Check rate limit and return 429 response if exceeded, or null if OK.
  *  Pass an explicit `identifier` (for example the verified user id after auth)
