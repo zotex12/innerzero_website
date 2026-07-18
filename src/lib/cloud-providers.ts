@@ -9,10 +9,39 @@ interface ChatMessage {
   content: string;
 }
 
+// Failure classification for the B0 direct-DeepSeek path (Codex plan-review
+// correction c). "transient" = provider-side trouble (timeout, connection,
+// 5xx, 429): may fall back, counts toward the circuit. "auth" = our key or
+// config (401/403): the prompt is fine, may fall back, counts toward the
+// circuit. "request" = malformed/content 4xx: the prompt must NEVER be
+// resent to another provider and the circuit must not open.
+// The legacy tier-cascade path ignores this field (defaults to "transient"),
+// so flag-off behaviour is unchanged.
+export type ProviderErrorClass = "transient" | "auth" | "request";
+
+export function classifyProviderHttpStatus(status: number): ProviderErrorClass {
+  if (status === 401 || status === 403) return "auth";
+  if (status === 429) return "transient";
+  if (status >= 400 && status < 500) return "request";
+  return "transient";
+}
+
 export class ProviderUnavailableError extends Error {
-  constructor(provider: string, reason: string) {
+  errorClass: ProviderErrorClass;
+  // First token of the reason ("502", "timeout", "connection_error").
+  // The B0 path persists ONLY this token (plus errorClass) to the
+  // fallback-event and provider-health tables, never the provider's
+  // error body (Codex plan-review correction d).
+  reasonCode: string;
+  constructor(
+    provider: string,
+    reason: string,
+    errorClass: ProviderErrorClass = "transient"
+  ) {
     super(`${provider} unavailable: ${reason}`);
     this.name = "ProviderUnavailableError";
+    this.errorClass = errorClass;
+    this.reasonCode = reason.split(":")[0].trim().slice(0, 40);
   }
 }
 
@@ -107,6 +136,92 @@ async function callDeepSeek(
     content: choice?.message?.content ?? "",
     provider: "deepseek",
     model: modelId,
+    input_tokens: data.usage?.prompt_tokens,
+    output_tokens: data.usage?.completion_tokens,
+  };
+}
+
+// ── DeepSeek direct API (B0, deepseek-v4-flash) ───────────────────────
+
+// Exported for tests: the exact request body sent to the direct DeepSeek
+// API. Locked decision 6 pins the single managed text model to
+// deepseek-v4-flash; correction (b) pins thinking EXPLICITLY disabled
+// (v4-flash defaults thinking ON, and reasoning would eat the 2048 output
+// budget and truncate answers); max_tokens stays at or below 2048.
+export function buildDeepSeekDirectBody(
+  messages: ChatMessage[],
+  systemPrompt?: string
+): Record<string, unknown> {
+  const openaiMessages: { role: string; content: string }[] = [];
+  if (systemPrompt) {
+    openaiMessages.push({ role: "system", content: systemPrompt });
+  }
+  for (const m of messages) {
+    openaiMessages.push({ role: m.role, content: m.content });
+  }
+  return {
+    model: "deepseek-v4-flash",
+    messages: openaiMessages,
+    max_tokens: 2048,
+    thinking: { type: "disabled" },
+  };
+}
+
+// Direct DeepSeek call for the B0 managed path (locked decision 9: Azure is
+// retired; every provider call uses that provider's DIRECT API). Reached
+// only when CLOUD_PROXY_B0_V4FLASH_ENABLED is on; the Azure leg above stays
+// untouched for the flag-off path until the post-B0 cleanup phase removes it.
+export async function callDeepSeekDirect(
+  messages: ChatMessage[],
+  systemPrompt?: string,
+  timeoutMs: number = 30_000
+): Promise<ProviderResponse> {
+  const apiKey = process.env.DEEPSEEK_API_KEY;
+  if (!apiKey) throw new Error("DEEPSEEK_API_KEY not configured");
+
+  let res: Response;
+  try {
+    res = await fetch("https://api.deepseek.com/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(buildDeepSeekDirectBody(messages, systemPrompt)),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+  } catch (err) {
+    const name = (err as { name?: string } | null)?.name;
+    const reason = (name === "TimeoutError" || name === "AbortError")
+      ? "timeout"
+      : "connection_error";
+    throw new ProviderUnavailableError("deepseek", reason, "transient");
+  }
+
+  if (!res.ok) {
+    // Classified, unlike the legacy cascade: a request-class 4xx must not
+    // be resent to a second provider. Body text is the provider's own
+    // error response (truncated) — NOT user content.
+    const bodyText = await res.text().catch(() => "");
+    throw new ProviderUnavailableError(
+      "deepseek",
+      `${res.status}: ${bodyText.slice(0, 200)}`,
+      classifyProviderHttpStatus(res.status)
+    );
+  }
+
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    throw new ProviderUnavailableError("deepseek", "body_read_failed", "transient");
+  }
+  const choice = data.choices?.[0];
+
+  return {
+    content: choice?.message?.content ?? "",
+    provider: "deepseek",
+    model: "deepseek-v4-flash",
     input_tokens: data.usage?.prompt_tokens,
     output_tokens: data.usage?.completion_tokens,
   };
@@ -273,6 +388,9 @@ export const PROVIDER_COSTS: Record<
   // provider-level model_id from model_tiers.models (proxy passes that in).
   // The Azure deployment name "DeepSeek-V3.2" lives only inside callDeepSeek.
   "deepseek-chat": { input_per_1k: 0.0459, output_per_1k: 0.1328 },
+  // Direct DeepSeek V4 Flash (B0): $0.14/1M input (cache miss), $0.28/1M
+  // output. Official api-docs.deepseek.com prices verified 2026-07-17.
+  "deepseek-v4-flash": { input_per_1k: 0.0111, output_per_1k: 0.0223 },
   // Google Gemini 2.5 Flash: $0.30/1M input, $2.50/1M output
   "gemini-2.5-flash": { input_per_1k: 0.0237, output_per_1k: 0.1975 },
   // Google Gemini 2.5 Flash-Lite: $0.10/1M input, $0.40/1M output

@@ -6,7 +6,17 @@ import {
   routeToProvider,
   estimateCostPence,
   ProviderUnavailableError,
+  callDeepSeekDirect,
 } from "@/lib/cloud-providers";
+import {
+  B0_PRIMARY,
+  checkProviderRoute,
+  selectB0Candidates,
+  b0FailureAction,
+  reportProviderFailure,
+  reportProviderSuccess,
+  recordFallbackEvent,
+} from "@/lib/cloud-failover";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
 import { checkSpendingCap } from "@/lib/spending-cap";
@@ -46,6 +56,19 @@ const REQUEST_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 // testing or incident response). When off, the first provider error
 // propagates directly to the user via the existing 502 path.
 const CASCADE_ENABLED = process.env.CLOUD_PROXY_CASCADE_ENABLED !== "false";
+
+// B0 kill switches (phase managed-model-collapse-v4flash-direct,
+// 2026-07-17). Both default OFF so the deploy is inert until the operator
+// activates. B0_ENABLED swaps routing to the server-owned pair (direct
+// DeepSeek deepseek-v4-flash primary, Gemini 2.5 Flash-Lite fallback)
+// behind the Supabase circuit breaker (migration 006); tier rows keep
+// gating access and the usage multiplier. The Gemini fallback leg is
+// gated SEPARATELY so no user prompt can reach Google before the
+// operator's paid-tier DPA verification gate; with it off, a primary
+// failure returns the clean 502 envelope and the desktop falls to local.
+const B0_ENABLED = process.env.CLOUD_PROXY_B0_V4FLASH_ENABLED === "true";
+const B0_GEMINI_FALLBACK_ENABLED =
+  process.env.CLOUD_PROXY_B0_GEMINI_FALLBACK_ENABLED === "true";
 
 interface ProxyMessage {
   role: "user" | "assistant";
@@ -397,77 +420,96 @@ export async function POST(request: Request) {
     }
   }
 
-  // Select models from tier config.
-  // model_tiers.models is a JSONB array of {model_id, provider, priority?,
-  // display_name?} objects. Sorted by priority ascending with fallback to
-  // source order.
-  type TierModelEntry = {
-    model_id: string;
-    provider: string;
-    priority?: number;
-    display_name?: string;
-  };
-  const models = tier.models as TierModelEntry[] | null;
-  if (!Array.isArray(models)) {
-    console.error(
-      "[cloud/proxy] tier.models is not an array, typeof=", typeof models,
-      "tier=", requestedTier,
-    );
-    if (reservationActive) {
-      await finalizeCloudRequest(admin, userId, reservationId, "failed");
-    }
-    return NextResponse.json(
-      { error: "Invalid tier configuration." },
-      { status: 500 }
-    );
-  }
-  if (models.length === 0) {
-    if (reservationActive) {
-      await finalizeCloudRequest(admin, userId, reservationId, "failed");
-    }
-    return NextResponse.json(
-      { error: "No models configured for this tier." },
-      { status: 500 }
-    );
-  }
+  // Select the provider candidates for this request.
+  type ProxyCandidate = { provider: string; modelId: string };
+  let candidates: ProxyCandidate[] = [];
+  let b0Probe = false;
 
-  const MAX_ATTEMPTS = 2;
-  const validated = models
-    .map((entry, idx) => ({ entry, idx }))
-    .filter(({ entry }) => {
-      if (
-        !entry ||
-        typeof entry.model_id !== "string" ||
-        entry.model_id.length === 0 ||
-        typeof entry.provider !== "string" ||
-        entry.provider.length === 0
-      ) {
-        console.warn(
-          "[cloud/proxy] malformed tier model entry, skipping; missing model_id or provider"
-        );
-        return false;
+  if (B0_ENABLED) {
+    // B0 path: routing comes from the server-owned primary/fallback pair,
+    // not from tier.models (the tier row above still gated access and set
+    // the usage multiplier). The circuit breaker decides whether the
+    // primary is callable this request; "probe" means this request must
+    // report the primary's outcome so a success closes the circuit.
+    // checkProviderRoute fails open to "closed" if migration 006 is not
+    // applied yet, degrading to plain direct-DeepSeek routing.
+    const verdict = await checkProviderRoute(admin, B0_PRIMARY.provider);
+    const sel = selectB0Candidates(verdict, B0_GEMINI_FALLBACK_ENABLED);
+    candidates = sel.candidates;
+    b0Probe = sel.probe;
+  } else {
+    // Legacy path: select models from tier config.
+    // model_tiers.models is a JSONB array of {model_id, provider, priority?,
+    // display_name?} objects. Sorted by priority ascending with fallback to
+    // source order.
+    type TierModelEntry = {
+      model_id: string;
+      provider: string;
+      priority?: number;
+      display_name?: string;
+    };
+    const models = tier.models as TierModelEntry[] | null;
+    if (!Array.isArray(models)) {
+      console.error(
+        "[cloud/proxy] tier.models is not an array, typeof=", typeof models,
+        "tier=", requestedTier,
+      );
+      if (reservationActive) {
+        await finalizeCloudRequest(admin, userId, reservationId, "failed");
       }
-      return true;
-    })
-    .sort((a, b) => {
-      const pa = typeof a.entry.priority === "number" ? a.entry.priority : Number.MAX_SAFE_INTEGER;
-      const pb = typeof b.entry.priority === "number" ? b.entry.priority : Number.MAX_SAFE_INTEGER;
-      if (pa !== pb) return pa - pb;
-      return a.idx - b.idx;
-    });
-
-  const candidates = validated
-    .slice(0, MAX_ATTEMPTS)
-    .map(({ entry }) => ({ provider: entry.provider, modelId: entry.model_id }));
-
-  if (candidates.length === 0) {
-    if (reservationActive) {
-      await finalizeCloudRequest(admin, userId, reservationId, "failed");
+      return NextResponse.json(
+        { error: "Invalid tier configuration." },
+        { status: 500 }
+      );
     }
-    return NextResponse.json(
-      { error: "Invalid model configuration." },
-      { status: 500 }
-    );
+    if (models.length === 0) {
+      if (reservationActive) {
+        await finalizeCloudRequest(admin, userId, reservationId, "failed");
+      }
+      return NextResponse.json(
+        { error: "No models configured for this tier." },
+        { status: 500 }
+      );
+    }
+
+    const MAX_ATTEMPTS = 2;
+    const validated = models
+      .map((entry, idx) => ({ entry, idx }))
+      .filter(({ entry }) => {
+        if (
+          !entry ||
+          typeof entry.model_id !== "string" ||
+          entry.model_id.length === 0 ||
+          typeof entry.provider !== "string" ||
+          entry.provider.length === 0
+        ) {
+          console.warn(
+            "[cloud/proxy] malformed tier model entry, skipping; missing model_id or provider"
+          );
+          return false;
+        }
+        return true;
+      })
+      .sort((a, b) => {
+        const pa = typeof a.entry.priority === "number" ? a.entry.priority : Number.MAX_SAFE_INTEGER;
+        const pb = typeof b.entry.priority === "number" ? b.entry.priority : Number.MAX_SAFE_INTEGER;
+        if (pa !== pb) return pa - pb;
+        return a.idx - b.idx;
+      });
+
+    candidates = validated
+      .slice(0, MAX_ATTEMPTS)
+      .map(({ entry }) => ({ provider: entry.provider, modelId: entry.model_id }));
+
+    if (candidates.length === 0) {
+      if (reservationActive) {
+        await finalizeCloudRequest(admin, userId, reservationId, "failed");
+      }
+      return NextResponse.json(
+        { error: "Invalid model configuration." },
+        { status: 500 }
+      );
+    }
   }
 
   // Use shorter timeout when fallback is available. 10s per provider is
@@ -484,14 +526,39 @@ export async function POST(request: Request) {
   // log below reports the real offenders (not just the last tier entry).
   const attempted: { provider: string; modelId: string }[] = [];
 
+  // B0 fast-fail: circuit open with the Gemini fallback flag off. The
+  // primary is known-dead, so skip the provider call entirely instead of
+  // burning a timeout; the shared failure tail below releases the
+  // reservation and returns the clean 502 envelope (desktop falls local).
+  if (B0_ENABLED && candidates.length === 0) {
+    lastError = new ProviderUnavailableError(
+      "deepseek",
+      "circuit_open",
+      "transient"
+    );
+  }
+
   for (const candidate of candidates) {
     const { provider, modelId } = candidate;
     attempted.push({ provider, modelId });
 
     try {
-      const result = await routeToProvider(
-        provider, modelId, messages, systemPrompt, timeoutMs
-      );
+      // B0 primary goes through the DIRECT DeepSeek API (decision 9: Azure
+      // retired); everything else (B0 Gemini fallback, whole legacy path)
+      // routes through the existing provider map.
+      const result =
+        B0_ENABLED && provider === B0_PRIMARY.provider
+          ? await callDeepSeekDirect(messages, systemPrompt, timeoutMs)
+          : await routeToProvider(
+              provider, modelId, messages, systemPrompt, timeoutMs
+            );
+
+      // A successful half-open probe closes the circuit (and sends the one
+      // recovery alert). Awaited so the very next requests route to the
+      // primary again; fails soft inside the helper.
+      if (B0_ENABLED && b0Probe && provider === B0_PRIMARY.provider) {
+        await reportProviderSuccess(admin, B0_PRIMARY.provider);
+      }
 
       const responseTimeMs = Date.now() - startTime;
 
@@ -788,10 +855,41 @@ export async function POST(request: Request) {
             provider,
             model_id: modelId,
             error: err.message.slice(0, 80),
+            error_class: err.errorClass,
             attempt: candidates.indexOf(candidate) + 1,
             cascade_enabled: CASCADE_ENABLED,
           })
         );
+
+        if (B0_ENABLED) {
+          // B0 failure matrix (Codex correction c). Circuit accounting and
+          // incident alerts apply to the PRIMARY only, and never for a
+          // request-class 4xx (a malformed/content rejection is not a
+          // provider outage and must not open the circuit). The persisted
+          // reason is class + status token ONLY, never the provider body
+          // (correction d); the body stays in the Vercel log line above.
+          const reason = `${err.errorClass}:${err.reasonCode}`;
+          if (
+            provider === B0_PRIMARY.provider &&
+            err.errorClass !== "request"
+          ) {
+            await reportProviderFailure(admin, B0_PRIMARY.provider, reason);
+          }
+          const next = candidates[candidates.indexOf(candidate) + 1];
+          const action = b0FailureAction(
+            err.errorClass, provider, next !== undefined
+          );
+          if (action === "fallback" && next) {
+            // Audited fallback (correction d): classified reason only,
+            // never content. Same charge to the user (decision 11).
+            await recordFallbackEvent(
+              admin, userId, provider, next.provider, reason
+            );
+            continue;
+          }
+          break;
+        }
+
         if (!CASCADE_ENABLED) break;
         continue; // try next provider
       }
