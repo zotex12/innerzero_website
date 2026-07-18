@@ -71,9 +71,18 @@ export const VOICE_MAX_SESSIONS_PER_WINDOW = 3;
 // operator and the desktop falls to local voice.
 export const VOICE_INCIDENT_PROVIDER = "openai_voice";
 
+// Vercel env alias (2026-07-18 activation): the production key was
+// created under the name `openai_voice` and Vercel forbids renaming a
+// Sensitive variable without re-entering the value, so both names are
+// accepted. OPENAI_API_KEY stays the documented canonical name;
+// consolidate when the key is next rotated. Either way this is the
+// PLATFORM key, never a user's BYO key.
+function voiceApiKey(): string {
+  return process.env.OPENAI_API_KEY || process.env.openai_voice || "";
+}
+
 export function isVoiceConfigured(): boolean {
-  return typeof process.env.OPENAI_API_KEY === "string" &&
-    process.env.OPENAI_API_KEY.length > 0;
+  return voiceApiKey().length > 0;
 }
 
 // ── Ephemeral client secret minting ───────────────────────────────────
@@ -139,7 +148,7 @@ export interface VoiceClientSecret {
 export async function mintVoiceClientSecret(
   timeoutMs = 10_000
 ): Promise<VoiceClientSecret> {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = voiceApiKey();
   if (!apiKey) {
     throw new VoiceProviderError("not_configured", "auth");
   }
