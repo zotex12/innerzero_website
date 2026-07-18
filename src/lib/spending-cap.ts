@@ -18,6 +18,40 @@ import type { SupabaseClient } from "@supabase/supabase-js";
  *  (e.g. /api/cloud/deduct). The proxy route uses real provider estimates. */
 export const PENCE_PER_USAGE_UNIT = 0.5;
 
+// ── B1 (2026-07-18): request-size cap + effective-cap semantics ───────
+
+/** Total input budget per proxy request across all message contents plus
+ *  the system prompt. 90,000 chars is ~22k tokens at 4 chars/token,
+ *  inside the H9 sizing budget that keeps a 1-unit call under the
+ *  decision-10 margin floor at the Pro per-unit rate. Hostile
+ *  token-dense input that beats the chars/token assumption is bounded at
+ *  CYCLE level by the plan provider-cost ceiling (migration 009), which
+ *  uses real post-call token costs. */
+export const MAX_TOTAL_REQUEST_CHARS = 90_000;
+
+/** Sum of message content lengths plus the system prompt length. */
+export function totalRequestChars(
+  messages: { content: string }[],
+  systemPrompt: string | undefined
+): number {
+  let total = systemPrompt ? systemPrompt.length : 0;
+  for (const m of messages) total += m.content.length;
+  return total;
+}
+
+/** TS mirror of the migration-009 guard semantics: effective cap is the
+ *  smaller of the user cap and the plan ceiling, where NULL means "no
+ *  cap of that kind" (Postgres least() ignores NULLs the same way).
+ *  Exported for tests and any read-side advisory use. */
+export function effectiveSpendCapPence(
+  userCapPence: number | null,
+  planCeilingPence: number | null
+): number | null {
+  if (userCapPence === null) return planCeilingPence;
+  if (planCeilingPence === null) return userCapPence;
+  return Math.min(userCapPence, planCeilingPence);
+}
+
 /**
  * Read the denormalised cycle spend directly from the profile row.
  * Signature kept so existing callers do not change, but `billingCycleEnd`

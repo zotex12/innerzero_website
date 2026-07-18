@@ -19,7 +19,12 @@ import {
 } from "@/lib/cloud-failover";
 import { checkRateLimit, checkRateLimitShared } from "@/lib/rate-limit";
 import { checkAndSendUsageAlert } from "@/lib/usage-alerts";
-import { checkSpendingCap } from "@/lib/spending-cap";
+import {
+  checkSpendingCap,
+  effectiveSpendCapPence,
+  MAX_TOTAL_REQUEST_CHARS,
+  totalRequestChars,
+} from "@/lib/spending-cap";
 import { applySecurityHeaders } from "@/lib/security-headers";
 import {
   hashProxyPayload,
@@ -197,6 +202,26 @@ export async function POST(request: Request) {
     }
   }
 
+  // B1 (H9): total input budget across all messages + system prompt.
+  // The per-message and message-count caps alone allow ~500k chars,
+  // whose real provider cost breaks the decision-10 margin floor on a
+  // 1-unit call. Rejected up front, before any billing work.
+  const requestChars = totalRequestChars(messages, systemPrompt);
+  if (requestChars > MAX_TOTAL_REQUEST_CHARS) {
+    console.debug(
+      "[proxy 400] request_too_large, total_chars=", requestChars,
+      "cap=", MAX_TOTAL_REQUEST_CHARS,
+      "messages_count=", messages.length,
+    );
+    return NextResponse.json(
+      {
+        error: "request_too_large",
+        detail: "Combined message content must be 90000 characters or less.",
+      },
+      { status: 400 }
+    );
+  }
+
   const admin = createAdminClient();
   const userId = auth.user.id;
   const startTime = Date.now();
@@ -357,10 +382,37 @@ export async function POST(request: Request) {
     // read-only pre-check exists so a cap-blocked account cannot loop
     // provider calls that always fail deduction afterwards (unbounded
     // provider spend with zero deduction). TOCTOU here is safe-direction
-    // only: a stale read can never over-deduct, at worst it lets one
-    // request through to the authoritative check.
+    // only: a stale read can never over-deduct; the slip-through past a
+    // just-crossed boundary is bounded by the requests concurrently in
+    // flight at that instant (at most the per-user rate limit), after
+    // which the live counter re-read rejects every new request before
+    // any provider call. B1 extends the advisory cap to
+    // the EFFECTIVE cap (user cap AND the plan provider-cost ceiling from
+    // migration 009), because the same loop-past-the-boundary provider
+    // spend applies to the ceiling (Codex B1 review P1 fold). The ceiling
+    // column may not exist before 009 is applied; a failed read degrades
+    // to the user cap alone.
+    let planCeiling: number | null = null;
+    if (hasPlan) {
+      try {
+        const { data: planRow } = await admin
+          .from("cloud_plans")
+          .select("provider_cost_ceiling_pence")
+          .eq("id", profile.plan!)
+          .maybeSingle();
+        planCeiling =
+          (planRow as { provider_cost_ceiling_pence?: number | null } | null)
+            ?.provider_cost_ceiling_pence ?? null;
+      } catch {
+        planCeiling = null;
+      }
+    }
     const capMsg = await checkSpendingCap(
-      admin, userId, profile.spending_cap_pence ?? null, null, cost
+      admin,
+      userId,
+      effectiveSpendCapPence(profile.spending_cap_pence ?? null, planCeiling),
+      null,
+      cost
     );
     if (capMsg) {
       console.debug("[proxy 402] spending_cap_exceeded (pre-call advisory)");
@@ -860,7 +912,10 @@ export async function POST(request: Request) {
             model_tier: requestedTier,
             provider,
             model_id: modelId,
-            error: err.message.slice(0, 80),
+            // Classified code only, never the provider error body: an
+            // upstream error message could echo rejected input (Codex
+            // review fold; deliberate log-content change for BOTH paths).
+            error: err.reasonCode,
             error_class: err.errorClass,
             attempt: candidates.indexOf(candidate) + 1,
             cascade_enabled: CASCADE_ENABLED,
@@ -908,8 +963,14 @@ export async function POST(request: Request) {
   // All attempts failed
   const responseTimeMs = Date.now() - startTime;
   const lastAttempted = attempted[attempted.length - 1];
+  // Classified code for provider errors (no upstream body in logs); other
+  // error classes keep their message (first-party, no user content).
   const errorType =
-    lastError instanceof Error ? lastError.message.slice(0, 200) : "unknown";
+    lastError instanceof ProviderUnavailableError
+      ? `${lastError.errorClass}:${lastError.reasonCode}`
+      : lastError instanceof Error
+        ? lastError.message.slice(0, 200)
+        : "unknown";
 
   console.log(
     JSON.stringify({
