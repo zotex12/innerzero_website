@@ -28,6 +28,8 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [desktopToken, setDesktopToken] = useState("");
   const [copied, setCopied] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
+  const tokenRef = useRef<HTMLElement>(null);
   const [captchaToken, setCaptchaToken] = useState("");
   const turnstileRef = useRef<TurnstileRef>(null);
 
@@ -78,10 +80,48 @@ export function LoginForm() {
     router.refresh();
   }
 
+  // Select the token text in the code block so a manual Ctrl+C works even
+  // when programmatic clipboard access is unavailable.
+  function selectTokenText() {
+    const node = tokenRef.current;
+    if (!node) return;
+    const selection = window.getSelection();
+    if (!selection) return;
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
   async function handleCopy() {
-    await navigator.clipboard.writeText(desktopToken);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    // The async Clipboard API can be blocked (permissions policy, unfocused
+    // document, some Chromium configurations). Never fail silently: fall back
+    // to the legacy execCommand path, and if that also fails, select the
+    // token and tell the user to press Ctrl+C. The token value itself never
+    // reaches logs or error messages.
+    setCopyFailed(false);
+    setCopied(false);
+    try {
+      await navigator.clipboard.writeText(desktopToken);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      return;
+    } catch {
+      // fall through to the legacy path
+    }
+    try {
+      selectTokenText();
+      const ok = document.execCommand("copy");
+      if (ok) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+        return;
+      }
+    } catch {
+      // fall through to the manual-copy prompt
+    }
+    selectTokenText();
+    setCopyFailed(true);
   }
 
   // Desktop token display — shown after successful login with ?desktop=true
@@ -98,7 +138,10 @@ export function LoginForm() {
           </p>
 
           <div className="relative rounded-lg border border-border-default bg-bg-secondary p-4">
-            <code className="block text-xs text-text-primary break-all max-h-24 overflow-y-auto font-mono">
+            <code
+              ref={tokenRef}
+              className="block text-xs text-text-primary break-all max-h-24 overflow-y-auto font-mono"
+            >
               {desktopToken}
             </code>
           </div>
@@ -106,6 +149,13 @@ export function LoginForm() {
           <Button onClick={handleCopy} className="w-full">
             {copied ? "Copied!" : "Copy Token"}
           </Button>
+
+          {copyFailed && (
+            <p className="text-xs text-error text-center" role="alert">
+              Automatic copy is blocked in this browser. The token above is now
+              selected: press Ctrl+C (Cmd+C on Mac) to copy it.
+            </p>
+          )}
 
           <p className="text-xs text-text-muted text-center">
             This token expires after 1 hour, but InnerZero will automatically refresh it.
