@@ -3,6 +3,10 @@ import { stripe } from "@/lib/stripe-server";
 import { isBusinessLicencePriceId, isProPriceId } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCloudPlanByPriceId, grantUsage } from "@/lib/cloud-plans";
+import {
+  resolveClawbackTarget,
+  performClawback,
+} from "@/lib/refund-clawback";
 import { applySecurityHeaders } from "@/lib/security-headers";
 import crypto from "crypto";
 import type Stripe from "stripe";
@@ -681,6 +685,66 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
     .eq("status", "active");
 }
 
+// ── B3: refund / chargeback claw-back (2026-07-18) ────────────────────
+// Full refunds and new disputes claw back the cloud credits the refunded
+// payment bought (PAYG pack expiry, or bounded subscription-balance
+// deduction). Mapping is precise via src/lib/refund-clawback.ts; Pro,
+// business licence, and unmapped payments are never touched. At-most-once
+// per charge via the clawback_<charge_id> transaction marker.
+
+async function handleChargeRefunded(charge: Stripe.Charge) {
+  // Only FULL refunds claw back. Partial refunds are support-initiated
+  // edge cases; log and leave credits alone.
+  if (!charge.refunded) {
+    console.log(
+      JSON.stringify({
+        event: "clawback_partial_refund_skipped",
+        charge_id: charge.id,
+        amount_refunded: charge.amount_refunded,
+        amount: charge.amount,
+      })
+    );
+    return;
+  }
+  const admin = createAdminClient();
+  const target = await resolveClawbackTarget(
+    stripe, admin, getCloudPlanByPriceId, charge, getSubscriptionIdFromInvoice
+  );
+  const outcome = await performClawback(admin, target, charge.id, "refund");
+  console.log(
+    JSON.stringify({
+      event: "clawback_refund",
+      charge_id: charge.id,
+      target: target.kind,
+      outcome,
+    })
+  );
+}
+
+async function handleDisputeCreated(dispute: Stripe.Dispute) {
+  const chargeId =
+    typeof dispute.charge === "string" ? dispute.charge : dispute.charge?.id;
+  if (!chargeId) return;
+  const charge = await stripe.charges.retrieve(chargeId);
+  const admin = createAdminClient();
+  // A dispute freezes the money regardless of refund state: claw
+  // immediately (idempotent with any earlier/later refund claw-back for
+  // the same charge via the shared charge-keyed marker).
+  const target = await resolveClawbackTarget(
+    stripe, admin, getCloudPlanByPriceId, charge, getSubscriptionIdFromInvoice
+  );
+  const outcome = await performClawback(admin, target, charge.id, "dispute");
+  console.log(
+    JSON.stringify({
+      event: "clawback_dispute",
+      charge_id: charge.id,
+      dispute_id: dispute.id,
+      target: target.kind,
+      outcome,
+    })
+  );
+}
+
 export async function POST(request: Request) {
   // Signature verification runs FIRST, before rate limiting. A rate limiter
   // that runs before verification can be flooded by hostile senders to 429
@@ -767,6 +831,12 @@ export async function POST(request: Request) {
       break;
     case "invoice.payment_failed":
       await handleInvoicePaymentFailed(event.data.object as Stripe.Invoice);
+      break;
+    case "charge.refunded":
+      await handleChargeRefunded(event.data.object as Stripe.Charge);
+      break;
+    case "charge.dispute.created":
+      await handleDisputeCreated(event.data.object as Stripe.Dispute);
       break;
   }
 

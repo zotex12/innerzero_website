@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { stripe } from "@/lib/stripe-server";
+import { shouldCancelSubStatus } from "@/lib/refund-clawback";
 
 export async function POST(request: Request) {
   const rateLimited = checkRateLimit(request, "accountDelete");
@@ -21,6 +23,49 @@ export async function POST(request: Request) {
 
   const admin = createAdminClient();
   const errors: string[] = [];
+
+  // 0. Cancel live Stripe subscriptions BEFORE any row deletion (B3, risk
+  // H6: deletion used to remove the data but leave Stripe billing the
+  // card forever). Read the customer id now because step 8 deletes the
+  // profile row. A Stripe failure never blocks the GDPR deletion: it is
+  // recorded in partial_errors and logged loudly for manual follow-up.
+  try {
+    const { data: prof } = await admin
+      .from("profiles")
+      .select("stripe_customer_id")
+      .eq("id", user.id)
+      .maybeSingle();
+    const stripeCustomerId = prof?.stripe_customer_id ?? null;
+    if (stripeCustomerId) {
+      // for-await auto-paginates past the page size, so >100 subscriptions
+      // cannot leave live billing behind (review round 1 P2 fix).
+      for await (const sub of stripe.subscriptions.list({
+        customer: stripeCustomerId,
+        status: "all",
+        limit: 100,
+      })) {
+        if (!shouldCancelSubStatus(sub.status)) continue;
+        try {
+          await stripe.subscriptions.cancel(sub.id);
+        } catch (e) {
+          const msg = e instanceof Error ? e.message : "failed";
+          errors.push(`stripe_cancel ${sub.id}: ${msg}`);
+          console.error("[account/delete] stripe subscription cancel failed", {
+            user_id: user.id,
+            subscription_id: sub.id,
+            message: msg,
+          });
+        }
+      }
+    }
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "failed";
+    errors.push(`stripe_cancel: ${msg}`);
+    console.error("[account/delete] stripe cancellation step failed", {
+      user_id: user.id,
+      message: msg,
+    });
+  }
 
   // 1. Delete proxy cost log (no FKs to other public tables)
   try {
@@ -93,8 +138,11 @@ export async function POST(request: Request) {
     errors.push(`auth: ${authError.message}`);
   }
 
-  if (errors.length > 0 && authError) {
-    // Auth deletion failed, which is critical
+  if (authError) {
+    // Auth deletion failed, which is critical: the account still exists,
+    // so this must never report success. (Pre-existing bug fixed in B3
+    // review round 1: the old gate required data-deletion errors AS WELL,
+    // so a clean data pass with a failed auth delete returned success.)
     return NextResponse.json(
       {
         success: false,
