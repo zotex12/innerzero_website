@@ -218,8 +218,17 @@ export async function callDeepSeekDirect(
   }
   const choice = data.choices?.[0];
 
+  // A 200 with no usable content must NOT enter the success/billing path
+  // (Codex review fold: the subscriber would be charged for an empty
+  // reply). Throwing transient lets the circuit count it and the
+  // fallback leg serve the request instead.
+  const content = choice?.message?.content;
+  if (typeof content !== "string" || content.length === 0) {
+    throw new ProviderUnavailableError("deepseek", "empty_response", "transient");
+  }
+
   return {
-    content: choice?.message?.content ?? "",
+    content,
     provider: "deepseek",
     model: "deepseek-v4-flash",
     input_tokens: data.usage?.prompt_tokens,

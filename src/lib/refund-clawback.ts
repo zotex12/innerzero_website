@@ -23,11 +23,26 @@ export function shouldCancelSubStatus(status: string): boolean {
   return status !== "canceled" && status !== "incomplete_expired";
 }
 
+// Tiny non-cryptographic hash (djb2, hex) used to keep truncated ids
+// injective. Collisions need matching 32-bit hashes AND shared prefixes.
+function shortHash(input: string): string {
+  let h = 5381;
+  for (let i = 0; i < input.length; i++) {
+    h = ((h << 5) + h + input.charCodeAt(i)) >>> 0;
+  }
+  return h.toString(16).padStart(8, "0");
+}
+
 // One claw-back per CHARGE, not per event: charge.refunded and
 // charge.dispute.created for the same charge share this marker, and the
-// unique index on usage_transactions.request_id backstops races.
+// unique index on usage_transactions.request_id backstops races. Charge
+// ids have no documented length guarantee, so oversized ids keep a
+// distinguishing hash suffix instead of a bare (non-injective) truncation
+// (Codex review fold).
 export function clawbackRequestId(chargeId: string): string {
-  return `clawback_${chargeId}`.slice(0, 64);
+  const raw = `clawback_${chargeId}`;
+  if (raw.length <= 64) return raw;
+  return `${raw.slice(0, 55)}_${shortHash(raw)}`;
 }
 
 // Bounded claw amount: never below zero, never more than the plan grant
@@ -61,35 +76,20 @@ type CloudPlanLookup = (
   priceId: string
 ) => Promise<{ plan_type: string; usage_amount: number } | null>;
 
-async function targetFromSubscription(
-  stripe: Stripe,
-  admin: SupabaseClient,
-  getCloudPlanByPriceId: CloudPlanLookup,
-  charge: Stripe.Charge,
-  subscriptionId: string
-): Promise<ClawbackTarget> {
-  const sub = await stripe.subscriptions.retrieve(subscriptionId);
-  const priceId = sub.items.data[0]?.price?.id;
-  const plan = priceId ? await getCloudPlanByPriceId(priceId) : null;
-  if (!plan || plan.plan_type !== "subscription") {
-    return { kind: "none", reason: "subscription_not_cloud" };
-  }
-  const userId = await profileIdForCustomer(admin, charge.customer);
-  if (!userId) return { kind: "none", reason: "no_profile_for_customer" };
-  return { kind: "cloud_sub", userId, usageAmount: plan.usage_amount };
-}
-
 // Resolve what (if anything) a charge's money bought in the cloud
 // billing system. Stripe v22 (dahlia) has no Charge.invoice field, so:
 // payment_intent -> checkout session (one-time payments: PAYG packs), or
-// payment_intent -> invoice payment -> invoice -> subscription
-// (first payment AND renewals of cloud subscriptions).
+// payment_intent -> invoice payment -> invoice line item (first payment
+// AND renewals of cloud subscriptions). The invoice LINE price is the
+// authority for classification, never the subscription's CURRENT price:
+// a plan change after the refunded payment must not reclassify it (Codex
+// review fold; wrong-target/wrong-amount claw prevention). Unresolvable
+// classification always SKIPS rather than guessing.
 export async function resolveClawbackTarget(
   stripe: Stripe,
   admin: SupabaseClient,
   getCloudPlanByPriceId: CloudPlanLookup,
-  charge: Stripe.Charge,
-  getSubscriptionIdFromInvoice: (invoice: Stripe.Invoice) => string | null
+  charge: Stripe.Charge
 ): Promise<ClawbackTarget> {
   const pi = paymentIntentId(charge);
   if (!pi) return { kind: "none", reason: "no_payment_intent" };
@@ -133,12 +133,47 @@ export async function resolveClawbackTarget(
   if (!invoiceId) return { kind: "none", reason: "unmapped_payment" };
 
   const invoice = await stripe.invoices.retrieve(invoiceId);
-  const subId = getSubscriptionIdFromInvoice(invoice);
-  if (!subId) return { kind: "none", reason: "invoice_without_subscription" };
 
-  return targetFromSubscription(
-    stripe, admin, getCloudPlanByPriceId, charge, subId
-  );
+  // Scan ALL invoice lines, not just the first: proration/plan-change
+  // invoices order pending/proration lines before subscription lines, so
+  // lines[0] can be the wrong price (Codex micro-round fold). Negative
+  // lines are proration CREDITS, not entitlement-bearing charges, and are
+  // excluded before classification: an upgrade invoice carries a negative
+  // old-plan credit plus a positive new-plan charge, and must resolve to
+  // the new plan rather than skip as ambiguous (Codex round-3 fold).
+  // Rule over the remaining charge lines: exactly ONE distinct cloud
+  // subscription plan claws that plan; zero means not-cloud; more than
+  // one distinct plan is ambiguous and SKIPS. Money decisions never
+  // guess.
+  const linePrices = new Set<string>();
+  for (const line of invoice.lines?.data ?? []) {
+    if ((line.amount ?? 0) <= 0) continue;
+    const ref = line.pricing?.price_details?.price ?? null;
+    const id = typeof ref === "string" ? ref : ref?.id ?? null;
+    if (id) linePrices.add(id);
+  }
+  if (linePrices.size === 0) {
+    return { kind: "none", reason: "line_price_unresolved" };
+  }
+
+  const matchedPlans = new Map<string, { usage_amount: number }>();
+  for (const priceId of linePrices) {
+    const plan = await getCloudPlanByPriceId(priceId);
+    if (plan && plan.plan_type === "subscription") {
+      matchedPlans.set(priceId, { usage_amount: plan.usage_amount });
+    }
+  }
+  if (matchedPlans.size === 0) {
+    return { kind: "none", reason: "invoice_not_cloud" };
+  }
+  if (matchedPlans.size > 1) {
+    return { kind: "none", reason: "ambiguous_invoice_lines" };
+  }
+
+  const userId = await profileIdForCustomer(admin, charge.customer);
+  if (!userId) return { kind: "none", reason: "no_profile_for_customer" };
+  const [only] = matchedPlans.values();
+  return { kind: "cloud_sub", userId, usageAmount: only.usage_amount };
 }
 
 // Execute the claw-back at-most-once per charge. The marker transaction
@@ -190,6 +225,27 @@ export async function performClawback(
     return "skip:marker_failed";
   }
 
+  // Marker-finalize contract (Codex review fold): if a completion update
+  // below fails, the CLAW HAS LANDED but the ledger row stays [PENDING].
+  // The loud log is the reconciliation truth: never re-claw a PENDING row
+  // manually without first checking whether the balance/pack change
+  // already happened.
+  const finalizeMarker = async (
+    patch: Record<string, unknown>,
+    landed: string
+  ): Promise<void> => {
+    const { error } = await admin
+      .from("usage_transactions")
+      .update(patch)
+      .eq("request_id", requestId);
+    if (error) {
+      console.error(
+        "[refund-clawback] CLAW LANDED but marker finalize FAILED; row stays [PENDING]; do not re-claw without checking balances:",
+        { charge_id: chargeId, landed, message: error.message }
+      );
+    }
+  };
+
   if (target.kind === "payg_pack") {
     const { data: zeroed, error } = await admin.rpc("atomic_pack_expire", {
       p_pack_id: target.packId,
@@ -202,13 +258,13 @@ export async function performClawback(
       });
       return "error:pack_expire_failed";
     }
-    await admin
-      .from("usage_transactions")
-      .update({
+    await finalizeMarker(
+      {
         amount: -(typeof zeroed === "number" ? zeroed : 0),
         description,
-      })
-      .eq("request_id", requestId);
+      },
+      `pack_zeroed:${zeroed ?? 0}`
+    );
     return `clawed:pack:${zeroed ?? 0}`;
   }
 
@@ -223,10 +279,7 @@ export async function performClawback(
     const balance = profile?.usage_balance ?? 0;
     const claw = boundedClawAmount(balance, target.usageAmount);
     if (claw === 0) {
-      await admin
-        .from("usage_transactions")
-        .update({ description })
-        .eq("request_id", requestId);
+      await finalizeMarker({ description }, "zero_balance_noop");
       return "clawed:sub:0";
     }
 
@@ -243,10 +296,10 @@ export async function performClawback(
       return "error:sub_deduct_failed";
     }
     if (newBalance !== null) {
-      await admin
-        .from("usage_transactions")
-        .update({ amount: -claw, balance_after: newBalance, description })
-        .eq("request_id", requestId);
+      await finalizeMarker(
+        { amount: -claw, balance_after: newBalance, description },
+        `sub_deducted:${claw}`
+      );
       return `clawed:sub:${claw}`;
     }
     // Conditional update did not apply (balance moved); re-read and retry.

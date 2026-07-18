@@ -133,10 +133,30 @@ export async function reportProviderFailure(
     }
     const verdict = typeof data === "string" ? data : "unexpected";
     if (verdict === "opened") {
-      await sendIncidentEmail("open", provider, reason);
+      const sent = await sendIncidentEmail("open", provider, reason);
+      if (!sent) {
+        // The circuit-open state is already committed. Alerting is
+        // best-effort notification; the health table is the source of
+        // truth. Backstop is TRAFFIC-DRIVEN: while the circuit stays
+        // open, failing 60s probes keep calling this reporter, and the
+        // first one past the 30-minute throttle emits summary_due (no
+        // traffic means no alerts but also no impact). Loud log so the
+        // operator sees the gap in Vercel even without email (Codex
+        // review fold).
+        console.error(
+          "[cloud-failover] CIRCUIT-OPEN ALERT DELIVERY FAILED; next failing probe past the 30-min throttle emits a summary:",
+          provider
+        );
+      }
     } else if (verdict.startsWith("summary_due:")) {
       const count = verdict.slice("summary_due:".length);
-      await sendIncidentEmail("summary", provider, `${count} failures since the last alert. Latest: ${reason}`);
+      const sent = await sendIncidentEmail("summary", provider, `${count} failures since the last alert. Latest: ${reason}`);
+      if (!sent) {
+        console.error(
+          "[cloud-failover] incident SUMMARY delivery failed:",
+          provider
+        );
+      }
     }
     return verdict;
   } catch (err) {
@@ -165,7 +185,17 @@ export async function reportProviderSuccess(
     }
     const verdict = typeof data === "string" ? data : "unexpected";
     if (verdict === "recovered") {
-      await sendIncidentEmail("recovered", provider, "Probe request succeeded.");
+      const sent = await sendIncidentEmail(
+        "recovered", provider, "Probe request succeeded."
+      );
+      if (!sent) {
+        // Recovery is committed and correct; only the notification was
+        // lost. Loud log is the record (Codex review fold).
+        console.error(
+          "[cloud-failover] RECOVERY ALERT DELIVERY FAILED (circuit closed correctly):",
+          provider
+        );
+      }
     }
     return verdict;
   } catch (err) {
@@ -251,14 +281,14 @@ async function sendIncidentEmail(
   kind: IncidentKind,
   provider: string,
   detail: string
-): Promise<void> {
+): Promise<boolean> {
   if (!ALERT_EMAIL) {
     console.error(
       "[cloud-failover] CLOUD_INCIDENT_ALERT_EMAIL not configured; incident email skipped:",
       kind,
       provider
     );
-    return;
+    return false;
   }
   if (!RESEND_API_KEY) {
     console.error(
@@ -266,7 +296,7 @@ async function sendIncidentEmail(
       kind,
       provider
     );
-    return;
+    return false;
   }
   const { subject, html } = buildIncidentEmail(kind, provider, detail);
   try {
@@ -280,11 +310,14 @@ async function sendIncidentEmail(
     });
     if (!res.ok) {
       console.error(`[cloud-failover] Resend API error: ${res.status}`);
+      return false;
     }
+    return true;
   } catch (err) {
     console.error(
       "[cloud-failover] incident email send failed:",
       err instanceof Error ? err.message : "unknown"
     );
+    return false;
   }
 }

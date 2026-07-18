@@ -22,6 +22,15 @@ test("shared key is namespaced by store then identifier", () => {
   );
 });
 
+test("oversized keys stay capped AND injective via a hash suffix", () => {
+  const base = "x".repeat(200);
+  const a = sharedRateLimitKey("cloud-proxy", base + "a");
+  const b = sharedRateLimitKey("cloud-proxy", base + "b");
+  assert.ok(a.length <= 128);
+  assert.ok(b.length <= 128);
+  assert.notEqual(a, b, "prefix-sharing long keys must not collide");
+});
+
 test("flag off: shared check delegates to the in-memory limiter", async () => {
   assert.notEqual(
     process.env.CLOUD_PROXY_SHARED_RATELIMIT_ENABLED,

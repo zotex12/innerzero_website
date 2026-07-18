@@ -708,7 +708,7 @@ async function handleChargeRefunded(charge: Stripe.Charge) {
   }
   const admin = createAdminClient();
   const target = await resolveClawbackTarget(
-    stripe, admin, getCloudPlanByPriceId, charge, getSubscriptionIdFromInvoice
+    stripe, admin, getCloudPlanByPriceId, charge
   );
   const outcome = await performClawback(admin, target, charge.id, "refund");
   console.log(
@@ -731,7 +731,7 @@ async function handleDisputeCreated(dispute: Stripe.Dispute) {
   // immediately (idempotent with any earlier/later refund claw-back for
   // the same charge via the shared charge-keyed marker).
   const target = await resolveClawbackTarget(
-    stripe, admin, getCloudPlanByPriceId, charge, getSubscriptionIdFromInvoice
+    stripe, admin, getCloudPlanByPriceId, charge
   );
   const outcome = await performClawback(admin, target, charge.id, "dispute");
   console.log(

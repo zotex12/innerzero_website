@@ -40,6 +40,14 @@ test("clawback request id is charge-keyed and index-safe", () => {
 test("clawback request id never exceeds the 64-char index budget", () => {
   const id = clawbackRequestId("ch_" + "x".repeat(100));
   assert.ok(id.length <= 64);
+  assert.match(id, /^[a-zA-Z0-9_-]{1,64}$/);
+});
+
+test("oversized charge ids stay injective via a hash suffix", () => {
+  const base = "ch_" + "x".repeat(100);
+  const a = clawbackRequestId(base + "a");
+  const b = clawbackRequestId(base + "b");
+  assert.notEqual(a, b, "prefix-sharing long charge ids must not collide");
 });
 
 test("refund and dispute for the same charge share one marker", () => {

@@ -28,7 +28,11 @@ create table if not exists public.cloud_provider_health (
   provider text primary key,
   state text not null default 'closed' check (state in ('closed', 'open')),
   consecutive_failures integer not null default 0,
-  last_reason text,
+  -- Classified class:code token only, DB-enforced (Codex review fold):
+  -- even a future service-role caller cannot persist a provider body.
+  last_reason text
+    check (last_reason is null
+           or last_reason ~ '^[a-z]+:[A-Za-z0-9_.-]{1,40}$'),
   opened_at timestamptz,
   last_failure_at timestamptz,
   last_probe_at timestamptz,
@@ -46,7 +50,9 @@ create table if not exists public.cloud_fallback_events (
   user_id uuid references auth.users (id) on delete set null,
   from_provider text not null,
   to_provider text not null,
-  reason text not null,
+  -- Classified class:code token only, DB-enforced (Codex review fold).
+  reason text not null
+    check (reason ~ '^[a-z]+:[A-Za-z0-9_.-]{1,40}$'),
   created_at timestamptz not null default now()
 );
 

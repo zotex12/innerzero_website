@@ -37,6 +37,14 @@
 -- revoke_truncate_trigger_grants, revoke_rls_auto_enable_execute,
 -- harden_newsletter_and_waitlist.
 
+-- Single transaction (Codex review fold): without this, a raw `psql -f`
+-- run with the default ON_ERROR_STOP=off would report the guard's raise
+-- as an error but keep executing the later statements. Inside one
+-- transaction the raise aborts everything; no statement can land on a
+-- database where the guard fires. Every statement below is
+-- transaction-safe DDL/DML (no CONCURRENTLY).
+begin;
+
 do $$
 begin
   if exists (
@@ -44,7 +52,7 @@ begin
     where schemaname = 'public'
       and tablename in
         ('cloud_plans', 'model_tiers', 'usage_packs',
-         'usage_transactions', 'proxy_cost_log')
+         'usage_transactions', 'proxy_cost_log', 'licences')
   ) then
     raise exception
       'billing baseline already applied (a billing table exists); this file documents the live schema and must not be re-run';
@@ -698,3 +706,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS usage_packs_stripe_session_id_unique
 
 COMMENT ON COLUMN usage_packs.stripe_session_id IS
   'Stripe checkout session id that created this pack. UNIQUE via partial index to prevent double-grant on webhook retry. NULL allowed for historical packs.';
+
+-- Close the single transaction opened before the guard (Codex micro-round
+-- fold: begin without commit would roll back a successful fresh run on
+-- disconnect).
+commit;

@@ -110,11 +110,25 @@ export const LIMITS = {
 const SHARED_RATELIMIT_ENABLED =
   process.env.CLOUD_PROXY_SHARED_RATELIMIT_ENABLED === "true";
 
+// Tiny non-cryptographic hash (djb2, hex) so truncated keys stay
+// injective: two long identifiers sharing a 119-char prefix must not
+// collide into one bucket (Codex review fold).
+function shortHash(input: string): string {
+  let h = 5381;
+  for (let i = 0; i < input.length; i++) {
+    h = ((h << 5) + h + input.charCodeAt(i)) >>> 0;
+  }
+  return h.toString(16).padStart(8, "0");
+}
+
 // Exported for tests: the shared-counter key namespace. Capped so a
 // future call site with a longer identifier cannot grow unbounded rows
-// (current identifiers are store constants + a verified UUID, ~60 chars).
+// (current identifiers are store constants + a verified UUID, ~60 chars);
+// oversized keys keep a distinguishing hash suffix.
 export function sharedRateLimitKey(store: string, identifier: string): string {
-  return `${store}:${identifier}`.slice(0, 128);
+  const raw = `${store}:${identifier}`;
+  if (raw.length <= 128) return raw;
+  return `${raw.slice(0, 119)}_${shortHash(raw)}`;
 }
 
 function build429(retryAfter: number): Response {
@@ -155,12 +169,16 @@ export async function checkRateLimitShared(
       });
       if (!error && data && typeof data === "object") {
         const verdict = data as { allowed?: unknown; retry_after?: unknown };
-        if (verdict.allowed === false) {
-          const retryAfter =
-            typeof verdict.retry_after === "number" && verdict.retry_after > 0
-              ? verdict.retry_after
-              : 60;
-          return build429(retryAfter);
+        // Honour the RPC only on a FULLY well-formed verdict; any shape
+        // surprise (including allowed:false with a mangled retry_after)
+        // fails OPEN to the in-memory limiter instead of fabricating a
+        // block (Codex review fold: strict fail-open contract).
+        if (
+          verdict.allowed === false &&
+          typeof verdict.retry_after === "number" &&
+          verdict.retry_after > 0
+        ) {
+          return build429(verdict.retry_after);
         }
         if (verdict.allowed === true) return null;
       }

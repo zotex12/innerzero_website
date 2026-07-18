@@ -65,8 +65,14 @@ begin
   delete from public.rate_limit_counters
     where key = p_key
       and window_start < now() - (2 * v_window);
+  -- Global sweep at 30 days: rows do not store their own window size, so
+  -- a caller-relative threshold could let a short-window caller delete
+  -- ANOTHER key's active long-window counter (Codex micro-round fold).
+  -- 30 days is far above any sane limiter window (current presets max 1
+  -- hour; windows must stay under 15 days), and abandoned keys are still
+  -- bounded.
   delete from public.rate_limit_counters
-    where window_start < now() - interval '1 day';
+    where window_start < now() - interval '30 days';
 
   insert into public.rate_limit_counters as c (key, window_start, count)
     values (p_key, v_window_start, 1)
