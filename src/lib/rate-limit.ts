@@ -90,6 +90,7 @@ export const LIMITS = {
   accountDelete:   { limit: 3,   windowMs: 60_000, store: "account-delete" },
   cloudDeduct:     { limit: 10,  windowMs: 60_000, store: "cloud-deduct" },
   cloudProxy:      { limit: 10,  windowMs: 60_000, store: "cloud-proxy" },
+  voiceSession:    { limit: 10,  windowMs: 60_000, store: "voice-session" },
   spendingCap:     { limit: 5,   windowMs: 60_000, store: "spending-cap" },
   cloudAbuse:      { limit: 120, windowMs: 60_000, store: "cloud-abuse" },
   themeRedeem:     { limit: 5,   windowMs: 60_000, store: "theme-redeem" },
