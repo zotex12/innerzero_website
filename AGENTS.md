@@ -36,6 +36,14 @@ Rules:
 - Do not use git add -A.
 - Stage explicit paths only.
 
+MCP accounts (Supabase / Stripe / Cloudflare):
+- This machine has TWO logins per platform. This repo belongs to the Summers Solutions / InnerZero accounts.
+- Supabase: use the `supabase-summers` MCP server only. This site's project is `chdsbjydwswtshjflkva` (innerzero_website). Do not touch the "Summers Solutions" project from this repo.
+- Stripe: use the `stripe-summers` MCP server only (acct_1THpyQIcHKhxPb7A, SUMMERS SOLUTIONS LTD).
+- Cloudflare: use the "claude.ai Cloudflare Developer Platform" connector, NOT `cloudflare-axon`.
+- NEVER use the plugin `supabase` or plugin `stripe` MCP servers here. Those are logged into the Axon Neuro accounts (SW HEALTH LTD, project iqabofslusulvsaevmyq).
+- If unsure, verify BEFORE any write: Supabase list_projects must show innerzero_website; Stripe get_stripe_account_info must show SUMMERS SOLUTIONS LTD. Wrong account: STOP and report.
+
 Tool availability:
 - Preferred: Claude Code primary builder, Codex reviewer and fallback builder.
 - Claude Code only mode: use Claude Code for build and Claude review/subagents/audit templates instead of Codex.
