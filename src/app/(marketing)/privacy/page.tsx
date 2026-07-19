@@ -37,7 +37,7 @@ const FAQ_ITEMS = [
   {
     question: "Does InnerZero send data to the cloud?",
     answer:
-      "Not by default. Cloud mode is optional and off by default. If you enable it, only your current prompt and a short conversation window are sent to the AI provider. Your full memory, files, and profile are never sent.",
+      "Not by default. Cloud mode is optional and off by default. If you enable it, for text chat only your current prompt and a short conversation window are sent to the AI provider, and your full memory, files, and profile are never sent. If you use cloud voice in speech-to-speech mode or a managed voice subscription, your spoken audio is also sent to OpenAI to generate the reply.",
   },
   {
     question: "Is InnerZero GDPR compliant?",
@@ -109,7 +109,7 @@ export default function PrivacyPage() {
                     Cloud mode is optional
                   </h3>
                   <p className="text-text-secondary leading-relaxed">
-                    If you enable optional cloud mode, only your current prompt and a short conversation window are sent to the AI provider you select (such as DeepSeek, Anthropic, or OpenAI). Your full memory, files, and profile are never sent. InnerZero never stores or logs cloud prompts or responses.
+                    If you enable optional cloud mode, for text chat only your current prompt and a short conversation window are sent to the AI provider you select (such as DeepSeek, Anthropic, or OpenAI), and your full memory, files, and profile are never sent. InnerZero never stores or logs cloud prompts or responses. If you use cloud voice in speech-to-speech mode or a managed voice subscription, your spoken audio is also sent directly to OpenAI to generate the reply; see the Voice and Microphone section below.
                   </p>
                 </div>
 
@@ -150,7 +150,7 @@ export default function PrivacyPage() {
                 Privacy Policy
               </h2>
               <p className="mt-2 text-sm text-text-muted">
-                Last updated: 2026-06-01
+                Last updated: 2026-07-19
               </p>
 
               <div className="mt-6 space-y-6 text-text-secondary leading-relaxed text-sm">
@@ -242,6 +242,15 @@ export default function PrivacyPage() {
                     <li>Anthropic (Claude models): covered by Anthropic DPA</li>
                   </ul>
                   <p className="mt-2">
+                    If you use managed voice, your spoken audio is processed by an additional subprocessor for the audio itself:
+                  </p>
+                  <ul className="mt-2 list-disc pl-6 space-y-1">
+                    <li>OpenAI (Realtime voice model): processes your spoken audio during managed voice sessions. Your audio streams directly from your device to OpenAI and does not pass through our proxy server, and InnerZero does not receive or store it. Covered by OpenAI&apos;s privacy policy and API terms.</li>
+                  </ul>
+                  <p className="mt-2">
+                    Managed voice works differently from managed text. Our proxy only issues a short-lived session credential and records the session minutes used for billing, so your voice audio never reaches our servers. See Section 7 (Voice and Microphone) for details.
+                  </p>
+                  <p className="mt-2">
                     When using BYO (Bring Your Own) API keys, your prompts are sent directly to the provider from your device. InnerZero&apos;s servers are not involved.
                   </p>
                 </div>
@@ -269,7 +278,17 @@ export default function PrivacyPage() {
                     7. Voice and Microphone
                   </h3>
                   <p>
-                    If you use InnerZero&apos;s voice features, the application accesses your microphone to capture speech for local speech-to-text processing. All audio is processed locally on your device using offline speech recognition models. No audio recordings are transmitted, stored, or sent to any server. Audio data is processed in real-time and discarded immediately after transcription. If Cloud Voice mode is enabled, your transcribed text (not audio) is sent to OpenAI for response generation; see Section 3 (Cloud Mode) for details.
+                    If you use InnerZero&apos;s voice features, the application accesses your microphone to capture speech. By default, and whenever cloud voice is off, all audio is processed locally on your device using offline speech recognition models: no audio recordings are transmitted, stored, or sent to any server, and audio is discarded immediately after transcription.
+                  </p>
+                  <p className="mt-2">
+                    If you enable cloud voice, how your speech is handled depends on the mode you choose:
+                  </p>
+                  <ul className="mt-2 list-disc pl-6 space-y-1">
+                    <li>In text-in mode (including the standard and premium cloud voice options), your speech is transcribed locally first, and only the transcribed text, not your audio, is sent to OpenAI to generate a response.</li>
+                    <li>In speech-to-speech mode, and for managed voice subscriptions, your raw microphone audio is streamed directly from your device to OpenAI&apos;s Realtime service, which returns spoken audio. Your audio goes directly from your device to OpenAI; it does not pass through InnerZero&apos;s servers, and InnerZero never receives or stores it. OpenAI processes this audio as a subprocessor under its own privacy policy and API terms. For managed voice, InnerZero&apos;s server only issues a short-lived session credential and records the session minutes used for billing; it never handles your audio.</li>
+                  </ul>
+                  <p className="mt-2">
+                    Speech-to-speech voice is off by default, is blocked entirely in Offline and Private modes, and is gated behind a one-time in-app notice explaining that the Privacy Blacklist cannot scrub raw audio. See Section 4 (Cloud AI Service) for the managed subprocessor list.
                   </p>
                 </div>
 
