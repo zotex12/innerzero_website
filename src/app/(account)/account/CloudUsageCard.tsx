@@ -241,7 +241,7 @@ export function CloudUsageCard({
           <h2 className="text-lg font-semibold text-text-primary">Cloud AI</h2>
         </div>
         <p className="text-sm text-text-secondary">
-          Running on local AI. Add Cloud AI for faster responses and premium models.
+          Running on local AI. Add Cloud AI for faster responses and higher model tiers.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
           <a

@@ -446,7 +446,7 @@ export function PricingSection({ className }: PricingSectionProps) {
         setModelTiers(data.model_tiers ?? []);
       })
       .catch(() => {
-        // Silently fail; static fallback from constants will show
+        // Silently fail; the loading state renders until the fetch succeeds
       });
 
     // Check if user is logged in and has a plan
@@ -605,7 +605,7 @@ export function PricingSection({ className }: PricingSectionProps) {
                 </h2>
               </div>
               <p className="text-text-secondary">
-                Optional cloud AI for faster responses and premium models, with built-in privacy controls.
+                Optional cloud AI for faster responses and higher model tiers, with built-in privacy controls.
               </p>
               <p className="mt-2 text-sm text-text-muted">
                 Or add your own API keys for free, with zero markup.
@@ -614,7 +614,7 @@ export function PricingSection({ className }: PricingSectionProps) {
 
             <div className="mx-auto max-w-2xl mb-10 rounded-xl border border-border-default bg-bg-card p-5 text-sm text-text-secondary">
               <p>
-                Cloud AI runs on datacentre servers instead of your PC. Use it for faster answers, longer responses, or premium models like Claude, GPT, and DeepSeek. Your local InnerZero is always available without it. Cloud is fully optional, and most users do not need it.
+                Cloud AI runs on datacentre servers instead of your PC. Use it for faster answers, longer responses, or higher model tiers. Your local InnerZero is always available without it. Cloud is fully optional, and most users do not need it.
               </p>
             </div>
 
@@ -705,7 +705,7 @@ export function PricingSection({ className }: PricingSectionProps) {
 
             <div className="mx-auto max-w-3xl mt-8 text-center space-y-2">
               <p className="text-sm text-text-secondary">
-                Managed plans include DeepSeek, Google Gemini, and Anthropic Claude. Model selection is automatic based on your chosen tier.
+                Managed plans cover text chat, voice, specialist agents, and sleep from your monthly credit allowance, across model tiers from fast everyday models up to premium ones. Image vision uses your own API key. Model selection is automatic based on your chosen tier.
               </p>
               <p className="text-sm text-text-muted">
                 Want more providers? Add your own API keys for free. Supports OpenAI, xAI Grok, Qwen, Kimi, and all managed providers. Zero markup.

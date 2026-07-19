@@ -95,7 +95,7 @@ const SECTIONS: FeatureSection[] = [
       { icon: AudioLines, title: "Speech-to-text panel", desc: "A standalone transcribe panel on the Voice page. Speak and your words land in an editable box to copy or save." },
       { icon: Volume2, title: "Text-to-speech panel", desc: "Type or paste any text and Zero reads it aloud locally. Keep the model warm with a toggle, with clear loading and stop controls." },
       { icon: Timer, title: "Voice shortcuts", desc: "Ask the time, set a timer, or do quick math instantly by voice." },
-      { icon: Cloud, title: "Cloud voice (optional)", desc: "Enable OpenAI voices for premium spoken responses. 13 voice options." },
+      { icon: Cloud, title: "Cloud voice (optional)", desc: "Natural spoken responses through the cloud, included with a managed plan or your own OpenAI key." },
     ],
   },
   {

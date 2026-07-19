@@ -159,35 +159,12 @@ export const PRICING_FREE = {
   ctaHref: "/download",
 } as const;
 
-/* ── Pricing: Cloud AI plans (coming soon) ── */
+/* ── Pricing: Cloud AI plans ──
 
-export interface CloudPlan {
-  name: string;
-  price: string;
-  period: string;
-  features: string[];
-}
-
-export const CLOUD_PLANS: CloudPlan[] = [
-  {
-    name: "Cloud Starter",
-    price: "£9.99",
-    period: "/month",
-    features: ["300 credits/month", "Budget + Standard models", "Auto-routed model selection"],
-  },
-  {
-    name: "Cloud Plus",
-    price: "£19.99",
-    period: "/month",
-    features: ["800 credits/month", "All models including Premium", "Priority routing"],
-  },
-  {
-    name: "Cloud Pro",
-    price: "£39.99",
-    period: "/month",
-    features: ["2,000 credits/month", "All models including Ultra", "Priority routing"],
-  },
-];
+The live cloud plan cards (name, price, monthly usage allowance, tier access) are
+rendered from the database via /api/cloud/plans in PricingSection.tsx, so plan
+figures are never hardcoded here. A stale hardcoded CLOUD_PLANS constant used to
+live here; it was removed so it could not drift from the real plan values. */
 
 /* ── Pricing: InnerZero Pro (optional app membership, billed via Stripe) ──
 
@@ -237,7 +214,7 @@ export const FAQ_DATA: FAQItem[] = [
   {
     question: "What are cloud plans?",
     answer:
-      "Optional. If you want faster reasoning or access to premium AI models (Claude, GPT, DeepSeek), you can subscribe to a cloud plan. Your local AI always works without one.",
+      "Optional. If you want faster reasoning or higher-quality model tiers, you can subscribe to a cloud plan for a set monthly credit allowance. Your local AI always works without one.",
   },
   {
     question: "Can I use my own API keys?",
@@ -278,9 +255,14 @@ export const FAQ_DATA: FAQItem[] = [
 
 export const CLOUD_FAQ: FAQItem[] = [
   {
+    question: "What does a cloud plan include?",
+    answer:
+      "Managed plans cover text chat, voice, specialist agents, and sleep processing, all drawn from your monthly credit allowance. Image vision uses your own API key. Plans differ by how many credits you get each month and which model tiers you can use.",
+  },
+  {
     question: "What is usage?",
     answer:
-      "Each cloud AI response uses a set amount from your monthly or purchased usage. Budget models use 1 per response, premium models use more. Auto mode picks the best model and uses just 1.",
+      "Each cloud AI response uses a set amount from your monthly or purchased usage. Lower tiers use 1 per response, higher tiers use more. Auto mode picks a model for you and uses just 1. Voice is metered by the minute.",
   },
   {
     question: "What happens when usage runs out?",
