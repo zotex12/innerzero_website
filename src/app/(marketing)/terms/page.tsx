@@ -22,14 +22,7 @@ export default function TermsPage() {
           <h1 className="text-3xl font-bold text-text-primary md:text-[2.5rem] md:leading-[1.2]">
             Terms of Service
           </h1>
-          <p className="mt-2 text-sm text-text-muted">Last updated: June 2026</p>
-
-          {/* Solicitor review notice */}
-          <div className="mt-6 rounded-lg border-l-4 border-[#f59e0b] bg-[rgba(245,158,11,0.1)] p-4">
-            <p className="text-sm text-[#f59e0b]">
-              These terms are pending final solicitor review. They are provided in good faith and are legally substantive, but have not yet received formal legal sign-off.
-            </p>
-          </div>
+          <p className="mt-2 text-sm text-text-muted">Last updated: July 2026</p>
 
           <div className="mt-10 space-y-8 text-text-secondary leading-relaxed text-sm">
 
