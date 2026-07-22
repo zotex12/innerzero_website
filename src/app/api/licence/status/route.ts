@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimitShared, clientIpRateLimitId } from "@/lib/rate-limit";
 import type { StatusRequest, StatusResponse } from "@/types/licence";
 
 export async function POST(request: NextRequest) {
-  const rateLimited = checkRateLimit(request, "licence");
+  // Durable (shared) IP-keyed limiter, keyed on a pseudonymised IP. Behaviourally
+  // identical to the in-memory limiter while CLOUD_PROXY_SHARED_RATELIMIT_ENABLED
+  // is off; global cap when on.
+  const rateLimited = await checkRateLimitShared(
+    request,
+    "licence",
+    clientIpRateLimitId(request),
+  );
   if (rateLimited) return rateLimited;
 
   try {

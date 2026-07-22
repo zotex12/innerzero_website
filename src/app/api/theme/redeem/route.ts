@@ -2,7 +2,7 @@ import { createHash } from "crypto";
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimitShared, clientIpRateLimitId } from "@/lib/rate-limit";
 
 interface RedeemBody {
   code: string;
@@ -10,7 +10,14 @@ interface RedeemBody {
 }
 
 export async function POST(request: Request) {
-  const rateLimited = checkRateLimit(request, "themeRedeem");
+  // Durable (shared) IP-keyed limiter, keyed on a pseudonymised IP. Behaviourally
+  // identical to the in-memory limiter while CLOUD_PROXY_SHARED_RATELIMIT_ENABLED
+  // is off; global cap when on.
+  const rateLimited = await checkRateLimitShared(
+    request,
+    "themeRedeem",
+    clientIpRateLimitId(request),
+  );
   if (rateLimited) return rateLimited;
 
   let body: RedeemBody;

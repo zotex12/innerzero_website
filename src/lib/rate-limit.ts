@@ -5,6 +5,8 @@
  * own configured window, so it never evicts entries inside an active window.
  */
 
+import { createHmac } from "node:crypto";
+
 const stores = new Map<string, Map<string, number[]>>();
 // Largest window (ms) seen per store, used by cleanup so a long window (for
 // example the 1 hour newsletter limit) is not reset early by a fixed threshold.
@@ -71,13 +73,73 @@ export function rateLimit(
   return { success: true, remaining: limit - recent.length, retryAfter: 0 };
 }
 
-/** Extract client IP from request headers. */
+/**
+ * Extract the client IP from a PLATFORM-TRUSTED signal.
+ *
+ * The client can set x-forwarded-for freely, so its leftmost token is the most
+ * attacker-influenceable value in the request and must never key a security
+ * decision (rate limit, abuse counter). Derivation order, most-trusted first:
+ *   1. x-vercel-forwarded-for  - written by Vercel's edge at ingress; the
+ *      platform overwrites any client-supplied value, so it is trustworthy.
+ *   2. x-real-ip               - single-IP header set by the trusted proxy.
+ *   3. x-forwarded-for RIGHTMOST hop - the value appended closest to our
+ *      server (by the trusted proxy), not the leftmost client-controlled one.
+ *   4. "unknown"               - safe fallback; buckets all header-less callers
+ *      together rather than trusting a spoofable field.
+ *
+ * On standard Vercel ingress (1) is present and the platform overwrites XFF, so
+ * spoofing is already prevented; (3) is only a defence-in-depth fallback for
+ * non-Vercel/edge-misconfigured paths. The rightmost hop is not a universal
+ * trust guarantee (if the entire header is attacker-set, every token is), but
+ * it is strictly better than the leftmost token as a rate-limit key: it groups
+ * more coarsely and can never be spoofed to a fresh per-request bucket. When no
+ * trusted header is present at all we return "unknown" rather than infer trust.
+ */
 export function getClientIp(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0].trim();
+  const vercel = request.headers.get("x-vercel-forwarded-for");
+  if (vercel) {
+    // Vercel sets a single client IP here; split defensively in case an
+    // upstream ever appends, and take the first (Vercel-authored) token.
+    const ip = vercel.split(",")[0].trim();
+    if (ip) return ip;
+  }
+
   const real = request.headers.get("x-real-ip");
-  if (real) return real.trim();
+  if (real) {
+    const ip = real.trim();
+    if (ip) return ip;
+  }
+
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const hops = forwarded.split(",").map((h) => h.trim()).filter(Boolean);
+    if (hops.length > 0) return hops[hops.length - 1];
+  }
+
   return "unknown";
+}
+
+// Pseudonymised client-IP rate-limit identifier.
+//
+// The durable (shared) limiter persists its key in Postgres (migration 008).
+// For IP-keyed routes that would mean storing a raw client IP as a row key, so
+// we key on an HMAC of the IP instead: the database never sees the raw address,
+// only a salted digest. Per-IP bucketing is unchanged (distinct IPs -> distinct
+// digests; HMAC-SHA256 collisions are not a practical concern), so the in-memory
+// (flag-off) rate-limiting outcome is behaviourally identical to keying on the
+// raw IP. The secret comes from RATE_LIMIT_IP_HASH_SECRET; the durable limiter
+// only runs in production where that secret is set, so the dev fallback salt is
+// never used to persist anything.
+const IP_HASH_SECRET =
+  process.env.RATE_LIMIT_IP_HASH_SECRET || "innerzero-dev-ratelimit-ip-salt";
+
+export function clientIpRateLimitId(request: Request): string {
+  const ip = getClientIp(request);
+  const digest = createHmac("sha256", IP_HASH_SECRET)
+    .update(ip)
+    .digest("hex")
+    .slice(0, 24);
+  return `ip:${digest}`;
 }
 
 /** Preset rate limiters for common endpoint types. */
@@ -100,6 +162,9 @@ export const LIMITS = {
   usageHistory:    { limit: 120, windowMs: 60_000, store: "usage-history" },
   newsletter:      { limit: 3,   windowMs: 3_600_000, store: "newsletter" },
   unsubscribe:     { limit: 10,  windowMs: 60_000, store: "unsubscribe" },
+  // Unauthenticated browser-driven CSP violation reports. Capped per IP so a
+  // report flood cannot drive unbounded log/compute cost.
+  cspReport:       { limit: 30,  windowMs: 60_000, store: "csp-report" },
 } as const;
 
 // ── B5: shared per-user limiter (2026-07-18) ──────────────────────────

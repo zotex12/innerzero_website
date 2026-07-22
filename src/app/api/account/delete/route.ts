@@ -1,12 +1,19 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimitShared, clientIpRateLimitId } from "@/lib/rate-limit";
 import { stripe } from "@/lib/stripe-server";
 import { shouldCancelSubStatus } from "@/lib/refund-clawback";
 
 export async function POST(request: Request) {
-  const rateLimited = checkRateLimit(request, "accountDelete");
+  // Durable (shared) IP-keyed limiter, keyed on a pseudonymised IP. Behaviourally
+  // identical to the in-memory limiter while CLOUD_PROXY_SHARED_RATELIMIT_ENABLED
+  // is off; global cap when on.
+  const rateLimited = await checkRateLimitShared(
+    request,
+    "accountDelete",
+    clientIpRateLimitId(request),
+  );
   if (rateLimited) return rateLimited;
 
   const supabase = await createClient();

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimitShared, clientIpRateLimitId } from "@/lib/rate-limit";
 
 // POST /api/newsletter/subscribe
 //
@@ -86,8 +86,14 @@ async function verifyTurnstile(token: string): Promise<boolean> {
 }
 
 export async function POST(request: Request) {
-  // 1. Rate limit (3 / hour / IP). Returns a 429 Response or null.
-  const limited = checkRateLimit(request, "newsletter");
+  // 1. Rate limit (3 / hour / IP). Durable (shared) limiter keyed on a
+  // pseudonymised IP: behaviourally identical to the in-memory limiter while
+  // CLOUD_PROXY_SHARED_RATELIMIT_ENABLED is off; global cap when on.
+  const limited = await checkRateLimitShared(
+    request,
+    "newsletter",
+    clientIpRateLimitId(request),
+  );
   if (limited) return limited;
 
   // 2. Body parse.
