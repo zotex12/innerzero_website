@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDesktopUser } from "@/lib/auth-desktop";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function GET(request: Request) {
+  // Coarse pre-auth IP guard so the auth verification below cannot be flooded.
+  const rateLimited = checkRateLimit(request, "cloudBalance");
+  if (rateLimited) return rateLimited;
+
   const auth = await getDesktopUser(request);
   if ("error" in auth) return auth.error;
 

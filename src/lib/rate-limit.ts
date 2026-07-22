@@ -82,7 +82,6 @@ export function getClientIp(request: Request): string {
 
 /** Preset rate limiters for common endpoint types. */
 export const LIMITS = {
-  waitlist:        { limit: 5,   windowMs: 60_000, store: "waitlist" },
   stripeCheckout:  { limit: 10,  windowMs: 60_000, store: "stripe-checkout" },
   stripePortal:    { limit: 10,  windowMs: 60_000, store: "stripe-portal" },
   stripeWebhook:   { limit: 100, windowMs: 60_000, store: "stripe-webhook" },
@@ -94,6 +93,11 @@ export const LIMITS = {
   spendingCap:     { limit: 5,   windowMs: 60_000, store: "spending-cap" },
   cloudAbuse:      { limit: 120, windowMs: 60_000, store: "cloud-abuse" },
   themeRedeem:     { limit: 5,   windowMs: 60_000, store: "theme-redeem" },
+  // Read-only, desktop-polled endpoints. Deliberately high: the guard exists
+  // to cap unauthenticated flooding of the auth verification, not to throttle
+  // normal polling.
+  cloudBalance:    { limit: 240, windowMs: 60_000, store: "cloud-balance" },
+  usageHistory:    { limit: 120, windowMs: 60_000, store: "usage-history" },
   newsletter:      { limit: 3,   windowMs: 3_600_000, store: "newsletter" },
   unsubscribe:     { limit: 10,  windowMs: 60_000, store: "unsubscribe" },
 } as const;

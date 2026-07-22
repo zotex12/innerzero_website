@@ -996,9 +996,12 @@ export async function POST(request: Request) {
   // Non-production envs (dev + Vercel preview) include the truncated error
   // message so local/preview clients can diagnose without Vercel log access.
   // Production responses stay clean.
+  // Local dev only by default. Vercel sets NODE_ENV=production on BOTH preview
+  // and production, so preview deployments (publicly reachable) no longer echo
+  // internal error detail; set CLOUD_PROXY_DEBUG_ERRORS=true to opt a preview in.
   const includeDebug =
     process.env.NODE_ENV !== "production" ||
-    process.env.VERCEL_ENV === "preview";
+    process.env.CLOUD_PROXY_DEBUG_ERRORS === "true";
   return NextResponse.json(
     {
       error: "provider_error",

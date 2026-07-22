@@ -62,63 +62,66 @@ export async function POST(request: Request) {
 
   const admin = createAdminClient();
 
-  // Hash the code
+  // Hash the code before use; only the hash is ever stored or queried.
   const codeHash = createHash("sha256").update(body.code).digest("hex");
 
-  // Look up theme_codes by code_hash
-  const { data: themeCode } = await admin
-    .from("theme_codes")
-    .select("id, theme_id, label, max_uses, uses, expires_at")
-    .eq("code_hash", codeHash)
-    .single();
-
-  if (!themeCode) {
-    return NextResponse.json({ error: "Invalid code." }, { status: 404 });
-  }
-
-  // Check expiry
-  if (themeCode.expires_at && new Date(themeCode.expires_at) < new Date()) {
-    return NextResponse.json({ error: "Code expired." }, { status: 410 });
-  }
-
-  // Check max uses
-  if (themeCode.uses >= themeCode.max_uses) {
-    return NextResponse.json({ error: "Code fully redeemed." }, { status: 410 });
-  }
-
-  // Check if device already redeemed this code
-  const { data: existing } = await admin
-    .from("theme_redemptions")
-    .select("id")
-    .eq("code_id", themeCode.id)
-    .eq("device_fingerprint", body.device_fingerprint)
-    .single();
-
-  if (existing) {
-    return NextResponse.json({
-      error: "Already redeemed on this device.",
-      theme_id: themeCode.theme_id,
-      label: themeCode.label,
-      unlocked: true,
-    }, { status: 409 });
-  }
-
-  // Insert redemption
-  await admin.from("theme_redemptions").insert({
-    code_id: themeCode.id,
-    user_id: userId,
-    device_fingerprint: body.device_fingerprint,
+  // Atomic redeem (migration 013). The RPC takes the theme_codes row FOR UPDATE
+  // so concurrent redeems of the same code serialise and the uses check +
+  // increment cannot race past max_uses. Cast mirrors the shared-rate-limit rpc
+  // pattern because this function is newer than the generated Supabase types.
+  const adminRpc = admin as unknown as {
+    rpc: (
+      fn: string,
+      args: Record<string, unknown>
+    ) => PromiseLike<{
+      data: unknown;
+      error: { code?: string; message: string } | null;
+    }>;
+  };
+  const { data, error } = await adminRpc.rpc("redeem_theme_code", {
+    p_code_hash: codeHash,
+    p_device_fingerprint: body.device_fingerprint,
+    p_user_id: userId,
   });
 
-  // Increment uses
-  await admin
-    .from("theme_codes")
-    .update({ uses: themeCode.uses + 1 })
-    .eq("id", themeCode.id);
+  if (error) {
+    console.error("[theme-redeem] rpc failed", {
+      code: error.code,
+      message: error.message,
+    });
+    return NextResponse.json({ error: "Redemption failed." }, { status: 500 });
+  }
 
-  return NextResponse.json({
-    theme_id: themeCode.theme_id,
-    label: themeCode.label,
-    unlocked: true,
-  });
+  const verdict = (data ?? {}) as {
+    status?: string;
+    theme_id?: string;
+    label?: string;
+  };
+
+  switch (verdict.status) {
+    case "invalid":
+      return NextResponse.json({ error: "Invalid code." }, { status: 404 });
+    case "expired":
+      return NextResponse.json({ error: "Code expired." }, { status: 410 });
+    case "exhausted":
+      return NextResponse.json({ error: "Code fully redeemed." }, { status: 410 });
+    case "already_redeemed":
+      return NextResponse.json(
+        {
+          error: "Already redeemed on this device.",
+          theme_id: verdict.theme_id,
+          label: verdict.label,
+          unlocked: true,
+        },
+        { status: 409 }
+      );
+    case "redeemed":
+      return NextResponse.json({
+        theme_id: verdict.theme_id,
+        label: verdict.label,
+        unlocked: true,
+      });
+    default:
+      return NextResponse.json({ error: "Redemption failed." }, { status: 500 });
+  }
 }

@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
 
 export async function GET(request: Request) {
+  // Coarse pre-auth IP guard so the auth verification below cannot be flooded.
+  const rateLimited = checkRateLimit(request, "usageHistory");
+  if (rateLimited) return rateLimited;
+
   const supabase = await createClient();
   const {
     data: { user },
