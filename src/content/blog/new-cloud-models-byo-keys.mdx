@@ -1,0 +1,92 @@
+---
+title: "The New Cloud Models You Can Use in InnerZero With Your Own Key"
+description: "InnerZero's bring your own key catalogue now covers the current flagship models from OpenAI, Anthropic, Google, xAI, Qwen, Kimi, and DeepSeek. Here is what was added, how to connect your key, and why there is no markup."
+date: "2026-07-22"
+author: "Louie"
+authorRole: "Founder"
+slug: "new-cloud-models-byo-keys"
+tags: ["cloud ai", "features", "announcement"]
+readingTime: "7 min read"
+featured: false
+---
+
+> **Quick summary**
+>
+> - InnerZero refreshed its bring your own key cloud catalogue with the current flagship and tier models from every supported provider.
+> - New additions include OpenAI GPT-5.6 and GPT-5.5, Anthropic Claude Opus 4.8, Sonnet 5 and Fable 5, Google Gemini 3.5 Flash and 3.1 Pro, Qwen 3.7 Max and Plus, xAI Grok 4.5 and 4.3, Kimi K3, and DeepSeek V4 Pro.
+> - You add your own API key and pay the provider directly. InnerZero adds no markup and never stores your key on a server.
+> - Cloud is optional and off by default. Local models on your own machine are still the default way InnerZero runs.
+
+InnerZero runs on your own machine by default, with open models and no account. That has not changed and it is not going to. What has changed is the cloud side: if you already pay for an API key from a provider, InnerZero now lets you point it at the current top models rather than last year's.
+
+This post lists exactly what was added, explains how bring your own key works, and covers the one question everyone asks, which is whether there is a markup.
+
+## Which new cloud models can I use in InnerZero?
+
+The catalogue now includes the current flagship and tier models from all seven supported providers. Here is what landed in this refresh, grouped by provider.
+
+| Provider | New models added | How you access them |
+|---|---|---|
+| OpenAI | GPT-5.6 (sol, terra, luna) and GPT-5.5 | Your own key |
+| Anthropic | Claude Opus 4.8, Sonnet 5, Fable 5 | Your own key or a managed plan |
+| Google | Gemini 3.5 Flash, 3.1 Flash-Lite, 3.1 Pro | Your own key or a managed plan |
+| Qwen | Qwen 3.7 Max and 3.7 Plus | Your own key |
+| xAI | Grok 4.5 and Grok 4.3 | Your own key |
+| Kimi | K3, K2.6, K2.7 Code | Your own key |
+| DeepSeek | V4 Pro | Your own key or a managed plan |
+
+Two housekeeping notes came with the refresh. The older xAI Grok model ids that no longer exist upstream were removed, so the list only offers models you can actually call. And the OpenAI reasoning models are now handled correctly: a fix in this release means GPT-5 and the o-series work for both the first warm up and normal chat, where before they returned an error. Your existing GPT-4o and GPT-4.1 keys were never affected and keep working.
+
+Model names move fast, so treat any specific list as a snapshot. The current set always lives on the [supported models](/models) page, which is the reference I keep up to date.
+
+## What does "bring your own key" mean?
+
+Bring your own key means you use an API key you already hold with a provider, and InnerZero talks to that provider on your behalf using your key. You are the account holder, you see the usage on your own provider dashboard, and you pay the provider directly at their published rates.
+
+InnerZero adds nothing on top. There is no per-message fee, no subscription tax, and no reselling of tokens. This is the difference I wrote about in [cloud credits versus bring your own keys](/blog/cloud-credits-vs-byo-keys): a credit system marks the cost up so the middle layer makes money, while a bring your own key setup just passes your prompt through. InnerZero is the second kind.
+
+Your key is stored encrypted on your own machine and is never uploaded to any InnerZero server. When you send a message to a cloud model, only that message and the context it needs go to the provider. Your memory database, your files, and your past conversations stay local. This is the same boundary described in [local AI versus cloud AI](/blog/local-ai-vs-cloud-ai): cloud mode is a deliberate, per-message reach out, not a pipe that mirrors everything you do.
+
+## How do I add my own API key?
+
+Open Settings and go to the AI and Models tab. There is a section for cloud API keys where you paste the key for each provider you want to use. Once a key is saved, its models become selectable and you can switch to them for a conversation.
+
+You only need keys for the providers you actually want. If you only use Anthropic, add one Anthropic key and ignore the rest. Nothing about the local experience changes, and you can remove a key at any time. For a walkthrough of connecting a specific provider, [using Claude Opus with your own keys](/blog/claude-opus-4-7-byo-keys) covers the flow end to end, and it applies to the newer Claude models in this refresh too.
+
+## Do I have to use cloud models at all?
+
+No. Cloud mode is optional and off until you turn it on. InnerZero is built to run entirely on your own hardware with local open models, and for most everyday use that is all you need.
+
+The reason cloud support exists at all is choice. Local models are private, free, and offline, but the very largest frontier models still live in the cloud. If you have a hard task and you already pay for a top model, it makes sense to let InnerZero use it rather than forcing you to leave the app. When the task is done, you switch back to local and nothing has leaked in the meantime. If you want the full picture of what runs on your machine without any key at all, [what models does InnerZero use](/blog/what-models-does-innerzero-use) covers the local side.
+
+## Why refresh the whole catalogue at once?
+
+Because a stale model list is quietly worse than no list. If InnerZero offered you a model that a provider had renamed or retired, your key would fail and it would look like the app was broken when the real problem was an out of date entry. Refreshing the whole set keeps every option in the list a model you can actually call today.
+
+It also means you get the current quality tier for the same key you already hold. A flagship from this year reasons better and follows instructions more closely than the one it replaced, at no extra setup on your side. You paste the same key, pick the newer model, and carry on.
+
+## Frequently asked questions
+
+### Does InnerZero charge extra for cloud models?
+
+No. With bring your own key, you pay your provider directly at their rates and InnerZero adds no markup. You hold the account and see the usage on the provider's own dashboard.
+
+### Where is my API key stored?
+
+Your key is stored encrypted on your own machine. It is never uploaded to an InnerZero server. Only the message you send and its context reach the provider, using your key.
+
+### Which cloud providers does InnerZero support?
+
+Seven: OpenAI, Anthropic, Google, xAI, Qwen, Kimi, and DeepSeek. You add a key only for the providers you want to use, and the current model list for each lives on the supported models page.
+
+### Do the new models work with GPT-5 and o-series keys?
+
+Yes. This release fixed a problem where GPT-5 and o-series models returned an error on warm up and chat. They now work normally, and GPT-4o and GPT-4.1 keys were unaffected throughout.
+
+### Do I need a cloud key to use InnerZero?
+
+No. InnerZero runs on local models on your own machine by default, with no account and no key. Cloud mode is an optional extra for people who already pay for a provider and want to use it.
+
+### Will the model list change again?
+
+Yes, as providers ship and retire models. The supported models page is kept current, so check there for the live list rather than relying on any single snapshot.

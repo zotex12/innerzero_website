@@ -1,0 +1,91 @@
+---
+title: "A Smoother InnerZero: Why v0.1.9 Rebuilt the Foundations"
+description: "InnerZero v0.1.9 spent most of its effort under the hood, restructuring the code and fixing rendering, caching, and layout problems. Here is what changed and why a foundations release makes the app feel better to use."
+date: "2026-07-22"
+author: "Louie"
+authorRole: "Founder"
+slug: "smoother-faster-innerzero-foundations"
+tags: ["innerzero", "announcement", "features"]
+readingTime: "7 min read"
+featured: false
+---
+
+> **Quick summary**
+>
+> - InnerZero v0.1.9 was mostly a foundations release. I restructured large parts of the code into smaller, focused pieces.
+> - It also fixed real problems you could feel: a stale cache that hid updates, a cramped layout on small screens, and a first run that could hang on a stalled download.
+> - The result is an app that feels smoother and more responsive, and a much cleaner base for the features that come next.
+> - I am not going to quote you a made up percentage. This post says exactly what changed instead.
+
+Not every release is about new features. Some of the most useful work happens under the hood, where you never see the code but you feel the result. InnerZero v0.1.9 was one of those releases. I spent most of it rebuilding foundations and fixing the kind of rough edges that make an app feel heavier than it should.
+
+This post is a plain account of what changed, why it matters, and what it means for the app you actually use.
+
+## Why spend a release on foundations instead of features?
+
+Because an app is only as good as the code underneath it, and after a year of fast feature work, parts of that code had grown into large, tangled files that were slow to change safely.
+
+When a file gets too big, every new feature is riskier to add and every bug is harder to find. You start moving slower, and the app starts picking up small glitches that are hard to trace. The honest fix is not to keep piling on top. It is to stop, break the big pieces into smaller focused ones, and put the foundations back in order. That is most of what v0.1.9 did.
+
+I have written before about [why I built InnerZero](/blog/why-we-built-innerzero) the way I did. The same thinking applies here: a private assistant that lives on your machine has to be dependable, and dependability comes from clean foundations, not from features bolted onto a shaky base.
+
+## What actually changed under the hood?
+
+I took several of the largest, most heavily used parts of the app and split them into smaller, self contained modules. Same behaviour, cleaner structure. Nothing about how you use the app changed, but the code behind the chat view, the settings, and the background processing is now organised so that a change in one place cannot quietly break another.
+
+I am keeping this deliberately general, because the interesting details are internal plumbing and not the sort of thing that helps you as a user. The point is the outcome: smaller pieces are faster to reason about, easier to test, and much harder to break by accident. That translates directly into fewer regressions in the releases that follow this one.
+
+## Is the app actually faster now?
+
+The honest answer is that it feels smoother and more responsive, and I would rather tell you what specifically changed than quote a benchmark I made up. A single "it is X percent faster" number would be marketing, not truth, because the real gains came from fixing specific problems rather than one magic speed switch.
+
+Here are the changes you can actually feel.
+
+| The problem | What it felt like | What changed in v0.1.9 |
+|---|---|---|
+| Stale interface cache | Fixes and updates sometimes did not appear until much later | The app now serves a fresh interface, so an update shows up the moment you restart |
+| Fixed layout | The app looked cramped on small laptops and at higher zoom | The whole shell now adapts to your screen size and scaling |
+| Stalled first run | A dropped connection during setup could hang the first launch | A stalled model download now fails into the retry screen instead of freezing |
+| Interface flicker | Brief flashes when the app warmed up or first drew the screen | Those render paths were cleaned up so the interface settles quietly |
+
+None of these are glamorous. All of them are the difference between an app that feels solid and one that feels slightly off.
+
+## Which visible problems did this fix?
+
+The biggest one was a caching problem that could hide updates entirely. The app draws its interface from a small local server, and the display layer was holding on to an old copy across restarts. That meant a fix I shipped, even one delivered by the auto updater, could stay invisible on your machine until the cache cleared itself. If you ever updated InnerZero and wondered why nothing looked different, this was very likely the reason. It is fixed now, so what you download is what you see.
+
+The second was layout. The app was built with fixed sizes that assumed a large screen, so on a smaller laptop, or at a higher display scaling, the side panel ate too much width and everything felt tight. The shell now responds to the space it actually has, which makes InnerZero far more comfortable on modest hardware. That fits the wider goal of running well on the machine you already own, which is also the theme of [running AI on your own PC](/blog/run-ai-on-your-pc) and [choosing hardware for local AI](/blog/hardware-for-local-ai).
+
+The third was reliability during setup. A stalled network connection while a model was downloading could leave the first launch hanging with no way forward. Now a stall is caught and handed to the retry screen that was already there, so setup can recover instead of sitting frozen.
+
+## What does this mean for future updates?
+
+It means the next features arrive faster and with fewer surprises. A codebase in smaller, well ordered pieces is one where I can add something without holding my breath, and where a bug has fewer places to hide. The work in v0.1.9 does not show up as a shiny new button, but you will feel it in every release after it.
+
+That is the quiet trade a foundations release makes. You give up a headline feature now to get a steadier, quicker stream of them later. For an app that one person maintains, and that you rely on to run privately on your own machine, that is a trade worth making. If you want to see what the app can already do while those next features land, [things you can do with InnerZero](/blog/things-you-can-do-with-innerzero) is a good tour.
+
+## Frequently asked questions
+
+### Did InnerZero get faster in v0.1.9?
+
+It feels smoother and more responsive. The gains came from fixing specific problems, a stale interface cache, a fixed layout, and a first run that could hang, rather than a single speed setting, so the honest description is smoother rather than a benchmark number.
+
+### Why did some past updates seem to change nothing?
+
+A caching problem was holding on to an old copy of the interface across restarts, so a fix could stay invisible until the cache cleared. That is fixed in v0.1.9, so updates now appear as soon as you restart.
+
+### Does InnerZero work better on small laptops now?
+
+Yes. The layout used to assume a large screen and looked cramped on smaller ones or at higher zoom. The shell now adapts to your screen size and scaling, so it fits modest displays properly.
+
+### Will a dropped connection still hang the first launch?
+
+No. A stalled model download during setup now fails into the existing retry screen instead of freezing, so the first run can recover on its own.
+
+### Are there new features in v0.1.9?
+
+The headline items were a refreshed cloud model catalogue and a fix for bring your own OpenAI keys, but most of the release was foundations work. See the changelog for the full list.
+
+### Why release foundations work instead of features?
+
+Because clean foundations keep the app dependable and let new features ship faster and more safely afterwards. Piling features on a tangled base slows everything down and introduces bugs, so it was the right moment to rebuild.

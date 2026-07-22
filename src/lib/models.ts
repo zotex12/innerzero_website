@@ -12,7 +12,7 @@
 // one of those drifts faster than we can update it. The linked provider
 // pricing pages are the only pricing source of truth for readers.
 
-export const lastReviewed = "2026-04-19";
+export const lastReviewed = "2026-07-22";
 
 // ── Local models ─────────────────────────────────────────────────────────
 
@@ -144,6 +144,10 @@ export const CLOUD_MODELS: CloudModel[] = [
   cloud("DeepSeek", "deepseek-reasoner", "DeepSeek R1"),
 
   // OpenAI (BYO only)
+  cloud("OpenAI", "gpt-5.6-sol", "GPT-5.6 Sol"),
+  cloud("OpenAI", "gpt-5.6-terra", "GPT-5.6 Terra"),
+  cloud("OpenAI", "gpt-5.6-luna", "GPT-5.6 Luna"),
+  cloud("OpenAI", "gpt-5.5", "GPT-5.5"),
   cloud("OpenAI", "gpt-5.4", "GPT-5.4"),
   cloud("OpenAI", "gpt-5.4-mini", "GPT-5.4 Mini"),
   cloud("OpenAI", "gpt-4.1", "GPT-4.1"),
@@ -164,20 +168,22 @@ export const CLOUD_MODELS: CloudModel[] = [
   cloud("Google", "gemini-2.5-pro", "Gemini 2.5 Pro"),
 
   // Qwen (BYO only)
+  cloud("Qwen", "qwen3.7-max", "Qwen 3.7 Max"),
+  cloud("Qwen", "qwen3.7-plus", "Qwen 3.7 Plus"),
   cloud("Qwen", "qwen-max", "Qwen Max"),
   cloud("Qwen", "qwen-plus", "Qwen Plus"),
   cloud("Qwen", "qwen-turbo", "Qwen Turbo"),
   cloud("Qwen", "qwen3-coder-plus", "Qwen3 Coder Plus"),
 
-  // xAI (BYO only)
-  cloud("xAI", "grok-4.20-reasoning", "Grok 4.20 Reasoning"),
-  cloud("xAI", "grok-4.20-non-reasoning", "Grok 4.20"),
-  cloud("xAI", "grok-4-1-fast-reasoning", "Grok 4.1 Fast Reasoning"),
-  cloud("xAI", "grok-4-1-fast-non-reasoning", "Grok 4.1 Fast"),
-  cloud("xAI", "grok-4", "Grok 4"),
-  cloud("xAI", "grok-3", "Grok 3"),
+  // xAI (BYO only). Older grok-4.20 / grok-4-1-fast / grok-4 / grok-3 ids
+  // were retired upstream and removed from the desktop catalogue in v0.1.9.
+  cloud("xAI", "grok-4.5", "Grok 4.5"),
+  cloud("xAI", "grok-4.3", "Grok 4.3"),
 
   // Kimi / Moonshot (BYO only)
+  cloud("Kimi", "kimi-k3", "Kimi K3"),
+  cloud("Kimi", "kimi-k2.6", "Kimi K2.6"),
+  cloud("Kimi", "kimi-k2.7-code", "Kimi K2.7 Code"),
   cloud("Kimi", "kimi-k2.5", "Kimi K2.5"),
 ];
 
