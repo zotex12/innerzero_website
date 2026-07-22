@@ -321,7 +321,7 @@ export default function PrivacyPage() {
                     8. What Data the Website Collects
                   </h3>
                   <p>
-                    When you create an account on innerzero.com, we collect your email address. If you join our waitlist, we store your email address. Payment information for InnerZero Pro, cloud plans, and Business Licences is processed by Stripe, and payment information for one-off donations is processed by Ko-fi and PayPal; we never receive or store your payment card details.
+                    When you create an account on innerzero.com, we collect your email address. Payment information for InnerZero Pro, cloud plans, and Business Licences is processed by Stripe, and payment information for one-off donations is processed by Ko-fi and PayPal; we never receive or store your payment card details.
                   </p>
                 </div>
 
@@ -416,7 +416,7 @@ export default function PrivacyPage() {
                     11. Data Retention and Deletion
                   </h3>
                   <p>
-                    All desktop data is stored locally on your machine and can be deleted at any time by you. Account data (email address) is retained for as long as your account is active. Waitlist data is retained until the waitlist is no longer needed, after which it will be deleted. You can permanently delete your account and all associated data at any time from your{" "}
+                    All desktop data is stored locally on your machine and can be deleted at any time by you. Account data (email address) is retained for as long as your account is active. You can permanently delete your account and all associated data at any time from your{" "}
                     <Link href="/account/settings" className="text-accent-gold hover:text-accent-gold-hover transition-colors">account settings page</Link>.
                   </p>
                 </div>

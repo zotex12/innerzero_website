@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDesktopUser } from "@/lib/auth-desktop";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkRateLimitShared, getClientIp } from "@/lib/rate-limit";
 
 export async function GET(request: Request) {
-  // Coarse pre-auth IP guard so the auth verification below cannot be flooded.
-  const rateLimited = checkRateLimit(request, "cloudBalance");
+  // Pre-auth IP guard so the auth verification below cannot be flooded. Uses the
+  // shared Postgres-backed counter when CLOUD_PROXY_SHARED_RATELIMIT_ENABLED is
+  // on (a global cap across serverless instances); fails open to the in-memory
+  // limiter otherwise. An edge rate-limit rule is the stronger DoS control.
+  const rateLimited = await checkRateLimitShared(
+    request, "cloudBalance", `ip:${getClientIp(request)}`
+  );
   if (rateLimited) return rateLimited;
 
   const auth = await getDesktopUser(request);
