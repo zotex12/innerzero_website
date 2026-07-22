@@ -507,7 +507,7 @@ If you use InnerZero's voice features, the application accesses your microphone 
 
 ## What the website collects
 
-When you create an account on innerzero.com, we collect your email address. If you join the waitlist, we store your email address. Payment information for InnerZero Pro, cloud plans, and Business Licences is processed by Stripe, and payment information for one-off donations is processed by Ko-fi and PayPal; we never receive or store your payment card details.
+When you create an account on innerzero.com, we collect your email address. Payment information for InnerZero Pro, cloud plans, and Business Licences is processed by Stripe, and payment information for one-off donations is processed by Ko-fi and PayPal; we never receive or store your payment card details.
 
 ## Cookies
 

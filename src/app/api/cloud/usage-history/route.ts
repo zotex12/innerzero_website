@@ -1,19 +1,18 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { checkRateLimitShared, getClientIp } from "@/lib/rate-limit";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
 
 export async function GET(request: Request) {
-  // Pre-auth IP guard so the auth verification below cannot be flooded. Uses the
-  // shared Postgres-backed counter when CLOUD_PROXY_SHARED_RATELIMIT_ENABLED is
-  // on (a global cap across serverless instances); fails open to the in-memory
-  // limiter otherwise. An edge rate-limit rule is the stronger DoS control.
-  const rateLimited = await checkRateLimitShared(
-    request, "usageHistory", `ip:${getClientIp(request)}`
-  );
+  // Cheap in-memory pre-auth IP guard: caps a flood BEFORE the auth verification,
+  // and deliberately NOT the shared/DB limiter here - a Postgres write on the
+  // unauthenticated path would let a flood hammer the same database auth and
+  // billing rely on. Global capping across instances is an edge / firewall
+  // rate-limit rule (infra), not this guard.
+  const rateLimited = checkRateLimit(request, "usageHistory");
   if (rateLimited) return rateLimited;
 
   const supabase = await createClient();

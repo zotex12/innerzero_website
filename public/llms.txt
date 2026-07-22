@@ -164,7 +164,6 @@ InnerZero is a private AI assistant desktop application. It provides:
 
 ## Optional
 
-- [Waitlist](https://innerzero.com/waitlist): Early-access list for upcoming features.
 - [Login](https://innerzero.com/login): Cloud subscription account login. Not required for the desktop app.
 - [Register](https://innerzero.com/register): Create an account for cloud plans or InnerZero Pro.
 - [Forgot password](https://innerzero.com/forgot-password): Password reset for cloud accounts.
