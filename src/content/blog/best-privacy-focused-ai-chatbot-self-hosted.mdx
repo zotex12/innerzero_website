@@ -38,6 +38,7 @@ Most popular options give you the model on your machine. The differences show up
 | Raw Ollama | Easy if you like terminals | None | None | Local-only inference, no UI to leak from |
 | LM Studio | Moderate, model picker is technical | None built-in | None | Local inference, optional telemetry |
 | Jan | Easy | Limited (per-thread context only) | None | Local-first, optional cloud features clearly flagged |
+| Open WebUI on Ollama | Moderate, sits on top of Ollama | Plugin attempts, wired together yourself | Optional, wired together yourself | Local-first on your Ollama backend |
 | InnerZero | Easy, auto setup wizard | Persistent SQLite database on your disk | Yes, faster-whisper + Kokoro + Silero | Default offline, cloud only opt-in |
 
 Raw Ollama is the most surgically private option because it has no UI to forget about. It also has no memory, no voice, no tools. It is a model runtime, not an assistant. LM Studio adds a polished chat UI and a developer-grade local API server but stops short of memory or voice. Jan is a clean local-first chat client that has improved a lot in the last year, with optional cloud add-ons that are clearly labelled. InnerZero is what happens when you assume someone wants the assistant features that the others stop short of providing.

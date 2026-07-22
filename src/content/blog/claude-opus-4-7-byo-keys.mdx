@@ -10,7 +10,7 @@ readingTime: "7 min read"
 featured: false
 ---
 
-**[Claude Opus 4.7](/models)** released on 15 April 2026. It's Anthropic's strongest reasoning model to date, and InnerZero's v0.1.4 release added it as a selectable model for anyone using **bring your own keys** with their own Anthropic account. This guide walks through the setup, what it costs, and when you'd actually pick it over a model running on your own machine.
+**[Claude Opus 4.7](/models)** released on 15 April 2026. At launch it was Anthropic's strongest reasoning model, and InnerZero's v0.1.4 release added it as a selectable model for anyone using **bring your own keys** with their own Anthropic account. (Since then Anthropic has shipped Opus 4.8, now the current top model, and you can select it the same way. See [/models](/models) for what's live today.) This guide walks through the setup, what it costs, and when you'd actually pick it over a model running on your own machine.
 
 I'm not going to pretend Opus 4.7 is the right choice for every task. Most of what I ask my AI assistant is better handled locally. But when I'm debugging something at the edge of a language I don't know well, or drafting something where I want the quality to be high on the first pass, Opus is where I reach.
 
@@ -22,7 +22,7 @@ I'm not going to pretend Opus 4.7 is the right choice for every task. Most of wh
 
 ## What is Claude Opus 4.7 and why use it with InnerZero?
 
-**Claude Opus 4.7 is Anthropic's most capable model in the Claude 4 family**, released 15 April 2026. It's the one you pick when reasoning quality matters more than speed or cost. Anthropic tuned it hard for long-context work, extended thinking, and coding. If you've tried Opus 4.6 and wanted the same behaviour but sharper, that's the upgrade.
+**Claude Opus 4.7 was Anthropic's most capable model in the Claude 4 family at release**, on 15 April 2026 (Opus 4.8 has since taken the top spot and selects the same way). It's the one you pick when reasoning quality matters more than speed or cost. Anthropic tuned it hard for long-context work, extended thinking, and coding. If you've tried Opus 4.6 and wanted the same behaviour but sharper, that's the upgrade.
 
 InnerZero is a local-first AI assistant. The default setup runs entirely on your machine using [Ollama](https://ollama.com) or [LM Studio](/blog/innerzero-vs-lm-studio). Everything is free, stays on your hardware, and needs no internet connection once the model is downloaded. That's the normal mode.
 
@@ -75,7 +75,7 @@ Honest opinion. I default to local. The open-source models you can run on a mid-
 | Privacy | Sent to Anthropic | Never leaves your PC |
 | Setup | Anthropic account + API key | Auto-configured on first launch |
 | Internet required | Yes | No, after model download |
-| Reasoning quality | Frontier tier | Good for most tasks |
+| Reasoning quality | Top tier at launch | Good for most tasks |
 | Coding agent support | Yes | Yes |
 
 ## Can I switch back to local mid-conversation?

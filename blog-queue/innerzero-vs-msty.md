@@ -32,7 +32,7 @@ Its standout features lean toward power use: Split Chats for comparing several m
 
 ## What is InnerZero built for?
 
-InnerZero is a desktop app that runs a private AI assistant on your own machine, built around being a companion rather than a model workbench. It carries persistent [memory](/blog/why-your-ai-should-remember-you) that learns about you across conversations, local [voice mode](/blog/voice-mode-innerzero) with speech recognition and spoken replies, document and image handling, connectors for calendar and mail, and proactive briefings you can schedule. Setup is one click and includes downloading and tuning a model to your hardware.
+InnerZero is a desktop app that runs a private AI assistant on your own machine, built around being a companion rather than a model workbench. It carries persistent [memory](/blog/why-your-ai-should-remember-you) that learns about you across conversations, local [voice mode](/blog/voice-mode-innerzero) with speech recognition and spoken replies, document and image handling, connectors for calendar, mail, and Telegram, and proactive briefings you can schedule. Setup is one click and includes downloading and tuning a model to your hardware.
 
 Where Msty gives you a flexible surface to drive many models, InnerZero gives you one assistant that gets to know you and can reach out on a schedule rather than only answering on demand.
 

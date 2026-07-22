@@ -52,7 +52,7 @@ The richest bucket is structured semantic memory: facts get extracted from conve
 
 InnerZero treats memory as the central organising feature rather than an add-on. The full memory stack is built in: structured storage in SQLite, semantic retrieval with embeddings, automatic fact extraction from every conversation, a sleep/reflection pipeline that consolidates and prunes memory while you are away, and a project-scoping system so different work contexts stay separate.
 
-It is also backend-agnostic. The same memory layer works whether your model is running through Ollama, LM Studio, or one of the seven supported BYO cloud providers (Anthropic, OpenAI, Google, DeepSeek, Qwen, xAI, Kimi). Switch from a local 8B model to Claude Opus 4.7 mid-conversation and the memory context follows. Detailed comparisons against specific frontends live in [InnerZero vs LM Studio](/blog/innerzero-vs-lm-studio), [InnerZero vs Jan](/blog/innerzero-vs-jan), and [InnerZero vs GPT4All](/blog/innerzero-vs-gpt4all).
+It is also backend-agnostic. The same memory layer works whether your model is running through Ollama, LM Studio, or one of the seven supported BYO cloud providers (Anthropic, OpenAI, Google, DeepSeek, Qwen, xAI, Kimi). Switch from a local 8B model to Claude Opus 4.8 mid-conversation and the memory context follows. Detailed comparisons against specific frontends live in [InnerZero vs LM Studio](/blog/innerzero-vs-lm-studio), [InnerZero vs Jan](/blog/innerzero-vs-jan), and [InnerZero vs GPT4All](/blog/innerzero-vs-gpt4all).
 
 The other thing InnerZero handles that the others have not built yet: a voice loop with the same memory context, a screen-automation tool layer (opt-in), 30-plus built-in tools the model can use autonomously, and offline knowledge packs. Memory is the headline feature; the rest is the assembled assistant the headline feature lives inside.
 
@@ -70,7 +70,7 @@ Yes. InnerZero supports Ollama and LM Studio as local backends, plus seven cloud
 
 ### Does memory transfer if I switch the underlying model?
 
-Yes. The memory database is independent of the model. Switching from local Qwen 3 8B to Claude Opus 4.7 (or back) does not disturb anything stored. The new model receives the same packed-context view of your relevant memory facts on every prompt. That is the point of having memory live in the application layer rather than in any specific model.
+Yes. The memory database is independent of the model. Switching from local Qwen 3 8B to Claude Opus 4.8 (or back) does not disturb anything stored. The new model receives the same packed-context view of your relevant memory facts on every prompt. That is the point of having memory live in the application layer rather than in any specific model.
 
 ### What's the difference between context window and long-term memory?
 

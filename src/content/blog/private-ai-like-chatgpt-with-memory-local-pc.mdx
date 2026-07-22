@@ -50,13 +50,13 @@ The honest list of trade-offs in 2026:
 | Memory exportable | Limited | Limited | No | Yes, copy the file |
 | Telemetry default | On | On | On | Off |
 
-Frontier reasoning is the big trade. GPT-5.4, Claude Opus 4.7, and Gemini 2.5 Pro are still meaningfully smarter than a local 30B Qwen on the hardest tasks. If you are debugging novel multi-file code, drafting nuanced policy text, or working at the edge of a domain, frontier cloud models pull ahead. Local models match or exceed them on routine tasks, but the gap widens with task complexity.
+Frontier reasoning is the big trade. GPT-5.6, Claude Opus 4.8, and Gemini 3.1 Pro are still meaningfully smarter than a local Qwen3 model on the hardest tasks. If you are debugging novel multi-file code, drafting nuanced policy text, or working at the edge of a domain, frontier cloud models pull ahead. Local models match or exceed them on routine tasks, but the gap widens with task complexity.
 
 Latency is a smaller trade. Cloud APIs typically respond in 1-3 seconds for short prompts. Local models on capable hardware are similar; on slower hardware they fall behind, particularly with long context windows. For voice mode the gap closes because speech-to-text and text-to-speech latency dominate the perceived response time anyway.
 
 Account portability is a real loss for some users. ChatGPT logs in everywhere your account works, with synced history. Local AI is bound to the machine it runs on (you can manually copy the database between your machines, but there is no built-in sync). For people who genuinely use AI across phone, tablet, and three computers, that limitation is real.
 
-InnerZero's compromise is a [bring-your-own-keys](/blog/claude-opus-4-7-byo-keys) layer that lets you reach Claude Opus 4.7 or GPT-5.4 directly from your machine to the provider with no middleman, when the task warrants it. The default stays local, the cloud is a knob. That covers the frontier-reasoning gap for the 5-10% of tasks that need it without giving up the local-first stance for the other 90-95%.
+InnerZero's compromise is a [bring-your-own-keys](/blog/claude-opus-4-7-byo-keys) layer that lets you reach Claude Opus 4.8 or GPT-5.6 directly from your machine to the provider with no middleman, when the task warrants it. The default stays local, the cloud is a knob. That covers the frontier-reasoning gap for the 5-10% of tasks that need it without giving up the local-first stance for the other 90-95%.
 
 ## When does it make sense to keep using ChatGPT?
 
@@ -72,7 +72,7 @@ For most everyday tasks, a local 8B-30B model is in the same ballpark as ChatGPT
 
 ### Can I bring ChatGPT-quality intelligence into a local setup?
 
-Yes, via BYO keys. InnerZero supports OpenAI, Anthropic, Google, DeepSeek, Qwen, xAI, and Kimi as cloud providers. You add your own API key, the assistant validates it, and you can flip individual messages or whole sessions to a frontier model when you need the firepower. Your default stays local; the cloud is opt-in per request. The OpenAI-key path specifically lets you call GPT-5.4 from your machine with no InnerZero server in the loop.
+Yes, via BYO keys. InnerZero supports OpenAI, Anthropic, Google, DeepSeek, Qwen, xAI, and Kimi as cloud providers. You add your own API key, the assistant validates it, and you can flip individual messages or whole sessions to a frontier model when you need the firepower. Your default stays local; the cloud is opt-in per request. The OpenAI-key path specifically lets you call GPT-5.6 from your machine with no InnerZero server in the loop.
 
 ### What hardware do I need to match ChatGPT's response speed?
 

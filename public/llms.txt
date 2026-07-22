@@ -87,7 +87,7 @@ InnerZero is a private AI assistant desktop application. It provides:
 - [About](https://innerzero.com/about): Mission and company.
 - [Contact](https://innerzero.com/contact): Contact form.
 - [Changelog](https://innerzero.com/changelog): Version history with New, Improved, and Fixed changes per release.
-- [Learn (Blog)](https://innerzero.com/blog): 25+ in-depth articles on private AI, local AI, comparisons, and guides.
+- [Learn (Blog)](https://innerzero.com/blog): 60+ in-depth articles on private AI, local AI, comparisons, and guides.
 
 ## Learn (featured articles)
 
