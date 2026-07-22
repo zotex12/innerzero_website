@@ -36,10 +36,30 @@ export interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "0.1.9",
+    date: "July 2026",
+    releaseDate: "2026-07-22",
+    latest: true,
+    groups: [
+      {
+        label: "New",
+        entries: [
+          { text: "Refreshed the bring your own cloud model catalogue. If you connect your own provider API key, InnerZero now offers the current flagship and tier models for each provider: OpenAI GPT-5.6 and GPT-5.5, Anthropic Claude Opus 4.8, Sonnet 5 and Fable 5, Google Gemini 3.5 Flash, 3.1 Flash-Lite and 3.1 Pro, Qwen 3.7 Max and Plus, xAI Grok 4.5 and 4.3, Kimi K3, K2.6 and K2.7 Code, and DeepSeek V4 Pro. Retired the older xAI Grok model ids that no longer exist upstream." },
+        ],
+      },
+      {
+        label: "Fixed",
+        entries: [
+          { text: "Bring your own OpenAI keys now work with GPT-5 and o-series models. Warmup and chat were failing with a request error on these models; InnerZero now sends the correct token limit with a reasoning-token allowance, so they respond normally. GPT-4o and GPT-4.1 keys were unaffected." },
+          { text: "Build and packaging fixes so the Windows, macOS, and Linux installers all build and ship cleanly." },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.8",
     date: "June 2026",
     releaseDate: "2026-06-10",
-    latest: true,
     groups: [
       {
         label: "New",

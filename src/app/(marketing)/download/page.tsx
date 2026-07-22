@@ -67,12 +67,12 @@ export default function DownloadPage() {
               href="/changelog"
               className="text-xs text-text-muted transition-colors hover:text-accent-gold"
             >
-              See what&apos;s new in v0.1.8
+              See what&apos;s new in v0.1.9
             </Link>
           </p>
         </div>
 
-        {/* v0.1.8 download-size note */}
+        {/* v0.1.9 download-size note */}
         <p className="mx-auto mt-8 max-w-2xl text-center text-xs text-text-muted">
           InnerZero bundles a complete local AI runtime with GPU acceleration, so the installer is large. On Windows the heaviest components download on first run, which keeps the initial download smaller.
         </p>
@@ -185,7 +185,7 @@ export default function DownloadPage() {
             applicationCategory: "UtilitiesApplication",
             applicationSubCategory: "AI Assistant",
             operatingSystem: "Windows, macOS, Linux",
-            softwareVersion: "0.1.8",
+            softwareVersion: "0.1.9",
             description:
               "A free private AI assistant that runs entirely on your PC. No cloud. No tracking. No subscription.",
             url: absoluteUrl("/"),
@@ -203,7 +203,7 @@ export default function DownloadPage() {
                 price: "0",
                 priceCurrency: "GBP",
                 availability: "https://schema.org/InStock",
-                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.8.exe",
+                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.9.exe",
                 operatingSystem: "Windows 10, Windows 11",
               },
               {
@@ -212,7 +212,7 @@ export default function DownloadPage() {
                 price: "0",
                 priceCurrency: "GBP",
                 availability: "https://schema.org/InStock",
-                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.8-mac.dmg",
+                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.9-mac.dmg",
                 operatingSystem: "macOS 14 or later",
               },
               {
@@ -221,7 +221,7 @@ export default function DownloadPage() {
                 price: "0",
                 priceCurrency: "GBP",
                 availability: "https://schema.org/InStock",
-                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.8-x86_64.AppImage",
+                url: "https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.9-x86_64.AppImage",
                 operatingSystem: "Linux x86_64",
               },
             ],
