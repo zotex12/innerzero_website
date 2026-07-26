@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { buildStaticCsp, REPORT_TO } from "./src/lib/csp";
 
 // Resolved at build time. On preview deploys we allow the preview URL so
 // browser testing works; production always uses the canonical domain.
@@ -61,21 +62,42 @@ const PERMISSIONS_POLICY = [
   'picture-in-picture=(self "https://www.youtube-nocookie.com")',
 ].join(",");
 
-// Phase 7B-2. Content-Security-Policy and Report-To MOVED OUT of this file.
-// Both headers are now built per-request in `src/middleware.ts` (Edge
-// runtime) so a fresh nonce can be embedded in `script-src`. A static
-// next.config.ts header cannot inject per-request nonces, and 'strict-dynamic'
-// requires per-request nonces to mean anything. The same middleware also
-// forwards `x-nonce` on the request so Next.js auto-applies the nonce to
-// streaming hydration scripts, framework bundles, and `<Script>` consumers.
+// Phase middleware-matcher-fluid-cpu. CSP ownership is now SPLIT:
 //
-// Theme-flash hash maintenance trap (still applies). The script-src
-// directive in middleware.ts includes
-//   'sha256-f7LAjRiK+uoAyu7rUwSbVvtnehpB2z0d+hr4fBMjsds='
-// which covers the inline IIFE in `src/app/layout.tsx`. Any edit to that
-// script — even whitespace — invalidates the hash. Regenerate with the
-// command in middleware.ts (kept there because middleware now owns the
-// constant) and update both files in lockstep.
+//   - Public content routes get the STATIC CSP + Report-To from headers()
+//     below (source with a negative lookahead excluding /api and the nonce
+//     routes). Applied at the routing layer, so serving a cached public page
+//     no longer invokes middleware — that per-request invocation was the
+//     dominant consumer of the Vercel Hobby Fluid Active CPU allowance.
+//   - Auth/account routes get the per-request NONCE CSP from
+//     src/middleware.ts, whose matcher is now positive (/api/* + the nonce
+//     routes only).
+//
+// The two policies share every common directive via src/lib/csp.ts (imported
+// RELATIVELY here — tsconfig path aliases do not apply to next.config.ts).
+// The exclusion list in the CSP source below and the middleware matcher MUST
+// stay in lockstep: a route matched by both would get two CSP headers and the
+// browser enforces the intersection (breaks Turnstile on auth pages); a route
+// matched by neither ships without CSP.
+//
+// Theme-flash hash maintenance trap: THEME_SCRIPT_HASH lives in src/lib/csp.ts
+// with the CSP builders. Any edit to the layout inline script — even
+// whitespace — invalidates the hash. Regenerate with the command documented
+// there and update both in lockstep.
+
+// Path prefixes excluded from the static CSP because middleware owns them
+// (nonce CSP) or they are non-HTML API responses (no CSP). `(?:/|$)` bounds
+// each prefix at a segment boundary so e.g. a future /accountant page still
+// gets the static CSP.
+const STATIC_CSP_EXCLUDED_PREFIXES = [
+  "api",
+  "login",
+  "register",
+  "forgot-password",
+  "reset-password",
+  "account",
+  "auth",
+].join("|");
 
 const nextConfig: NextConfig = {
   // Phase 7A: stop leaking the framework name.
@@ -138,9 +160,19 @@ const nextConfig: NextConfig = {
           // computation needed, so it lives here next to the other static
           // headers rather than in middleware.
           { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
-          // Phase 7B-2: CSP and Report-To intentionally NOT set here. See
-          // src/middleware.ts. Static assets that bypass middleware do not
-          // need CSP — they're not HTML and do not execute scripts.
+        ],
+      },
+      {
+        // Phase middleware-matcher-fluid-cpu: static CSP + Report-To for every
+        // route middleware no longer touches. The lookahead mirrors the
+        // positive middleware matcher — keep the two in lockstep (see the
+        // comment block at the top of this file). Matching static assets and
+        // feeds too is harmless and deliberate: CSP is inert on non-HTML
+        // responses, and one broad source avoids a second drift-prone list.
+        source: `/:path((?!(?:${STATIC_CSP_EXCLUDED_PREFIXES})(?:/|$)).*)`,
+        headers: [
+          { key: "Content-Security-Policy", value: buildStaticCsp() },
+          { key: "Report-To", value: REPORT_TO },
         ],
       },
       {
