@@ -44,6 +44,7 @@ export const NAV_LINKS: NavLink[] = [
 export const SITE_AUTHOR = {
   name: "Louie Summers",
   role: "Founder",
+  email: "louie@innerzero.com",
   linkedin: "https://www.linkedin.com/in/louie-summers/",
   // Stable schema.org node id. Anchored on /about because that page carries
   // the full founder bio, so every Person reference resolves to one entity.

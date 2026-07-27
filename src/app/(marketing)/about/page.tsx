@@ -147,6 +147,22 @@ export default function AboutPage() {
                     </a>
                   </li>
                 </ul>
+
+                <div className="rounded-xl border border-border-default bg-bg-card p-6">
+                  <h3 className="text-lg font-semibold text-text-primary">
+                    Have a question?
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+                    Speak to the creator directly. Email reaches me, not a
+                    support queue.
+                  </p>
+                  <a
+                    href={`mailto:${SITE_AUTHOR.email}`}
+                    className="mt-4 inline-block text-sm font-medium text-accent-gold hover:text-accent-gold-hover transition-colors"
+                  >
+                    {SITE_AUTHOR.email}
+                  </a>
+                </div>
               </section>
             </ScrollReveal>
 
@@ -248,6 +264,7 @@ export default function AboutPage() {
                 "On-device large language models",
                 "Data privacy",
               ],
+              email: SITE_AUTHOR.email,
               worksFor: { "@id": `${absoluteUrl("/")}#organization` },
               sameAs: [FOUNDER_LINKEDIN],
             },
