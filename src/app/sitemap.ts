@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/metadata";
 import { getAllPosts } from "@/lib/blog";
+import { FEATURE_CATEGORIES } from "@/lib/features";
 
 // Native App Router sitemap. Replaces the previous next-sitemap postbuild
 // step, which only captured the two RSS route handlers (/feed.xml and
@@ -46,6 +47,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: p.priority,
   }));
 
+  // Feature category pages. Derived from the registry rather than listed
+  // by hand so a new category cannot be added without reaching the
+  // sitemap. Priority sits just under /features (0.8) because the hub is
+  // the cluster's entry point and each category is a spoke off it.
+  const featureEntries: MetadataRoute.Sitemap = FEATURE_CATEGORIES.map((c) => ({
+    url: absoluteUrl(`/features/${c.slug}`),
+    lastModified: c.modified,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
   const postEntries: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
     url: absoluteUrl(`/blog/${post.slug}`),
     lastModified: post.updated || post.date || undefined,
@@ -53,5 +65,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticEntries, ...postEntries];
+  return [...staticEntries, ...featureEntries, ...postEntries];
 }

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/blog";
+import { getCategoriesForGuide } from "@/lib/features";
 import { extractFaqs } from "@/lib/blog-faq";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
@@ -70,6 +71,7 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) notFound();
 
   const related = getRelatedPosts(post.slug, post.tags, 3);
+  const featurePages = getCategoriesForGuide(post.slug);
 
   const faqs = extractFaqs(post.content);
   const faqJsonLd =
@@ -140,6 +142,41 @@ export default async function BlogPostPage({ params }: Props) {
               options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
             />
           </div>
+
+          {/* Feature pages this guide belongs to. Derived from the
+              `guides` arrays in src/lib/features, so it stays in step
+              with the feature side automatically. */}
+          {featurePages.length > 0 && (
+            <>
+              <hr className="my-12 border-border-default" />
+              <section aria-labelledby="feature-link-heading">
+                <h2
+                  id="feature-link-heading"
+                  className="mb-6 text-lg font-semibold text-text-primary"
+                >
+                  {featurePages.length === 1
+                    ? "The feature this guide covers"
+                    : "The features this guide covers"}
+                </h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {featurePages.map((f) => (
+                    <Link
+                      key={f.slug}
+                      href={`/features/${f.slug}`}
+                      className="group block rounded-lg border border-border-default bg-bg-card p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-gold"
+                    >
+                      <h3 className="text-sm font-semibold text-text-primary transition-colors group-hover:text-accent-gold">
+                        {f.navLabel}
+                      </h3>
+                      <p className="mt-1.5 text-xs leading-relaxed text-text-muted">
+                        {f.hubTeaser}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            </>
+          )}
 
           {/* Related posts */}
           {related.length > 0 && (
