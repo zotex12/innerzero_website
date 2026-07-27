@@ -89,6 +89,25 @@ InnerZero is a private AI assistant desktop application. It provides:
 - [Changelog](https://innerzero.com/changelog): Version history with New, Improved, and Fixed changes per release.
 - [Learn (Blog)](https://innerzero.com/blog): 60+ in-depth articles on private AI, local AI, comparisons, and guides.
 
+## Feature pages (one per capability area)
+
+Each page covers what that area does and links to the step-by-step guides for it.
+
+- [Easy Setup](https://innerzero.com/features/setup): InnerZero installs with a double click and a setup wizard does the rest. No terminal, no Docker, no Python install, and no manual model downloads.
+- [AI Chat](https://innerzero.com/features/ai-chat): Chat with a local AI assistant on your own PC. Attach files and images, run slash commands, and export any answer to PDF or Word. Cloud mode is optional.
+- [Voice](https://innerzero.com/features/voice): Talk to a private AI assistant that hears and speaks on your own PC. Speech recognition and text to speech run locally by default, with no audio uploaded.
+- [Memory](https://innerzero.com/features/memory): An AI assistant that remembers you across sessions, with the memory kept on your own machine where you can read recent memories and archive or delete them.
+- [Languages](https://innerzero.com/features/languages): Run a private AI assistant in 26 languages. The interface and the replies both switch instantly, with no restart and no internet connection needed.
+- [Tools](https://innerzero.com/features/tools): InnerZero ships 45 built-in tools for web search, files, calendar, timers and notes. Every tool has its own switch, and file tools stay in one folder.
+- [Knowledge Packs](https://innerzero.com/features/knowledge-packs): Download Wikipedia to your own machine and let your AI check its answers against real articles. 871,000 articles offline, no internet needed.
+- [Specialists](https://innerzero.com/features/specialists): InnerZero specialists are agents built for one job. The Coding Specialist has its own model and its own sandbox, and shows a diff before any file changes.
+- [Proactive Assistant](https://innerzero.com/features/proactive): Schedule daily briefings, summaries and reminders in plain English, delivered to desktop chat or Telegram. Nothing runs until you create the first one.
+- [Action Hub](https://innerzero.com/features/action-hub): Run web scrapers with your own Apify key and let InnerZero fill in job applications in an isolated browser. It always asks before it submits anything.
+- [Screen Automation](https://innerzero.com/features/screen-automation): InnerZero reads your screen and can click, type and scroll in Windows apps. It ships switched off, asks before each action, and Escape aborts the action.
+- [Cloud AI](https://innerzero.com/features/cloud-ai): Add your own API keys for seven cloud providers at zero markup, or stay fully local. Cloud mode is off by default and every outbound connection is logged.
+- [Customisation](https://innerzero.com/features/customisation): Change the theme, give your AI a personality, switch off tools you do not want, and pick which local engine runs the models. All of it on your own machine.
+- [Unrestricted Mode](https://innerzero.com/features/unrestricted-mode): Unrestricted Mode swaps InnerZero's local models for uncensored ones. It is 18+ only, off by default, and the CSAM hard block stays active in every mode.
+
 ## Learn (featured articles)
 
 - [How to use local AI on Windows, Mac, and Linux](https://innerzero.com/blog): Setup guides for all three platforms.
