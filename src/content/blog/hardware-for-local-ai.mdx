@@ -36,7 +36,7 @@ InnerZero runs best on NVIDIA GPUs through CUDA. AMD and Intel GPUs are supporte
 
 ## What CPU is enough for local AI?
 
-Any modern Intel or AMD processor from the last 5 to 7 years will work. The AI doesn't lean heavily on the CPU when a GPU is available. But there's one hard requirement: AVX2 instruction support. Almost every processor since 2015 has this. Very old chips don't.
+Any modern Intel or AMD processor from the last 5 to 7 years will work. The AI doesn't lean heavily on the CPU when a GPU is available. AVX2 instruction support helps: almost every x86 processor since 2015 has it, and local models run noticeably faster with it. It is not a hard requirement though. A chip without it still runs local models, just more slowly, and Apple Silicon has no AVX2 at all yet runs InnerZero fine.
 
 Core count matters less than you'd think for AI inference. A modern quad-core is fine.
 
@@ -50,13 +50,13 @@ Plan for at least 10 GB of free space. 30 GB gives you room for multiple models 
 
 When you install InnerZero, it scans your hardware and assigns a tier automatically. You don't need to pick models or configure anything. Here's what the tiers look like:
 
-**Basic** (under 16 GB RAM, no/weak GPU). Smallest models, CPU-only. Works, but slower.
+**CPU-only tiers** (4 GB RAM and up, no GPU needed). Four of them, from the smallest model on 4 to 7 GB of RAM up to a 14b model on 32 GB. They work, just slower, and local voice is not available without a GPU.
 
-**Entry** (16+ GB RAM, 6 to 16 GB VRAM). Budget GPU tier. Good performance with compact models.
+**Entry** (16+ GB RAM, 8 to 16 GB VRAM). Budget GPU tier, and the first tier with local voice. Good performance with compact models.
 
 **Standard** (32+ GB RAM, 16 to 24 GB VRAM). The recommended experience. Fast, capable, smooth.
 
-**Performance** (32+ GB RAM, 24+ GB VRAM). Premium tier. Largest models, fastest responses.
+**Performance** (32+ GB RAM, 24 to 48 GB VRAM). Premium tier, fast responses on large models. Pro, Enterprise, and Frontier tiers sit above it for workstation and server hardware.
 
 InnerZero picks the best model for your hardware, downloads it during setup, and optimises the settings. If you upgrade your GPU later, re-run the setup wizard and it'll detect the new hardware.
 

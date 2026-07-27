@@ -382,18 +382,31 @@ export const COMING_SOON_FEATURES: ComingSoonFeature[] = [
 
 /* ── System requirements (download page) ── */
 
+// Grounded in the desktop repo's install_profile.py, which is the only
+// authority here. Its "unsupported" tier carries the app's own refusal
+// copy: "InnerZero requires at least 4 GB RAM and 2 GB of free disk
+// space." The cpu_minimal tier then runs a local model at 4 GB with no
+// GPU, and "No Local Model" is a real selectable tier where the app runs
+// with no local AI at all on a cloud plan or the user's own API key.
+//
+// These numbers were previously 8 GB and 10 GB, which turned away
+// machines InnerZero supports. Do not raise them to describe a nicer
+// experience: that is what the recommended column is for.
 export const SYSTEM_REQUIREMENTS = {
   minimum: [
-    "Windows 10 (64-bit), macOS 14 Sonoma, or Linux x86_64 (glibc 2.31+)",
-    "8GB RAM",
-    "10GB free disk space",
-    "Modern CPU (Intel i5 / AMD Ryzen 5 / Apple Silicon or equivalent)",
+    "Windows 10 (64-bit), macOS 14 Sonoma (Apple Silicon), or Linux x86_64 (glibc 2.31+)",
+    "4GB RAM",
+    "2GB free disk space, plus room for any model you download",
+    "No graphics card required",
+    "Runs the smallest local model on your CPU. Responses are slower at this level",
+    "Or run with no local model at all and use a cloud plan or your own API key",
   ],
   recommended: [
     "Windows 10/11, macOS 14+, or Linux x86_64",
     "16GB+ RAM",
     "20GB+ free disk space",
-    "NVIDIA GPU with 6GB+ VRAM, or Apple Silicon",
+    "Dedicated GPU with 8GB+ VRAM, or an Apple Silicon Mac with 16GB+ unified memory",
+    "A GPU is what enables local voice. CPU-only setups are text and tools",
     "SSD for faster model loading",
   ],
 } as const;
