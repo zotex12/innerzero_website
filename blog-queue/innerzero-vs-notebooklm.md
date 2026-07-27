@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "InnerZero vs NotebookLM: Private Document Q&A Compared"
 description: "NotebookLM is Google's cloud research tool that reads your uploaded sources on its servers. InnerZero reads your documents on your own machine. A factual comparison for private document Q&A."
 date: "2026-08-18"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "innerzero-vs-notebooklm"
 tags: ["comparison", "privacy", "local ai"]

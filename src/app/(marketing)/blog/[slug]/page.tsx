@@ -9,6 +9,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/Button";
 import { absoluteUrl } from "@/lib/metadata";
+import { SITE_AUTHOR } from "@/lib/constants";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -143,6 +144,49 @@ export default async function BlogPostPage({ params }: Props) {
             />
           </div>
 
+          {/* Author box. Gives the byline a bio and a link to the founder
+              page, so readers and crawlers get the same authorship signal
+              the BlogPosting Person JSON-LD below asserts. */}
+          <hr className="my-12 border-border-default" />
+          <section
+            aria-labelledby="author-heading"
+            className="rounded-xl border border-border-default bg-bg-card p-6"
+          >
+            <h2
+              id="author-heading"
+              className="text-xs font-semibold uppercase tracking-wide text-text-muted"
+            >
+              Written by
+            </h2>
+            <p className="mt-3 text-base font-semibold text-text-primary">
+              {post.author}
+              <span className="ml-2 text-sm font-normal text-text-muted">
+                {post.authorRole || SITE_AUTHOR.role}
+              </span>
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+              Louie Summers is the founder of Summers Solutions Ltd and the
+              sole developer of InnerZero, based in Birmingham, UK. Every post
+              here is written by the person who builds the product.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+              <Link
+                href={SITE_AUTHOR.profilePath}
+                className="text-accent-gold transition-colors hover:text-accent-gold-hover"
+              >
+                More about the founder
+              </Link>
+              <a
+                href={SITE_AUTHOR.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent-gold transition-colors hover:text-accent-gold-hover"
+              >
+                LinkedIn
+              </a>
+            </div>
+          </section>
+
           {/* Feature pages this guide belongs to. Derived from the
               `guides` arrays in src/lib/features, so it stays in step
               with the feature side automatically. */}
@@ -233,11 +277,17 @@ export default async function BlogPostPage({ params }: Props) {
               datePublished: post.date,
               dateModified: post.updated || post.date,
               image: post.ogImage || absoluteUrl("/banner.png"),
+              // Author is the Person who wrote the post, not the company.
+              // The visible byline names a human, so the structured data has
+              // to agree or the authorship signal reads as ambiguous. The
+              // company stays on `publisher` below, which is where it belongs.
               author: {
-                "@type": "Organization",
-                "@id": `${absoluteUrl("/")}#organization`,
-                name: "InnerZero",
-                url: absoluteUrl("/"),
+                "@type": "Person",
+                "@id": SITE_AUTHOR.schemaId,
+                name: post.author,
+                jobTitle: post.authorRole || SITE_AUTHOR.role,
+                url: absoluteUrl(SITE_AUTHOR.profilePath),
+                sameAs: [SITE_AUTHOR.linkedin],
               },
               publisher: {
                 "@type": "Organization",

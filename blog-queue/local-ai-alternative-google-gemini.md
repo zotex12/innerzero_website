@@ -2,7 +2,7 @@
 title: "A Local AI Alternative to Google Gemini"
 description: "A local AI alternative to Google Gemini that runs on your own PC. What Gemini does with your data, what you trade going local, and the feature differences."
 date: "2026-11-27"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "local-ai-alternative-google-gemini"
 tags: ["comparison", "privacy", "local ai", "cloud ai"]

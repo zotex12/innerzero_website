@@ -10,7 +10,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "How to Run Llama 3 Locally on Your PC"
 description: "Run Llama 3 locally on your PC with Ollama or LM Studio, then add memory and voice with InnerZero. Pick a size and quant, check hardware, keep it private."
 date: "2026-09-18"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "how-to-run-llama-locally"
 tags: ["local ai", "getting started", "guide"]

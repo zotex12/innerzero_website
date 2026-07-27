@@ -10,7 +10,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "Private AI for Writers and Authors"
 description: "Private AI for writers keeps unpublished manuscripts on your own machine. How local AI drafts in private, remembers your characters, and exports to documents."
 date: "2026-10-06"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "private-ai-for-writers"
 tags: ["privacy", "features", "local ai"]

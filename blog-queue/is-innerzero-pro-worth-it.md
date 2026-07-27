@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "Is InnerZero Pro Worth It? An Honest Look"
 description: "InnerZero is free and fully usable without paying. So what does InnerZero Pro add, what does it cost, and who should actually bother? A straight answer, with the free version's strengths included."
 date: "2026-09-11"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "is-innerzero-pro-worth-it"
 tags: ["features", "getting started", "local ai"]

@@ -10,7 +10,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "Private AI for Small Business"
 description: "Private AI for small business keeps client and company data on your own machines. How local AI, optional BYO-key cloud, and a business licence change the maths."
 date: "2026-10-27"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "private-ai-for-business"
 tags: ["privacy", "cloud ai", "features"]

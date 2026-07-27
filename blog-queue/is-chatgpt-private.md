@@ -10,7 +10,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "Is ChatGPT Private? Where Your Conversations Actually Go"
 description: "Is ChatGPT private? It sends conversations to OpenAI, stores them, and trains on them by default. Where your data goes, and the private local alternative."
 date: "2026-09-25"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "is-chatgpt-private"
 tags: ["privacy", "comparison", "local ai"]

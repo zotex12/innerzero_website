@@ -2,7 +2,7 @@
 title: "The Best Private AI Assistant for Linux in 2026"
 description: "A private AI assistant for Linux that runs locally as an AppImage, keeps chats on your machine, and works on most 64-bit distros with no account."
 date: "2026-10-30"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "private-ai-assistant-for-linux"
 tags: ["local ai", "privacy", "getting started"]

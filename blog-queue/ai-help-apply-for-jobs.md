@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "Can AI Help You Apply for Jobs Without Handing Over Your Data?"
 description: "InnerZero's Action Hub can research roles and help fill in job applications, with your approval on every submission and your details kept on your own machine. An honest look at what it does and does not do."
 date: "2026-07-31"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "ai-help-apply-for-jobs"
 tags: ["automation", "features", "privacy"]

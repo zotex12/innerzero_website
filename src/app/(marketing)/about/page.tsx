@@ -4,6 +4,7 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { CTABanner } from "@/components/sections/CTABanner";
 import { VideoEmbed } from "@/components/sections/VideoEmbed";
 import { absoluteUrl, createMetadata } from "@/lib/metadata";
+import { SITE_AUTHOR } from "@/lib/constants";
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/about" },
@@ -24,7 +25,7 @@ export const metadata: Metadata = createMetadata({
   },
 });
 
-const FOUNDER_LINKEDIN = "https://www.linkedin.com/in/louie-summers/";
+const FOUNDER_LINKEDIN = SITE_AUTHOR.linkedin;
 const SUMMERS_SOLUTIONS_URL = "https://www.summerssolutions.co.uk/";
 const COMPANIES_HOUSE_URL =
   "https://find-and-update.company-information.service.gov.uk/company/16448945";
@@ -207,11 +208,15 @@ export default function AboutPage() {
             description:
               "InnerZero is a free private AI assistant that runs entirely on your PC. Built by Summers Solutions, a UK-based software company focused on privacy-respecting tools.",
             foundingDate: "2025",
+            // Same @id as the Person referenced by every BlogPosting and
+            // persona Article, so the founder bio on this page is the node
+            // those bylines resolve to rather than a separate entity.
             founder: {
               "@type": "Person",
-              name: "Louie Summers",
+              "@id": SITE_AUTHOR.schemaId,
+              name: SITE_AUTHOR.name,
               jobTitle: "Founder & Developer",
-              url: FOUNDER_LINKEDIN,
+              url: absoluteUrl(SITE_AUTHOR.profilePath),
               sameAs: [FOUNDER_LINKEDIN],
             },
             identifier: {

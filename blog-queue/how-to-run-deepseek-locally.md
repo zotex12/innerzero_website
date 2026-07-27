@@ -10,7 +10,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "How to Run DeepSeek Locally and Keep It Private"
 description: "Run DeepSeek locally with the open-weight R1 and V3 distills, keep your data off the cloud, pick the right model for your hardware, and use it in InnerZero."
 date: "2026-09-22"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "how-to-run-deepseek-locally"
 tags: ["local ai", "getting started", "privacy"]

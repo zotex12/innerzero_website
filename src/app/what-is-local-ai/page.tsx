@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { JsonLd } from "@/components/JsonLd";
 import { createMetadata } from "@/lib/metadata";
+import { SITE_AUTHOR } from "@/lib/constants";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://innerzero.com";
 const PUBLISHED = "2026-04-19";
@@ -202,7 +203,10 @@ export default function WhatIsLocalAiPage() {
       "Plain-English guide to local AI: how it works, what hardware you need, and how it compares to cloud AI.",
     author: {
       "@type": "Person",
-      name: "Louie",
+      "@id": SITE_AUTHOR.schemaId,
+      name: SITE_AUTHOR.name,
+      url: `${SITE_URL}${SITE_AUTHOR.profilePath}`,
+      sameAs: [SITE_AUTHOR.linkedin],
     },
     publisher: {
       "@type": "Organization",

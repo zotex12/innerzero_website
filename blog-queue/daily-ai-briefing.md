@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "How to Get a Daily AI Briefing on Your PC, Privately"
 description: "InnerZero's Proactive Assistant can deliver scheduled briefings and reminders to your chat on a schedule you set, composed locally from your own memory, mail, and calendar. Off by default."
 date: "2026-08-04"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "daily-ai-briefing"
 tags: ["features", "automation", "local ai"]

@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "How to Run a Local AI Assistant Behind a Corporate or School Proxy"
 description: "On a work or university network behind a proxy, model downloads and updates can fail. InnerZero has a proxy setting so it can reach the internet for setup, while local AI traffic is never routed through it."
 date: "2026-08-25"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "local-ai-behind-a-proxy"
 tags: ["guide", "privacy", "local ai"]

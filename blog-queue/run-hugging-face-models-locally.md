@@ -10,7 +10,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "How to Run Hugging Face Models Locally"
 description: "Learn how to run Hugging Face models locally: find GGUF files, read model cards, pick a quant, and load them through Ollama, LM Studio, or llama.cpp."
 date: "2026-10-20"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "run-hugging-face-models-locally"
 tags: ["local ai", "getting started", "guide"]

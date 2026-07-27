@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "Asking AI About Health Questions Without the Privacy Cost"
 description: "Health questions are some of the most personal things people type into AI. InnerZero runs locally, so you can ask without sending your symptoms to a server. What it can help with, and what it can't."
 date: "2026-09-04"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "private-ai-for-health-questions"
 tags: ["privacy", "local ai", "features"]

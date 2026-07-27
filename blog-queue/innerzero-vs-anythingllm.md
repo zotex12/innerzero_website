@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "InnerZero vs AnythingLLM: Two Takes on Private AI"
 description: "AnythingLLM is an open-source app built around chatting with your documents. InnerZero is a local-first personal assistant. A factual comparison of what each does and who it suits."
 date: "2026-08-14"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "innerzero-vs-anythingllm"
 tags: ["comparison", "local ai", "privacy"]

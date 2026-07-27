@@ -10,7 +10,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "Microsoft Copilot Alternative: Local AI for Privacy, Cost, and Control"
 description: "A Microsoft Copilot alternative that runs on your own machine changes the privacy, cost, and control maths. A fair comparison of cloud Copilot and local AI."
 date: "2026-10-13"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "local-ai-vs-microsoft-copilot"
 tags: ["comparison", "privacy", "cloud ai"]

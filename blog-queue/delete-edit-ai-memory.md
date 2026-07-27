@@ -2,7 +2,7 @@
 title: "How to Delete or Edit What Your AI Remembers"
 description: "A practical guide to viewing, editing, and deleting what InnerZero remembers about you, plus how to wipe everything because the memory lives on your machine."
 date: "2026-11-20"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "delete-edit-ai-memory"
 tags: ["memory", "privacy", "local ai", "guide"]

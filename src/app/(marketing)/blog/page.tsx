@@ -5,6 +5,7 @@ import { getAllPosts, getAllTags } from "@/lib/blog";
 import Link from "next/link";
 import { BlogGrid } from "./BlogGrid";
 import { TimeAgo } from "@/components/ui/TimeAgo";
+import { SITE_AUTHOR } from "@/lib/constants";
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/blog" },
@@ -93,10 +94,13 @@ export default function BlogPage() {
                 headline: p.title,
                 description: p.description,
                 datePublished: p.date,
+                // Matches the per-post BlogPosting author in
+                // blog/[slug]/page.tsx: a Person, sharing one stable @id so
+                // the listing and the post resolve to the same entity.
                 author: {
-                  "@type": "Organization",
-                  "@id": "https://innerzero.com#organization",
-                  name: "InnerZero",
+                  "@type": "Person",
+                  "@id": SITE_AUTHOR.schemaId,
+                  name: p.author,
                 },
                 url: `https://innerzero.com/blog/${p.slug}`,
               })),

@@ -2,7 +2,7 @@
 title: "Private AI for Accountants and Bookkeepers"
 description: "Private AI for accountants and bookkeepers: run AI on your own PC to summarise statements, draft client emails, and handle tax data without cloud upload."
 date: "2026-11-13"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "private-ai-for-accountants"
 tags: ["privacy", "local ai", "features", "guide"]

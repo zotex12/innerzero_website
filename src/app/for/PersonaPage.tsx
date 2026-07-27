@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/JsonLd";
+import { SITE_AUTHOR } from "@/lib/constants";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://innerzero.com";
 
@@ -82,7 +83,13 @@ export function PersonaPage(props: PersonaPageProps) {
     "@type": "Article",
     headline: h1,
     description,
-    author: { "@type": "Person", name: "Louie" },
+    author: {
+      "@type": "Person",
+      "@id": SITE_AUTHOR.schemaId,
+      name: SITE_AUTHOR.name,
+      url: `${SITE_URL}${SITE_AUTHOR.profilePath}`,
+      sameAs: [SITE_AUTHOR.linkedin],
+    },
     publisher: {
       "@type": "Organization",
       name: "InnerZero",

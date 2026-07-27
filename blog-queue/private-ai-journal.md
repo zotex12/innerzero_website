@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "Using a Private AI Assistant as a Journal That Remembers You"
 description: "A journal is most useful when it remembers. InnerZero keeps a local memory of what you tell it and recalls it later, so you can journal to an AI that knows your history, with nothing uploaded."
 date: "2026-08-28"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "private-ai-journal"
 tags: ["memory", "privacy", "local ai"]

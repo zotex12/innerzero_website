@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "Can a Private AI Read Text From Your Screenshots and Images?"
 description: "InnerZero can read the text out of a screenshot or photo on your own machine, with the image itself never leaving your computer. How local image text extraction works and why it stays private."
 date: "2026-08-07"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "private-ai-read-text-from-images"
 tags: ["features", "privacy", "local ai"]

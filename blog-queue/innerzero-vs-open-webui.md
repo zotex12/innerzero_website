@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "InnerZero vs Open WebUI: Which Local AI Frontend Fits You?"
 description: "Open WebUI is a self-hosted server you run yourself. InnerZero is a one-click desktop app. A factual comparison of two ways to run private AI, and who each one suits."
 date: "2026-08-11"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "innerzero-vs-open-webui"
 tags: ["comparison", "local ai", "features"]

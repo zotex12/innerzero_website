@@ -10,7 +10,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "What Is LLM Quantization? Q4, Q8, and Picking a Local Model"
 description: "LLM quantization explained in plain terms: what Q4_K_M and Q8 labels mean, the size, speed, and quality tradeoffs, and how to pick a quant for your VRAM or RAM."
 date: "2026-10-02"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "what-is-llm-quantization"
 tags: ["local ai", "guide", "features"]

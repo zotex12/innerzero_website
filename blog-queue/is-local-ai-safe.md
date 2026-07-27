@@ -2,7 +2,7 @@
 title: "Is Local AI Safe? The Real Security Risks of Running AI on Your PC"
 description: "Local AI is safe to run if you mind the file format, installer, and app permissions. Here are the real security risks and how InnerZero limits exposure."
 date: "2026-11-06"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "is-local-ai-safe"
 tags: ["local ai", "privacy", "features"]

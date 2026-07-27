@@ -10,7 +10,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "What Is RAG? Retrieval Augmented Generation, Explained Simply"
 description: "What is RAG? A plain explanation of retrieval augmented generation, how it differs from memory and fine-tuning, and why local RAG keeps your documents private."
 date: "2026-10-23"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "what-is-rag-local-ai"
 tags: ["local ai", "memory", "guide"]

@@ -10,7 +10,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "InnerZero vs LibreChat: a local LibreChat alternative"
 description: "A LibreChat alternative for people who want a local AI assistant, not a server to run. How the self-hosted chat UI compares to InnerZero on memory and setup."
 date: "2026-10-16"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "innerzero-vs-librechat"
 tags: ["comparison", "local ai", "features"]

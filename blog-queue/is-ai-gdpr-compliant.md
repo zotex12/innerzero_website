@@ -2,7 +2,7 @@
 title: "Is AI GDPR Compliant? How Local AI Helps With Data Protection"
 description: "Is AI GDPR compliant? Cloud AI adds processors and transfers. Local AI keeps personal data on your machine, shrinking the data-protection surface."
 date: "2026-11-17"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "is-ai-gdpr-compliant"
 tags: ["privacy", "local ai", "cloud ai", "guide"]

@@ -2,7 +2,7 @@
 title: "Does Your AI Assistant Record Your Microphone?"
 description: "InnerZero does not record your mic in the background. It transcribes speech locally with Whisper, and only transcript text is sent in optional cloud voice."
 date: "2026-11-24"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "ai-assistant-microphone-privacy"
 tags: ["voice", "privacy", "local ai", "innerzero"]

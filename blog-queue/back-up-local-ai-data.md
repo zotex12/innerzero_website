@@ -2,7 +2,7 @@
 title: "How to Back Up Your Local AI Data and Move It to a New PC"
 description: "Back up your local AI memory, settings, and prompts, then move everything to a new PC. What to copy, where it lives, and how to keep backups encrypted."
 date: "2026-12-01"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "back-up-local-ai-data"
 tags: ["local ai", "memory", "privacy", "guide"]

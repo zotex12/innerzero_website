@@ -2,7 +2,7 @@
 title: "The Best Private AI Assistant for Teachers"
 description: "Private AI for teachers that runs on your laptop for lesson planning, marking drafts, and differentiation without uploading student names or work to the cloud."
 date: "2026-12-04"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "private-ai-for-teachers"
 tags: ["privacy", "local ai", "guide"]

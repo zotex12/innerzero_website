@@ -10,7 +10,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "Private AI for Lawyers and Legal Work"
 description: "Private AI for lawyers keeps client files on your machine. How local AI helps with review, summarising, and drafting without sending docs to the cloud."
 date: "2026-10-09"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "private-ai-for-lawyers"
 tags: ["privacy", "local ai", "features"]

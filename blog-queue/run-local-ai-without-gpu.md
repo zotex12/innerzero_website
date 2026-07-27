@@ -10,7 +10,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "How to Run a Local AI Without a GPU"
 description: "You can run a local AI without a GPU. Which small models work on CPU and RAM, realistic speed expectations, and how InnerZero picks a model for your machine."
 date: "2026-09-29"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "run-local-ai-without-gpu"
 tags: ["local ai", "getting started", "guide"]

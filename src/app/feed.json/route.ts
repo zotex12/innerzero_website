@@ -1,6 +1,7 @@
 import { getAllPostsForFeed } from "@/lib/blog";
 import { SITE_URL, absoluteUrl, buildExcerpt } from "@/lib/feeds";
 import { applySecurityHeaders } from "@/lib/security-headers";
+import { SITE_AUTHOR } from "@/lib/constants";
 
 // JSON Feed 1.1 — https://jsonfeed.org/version/1.1
 //
@@ -67,8 +68,11 @@ export async function GET() {
       date_published: iso,
       authors: [
         {
-          name: post.author || "Louie",
-          url: SITE_URL,
+          // Point the feed author at the /about founder bio rather than the
+          // site root, so the byline resolves to the same Person entity the
+          // BlogPosting JSON-LD references.
+          name: post.author || SITE_AUTHOR.name,
+          url: absoluteUrl(SITE_AUTHOR.profilePath),
         },
       ],
     };

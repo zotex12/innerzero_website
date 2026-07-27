@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { SITE_AUTHOR } from "@/lib/constants";
 
 const BLOG_DIR = path.join(process.cwd(), "src/content/blog");
 
@@ -33,7 +34,7 @@ export function getAllPosts(): BlogMeta[] {
       description: data.description || "",
       date: data.date || "",
       updated: data.updated || undefined,
-      author: data.author || "Louie",
+      author: data.author || SITE_AUTHOR.name,
       authorRole: data.authorRole || undefined,
       tags: data.tags || [],
       readingTime: data.readingTime || "",
@@ -60,7 +61,7 @@ export function getPostBySlug(slug: string): BlogPost | null {
         description: data.description || "",
         date: data.date || "",
         updated: data.updated || undefined,
-        author: data.author || "Louie",
+        author: data.author || SITE_AUTHOR.name,
         authorRole: data.authorRole || undefined,
         tags: data.tags || [],
         readingTime: data.readingTime || "",
@@ -113,7 +114,7 @@ export function getAllPostsForFeed(): BlogPost[] {
       description: data.description || "",
       date: data.date || "",
       updated: data.updated || undefined,
-      author: data.author || "Louie",
+      author: data.author || SITE_AUTHOR.name,
       authorRole: data.authorRole || undefined,
       tags: data.tags || [],
       readingTime: data.readingTime || "",

@@ -2,7 +2,7 @@
 title: "Private AI for Therapists and Counsellors"
 description: "Private AI for therapists runs on your own machine so session notes and client data never leave it. Draft notes, prep supervision, and stay confidential."
 date: "2026-11-10"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "private-ai-for-therapists"
 tags: ["privacy", "local ai", "guide"]

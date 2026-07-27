@@ -2,7 +2,7 @@
 title: "InnerZero vs Perplexity: Private Answers Without the Tracking"
 description: "InnerZero vs Perplexity compared: Perplexity is a cloud answer engine with web search, InnerZero is a local-first private assistant with optional web tools."
 date: "2026-12-08"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "innerzero-vs-perplexity"
 tags: ["comparison", "privacy", "local ai", "cloud ai"]

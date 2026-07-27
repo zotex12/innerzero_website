@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "A Private AI Assistant for Freelancers and Small Business"
 description: "Freelancers and small teams handle client data they cannot pour into a cloud chatbot. InnerZero runs locally so client work stays on your machine. What it helps with, and how the Business Licence works."
 date: "2026-09-15"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "private-ai-for-freelancers"
 tags: ["privacy", "local ai", "automation"]

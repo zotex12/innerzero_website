@@ -33,6 +33,24 @@ export const NAV_LINKS: NavLink[] = [
   { label: "Learn", href: "/blog" },
 ];
 
+/* ── Author identity ── */
+
+// Single source of truth for the human author byline and its schema.org
+// Person entity. Every surface that names the author (blog bylines, feeds,
+// BlogPosting JSON-LD, persona pages, the /about founder block) reads from
+// here so the name, role, and sameAs links never drift apart. Search engines
+// and AI answer engines can only resolve a byline to a real person when the
+// same full name and the same @id appear consistently across the site.
+export const SITE_AUTHOR = {
+  name: "Louie Summers",
+  role: "Founder",
+  linkedin: "https://www.linkedin.com/in/louie-summers/",
+  // Stable schema.org node id. Anchored on /about because that page carries
+  // the full founder bio, so every Person reference resolves to one entity.
+  schemaId: "https://innerzero.com/about#person",
+  profilePath: "/about",
+} as const;
+
 /* ── Hero copy ── */
 
 export const HERO = {

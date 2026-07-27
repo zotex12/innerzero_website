@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "Can Your AI Remember Things Across Different Languages?"
 description: "If you live between two languages, your AI's memory should follow you across both. InnerZero keeps memories searchable across languages, so something you said in one can be recalled in another, all locally."
 date: "2026-09-01"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "ai-memory-across-languages"
 tags: ["memory", "local ai", "features"]

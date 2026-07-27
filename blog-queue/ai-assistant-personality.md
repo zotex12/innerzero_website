@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "How to Give Your Local AI Assistant a Personality"
 description: "InnerZero lets you set how your assistant speaks, from professional to friendly to your own custom style. How personalities work, how to write your own, and why it changes the whole experience."
 date: "2026-09-08"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "ai-assistant-personality"
 tags: ["features", "getting started", "local ai"]

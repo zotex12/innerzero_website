@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "InnerZero vs Msty: Local AI Desktop Apps Compared"
 description: "Msty is a polished desktop app for running local and online models side by side. InnerZero is a local-first personal assistant with memory and voice. A factual comparison of the two."
 date: "2026-08-21"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "innerzero-vs-msty"
 tags: ["comparison", "local ai", "features"]

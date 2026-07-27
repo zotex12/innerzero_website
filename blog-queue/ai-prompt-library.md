@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 title: "How to Build a Reusable Prompt Library in Your AI Assistant"
 description: "InnerZero has a built-in Prompt Library on the Chat page. Save your best prompts in folders, mark favourites, and drop any of them into chat in one click, all stored locally."
 date: "2026-07-28"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "ai-prompt-library"
 tags: ["features", "getting started", "local ai"]
