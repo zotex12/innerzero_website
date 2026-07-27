@@ -17,7 +17,7 @@ export const metadata: Metadata = createMetadata({
       "About InnerZero: The Team and Mission Behind Your Private AI",
   },
   description:
-    "About InnerZero, a private AI assistant built by Summers Solutions, a UK software company. Our mission is AI that stays personal, private, and on your PC.",
+    "About InnerZero, a private AI assistant built by Summers Solutions, a UK software company. The mission is AI that stays personal, private, and on your PC.",
   openGraph: {
     title: "About | InnerZero. Private AI Assistant",
     description:
@@ -68,10 +68,10 @@ export default function AboutPage() {
                   Most AI assistants send everything you say to the cloud. Your questions, your documents, your personal context, all processed on someone else&apos;s servers, stored in someone else&apos;s database, used to train someone else&apos;s models.
                 </p>
                 <p>
-                  We believe AI should be <strong className="text-text-primary">personal and private</strong>. Your AI assistant should work for you, on your machine, with your data staying exactly where it belongs, with you.
+                  I believe AI should be <strong className="text-text-primary">personal and private</strong>. Your AI assistant should work for you, on your machine, with your data staying exactly where it belongs, with you.
                 </p>
                 <p>
-                  That&apos;s why we built InnerZero. An AI that runs locally, remembers locally, and never phones home.
+                  That&apos;s why I built InnerZero. An AI that runs locally, remembers locally, and never phones home.
                 </p>
               </section>
             </ScrollReveal>
@@ -94,7 +94,7 @@ export default function AboutPage() {
                   , a UK-based software company focused on building tools that respect user privacy and put people in control of their technology.
                 </p>
                 <p>
-                  InnerZero is our flagship product, the result of a deep belief that you should not have to trade privacy for capability.
+                  InnerZero is its flagship product, built on my belief that you should not have to trade privacy for capability.
                 </p>
               </section>
             </ScrollReveal>
