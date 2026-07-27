@@ -20,9 +20,11 @@ The core AI model that processes your messages, makes decisions, and generates r
 
 Qwen3 comes in several sizes. InnerZero picks the right one based on your hardware:
 
-- **Qwen3 4B** for basic tier hardware (CPU-only or limited GPU)
-- **Qwen3 8B** for entry tier (budget GPU with 6+ GB VRAM)
-- **Qwen3 30B** for standard and performance tiers (16+ GB VRAM)
+- **Qwen3 1.7B** for CPU minimal tier (4 GB RAM, no graphics card)
+- **Qwen3 4B** for basic tier (8 GB RAM, CPU-only) and entry tier (16 GB RAM with 8 GB VRAM)
+- **Qwen3 8B** for CPU standard tier (16 GB RAM) and standard tier (32 GB RAM with 16 GB VRAM)
+- **Qwen3 14B** for CPU high tier (32 GB RAM) and performance tier (32 GB RAM with 24 GB VRAM)
+- **Qwen3 30B** for pro tier (64 GB RAM with 48 GB VRAM)
 
 The "B" stands for billion parameters. Bigger models are smarter but need more [memory](/blog/ai-that-remembers). InnerZero's setup wizard handles the selection automatically. You don't need to know which one you're running.
 

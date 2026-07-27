@@ -34,14 +34,14 @@ export const HARDWARE_TIERS: HardwareTier[] = [
   {
     id: "minimum",
     name: "Minimum",
-    description: "Modest laptops and older desktops. Local AI works, on the CPU.",
-    ram: "8 GB",
-    cpu: "Modern 64-bit, 4 cores or more",
+    description: "Older laptops and low-spec desktops. Local AI still runs.",
+    ram: "4 GB",
+    cpu: "Modern 64-bit",
     gpu: "Not required",
-    storage: "10 GB free",
-    modelExamples: ["Qwen 3 4B"],
+    storage: "2 GB free, plus the model",
+    modelExamples: ["Qwen 3 1.7B"],
     notes:
-      "Runs on the CPU with no graphics card at all. Expect slower responses on long prompts. Voice needs a dedicated GPU, so it is off at this level. There is a smaller profile again for machines with 4 GB to 7 GB of RAM, and if a machine cannot run a local model at all InnerZero still works fully on a cloud plan.",
+      "The app's own floor. It runs the smallest model on the CPU, and responses are slow at this level. Voice needs a dedicated GPU, so it is off here. If a machine cannot run a local model at all, No Local Model is a supported choice: InnerZero works fully on a cloud plan or your own API key.",
   },
   {
     id: "recommended",
@@ -49,11 +49,11 @@ export const HARDWARE_TIERS: HardwareTier[] = [
     description: "A dedicated GPU. The full local experience, voice included.",
     ram: "16 GB or more",
     cpu: "Modern multi-core, 8 cores or more",
-    gpu: "Dedicated GPU with 8 GB or more VRAM",
+    gpu: "Dedicated GPU with 8 GB or more VRAM, or Apple Silicon",
     storage: "20 GB free",
     modelExamples: ["Qwen 3 4B on GPU", "Gemma 3 1B for voice"],
     notes:
-      "Voice is enabled from this level up. More RAM and VRAM moves you onto larger models: 32 GB with 16 GB of VRAM runs Qwen 3 8B, and it keeps going from there. NVIDIA CUDA GPUs deliver the best performance today.",
+      "Voice is enabled from this level up. More RAM and VRAM moves you onto larger models: 32 GB with 16 GB of VRAM runs Qwen 3 8B, and the ladder continues past that. NVIDIA CUDA GPUs deliver the best performance today.",
     recommended: true,
   },
 ];

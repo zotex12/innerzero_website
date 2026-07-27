@@ -11,8 +11,8 @@ Company: Summers Solutions Ltd, a UK company based in Birmingham, England (Compa
 Data protection: ICO registered (registration ZC122497)
 Current version: v0.1.9 (July 2026)
 Install sizes: 1.18 GB (Windows), 738 MB (macOS), 1.32 GB (Linux)
-Minimum requirements: 8 GB RAM, 10 GB free disk, modern 64-bit CPU (AVX2)
-Recommended: 16+ GB RAM, NVIDIA GPU with 6+ GB VRAM, SSD
+Minimum requirements: 4 GB RAM, 2 GB free disk, modern 64-bit CPU, no GPU required. That runs the smallest local model on the CPU, slowly. InnerZero also runs with no local model at all on a cloud plan or your own API key.
+Recommended: 16+ GB RAM, a dedicated GPU with 8+ GB VRAM or an Apple Silicon Mac, SSD. A GPU is what enables local voice; CPU-only setups are text and tools.
 
 ## Start here
 
@@ -61,7 +61,7 @@ InnerZero is a private AI assistant desktop application. It provides:
 - **Is InnerZero open source?** No. InnerZero is proprietary software. It runs on top of open-source AI models and libraries which remain under their respective licences.
 - **Does InnerZero collect telemetry or analytics?** No telemetry in the desktop app. No tracking, no phone-home, no usage analytics. The website uses privacy-friendly Vercel Analytics for page views only.
 - **Can InnerZero control my computer?** Optionally, yes. Screen automation can read the screen and click, type, or scroll other apps. It is disabled by default and has an emergency stop (Escape key). All file writes require explicit user approval.
-- **How much RAM and storage do I need?** Minimum 8 GB RAM and 10 GB free disk. Recommended 16 GB RAM and 20 GB free disk. An NVIDIA GPU with 6+ GB VRAM is recommended for faster responses.
+- **How much RAM and storage do I need?** Minimum 4 GB RAM and 2 GB free disk, plus room for whatever model you download. No graphics card is required at that level, but the smallest model runs on the CPU and is slow. Recommended is 16 GB RAM, 20 GB free disk, and a dedicated GPU with 8+ GB VRAM, which is also what enables local voice. You can also run with no local model at all and use a cloud plan or your own API key.
 - **Where does InnerZero store my data?** In a per-user folder: %APPDATA%\InnerZero on Windows, ~/Library/Application Support/InnerZero on macOS, and ~/.local/share/innerzero on Linux. Your data is never uploaded.
 
 ## Pricing (April 2026)

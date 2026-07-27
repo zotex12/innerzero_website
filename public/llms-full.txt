@@ -66,7 +66,7 @@ In optional cloud mode, you can access: DeepSeek (V3.2, Reasoner), OpenAI (GPT-5
 
 No mobile support (iOS or Android).
 
-Minimum hardware: 8 GB RAM, 10 GB free disk, modern 64-bit CPU with AVX2 support. Recommended: 16+ GB RAM, NVIDIA GPU with 6+ GB VRAM, SSD storage.
+Minimum hardware: 4 GB RAM, 2 GB free disk, modern 64-bit CPU, no GPU required. AVX2 speeds local models up where the CPU has it but is not required, and Apple Silicon does not have it. Recommended: 16+ GB RAM, a dedicated GPU with 8+ GB VRAM, SSD storage. InnerZero also runs with no local model at all on a cloud plan or your own API key.
 
 ## Can I use my own API keys with InnerZero?
 
@@ -419,7 +419,7 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 - Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.9.exe
 - Version: 0.1.9
 - Size: 1.18 GB
-- Requirements: 64-bit, 8 GB+ RAM
+- Requirements: 64-bit, 4 GB+ RAM
 - Note: Windows may show a SmartScreen warning on first install. Click More Info then Run Anyway. The installer is signed by Summers Solutions Ltd via Microsoft Trusted Signing.
 
 ## macOS 14+
@@ -427,7 +427,7 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 - Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.9-mac.dmg
 - Version: 0.1.9
 - Size: 738 MB
-- Requirements: Apple Silicon, 8 GB+ RAM
+- Requirements: Apple Silicon, 4 GB+ RAM
 - Note: Signed with Developer ID, notarised by Apple, and stapled. It opens with a normal double click, with no Gatekeeper warning and no workaround needed.
 
 ## Linux x86_64
@@ -435,22 +435,25 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 - Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.9-x86_64.AppImage
 - Version: 0.1.9
 - Size: 1.32 GB
-- Requirements: x86_64, glibc 2.31+, 8 GB+ RAM
+- Requirements: x86_64, glibc 2.31+, 4 GB+ RAM
 - Note: Install system dependencies first: sudo apt install -y espeak-ng portaudio19-dev xclip libwebkit2gtk-4.1-0 libgirepository-1.0-1 libfuse2 gir1.2-webkit2-4.1
 
 ## Minimum Requirements
 
-- Windows 10 (64-bit) or later, macOS 14+, or Linux x86_64 (glibc 2.31+)
-- 8 GB RAM
-- 10 GB free disk space
-- Modern CPU (Intel i5 / AMD Ryzen 5 or equivalent) with AVX2 support
+- Windows 10 (64-bit) or later, macOS 14+ (Apple Silicon), or Linux x86_64 (glibc 2.31+)
+- 4 GB RAM
+- 2 GB free disk space, plus room for any model you download
+- No graphics card required
+- At this level InnerZero runs its smallest local model on the CPU and responses are slow. AVX2 speeds local models up where the CPU has it, but it is not required and Apple Silicon does not have it.
+- You can also run with no local model at all. "No Local Model" is a supported choice, and chat, voice, and specialists then run on a cloud plan or your own API key.
 
 ## Recommended
 
 - Windows 10/11 (64-bit), macOS 14+, or Linux x86_64
 - 16 GB+ RAM
 - 20 GB+ free disk space
-- NVIDIA GPU with 6 GB+ VRAM
+- Dedicated GPU with 8 GB+ VRAM, or an Apple Silicon Mac (unified memory routes to a GPU-class tier without a discrete card)
+- A GPU is what enables local voice. CPU-only tiers are text and tools only.
 - SSD for faster model loading
 
 ===============================================================================
@@ -544,13 +547,25 @@ Under UK GDPR, you have the right to: access your personal data; correct inaccur
 
 InnerZero automatically picks models based on detected hardware:
 
-- Basic tier (under 16 GB RAM, weak or no GPU): Qwen3 4B assistant, CPU-only
-- Entry tier (16+ GB RAM, 6 to 16 GB VRAM): Qwen3 8B assistant, Gemma3 1B voice
-- Standard tier (32+ GB RAM, 16 to 24 GB VRAM): Qwen3 30B assistant, Gemma3 1B voice
-- Performance tier (32+ GB RAM, 24 to 48 GB VRAM): Qwen3 30B assistant, Gemma3 4B voice
-- Pro tier (64+ GB RAM, 48 to 80 GB VRAM): gpt-oss 120B assistant, Gemma3 4B voice
-- Enterprise tier (128+ GB RAM, 80+ GB VRAM): gpt-oss 120B assistant, Gemma3 12B voice
-- Frontier tier (manual only): Qwen3 235B assistant
+Detection picks a tier automatically and you can override it manually, in the setup wizard or later in Settings. Local voice needs a GPU tier; every CPU-only tier is text and tools.
+
+GPU tiers:
+
+- Entry (16+ GB RAM, 8 to 16 GB VRAM): Qwen3 4B assistant, Gemma3 1B voice
+- Standard (32+ GB RAM, 16 to 24 GB VRAM): Qwen3 8B assistant, Gemma3 1B voice
+- Performance (32+ GB RAM, 24 to 48 GB VRAM): Qwen3 14B assistant, Gemma3 4B voice
+- Pro (64+ GB RAM, 48 to 80 GB VRAM): Qwen3 30B assistant, Gemma3 4B voice
+- Enterprise (128+ GB RAM, 80+ GB VRAM): gpt-oss 120B assistant, Gemma3 4B voice. Server or workstation hardware.
+- Frontier (256+ GB RAM with 120+ GB VRAM, or 120+ GB unified memory; manual selection only): gpt-oss 120B assistant, Gemma3 12B voice
+
+CPU-only tiers, no graphics card required:
+
+- CPU Minimal (4 to 7 GB RAM): Qwen3 1.7B assistant
+- Basic (8 to 16 GB RAM): Qwen3 4B assistant
+- CPU Standard (16 to 32 GB RAM): Qwen3 8B assistant
+- CPU High (32+ GB RAM): Qwen3 14B assistant
+
+No Local Model (8+ GB RAM, no GPU, nothing to download): no local AI is installed. Chat, voice, and specialists then run on a managed cloud plan or your own API key.
 
 ## Safety and sandbox
 

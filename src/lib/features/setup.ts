@@ -59,7 +59,7 @@ export const setup: FeatureCategory = {
     {
       id: "signed-installers",
       title: "Signed installers on Windows and macOS",
-      body: "The Windows installer is 1.18 GB and code-signed by Summers Solutions Ltd. The macOS build is 738 MB, signed with Developer ID, notarised by Apple and stapled, so it opens on a normal double click with no Gatekeeper warning and no right-click workaround. The Linux AppImage is 1.32 GB for x86_64 and is the one platform that still asks for a command, because a handful of system packages have to be present before it runs. All three ask for 8 GB or more RAM on a 64-bit machine, and the wizard warns you before it downloads anything if less than 10 GB of disk is free. AVX2 is not a requirement: a Windows or Linux CPU without it still runs local models, with a warning that they will be slower, and Apple Silicon has no AVX2 at all.",
+      body: "The Windows installer is 1.18 GB and code-signed by Summers Solutions Ltd. The macOS build is 738 MB, signed with Developer ID, notarised by Apple and stapled, so it opens on a normal double click with no Gatekeeper warning and no right-click workaround. The Linux AppImage is 1.32 GB for x86_64 and is the one platform that still asks for a command, because a handful of system packages have to be present before it runs. All three ask for 4 GB or more RAM on a 64-bit machine, and the wizard warns you before it downloads anything if disk space is tight for the tier it picked. AVX2 is not a requirement: a Windows or Linux CPU without it still runs local models, with a warning that they will be slower, and Apple Silicon has no AVX2 at all.",
     },
     {
       id: "change-it-later",
@@ -129,7 +129,7 @@ export const setup: FeatureCategory = {
     {
       question: "What are the minimum requirements?",
       answer:
-        "The download page asks for a 64-bit machine with 8 GB or more of RAM, and the wizard warns you if less than 10 GB of disk is free. The app's own hard floor is lower: below 4 GB of RAM or 2 GB of free disk it routes you to the No Local Model options instead of installing something that cannot run. AVX2 is not required, and neither is a dedicated GPU, though one with 8 GB or more of VRAM unlocks the larger model tiers.",
+        "A 64-bit machine with 4 GB of RAM and 2 GB of free disk, plus room for whatever model you download. No dedicated graphics card is needed. Below that floor the wizard routes you to the No Local Model options rather than installing something that cannot run. AVX2 speeds local models up where the processor has it, but it is not required, and Apple Silicon does not have it at all. A GPU with 8 GB or more of VRAM is what unlocks the larger model tiers and local voice.",
     },
     {
       question: "What happens if my computer cannot run a local model?",
