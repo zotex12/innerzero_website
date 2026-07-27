@@ -9,7 +9,9 @@ tags: ["comparison", "memory", "local ai"]
 readingTime: "7 min read"
 ---
 
-The single biggest jump in usefulness when you move from raw Ollama to a polished Ollama frontend is long-term memory. Ollama itself is a model runtime: it pulls a model, exposes a chat API, and stops there. Memory is your problem. The five frontends that matter in 2026 are Open WebUI, Chatbox, Msty, Page Assist, and InnerZero, and they take very different approaches to that problem. This post is the honest field guide to which one actually remembers what you told it last Tuesday.
+The single biggest jump in usefulness when you move from raw Ollama to a polished Ollama frontend is long-term memory. Ollama itself is a model runtime: it pulls a model, exposes a chat API, and stops there. Memory is your problem.
+
+This post is for people who already run Ollama and intend to keep it. Every tool here layers on top of the install and the models you have already pulled: Open WebUI, Chatbox, Msty, Page Assist, and InnerZero. If you have not settled on a backend yet and want the wider field, including LM Studio, Jan, and GPT4All, the [comparison of local LLM frontends with long-term memory](/blog/best-local-llm-frontend-memory-2026) covers that ground instead.
 
 I built InnerZero around the memory question because every other Ollama UI I tried got me to "this is faster than ChatGPT for the things I already know how to ask" and stopped there. The thing that makes a chat assistant useful long-term is the bit that survives between sessions.
 
@@ -19,17 +21,17 @@ Ollama is intentionally a model runtime, not an assistant. Its job is to pull we
 
 That focus is also why Ollama is fast, stable, and almost universally used as the local-model backbone in 2026. Most of the frontends in this comparison are built on top of it precisely because Ollama nails the runtime job. They differ on what they layer above.
 
-## What does long-term memory actually mean for a local AI?
+## What does Ollama remember between sessions on its own?
 
-Long-term memory means three things working together: facts the AI has learned about you that survive between sessions, a system that surfaces the right facts at the right moment, and a process that consolidates and refines those facts over time. Anything less is conversation history with a long scrollback.
+Nothing. Ollama's chat endpoint is stateless. Every request carries the full message array, and the server keeps no record of it once the response is returned. Close the client and that conversation is gone unless the frontend wrote it down somewhere.
 
-Conversation history is when you can scroll up and read what you said yesterday. That is useful. It is not memory. Memory is when you ask "did I mention which contractor I am using for the kitchen", and the AI answers "yes, you mentioned Jamie three weeks ago in the budget conversation". The AI did not search its own logs. It already knew. That difference is the entire game.
+This catches people out because a long chat feels like memory. It is not. It is your frontend resending the transcript on every turn, and it dies at the context-window limit. Ask about something from forty messages back on a small-context model and it has already dropped out of the window.
 
-Real long-term memory needs storage that survives app restart, retrieval that works in milliseconds, ranking that picks the relevant facts out of hundreds, and ideally a background process that reviews everything periodically and keeps it tidy. Most Ollama frontends provide none of that yet.
+Real long-term memory is a different mechanism. Facts get extracted and stored outside the conversation, retrieved by relevance rather than recency, and injected into context only on the prompts where they matter. That needs storage surviving restart, retrieval in milliseconds, and ranking that picks the right handful out of hundreds. Most Ollama frontends provide none of it.
 
 ## Which Ollama frontends offer memory in 2026?
 
-Here is the honest table. "Memory across sessions" means the AI remembers facts you mentioned yesterday without you scrolling back to find them. "Memory editing UI" means you can read, search, and delete what the AI knows about you. "Sleep/reflection" means a background process that consolidates memory while you are away. "Project scoping" means the assistant can keep separate memory contexts for separate projects.
+Every frontend below talks to Ollama directly, so you can try any of them against the models you have already pulled. Here is the honest table. "Memory across sessions" means the AI remembers facts you mentioned yesterday without you scrolling back to find them. "Memory editing UI" means you can read, search, and delete what the AI knows about you. "Sleep/reflection" means a background process that consolidates memory while you are away. "Project scoping" means the assistant can keep separate memory contexts for separate projects.
 
 | Frontend | Memory across sessions | Memory editing UI | Sleep/reflection | Project scoping |
 |----------|-------------------------|-------------------|------------------|------------------|
