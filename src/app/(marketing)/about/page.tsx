@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { CTABanner } from "@/components/sections/CTABanner";
@@ -99,12 +100,30 @@ export default function AboutPage() {
             </ScrollReveal>
 
             <ScrollReveal>
-              <section className="mt-12 space-y-6 text-text-secondary leading-relaxed">
+              {/* id="person" matches the schema.org Person @id that every
+                  blog byline and persona Article resolves to, so the node
+                  identifier points at the bio a reader actually lands on.
+                  scroll-mt clears the fixed header on anchor navigation. */}
+              <section
+                id="person"
+                className="mt-12 scroll-mt-28 space-y-6 text-text-secondary leading-relaxed"
+              >
                 <h2 className="text-2xl font-semibold text-text-primary">
                   Meet the founder
                 </h2>
                 <p>
                   I&apos;m Louie Summers, founder of Summers Solutions Ltd and the sole developer of InnerZero. I&apos;m based in Birmingham, UK. I started Summers Solutions to build software that respects user privacy by default. InnerZero is the product I always wanted: AI that is genuinely useful and never phones home.
+                </p>
+                <p>
+                  I write every post on the InnerZero blog. Start with the
+                  guides on{" "}
+                  <Link
+                    href="/blog"
+                    className="text-accent-gold hover:text-accent-gold-hover transition-colors"
+                  >
+                    running AI privately on your own machine
+                  </Link>
+                  .
                 </p>
                 <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
                   <li>
@@ -217,6 +236,19 @@ export default function AboutPage() {
               name: SITE_AUTHOR.name,
               jobTitle: "Founder & Developer",
               url: absoluteUrl(SITE_AUTHOR.profilePath),
+              // Mirrors the visible bio above. Structured data that asserts
+              // more than the page shows is the thing to avoid here.
+              description:
+                "Founder of Summers Solutions Ltd and the sole developer of InnerZero, a private AI assistant that runs locally on the user's own machine. Based in Birmingham, UK.",
+              // Topic scope of the posts published under this byline, not a
+              // credential claim.
+              knowsAbout: [
+                "Local AI",
+                "Private AI assistants",
+                "On-device large language models",
+                "Data privacy",
+              ],
+              worksFor: { "@id": `${absoluteUrl("/")}#organization` },
               sameAs: [FOUNDER_LINKEDIN],
             },
             identifier: {
