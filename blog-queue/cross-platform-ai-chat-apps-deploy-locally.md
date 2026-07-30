@@ -1,0 +1,119 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale
+- [ ] Re-check the platform table: confirm each named app still ships a native build for Windows, macOS and Linux
+- [ ] Confirm Enchanted is still Apple-platforms only before publishing that row
+- [ ] Re-check default ports (Ollama 11434, llama-server 8080) and the OLLAMA_HOST binding instruction
+- [ ] Confirm InnerZero's stated system requirements still match the terms page and download page
+-->
+---
+title: "Looking For Cross Platform AI Chat Apps I Can Deploy Locally On My Own Servers. Which Ones Work Best?"
+description: "Which local AI chat apps really ship on Windows, macOS and Linux, when to install a desktop app per machine, and when to run one server with thin clients."
+date: "2026-08-20"
+author: "Louie Summers"
+authorRole: "Founder"
+slug: "cross-platform-ai-chat-apps-deploy-locally"
+tags: ["local ai", "comparison", "guide"]
+readingTime: "9 min read"
+featured: false
+---
+
+> **Quick summary**
+>
+> - This is really two questions: which app installs on all three operating systems, and how do I host the model once so every machine can use it.
+> - InnerZero, LM Studio, Jan, GPT4All, Chatbox and AnythingLLM ship native desktop builds for Windows, macOS and Linux. Open WebUI and LibreChat are server plus browser instead. Some clients, like Enchanted, are Apple-only.
+> - For most small setups the best shape is a hybrid: one machine with the GPU serves the model, every other machine runs a full desktop app pointed at that host.
+> - A shared server saves buying a GPU per person. It costs you offline use and creates a single point of failure.
+> - Local model runtimes ship with no authentication. If the server is reachable beyond your LAN, put a firewall, a VPN or an authenticating reverse proxy in front of it.
+
+The phrasing mixes two things. "Cross platform" means Windows, macOS and Linux. "Deploy locally on my own servers" means one box doing the heavy work for several machines. An app can be excellent at one and useless at the other.
+
+## Do I need a desktop app on every machine, or one server with thin clients?
+
+Both work, and they solve different problems. Install a desktop app on each machine when people work offline, travel with laptops, or already have hardware that can run a model. Run one server with thin clients when a single capable box has to serve several machines and you would rather not buy a GPU for each.
+
+The desktop-app pattern is the simplest thing that works. Each machine downloads the app and a model and runs everything on its own hardware, so nothing depends on the network. The cost is duplication: the same weights sit on every disk, and a laptop with integrated graphics is far slower than the desktop in the next room.
+
+The server pattern moves inference to one machine. In its purest form that server hosts the interface too, so clients need only a browser. Open WebUI and LibreChat are the common examples, both usually deployed with Docker. That is cross platform in the widest sense, including tablets.
+
+The third shape gets overlooked, and it is the one I would recommend to most people asking this. Run a full desktop app on each machine, but point its model engine at a shared host. You keep the desktop features (voice, files, memory, tools) and still pay for one GPU. That is how I run my own setup: a tower with the graphics card in it, and a laptop that does the typing.
+
+## Which AI chat apps genuinely ship on Windows, macOS and Linux?
+
+Fewer than the marketing pages suggest, but more than you might expect. The table separates native desktop builds from server-plus-browser tools, because the second group is cross platform in a different sense: the server runs on one operating system, everyone else uses a browser.
+
+| App | Windows | macOS | Linux | Shape |
+|---|---|---|---|---|
+| InnerZero | Yes, 10 and 11 | Yes, Apple Silicon, macOS 14+ | Yes, x86_64 AppImage | Desktop app, can use a remote engine |
+| LM Studio | Yes | Yes | Yes | Desktop app with a local API server |
+| Jan | Yes | Yes | Yes | Desktop app |
+| GPT4All | Yes | Yes | Yes | Desktop app |
+| Chatbox | Yes | Yes | Yes | Desktop app plus a web version |
+| AnythingLLM | Yes | Yes | Yes | Desktop app or self-hosted server |
+| Open WebUI | Via browser | Via browser | Via browser | Server plus browser (Docker) |
+| LibreChat | Via browser | Via browser | Via browser | Server plus browser (Docker) |
+| Enchanted | No | Yes | No | Apple platforms only |
+
+Two caveats. "Supports Linux" often means one x86_64 build and nothing for ARM, so a Raspberry Pi may be out even when the copy says Linux. And the download page does not guarantee feature parity, so check the feature you care about. InnerZero has its own edges: the macOS build is Apple Silicon only, and on macOS and Linux the local text-to-speech voice needs espeak-ng installed separately.
+
+For what each of these does once installed, [self-hosted privacy focused AI chatbot options](/blog/best-privacy-focused-ai-chatbot-self-hosted) goes through them feature by feature, and [what is local AI](/what-is-local-ai) covers the basics.
+
+## How do I point a desktop client at a model server on another computer?
+
+The pattern is the same for every tool: run the model runtime on the GPU machine, tell it to listen on the network rather than only on localhost, then enter that address and port in the client. It is a five-minute job on a home network.
+
+1. Install Ollama, LM Studio or llama.cpp on the machine with the graphics card. That box does the thinking.
+2. Bind the runtime to the network. Ollama listens on localhost by default, so set `OLLAMA_HOST` to `0.0.0.0` before starting it. Its default port is 11434; a llama-server uses 8080.
+3. Pull the models on the server, not the client. The client never stores weights here.
+4. In the client, enter `http://<server-ip>:11434` and test. A good client lists the models the server is serving.
+5. Leave the runtime running. Clients assume it is up and will not start it.
+
+For InnerZero, the full walkthrough with the exact settings screen is in [running Ollama on a remote machine with InnerZero](/blog/remote-ollama-innerzero). If you prefer your own build flags, [bring your own llama-server](/blog/use-llama-cpp-with-innerzero) covers the llama.cpp path instead.
+
+The part people skip is security. Local model runtimes ship with no authentication, so anyone who can reach that IP and port can use your models and read whatever passes through them. On a home LAN behind a router that is usually acceptable. The moment the server is reachable from outside, you need a VPN, a firewall rule, or a reverse proxy that asks for credentials. Forwarding port 11434 straight to the internet is the mistake to avoid.
+
+## What do you give up when one machine does all the thinking?
+
+Four things. Offline use goes first: if the server is off or the network drops, every client is a chat box with nothing behind it. Second, you get a single point of failure, so one machine rebooting for updates stops everybody. Third, latency stacks up over anything slower than a LAN, and a slow VPN adds a visible delay before the first token appears. Fourth, and least obvious: sharing a model server does not share anything else.
+
+To be concrete about InnerZero, because that last point catches people out. Pointing three machines at one Ollama host shares the model and the GPU. It does not share memory, settings or conversation history. Each install keeps its own SQLite database in its own user data directory, and InnerZero does not sync those between machines. To get the same history on a second machine, you copy the database file across yourself.
+
+The privacy side is simpler than people assume. Prompts travel from client to your server over your own network and stop there. Nothing goes to us. The memory database stays on whichever machine wrote it, protected by whatever disk encryption you have enabled (BitLocker, FileVault or LUKS) rather than by app-level encryption. Cloud models stay optional and off unless you turn them on.
+
+## Which setup should I deploy on my own network?
+
+Match the shape to the situation rather than the software. Here is the call I would make in each case.
+
+| Situation | Deploy this | Why |
+|---|---|---|
+| One person, one decent machine | Desktop app, local models | Nothing to configure, works unplugged |
+| Laptop plus a GPU tower | Desktop app on the laptop, engine on the tower | Full features, one GPU, negligible LAN latency |
+| A few people, mixed operating systems | Server plus browser | One deployment, any browser |
+| People who want voice and files | Desktop apps on a shared engine | Browser UIs are thinner on desktop integration |
+| Anyone travelling regularly | Desktop app, local models | A server you cannot reach is not a server |
+
+Still choosing the server hardware? [What hardware you need for local AI](/blog/hardware-for-local-ai) covers the VRAM and memory tiers that matter, and if the machine doing the typing is a Mac, the [private AI assistant for Mac](/blog/private-ai-assistant-for-mac) guide covers the Apple Silicon specifics.
+
+The honest summary: the best cross platform local AI chat app installs natively on all three operating systems and can also point at a shared engine. That is one deployment story instead of two. [Download InnerZero](/download) to test it on your own machines.
+
+## Frequently asked questions
+
+### Is there one AI chat app that runs on Windows, macOS and Linux with the same features on each?
+
+Close, but check the details. InnerZero, LM Studio, Jan, GPT4All, Chatbox and AnythingLLM all ship native builds for the three desktop operating systems. Parity is usually high, with small gaps around GPU acceleration, system integration and voice dependencies. Read the requirements page for the platform you use.
+
+### Can I run the chat app on a laptop and the model on my desktop?
+
+Yes, and this is the setup I recommend most often. The desktop runs the model runtime and holds the weights, the laptop runs the interface, and they talk over your local network. The laptop needs almost no hardware because it is not doing inference.
+
+### Which of these cross platform apps need Docker on the host?
+
+Only for the server-plus-browser tools. Open WebUI and LibreChat are normally deployed as containers, so the host needs Docker or an equivalent. Desktop apps need no containers: install them like any other application and, for a shared engine, point them at an address.
+
+### Does a shared AI server keep my conversations private?
+
+It keeps them inside your network, which is the main thing people want. Prompts go from your client to your server and stop there. What it does not do is stop other people on that network reaching the server, because local model runtimes have no built-in authentication.
+
+### Which operating system is best for hosting the model?
+
+Linux or Windows with an NVIDIA card is the usual answer, because CUDA is the most mature path for consumer GPUs. Apple Silicon Macs are good hosts too, thanks to unified memory and Metal acceleration. The operating system on the clients matters much less, since a client does very little work.

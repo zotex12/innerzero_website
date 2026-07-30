@@ -1,0 +1,120 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale
+- [ ] Re-check the download-size bands against current Ollama library listings for the small, mid and large model families
+- [ ] Confirm the 4-bit / 8-bit / full-precision per-billion-parameter rules of thumb still hold for current quantisation formats
+- [ ] Confirm InnerZero's installer size and first-run model selection description still match what ships
+- [ ] Confirm the model uninstaller is still in Settings before referencing it
+-->
+---
+title: "What's The Initial Model Download Size and VRAM Impact of Running AI?"
+description: "How big is the first AI model download, and what does it cost in VRAM once loaded? Approximate size bands by parameter count and quantisation level."
+date: "2026-09-03"
+author: "Louie Summers"
+authorRole: "Founder"
+slug: "ai-model-download-size-vram-impact"
+tags: ["hardware", "local ai", "guide"]
+readingTime: "9 min read"
+featured: false
+---
+
+People planning their first [local AI](/what-is-local-ai) setup worry about VRAM and forget the download. Then they click install and watch their connection spend half an hour pulling a multi-gigabyte file. The initial download is the first real cost of running AI on your own machine, and the one nobody budgets for. Here is what you are downloading, roughly how big it is at each compression level, and what the same model costs in memory once it loads.
+
+> **Quick summary**
+> - A usable local AI model is roughly a 2 to 9 GB download. Very small models start near 1 GB. The largest open-source models run past 40 GB.
+> - Two numbers set both figures: parameter count and quantisation level. Every size here is approximate and shifts with each release.
+> - VRAM usage once loaded is roughly the download size plus 1 to 2 GB of working headroom.
+> - The download is a one-off per model and stays on disk. VRAM is per-session and is released the moment the model unloads.
+> - If a model does not fit in VRAM, system RAM takes the overflow. It still runs, just more slowly.
+
+## How big is the initial AI model download?
+
+A usable local AI model is roughly a 2 to 9 GB download. That is the realistic band for the small and mid-size models most people run on a laptop or a mid-range desktop. Below it, very small models start around 1 GB. Above it, the largest open-source models are 40 GB or more.
+
+What you are downloading is a weights file: one large file, sometimes split into parts, holding the learned values that make up the model. A tool like Ollama or LM Studio pulls it once and stores it locally. The app itself is a rounding error next to that: InnerZero's installer is a few hundred megabytes.
+
+Treat every figure here as an approximate planning band, not a spec sheet. Model families quantise differently and files get re-cut between releases, so check the model page for the real size before a big pull.
+
+## Why do download size and VRAM usage move together?
+
+Because they come from the same two numbers: how many parameters the model has, and how many bits store each parameter. Multiply those and you get the size of the weights file. Load that file into memory and you have most of the VRAM figure already.
+
+Parameters are the learned values inside the model, and the count is what the "B" in a name like 8B refers to (more on that in [open-source AI models explained](/blog/open-source-ai-models-explained)). Quantisation is how aggressively each of those values is compressed: about 2 bytes each at full precision, about 1 byte at 8-bit, roughly half a byte at 4-bit. So the same model can be a 16 GB download or a 4 GB one depending purely on which build you pull. Most model listings spell it "quantization"; same thing.
+
+That means the file size on a model page is a decent first estimate of the VRAM it will occupy. Actual VRAM sits a little higher, because the context window and working buffers need room alongside the weights. That is the extra 1 to 2 GB.
+
+## What are typical model download sizes at each quantisation level?
+
+As a rule of thumb, allow about half a gigabyte per billion parameters at 4-bit, about one gigabyte per billion at 8-bit, and about two gigabytes per billion at full precision. The table turns that into planning bands. Every figure is approximate.
+
+| Model size | Approx download at 4-bit | Approx download at 8-bit | Approx download at full precision | Approx VRAM once loaded (4-bit) |
+|---|---|---|---|---|
+| 1 to 2 billion | 0.7 to 1.5 GB | 1.5 to 2.5 GB | 3 to 4.5 GB | 2 to 3 GB |
+| 3 to 4 billion | 2 to 3 GB | 3.5 to 4.5 GB | 6 to 9 GB | 3 to 5 GB |
+| 7 to 8 billion | 4 to 5 GB | 8 to 9 GB | 14 to 17 GB | 5 to 7 GB |
+| 12 to 14 billion | 7 to 9 GB | 13 to 16 GB | 24 to 30 GB | 8 to 11 GB |
+| 27 to 32 billion | 16 to 20 GB | 30 to 36 GB | 55 to 65 GB | 18 to 23 GB |
+| 70 billion | 38 to 42 GB | 70 to 78 GB | 135 to 150 GB | 40 to 46 GB |
+
+The 4-bit column is the one that matters for most people, because local tools default to it. Moving up to 8-bit roughly doubles the download and the memory footprint for a modest quality gain. Full precision is mainly a research and fine-tuning format.
+
+The table only covers the chat model. A complete assistant also needs a small embedding model for memory (a couple of hundred megabytes) and, on capable hardware, local voice models. Small individually, but they add to the first-run total.
+
+## Is the download a one-off, or does it happen every time?
+
+The download is a one-off per model. Once the weights file is on your disk it stays there, and every later session loads it from local storage with no network involved. VRAM works the other way round: it is claimed fresh each time the model loads and handed straight back when it unloads.
+
+| What you spend | When you spend it | Reclaimed when you close the app? |
+|---|---|---|
+| Download bandwidth | Once per model version | Not applicable |
+| Disk space | Once per model, held while installed | No, the file stays until you delete it |
+| VRAM | Every session the model is loaded | Yes, released on unload |
+| System RAM | Every session, when VRAM runs short | Yes, released on unload |
+
+Two caveats. Models are sometimes re-released under the same tag, which triggers a fresh pull of the whole file. And every extra model carries its own download, so a collection creeps upward over months, as [the hidden costs of running AI on your own PC](/blog/hidden-costs-of-local-ai) covers in detail.
+
+The upside is real, though. Once the weights are local you can disconnect entirely and the assistant keeps working, which is the whole point of being able to [use AI offline](/blog/use-ai-offline).
+
+## What happens if a model is larger than my VRAM?
+
+It still runs. Your GPU takes as many layers as fit and the rest is held in ordinary system RAM and processed by the CPU. The cost is speed, because the CPU path is far slower and the two have to pass work back and forth on every token.
+
+How much slower depends on how much spilled over. A small overflow is noticeable but tolerable. A model sitting mostly in RAM converges on CPU-only speed, a readable few words per second rather than an instant answer. Better to step down one size band, or pick a more compressed build of the same model: smaller download, better experience.
+
+Apple Silicon is the exception worth knowing. There is no separate VRAM pool, because the chip shares one unified memory space, so download size maps almost directly onto the memory footprint. For the fuller picture on [how much VRAM you need for local AI](/blog/how-much-vram-for-local-ai), that guide goes deeper, and [what hardware you need to run AI locally](/blog/hardware-for-local-ai) covers the rest of the machine.
+
+## How much will InnerZero download on first run?
+
+InnerZero checks your hardware during setup and picks a model that fits it, so the first-run download is sized to your machine rather than to a fixed number. On a modest CPU-only laptop that means a small model of a couple of gigabytes. On a machine with a mid-range graphics card it is a larger model, usually several gigabytes, plus the small support models.
+
+The app is free to download and the installer is a few hundred megabytes, so the weights are the bulk of what your connection does. You can add more models later, each with its own download and disk cost, and Settings includes a model uninstaller for reclaiming space. For the families involved, see [which AI models InnerZero uses](/blog/what-models-does-innerzero-use).
+
+## Frequently asked questions
+
+### How big is the first AI model download?
+
+Roughly 2 to 9 GB for the small and mid-size models most people run, and closer to 1 GB for the smallest. Large open-source models reach 40 GB and above. These are approximate bands, so check the model listing for the real file size before you pull it.
+
+### Does the download size equal the VRAM usage?
+
+Close, but not exactly. The weights file is the bulk of what goes into VRAM, so download size is a good first estimate. Add roughly 1 to 2 GB for the context window and working buffers. A 5 GB download typically wants 6 to 7 GB of VRAM to sit comfortably.
+
+### Do I have to download the model again every time I use it?
+
+No. The download is one-off per model. The file stays on your disk and loads from local storage on every later run. You only re-download if the model is re-released under the same tag, if you delete it, or if you add a different model.
+
+### Can I run a model that is bigger than my VRAM?
+
+Yes. The parts that do not fit are held in system RAM and processed by the CPU, so the model still works. It runs more slowly, and the more that spills into RAM the closer it gets to CPU-only speed. Dropping to a smaller or more compressed model is usually the better trade.
+
+### Does a smaller download mean a worse model?
+
+Not necessarily. A heavily quantised build of a large model can be a smaller download than a full-precision build of a much smaller model, and often performs better. Quality drops gradually as quantisation gets more aggressive, and 4-bit builds are widely used because the loss is small relative to the memory saved.
+
+### How much disk space should I set aside overall?
+
+Plan for more than one model. A single chat model plus the support models is a modest install, but most people end up adding a second chat model or a coding model. Leaving 30 GB free is a sensible starting point.
+
+## Try it on your own hardware
+
+[Download InnerZero](/download) for free on Windows, macOS, and Linux. Setup reads your hardware, picks a model that fits, and tells you what it is about to download before it starts.

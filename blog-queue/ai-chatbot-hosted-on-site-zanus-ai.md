@@ -1,0 +1,108 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale
+- [ ] Re-check Zanus AI's public product range and positioning on zanusai.com before publish
+- [ ] Confirm the Business Licence description still matches the live pricing page
+- [ ] Confirm no competitor prices, specs, or benchmark numbers have crept into the copy
+- [ ] Check the three-route framing still matches what the market offers
+-->
+---
+title: "Which AI Chatbot Can Be Hosted On Site? Is Zanus AI an Option?"
+description: "On-site AI chatbots come in three forms: a vendor appliance like Zanus AI, self-hosted open source, or a local desktop app. Here is how to pick one."
+date: "2026-08-01"
+author: "Louie Summers"
+authorRole: "Founder"
+slug: "ai-chatbot-hosted-on-site-zanus-ai"
+tags: ["local ai", "privacy", "comparison", "hardware"]
+readingTime: "9 min read"
+featured: false
+---
+
+If you are the person who has to sign off on an AI chatbot for a company, "hosted on site" is usually the phrase that decides everything. It rules out the tools that quietly route every message to somebody else's data centre, and it narrows the field to three genuinely different products. Zanus AI is a real option in one of them.
+
+> **Quick summary**
+> - "Hosted on site" means inference runs on hardware you own, in your building or your rack, with no third-party cloud in the loop
+> - Three routes are realistic: a vendor appliance, self-hosted open source on a server you own, or a local app per person
+> - Zanus AI is a genuine option, and it fits an organisation that wants a supported box delivered rather than a stack it has to assemble
+> - InnerZero fits when you want no capital outlay and privacy that belongs to each person on their own machine
+> - The deciding question is who maintains it, not which model it runs
+
+## What does "hosted on site" actually mean?
+
+It means the model runs on computers your organisation owns, physically located somewhere you control, with no part of the conversation sent to a third-party inference service. Three things have to be true: the model weights sit on your hardware, the conversation is processed there, and whatever the system stores about your business stays there.
+
+Vendors stretch the phrase. Some describe a private cloud tenancy as "on premises" because the servers are logically separated from other customers. It is not the same thing. Somebody else still owns the metal, still holds the keys, and still receives the legal requests about the machine your data sits on.
+
+The test is blunt and worth running before any purchase. If the building loses its internet connection tomorrow morning, does the chatbot still answer? If yes, it is hosted on site. If no, you bought hosted software with an on-site badge. Then ask where the memory lives and what still leaves the building, because a system can run inference locally and send usage analytics out anyway. Get that in writing.
+
+## Which AI chatbots can actually be hosted on site?
+
+Three routes work in practice, and almost everything else is a variation on them.
+
+**Route one: the vendor appliance.** A company sells you a physical server with enterprise GPUs, models installed, and a business application layer on top. It arrives configured. You rack it, connect it to your network, and staff use it through a browser. Zanus AI sells appliances in this category.
+
+**Route two: self-hosted open source.** You take Ollama, LM Studio, or llama.cpp, put it on a server with a capable GPU, and wire a chat interface to it. The software costs nothing. The server, the electricity, and the person who keeps it running are the real bill. Given spare capacity and someone in IT who enjoys this sort of work, it is the cheapest route by a distance.
+
+**Route three: a local app on each machine.** Instead of one central server, every person runs the assistant on their own PC or laptop. Nothing is centralised, so there is no central store to breach, and each person's history stays on their own disk under their own operating system's disk encryption. InnerZero is built for this route.
+
+The fuller software-side comparison, including which self-hosted tools handle memory and voice properly, is in [the guide to privacy focused AI chatbots you can self host](/blog/best-privacy-focused-ai-chatbot-self-hosted). This post stays on the buying decision.
+
+## Is Zanus AI an option for on-site hosting?
+
+Yes. Zanus AI is a US company based in Fort Lauderdale, Florida, that sells private AI server appliances: physical hardware with enterprise GPUs and large language models preinstalled, shipped to your own premises. Publicly listed products include Zanus AI Prime and Zanus AI Quantum. If your requirement reads "a supported system we own, installed here", it answers that.
+
+What you get is broader than a chatbot. Zanus bundles what it calls the Zanus AI Operating System, a set of business modules including AI chat, client management, scheduling, document generation, marketing automation, web chatbots and a vector store. The positioning is enterprise operations rather than a consumer assistant, and data stays inside your own infrastructure. Their site is at [zanusai.com](https://zanusai.com) for current product detail. I am not quoting prices or specifications here, because those move and belong to the vendor.
+
+The buyer it fits is recognisable. You have a capital budget, you want one supplier accountable for both the hardware and the software, you want business modules rather than only a chat window, and you would rather not ask your IT team to become an AI infrastructure team. Appliance vendors exist because plenty of organisations sit exactly there.
+
+The buyer it does not fit is just as recognisable. No capital budget this year, a team of fifteen rather than a hundred and fifty, or a goal of private AI for each individual rather than one shared company system. In those cases an appliance is more than the problem requires.
+
+## How do the three on-site routes compare on cost and effort?
+
+The routes differ far more on ownership and timescale than on model quality. All three run the same families of open weight models, so the real comparison is who pays, who maintains, and how soon anyone sees value.
+
+| Route | Upfront cost | Who maintains it | Time to first useful answer | Who it suits |
+|---|---|---|---|---|
+| Vendor appliance | Typically a capital purchase: hardware plus the vendor's own pricing | Typically the vendor, under a support agreement | Varies by vendor, once the unit is delivered | Organisations wanting one accountable supplier for a shared company system |
+| Self-hosted open source on your own server | Free software, but you supply the server, GPU, and electricity | Your IT team or a contractor | Weeks, depending on in-house skill | Companies with spare server capacity and someone who enjoys running it |
+| Local app per person (InnerZero) | No capital outlay, runs on the PCs staff already have | Each user, with an installer that does the setup | Under an hour on a capable machine | Teams that want per-person privacy without buying hardware |
+
+What the table cannot show is the failure mode of each route. An appliance moves maintenance to a supplier, which is worth real money when you are accountable for uptime. Self-hosting gives the most control and the lowest software cost, and it stalls the day the person who understood the setup leaves. Per-person local apps keep the blast radius to one machine, at the cost of no shared company brain.
+
+Electricity, cooling, and hardware refresh apply to the first two routes and are easy to forget at quote stage. I worked through those in [the hidden costs of running local AI](/blog/hidden-costs-of-local-ai), and the [local AI hardware guide](/blog/hardware-for-local-ai) covers what GPU capacity buys at each tier.
+
+## Which on-site route suits your organisation?
+
+Choose the appliance if you have capital available and want one accountable supplier. Choose self-hosting if you own server capacity and have an IT team that wants the control. Choose per-person local apps if you want privacy for each individual, no new hardware, and a rollout you can start this afternoon.
+
+InnerZero sits in that third category. It is free to download, it installs on the Windows, macOS, and Linux machines your staff already use, and it runs models locally with a memory database held on that person's own disk. No company server to buy, no capital request. For commercial use a per-seat Business Licence applies, an operating cost rather than a capital one, and the current terms are on the [pricing page](/pricing).
+
+It also covers a middle case neither of the other routes handles neatly. If you do have one capable machine in the building, staff can point their desktop app at it: [running InnerZero against a remote Ollama server](/blog/remote-ollama-innerzero) gives a shared GPU without giving up the per-person app. For regulated work, where the binding constraint is confidentiality rather than budget, [offline AI for legal, medical, and finance work](/blog/offline-ai-for-sensitive-work) covers what your compliance lead will ask first.
+
+None of this is a contest. An appliance vendor and a free local app answer different questions, and some businesses sensibly end up with both.
+
+## Frequently asked questions
+
+### Is Zanus AI a competitor to InnerZero?
+
+Not really, because they sell different things to different buyers. Zanus AI sells enterprise server appliances with hardware, models, and business modules bundled together and shipped to your premises. InnerZero is free software that runs on computers you already own, one person at a time. Both keep data on site. The choice is about budget and scale.
+
+### Can an on-site AI chatbot match ChatGPT quality?
+
+For everyday business work, open weight models on decent local hardware handle most tasks well: drafting, summarising, reformatting, and answering questions about documents you supply. The largest frontier cloud models still lead on the hardest reasoning tasks. Most organisations find that gap matters less than expected once the data stays in the building.
+
+### Do we need a dedicated server room?
+
+Not for the per-person route, which uses the computers you already have. An appliance or a self-hosted server needs proper electrical supply, cooling, and physical security, though for a small deployment a comms cupboard can do. Confirm the electrical and thermal requirements before ordering hardware.
+
+### Who is responsible for updates on an on-site system?
+
+With an appliance, the vendor, under whatever support agreement you sign. Read it closely, because update cadence and end-of-support dates decide how long the unit stays useful. With self-hosting, your own team. With a per-person local app, the app updates itself and the user approves it, so there is nothing central to schedule.
+
+### Is data on an on-site chatbot automatically secure?
+
+No. Hosting on site removes the third-party processor from the picture, which is a large part of the problem, but the machine still needs the controls any business system needs: disk encryption (BitLocker, FileVault, or LUKS), account controls, backups, and physical security. InnerZero relies on your operating system's disk encryption for data at rest rather than claiming a layer of its own.
+
+### Can we start small and change our mind later?
+
+Yes, and that is usually the smart order. Rolling out a free local app to a few people costs nothing but time and tells you what your staff actually use AI for. If the evidence then points to a shared company system with support attached, you will write a far better appliance specification for having run the trial first. [Download InnerZero](/download) to start there.

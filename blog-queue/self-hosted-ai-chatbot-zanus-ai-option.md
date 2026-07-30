@@ -1,0 +1,107 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale
+- [ ] Re-check that Zanus AI still sells on-premises appliances and that the product names referenced are current
+- [ ] Confirm Ollama, LM Studio, Jan and Open WebUI still match the setup-effort descriptions in the table
+- [ ] Confirm the InnerZero Business Licence price is still correct
+- [ ] Re-check that the InnerZero setup wizard flow described still matches what ships
+-->
+---
+title: "What AI Chatbot Can Be Self Hosted? Is Zanus AI an Option?"
+description: "Self-hosting means you install and maintain it yourself. Zanus AI ships a preconfigured on-premises appliance instead. Here is what you can genuinely self-host."
+date: "2026-08-06"
+author: "Louie Summers"
+authorRole: "Founder"
+slug: "self-hosted-ai-chatbot-zanus-ai-option"
+tags: ["local ai", "comparison", "getting started"]
+readingTime: "9 min read"
+featured: false
+---
+
+> **Quick summary**
+> - Self-hosting means you install, configure and maintain the software yourself, on hardware you already own.
+> - Zanus AI is an on-premises appliance rather than a self-host-it-yourself product. The vendor builds the box, preloads the models, and ships it to your site.
+> - It suits an organisation buying private AI as a finished system, not someone wanting to install something tonight.
+> - What one person can self-host today: Ollama with a frontend, LM Studio, Jan, Open WebUI, llama.cpp, and InnerZero as a desktop app.
+> - Effort ranges from a two-minute installer to an afternoon of Docker, ports and GPU drivers.
+
+"Self-hosted" gets used for two different things, and the confusion wastes hours. Sometimes it means software you download and run. Sometimes it means a machine that sits in your building. This post takes the practitioner reading: you want to install it and keep it running.
+
+## What is the difference between self-hosted and on-premises AI?
+
+Self-hosted means you are the operator. You choose the hardware, install the software, configure it, update it, and fix it when it breaks. On-premises only means the hardware lives at your site, and somebody else may have built and configured it before it arrived. Every self-hosted setup is on-premises. Not every on-premises setup is self-hosted.
+
+The difference is a list of jobs. Self-hosting hands you five: hardware selection, installation, configuration, updates, troubleshooting. An appliance hands you one, which is plugging it in and having someone to call.
+
+## Is Zanus AI something you can self-host yourself?
+
+No, not in the sense most people mean when they type that question. Zanus AI is a US company based in Fort Lauderdale, Florida that sells private AI server appliances: physical machines with enterprise GPUs and language models already installed, delivered to your own premises. You buy a finished system rather than assemble one. That makes it a real on-premises option, but not a download-and-install self-host route.
+
+What they ship is broader than a chatbot. The appliances (product names seen publicly include Zanus AI Prime and Zanus AI Quantum) carry a bundled operating system with 15 or more business modules including AI chat, client management, scheduling, document generation, marketing automation, web chatbots and a vector store. The positioning is enterprise operations rather than a consumer chat window, and data stays inside the customer's own infrastructure.
+
+So is it an option? Yes, if you are an organisation that wants private AI as a supported product, with a budget for hardware and a preference for one accountable supplier over a stack you maintain. No, if you are one person who wants a private chatbot on the machine you already own. I have not tested one, so I will not make claims about how it performs. Their site is [zanusai.com](https://zanusai.com). That is a category difference, not a verdict: one is bought and installed, the other is downloaded and run, and both keep data in your building.
+
+## Which AI chatbots can I install and run myself?
+
+Six routes cover what one person realistically self-hosts in 2026, ranked by setup effort.
+
+| Route | Setup effort | What it asks of you | What you end up with |
+|---|---|---|---|
+| InnerZero desktop app | Lowest | An installer and one setup wizard | Local chat with memory, voice and tools |
+| Jan | Low | Little beyond the installer | A tidy local chat client |
+| LM Studio | Low | Picking a model file and a quantisation that fits your RAM | A chat UI plus a local API server |
+| Ollama on its own | Low if you like a terminal | Command line comfort, model names, disk management | A model runtime with no chat interface |
+| Open WebUI on top of Ollama | Medium | Docker, ports, an account layer, updates for two projects | A multi-user web chat interface you host |
+| llama.cpp built from source | High | A build toolchain, compile flags, GPU libraries, patience | Maximum control over how the model runs |
+
+Ollama is the foundation under most of this. It downloads open weight models, runs them on your GPU or CPU, and exposes a local API. On its own it gives you a terminal and nothing else, which is why people pair it with a frontend, covered in [Ollama desktop app options](/blog/ollama-desktop-app).
+
+LM Studio is the friendliest way to browse and swap models without a command line, and its server mode is useful for developers. It stops short of memory, voice or tools, which is the honest gap in every model frontend. I wrote that gap up in [InnerZero vs LM Studio](/blog/innerzero-vs-lm-studio).
+
+Open WebUI is the closest thing here to a classic self-hosted web app: Docker, pointed at your Ollama instance, giving a browser interface with user accounts. It suits several people sharing one machine, and asks the most attention, because you maintain two projects and a container runtime. llama.cpp from source is for controlling quantisation and offloading layers by hand: rewarding afternoon, poor daily driver.
+
+## Does a desktop app like InnerZero count as self-hosting?
+
+Yes. Self-hosting is about where the software runs and who controls it, not about whether a server rack is involved. InnerZero installs on your own Windows, Mac or Linux machine, runs the model on your hardware, and keeps conversations and memory in a SQLite database in your user data folder. Pull the network cable and it keeps working.
+
+The trade-off against a Docker stack is less to configure and less to break. No account, no sign-in, no telemetry, no phone-home check. The setup wizard scans your CPU, RAM, GPU and free disk on first launch and picks a model to match.
+
+On privacy I want to be precise rather than flattering. The memory database is plain SQLite, readable by any SQLite browser. Protection comes from the operating system disk encryption you already run (BitLocker, FileVault, LUKS), not from application-level encryption. Two items are encrypted at the application layer: cloud API keys you save, and the Telegram bot token if you use remote access. Cloud mode is optional and off by default, and when on it forwards only the current prompt with its assembled context. Your memory database, files, profile facts and prior conversations are never sent, and microphone audio is processed locally. Full detail is in [how InnerZero stays private](/blog/how-innerzero-stays-private).
+
+For a server-shaped setup, put Ollama on a stronger machine on your network and point the desktop app at it, covered in [running InnerZero against remote Ollama](/blog/remote-ollama-innerzero). The app is free to download for personal use. Commercial use needs a Business Licence at £19.99 per seat per month, and optional cloud plans exist for frontier models but are not required for anything local.
+
+## When does a vendor appliance beat doing it yourself?
+
+When the cost of your time exceeds the cost of the hardware, when a client contract or regulator wants a supported system with someone accountable behind it, or when more than a handful of people need the same assistant with accounts, roles and uptime expectations.
+
+Three questions settle it. Who fixes it at two in the morning? Who signs off the security review? How many people share it, and does each need their own login and data boundary? If the first two answers are "me, and I do not mind", self-hosting is fine. If either is "nobody currently", an appliance with a support contract is buying you a person as much as a machine.
+
+The reverse case matters just as much. For an individual, a small business, or a professional who wants private AI for their own work, buying enterprise hardware is a large solution to a small problem. A local app on the laptop you own solves it for the price of the download. The fuller guide is [the best privacy focused AI chatbot you can self host](/blog/best-privacy-focused-ai-chatbot-self-hosted), and [what is local AI](/what-is-local-ai) is the primer if the category is new to you.
+
+## Frequently asked questions
+
+### Can I self-host an AI chatbot without a GPU?
+
+Yes. Every route in the table runs on CPU only, just more slowly. A model in the 1B to 4B range is comfortable on a modern CPU with 16 GB of RAM and answers at reading pace rather than typing pace. An 8B model is workable if you are patient. For anything larger you want a GPU with at least 8 GB of VRAM, and the tiers are broken down in the [hardware guide for local AI](/blog/hardware-for-local-ai).
+
+### Do I need Docker to self-host a chatbot?
+
+No. Docker is only needed for the web-app routes such as Open WebUI. Desktop applications install like any other program, and Ollama and LM Studio ship native installers. Skip that row and you lose only multi-user access.
+
+### Is self-hosting the same as running an AI chatbot offline?
+
+They usually go together but are not identical. Self-hosting is about who operates the software. Offline is about whether it needs the internet at runtime. A self-hosted tool can still call out for web search or updates. The test is to disconnect the network and see whether chat, history and memory still work.
+
+### Can I self-host on a spare machine and use it from my laptop?
+
+Yes, and it is a good pattern if an older desktop with a decent GPU is sitting idle. Put the model runtime on that machine, leave it running, and connect from your laptop over the local network. Keep it off the public internet unless you put real authentication in front of it.
+
+### Does self-hosting mean nobody can see my conversations?
+
+It means no vendor receives them by default, which is the largest part of the problem solved. It does not mean the file is unreadable to anyone with access to your computer. Chat history and memory sit in ordinary files on disk, so disk encryption, a locked screen and sensible backup hygiene remain your job.
+
+### Is Zanus AI open source, or can I install its software on my own server?
+
+Their public positioning is a hardware appliance with a bundled operating system, sold and delivered as a complete system, rather than software you download onto your own machine. To run something on hardware you already own, the open source routes in the table are built for that.
+
+Self-hosting an AI chatbot in 2026 is easy at the small end and involved at the large end. Pick the row of the table that matches how much maintenance you want to own, not the one that sounds most impressive. For the shortest path to a working private assistant, [download InnerZero](/download) and let the wizard choose for you.

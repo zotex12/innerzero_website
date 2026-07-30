@@ -1,0 +1,127 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale
+- [ ] Confirm project scoping, approval gates, and the local connection log still ship as described
+- [ ] Re-check the Ollama, LM Studio, and Open WebUI descriptions against their current feature sets
+- [ ] Confirm the Business Licence wording still matches the live pricing page (no figures quoted here on purpose)
+- [ ] Check the cloud data-flow sentence still matches the privacy page wording
+-->
+---
+title: "What's The Best Self-Hosted AI Tool For Studios Handling Confidential Client Work?"
+description: "Design, architecture, post and games studios need AI that survives an NDA and a client questionnaire. The self-hosted options compared, plus per-client separation."
+date: "2026-08-30"
+author: "Louie Summers"
+authorRole: "Founder"
+slug: "self-hosted-ai-tool-studios-confidential-client-work"
+tags: ["privacy", "local ai", "comparison"]
+readingTime: "9 min read"
+featured: false
+---
+
+A client sends over a security questionnaire. Question 14: confirm whether any material supplied under this agreement has been entered into a generative AI service, and name the provider if it has. Someone has to answer that in writing, and it has to still be true six months later when the campaign ships.
+
+That question is why studios ask about self-hosted AI. Design, architecture, post-production, advertising and games studios all sit on material that cannot leave the building: unreleased campaigns, unannounced products, embargoed launch dates, and client names that are themselves confidential. Getting a chat box running locally is the easy part. Getting one you can describe accurately in a questionnaire is the real requirement.
+
+> **Quick summary**
+> - The right tool keeps the model and the assistant's stored notes on hardware you own, keeps clients apart, and gives you a specific answer for a client questionnaire.
+> - Raw Ollama and LM Studio are fine for a local chat box. Open WebUI adds a team interface in exchange for a service you maintain.
+> - I built InnerZero for studios wanting an assistant rather than a model runtime: local by default, one project per client, free to download, cloud off unless you switch it on.
+> - Per-client separation stops one client's codename surfacing in another client's deck.
+
+## What does a studio actually need from a self-hosted AI tool?
+
+Four things, and most tools deliver only the first: model inference on hardware you own, the assistant's stored notes on hardware you own, a way to keep client contexts apart, and a written answer you can hand a client without hedging.
+
+The reason is contractual rather than technical. Studio NDAs restrict disclosure to third parties, and many now name subprocessors explicitly. Pasting a script, a brand book or an unannounced product name into a hosted chatbot is a disclosure to a company that was never listed in the agreement, whatever its retention policy says. In a studio that means embargoed scripts, design briefs for unreleased products, unannounced game titles, casting notes and your own rate card. In new business the client's identity is often the confidential part before a single asset exists. The broader case is in the fuller guide to [offline AI for sensitive work](/blog/offline-ai-for-sensitive-work).
+
+The second requirement is the one studios miss. Plenty of tools run the model locally and then keep chat history or memory in an account somewhere. If the assistant remembers a client codename, wherever that memory lives is in scope for the same NDA as the file it came from.
+
+## Which self-hosted AI tools work for studios under NDA?
+
+All the mainstream local runtimes keep inference on your machine, so the honest comparison is about what surrounds the model.
+
+| Option | What the studio gets | Client separation | Setup and upkeep |
+|---|---|---|---|
+| Raw Ollama | Model runtime driven from a terminal | None built in | Low, if you like a command line |
+| LM Studio | Local chat UI plus a local API server | None built in, a new chat is the separation | Low to moderate, model picking is technical |
+| Open WebUI on Ollama | Team-style web interface you host yourself | Workspaces you configure, memory via plugins | Moderate to high, your service to patch |
+| On-premises AI appliance | A bought server preinstalled for the studio | Depends entirely on the product | Procurement, install, capital budget |
+| InnerZero | Assistant with memory, voice, documents and tools | Project scoping, one project per client | Low, guided setup on a machine you own |
+
+Raw Ollama is the tightest option because there is no interface to forget about, and the least useful if you wanted an assistant. LM Studio suits a technical director building tooling on a local API. Open WebUI gets closest to a shared studio service, at the cost of running that service: containers, updates, accounts, backups. An appliance suits a larger studio with an IT function. The wider rundown is in [the privacy-focused self-hosted AI chatbot comparison](/blog/best-privacy-focused-ai-chatbot-self-hosted).
+
+InnerZero is the one I build, so weigh that accordingly: it exists for studios that want an assistant on the machine already on the desk, not another service to run.
+
+## How do I keep one client's material out of another client's work?
+
+Run one project per client and keep anything identifying out of the shared profile. Project scoping organises memory into named projects, and the assistant only sees the active project, so client A's codename does not surface while you draft for client B.
+
+A working setup for a studio:
+
+- One project per active engagement, named so you would not mind it appearing on a screen share.
+- Codenames, briefs, embargo dates and client terminology live inside that project.
+- The shared profile holds studio-level basics only: house style, tone of voice, British English, output formats.
+- When an engagement closes, archive or delete the project. Your original files stay where you put them.
+
+The full mechanics are in the guide to [keeping AI memory separate with project scoping](/blog/project-scoping-memory).
+
+Two honest limits. Project scoping is an organisational boundary, not a security one: anyone at that machine can switch projects. And the memory database is plain SQLite in your user data directory, so protection at rest comes from disk encryption at the operating system level (BitLocker, FileVault or LUKS), not from the app.
+
+## What about freelancers working on shared studio machines?
+
+Give every freelancer a separate operating system account, and add the AI assistant to the machine handover checklist. Separate accounts mean separate user data directories, so one freelancer's projects are not in the next one's session.
+
+1. **Separate accounts, always.** A shared login on an edit suite defeats every other control on this list.
+2. **Offboarding removes the account**, which takes the local memory and project data with it.
+3. **A named clause in the freelance contract** covering which AI tools may touch client material.
+4. **Approval gates left on.** In InnerZero, actions that would change files need approval first, which matters when someone points an assistant at a live project folder.
+
+Bring-your-own-device is the awkward case. You cannot audit a freelancer's own machine, so either supply a workstation for confidential engagements or write the restriction into the contract and accept that you are relying on trust. The data-flow detail behind either choice is in [how InnerZero stays private](/blog/how-innerzero-stays-private).
+
+## What do I tell a client who asks in writing whether their work went into an AI?
+
+Answer with specifics rather than reassurance. Name the tool and how it is deployed, say where inference happened (in local mode there is no outbound request carrying the material), say what is retained and how it is protected at rest, say whether any hosted model touched this engagement, and say who had access. Vague comfort language is what makes procurement teams nervous.
+
+Two things make that easier to give truthfully. If you do use hosted models elsewhere, only the current prompt and its assembled context go to the provider; the memory database, your files and prior history are not sent. And InnerZero keeps a local connection log you can open in the app, so the claim is checkable rather than remembered. For studios mixing confidential and general work on one machine, [the privacy blacklist](/blog/privacy-blacklist-explained) marks terms and paths that must never appear in anything cloud-bound.
+
+The one answer never worth giving is "no AI was used" when it was. A correction later costs far more than a precise answer now.
+
+## Where does a local model fall short for studio work?
+
+Local models are strong on text and weaker at the extremes. They will not match a frontier model on the hardest reasoning, and offline they cannot see the live web. Where they earn their place in a studio day:
+
+- Reading a 60-page brand guideline PDF and answering questions against it without that PDF going anywhere. The mechanics are in [local document Q&A](/blog/local-document-qa).
+- Generating fifteen headline variants at a set character count for a campaign that has not launched.
+- Turning a rambling client call into actions and owners, or a tender answer into one that fits the word limit.
+
+Where they do not help: image and video generation are a separate toolchain, and live research needs a connection. Hardware is usually good news here, because design, post and games machines already carry the GPU and memory local models want. The tiers are in the [hardware guide for local AI](/blog/hardware-for-local-ai).
+
+The sensible pattern is a split: confidential engagements stay local, general work can use a hosted model with your own API keys.
+
+## Frequently asked questions
+
+### Is a self-hosted AI tool enough to satisfy an NDA?
+
+It removes the disclosure problem, which is usually the blocking issue, but it is not the whole answer. An NDA also covers access control, retention, and who can see the material. You still need disk encryption, separate accounts and a legal adviser who has read the agreement.
+
+### Does using InnerZero on paid client work need a licence?
+
+Commercial use is covered by a Business Licence, separate from personal use. Studio work for clients is commercial, so that is the right path. Current terms live on the [pricing page](/pricing) rather than here.
+
+### Can the whole studio share one machine running the AI?
+
+You can, but it works better as a per-workstation install. A shared machine means shared context unless you set up separate accounts on it, and creative teams want the assistant next to the files they work in. If you need one shared endpoint, a self-hosted web interface on your own server fits better.
+
+### What happens to a client's material when the project ends?
+
+Delete or archive the project, which removes those memories from the assistant's working set. Your source files are untouched, so retention of the deliverables stays governed by your contract. If you have a contractual deletion deadline, put project deletion on the closedown checklist.
+
+### Can the assistant read our project files without uploading them?
+
+Yes. Document work happens on the machine, so a PDF, a brief or a spreadsheet is read locally and nothing is sent anywhere in local mode. Microphone audio follows the same rule: processed on your hardware, never uploaded.
+
+## Set this up before the next pitch
+
+[Download InnerZero](/download) on the workstation that handles confidential engagements, create one project per client, and turn on disk encryption if it is not already running. That combination answers most of a questionnaire before anyone asks, and [what is local AI](/what-is-local-ai) is the primer if you want the grounding first.
+
+This is not legal advice: client agreements differ, and what satisfies one procurement team may not satisfy the next.
