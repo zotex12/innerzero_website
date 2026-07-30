@@ -65,7 +65,7 @@ The integration matters. A voice loop with a 200ms hiccup between stages feels s
 
 ## What about Cloud Voice for users who want premium voices?
 
-InnerZero's default voice mode is fully local. There is also an opt-in Cloud Voice option that routes through OpenAI's voice API for users who specifically want a premium voice (currently 13 voices to pick from). It is genuinely opt-in. Default mode never touches a cloud voice service.
+InnerZero's default [voice mode](/features/voice) is fully local. There is also an opt-in Cloud Voice option that routes through OpenAI's voice API for users who specifically want a premium voice (currently 13 voices to pick from). It is genuinely opt-in. Default mode never touches a cloud voice service.
 
 Two things worth knowing. Cloud Voice uses your OpenAI API key (BYO model), so the cost is whatever OpenAI charges per minute, billed directly to your account. And in Standard mode the reasoning still runs on whichever LLM you configured (local, BYO Anthropic, whatever), with only the text reply sent to the cloud TTS step. Your prompt and model output stay on the path you picked. The voice TTS is the only cloud step, and only when you opt in. Full data-flow detail is in [how InnerZero stays private](/blog/how-innerzero-stays-private). For users who treat offline-capable voice as a hard requirement, Cloud Voice should stay off and Kokoro is the answer. The [offline work persona page](/for/offline-work) covers offline-first scenarios in more depth.
 

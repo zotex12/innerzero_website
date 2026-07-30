@@ -41,7 +41,7 @@ Text chat is one step: the model reads your message and writes a reply. Voice is
 
 The middle row is where your time goes. Transcription and speech synthesis are small models measured in megabytes and finish fast even on a CPU. The language model is measured in gigabytes.
 
-Two design tricks hide much of the extra latency. Transcription can start while you are still talking, and the voice can begin reading the first sentence before the model writes the rest, so a good voice loop feels quicker than the sum of its parts. The standalone panels for each step are covered in [local text to speech and speech to text](/blog/local-text-to-speech-speech-to-text).
+Two design tricks hide much of the extra latency. Transcription can start while you are still talking, and the voice can begin reading the first sentence before the model writes the rest, so a good [voice loop](/features/voice) feels quicker than the sum of its parts. The standalone panels for each step are covered in [local text to speech and speech to text](/blog/local-text-to-speech-speech-to-text).
 
 ## Which model sizes actually fit a laptop with 8 GB or 16 GB of RAM?
 
