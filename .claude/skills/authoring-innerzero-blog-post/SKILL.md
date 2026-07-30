@@ -1,6 +1,6 @@
 ---
 name: authoring-innerzero-blog-post
-description: Use when writing, drafting, editing, or rewriting blog posts for the InnerZero website at C:\Users\sumlu\Documents\innerzero_website. Triggers on tasks involving .mdx files in src/content/blog/, .md files in blog-queue/, or any request to author, draft, plan, or rewrite InnerZero blog content. Encodes InnerZero-specific copy rules (em dash ban, 12+ banned AI phrases, brand naming, voice), structure conventions (question-form h2s with answer-first chunks, FAQ section, summary box, comparison tables one-row-per-line), tag taxonomy (13 approved entries), internal linking discipline, AEO patterns for ChatGPT/Perplexity/Google AI Overviews citations, encryption/privacy claim discipline, and gotchas from 18+ shipped batch posts. Does NOT apply to general website pages, components, routes, the desktop app at C:\Users\sumlu\Documents\InnerZero, or the Summers Solutions site.
+description: Use when writing, drafting, editing, or rewriting blog posts for the InnerZero website at C:\Users\sumlu\Documents\innerzero_website. Triggers on tasks involving .mdx files in src/content/blog/, .md files in blog-queue/, or any request to author, draft, plan, or rewrite InnerZero blog content. Encodes InnerZero-specific copy rules (em dash ban, 12+ banned AI phrases, brand naming, voice), structure conventions (question-form h2s with answer-first chunks, FAQ section, summary box, comparison tables one-row-per-line), tag taxonomy (15 approved entries), internal linking discipline, AEO patterns for ChatGPT/Perplexity/Google AI Overviews citations, encryption/privacy claim discipline, and gotchas from 18+ shipped batch posts. Does NOT apply to general website pages, components, routes, the desktop app at C:\Users\sumlu\Documents\InnerZero, or the Summers Solutions site.
 ---
 
 ## Quick reference
@@ -53,7 +53,7 @@ Literal example (copy and adapt for new posts):
 title: "Does InnerZero Work Offline?"
 description: "InnerZero runs locally on your machine and works fully offline once models are installed. What works without internet, what needs a one-time download, and what cloud features look like."
 date: "2026-05-21"
-author: "Louie"
+author: "Louie Summers"
 authorRole: "Founder"
 slug: "does-innerzero-work-offline"
 tags: ["local ai", "privacy", "features"]
@@ -70,7 +70,7 @@ Field reference:
 | description | string | yes | 1-2 sentences. Used for og:description, twitter:description, RSS, JSON feed, and llms.txt. Wrap in double quotes. |
 | date | string | yes | ISO `YYYY-MM-DD`. In queue files this is the scheduled publish date. Wrap in double quotes. |
 | updated | string | no | ISO date. Set when materially refreshing a published post. |
-| author | string | no | Defaults to `"Louie"` if absent. |
+| author | string | no | Always set `"Louie Summers"` explicitly. That is the full-name convention across 70/70 published posts, and the fallback when absent is `SITE_AUTHOR.name` in `src/lib/constants.ts:45`, which is also `"Louie Summers"`. Never `"Louie"` alone; the short form breaks the Person entity used for blog authorship. |
 | authorRole | string | no | Defaults absent. Corpus uses `"Founder"`. |
 | slug | string | no | Falls back to filename. Set explicitly to match corpus convention. |
 | tags | string array | yes | 2-4 entries from the approved taxonomy. Use SPACES not hyphens. |
