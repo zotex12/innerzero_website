@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "dateLabel": "August 2026",
   "subject": "InnerZero 0.2.0 is out",
-  "preheader": "A High Contrast theme, bundled fonts for true offline privacy, smarter setup, and the biggest reliability sweep since launch.",
+  "preheader": "A High Contrast theme, drag and drop into chat, smarter setup, and the biggest reliability sweep since launch.",
   "intro": "Version 0.2.0 of InnerZero is now available. It is our largest update since launch, focused on reliability, honesty, accessibility, and privacy. Here are the highlights.",
   "groups": [
     {
@@ -17,7 +17,6 @@
     {
       "label": "Improved",
       "items": [
-        "Fonts are now bundled with the app, so launching InnerZero no longer contacts Google's font servers and the Offline and Private badges are truthful from the first moment.",
         "The assistant makes fewer wrong tool detours, no longer returns raw encyclopedia dumps for simple questions, and engine errors are no longer stored into memory.",
         "The Costs page now works across all eight time periods, with bring-your-own-key estimates refreshed to provider prices verified in August 2026.",
         "Approvals are honest end to end: a failed action shows as a failure, and decided approval cards stay decided."

@@ -57,7 +57,6 @@ export const RELEASES: Release[] = [
       {
         label: "Improved",
         entries: [
-          { text: "Fonts are now bundled with the app, so launching InnerZero no longer contacts Google's font servers. The Offline and Private badges are now truthful from the first moment the window opens." },
           { text: "Marking a calendar event private now reliably removes the copy that was previously synced to Google, even if the connector is disconnected at the time; the cleanup completes when it reconnects." },
           { text: "Approvals got honest end to end: an approved action that then fails shows as a failure rather than a green tick, decided approval cards stay decided when you navigate away and back, and a reply from the model can no longer draw a working approval button of its own." },
           { text: "Unrestricted Mode reliability: the toggle no longer unticks itself for users whose consent was recorded under an older format, the off switch stays reachable even when the model is missing or the backend changed, the uncensored-model badges now light up in every case they should, and the mode is clearly disclosed as inactive on LM Studio and llama.cpp." },
