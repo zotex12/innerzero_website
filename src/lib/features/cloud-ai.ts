@@ -28,7 +28,7 @@ export const cloudAi: FeatureCategory = {
     {
       id: "three-modes",
       title: "Three modes: Offline, Private, Cloud",
-      body: "Offline blocks outbound network connections at the application layer, so the app runs entirely on your machine with no internet access at all. Private keeps the AI local through Ollama or LM Studio, so no prompt, memory or profile goes to an AI provider. Anything you have connected yourself, such as Gmail or Google Calendar, still syncs; Offline is the mode that stops all of it. Cloud sends an assembled prompt to the providers you have set up: your current message, a short profile block of name, preferences and personal details, a few relevant memory snippets, and the relevant part of any file you attach, while the memory database itself stays on your machine. Private is the default, and all three sit side by side as cards on the My Privacy page.",
+      body: "Offline blocks outbound network connections at the application layer, so the app runs entirely on your machine with no internet access at all. Private keeps the AI local through Ollama, LM Studio, or llama.cpp, so no prompt, memory or profile goes to an AI provider. Anything you have connected yourself, such as Gmail or Google Calendar, still syncs; Offline is the mode that stops all of it. Cloud sends an assembled prompt to the providers you have set up: your current message, a short profile block of name, preferences and personal details, a few relevant memory snippets, and the relevant part of any file you attach, while the memory database itself stays on your machine. Private is the default, and all three sit side by side as cards on the My Privacy page.",
     },
     {
       id: "off-until-you-turn-it-on",
@@ -83,13 +83,12 @@ export const cloudAi: FeatureCategory = {
     {
       id: "proxy-support",
       title: "Works behind a corporate or university proxy",
-      body: "If your network needs a proxy to reach the internet, you can enter an HTTP or HTTPS proxy in Settings with an optional username and password. Local AI traffic is never routed through it: loopback addresses are excluded on every startup, even when the in-app proxy is switched off, so a request to Ollama or LM Studio on your own machine stays on your machine. The proxy changes where bytes go, not whether they are allowed to leave, so it does not bypass the egress guard or the privacy blacklist. SOCKS proxies are not supported.",
+      body: "If your network needs a proxy to reach the internet, you can enter an HTTP or HTTPS proxy in Settings with an optional username and password. Local AI traffic is never routed through it: loopback addresses are excluded on every startup, even when the in-app proxy is switched off, so a request to Ollama, LM Studio, or llama.cpp on your own machine stays on your machine. The proxy changes where bytes go, not whether they are allowed to leave, so it does not bypass the egress guard or the privacy blacklist. SOCKS proxies are not supported.",
     },
     {
       id: "cloud-vision",
       title: "Cloud vision for attached images",
-      body: "Sending an attached image to a vision model for a closer look is built behind the same privacy gate as everything else, but it has no control in the app yet. When it arrives it will fail closed by design: Offline mode, Private mode, an active privacy blacklist, or a provider with no vision model will each keep the image on your machine. Image bytes travel a separate path from text, because a text scrubber cannot cover bytes.",
-      comingSoon: true,
+      body: "An attached image can be sent to a vision model for a closer look, using your own API key with OpenAI, Anthropic, Google Gemini, or xAI Grok. It fails closed by design: Offline mode, Private mode, an active privacy blacklist, or a provider without a vision model each keep the image on your machine, and the accompanying text prompt still goes through the privacy blacklist scrub. Image bytes travel a separate, gated path from text, because a text scrubber cannot cover bytes. This is bring-your-own-key only; managed plans do not send images.",
     },
   ],
   guides: [
@@ -123,7 +122,7 @@ export const cloudAi: FeatureCategory = {
     {
       question: "Does InnerZero send my data to the cloud?",
       answer:
-        "Not unless cloud mode is on, and it is off out of the box. The default is Private, where the AI runs locally through Ollama or LM Studio and nothing you type goes to an AI provider. There is also an Offline mode that blocks outbound network connections at the application layer, so the app works with no internet access at all.",
+        "Not unless cloud mode is on, and it is off out of the box. The default is Private, where the AI runs locally through Ollama, LM Studio, or llama.cpp and nothing you type goes to an AI provider. There is also an Offline mode that blocks outbound network connections at the application layer, so the app works with no internet access at all.",
     },
     {
       question: "Which cloud providers can I use my own API keys with?",
@@ -148,10 +147,10 @@ export const cloudAi: FeatureCategory = {
     {
       question: "Does InnerZero work behind a corporate or school proxy?",
       answer:
-        "Yes, for HTTP and HTTPS proxies with an optional username and password, set in Settings. Local AI traffic is never routed through the proxy, so requests to Ollama or LM Studio on your own machine stay on your machine. SOCKS proxies are not supported, and the proxy only changes where traffic goes, not whether it is allowed to leave.",
+        "Yes, for HTTP and HTTPS proxies with an optional username and password, set in Settings. Local AI traffic is never routed through the proxy, so requests to Ollama, LM Studio, or llama.cpp on your own machine stay on your machine. SOCKS proxies are not supported, and the proxy only changes where traffic goes, not whether it is allowed to leave.",
     },
   ],
   related: ["setup", "ai-chat", "voice"],
   published: "2026-07-27",
-  modified: "2026-07-27",
+  modified: "2026-08-16",
 };

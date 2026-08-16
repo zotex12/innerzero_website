@@ -2,6 +2,7 @@
 title: "Running Multiple AI Models on One PC: What Actually Works"
 description: "Running multiple AI models on one PC is harder than it sounds. How InnerZero handles it, when swap beats concurrent loading, and VRAM budgets in practice."
 date: "2026-05-12"
+updated: "2026-08-16"
 author: "Louie Summers"
 authorRole: "Founder"
 slug: "multi-model-concurrency"
@@ -99,9 +100,9 @@ And cases where swap wins:
 
 ## Can I run different backends for different roles?
 
-**Yes. InnerZero lets you mix Ollama for some roles and LM Studio for others.** You might run your chat model on Ollama (managed automatically) and your coding model on LM Studio (because you want precise control over quantisation). This isn't common but it's supported.
+**Yes. InnerZero lets you mix Ollama for some roles and LM Studio or llama.cpp for others.** You might run your chat model on Ollama (managed automatically) and your coding model on LM Studio or your own llama-server (because you want precise control over quantisation). This isn't common but it's supported.
 
-The mechanism is simple. InnerZero has a single "active backend" setting for the current session. You pick Ollama or LM Studio for the primary role. The voice pipeline and cloud specialists can be configured independently regardless of backend. If you want advanced split-backend setups, it works but requires a bit more hands-on configuration.
+The mechanism is simple. InnerZero has a single "active backend" setting for the current session. You pick Ollama, LM Studio, or llama.cpp for the primary role. The voice pipeline and cloud specialists can be configured independently regardless of backend. If you want advanced split-backend setups, it works but requires a bit more hands-on configuration.
 
 ## Frequently asked questions
 

@@ -26,7 +26,7 @@ const PAGE_DATA: PersonaPageProps = {
   leadPain:
     "Developers worry about proprietary code leaving their machine every time they touch a cloud AI. IDE plugins log prompts, browser extensions sync history, and the strongest models are hosted on servers owned by whichever company your employer may not want you sharing code with.",
   leadFit:
-    "InnerZero runs open-source coding models locally and gives you an optional bring-your-own-key path to frontier models (Claude Opus 4.7, GPT-5, Gemini 2.5 Pro) when a task genuinely needs one, with no middleman and no markup on provider pricing.",
+    "InnerZero runs open-source coding models locally and gives you an optional bring-your-own-key path to frontier models (Claude Opus 4.8, GPT-5.6, Gemini 3.1 Pro) when a task genuinely needs one, with no middleman and no markup on provider pricing.",
   whyBullets: [
     {
       title: "Code never leaves your disk by default",
@@ -46,7 +46,7 @@ const PAGE_DATA: PersonaPageProps = {
     {
       title: "Frontier models on your own account",
       detail:
-        "When you want Claude Opus 4.7 for a hard reasoning problem, add your Anthropic key and the request goes directly to Anthropic. InnerZero adds zero markup.",
+        "When you want Claude Opus 4.8 for a hard reasoning problem, add your Anthropic key and the request goes directly to Anthropic. InnerZero adds zero markup.",
     },
     {
       title: "Works offline",
@@ -83,13 +83,13 @@ const PAGE_DATA: PersonaPageProps = {
       body: (
         <>
           Add your Anthropic, OpenAI, or Google key in Settings, then pick
-          Claude Opus 4.7 or GPT-5 for specialist work. Keys are encrypted on
+          Claude Opus 4.8 or GPT-5.6 for specialist work. Keys are encrypted on
           your machine; requests go direct.{" "}
           <Link
             href="/blog/claude-opus-4-7-byo-keys"
             className="text-accent-gold transition-colors hover:text-accent-gold-hover"
           >
-            See the Opus 4.7 setup guide
+            See the Claude BYO keys setup guide
           </Link>
           .
         </>
@@ -120,9 +120,9 @@ const PAGE_DATA: PersonaPageProps = {
         "Yes. With the default local models, every inference happens on your GPU and no code ever leaves your machine. If you enable bring-your-own-key cloud mode, only the prompt you send is routed directly to the provider you configured; InnerZero's servers are not in the path.",
     },
     {
-      question: "Can I use Claude Opus 4.7 for coding with InnerZero?",
+      question: "Can I use Claude Opus 4.8 for coding with InnerZero?",
       answer:
-        "Yes. Add your Anthropic API key in Settings and pick claude-opus-4-7 as your Specialist model. The coding agent will route reasoning-heavy steps to Opus and keep routine edits on a local model. You pay Anthropic directly at their published rates.",
+        "Yes. Add your Anthropic API key in Settings and pick claude-opus-4-8 (or claude-sonnet-5) as your Specialist model. The coding agent will route reasoning-heavy steps to it and keep routine edits on a local model. You pay Anthropic directly at their published rates.",
     },
     {
       question: "What local models are good for code?",

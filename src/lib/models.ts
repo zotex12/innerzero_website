@@ -12,7 +12,7 @@
 // one of those drifts faster than we can update it. The linked provider
 // pricing pages are the only pricing source of truth for readers.
 
-export const lastReviewed = "2026-07-22";
+export const lastReviewed = "2026-08-16";
 
 // ── Local models ─────────────────────────────────────────────────────────
 
@@ -115,9 +115,14 @@ const PROVIDER_PRICING_URLS: Record<CloudProvider, string> = {
   Kimi: "https://platform.moonshot.ai/docs/pricing/chat-completion",
 };
 
-// Access tiers per the task: managed-capable providers are DeepSeek,
-// Google, and Anthropic. OpenAI, xAI, Qwen, and Kimi are BYO-only today.
-const MANAGED_AND_BYO: CloudAccess[] = ["managed", "byo"];
+// This catalogue is the BYO (bring-your-own-key) picker list, mirrored
+// from the desktop's api_keys.PROVIDER_MODELS. Managed cloud plans are a
+// SEPARATE thing: subscribers pick a credit tier, not a per-model choice,
+// and the managed service decides routing server-side - so no row here
+// carries a per-model "managed" badge (the old provider-derived
+// MANAGED_AND_BYO assignment advertised managed availability the plans
+// do not promise per model). CloudAccess keeps the "managed" member so
+// the page's badge renderer stays typed for any future genuine use.
 const BYO_ONLY: CloudAccess[] = ["byo"];
 
 function cloud(
@@ -130,27 +135,31 @@ function cloud(
     displayName,
     provider,
     modelId,
-    access:
-      provider === "DeepSeek" || provider === "Google" || provider === "Anthropic"
-        ? MANAGED_AND_BYO
-        : BYO_ONLY,
+    access: BYO_ONLY,
     providerPricingUrl: PROVIDER_PRICING_URLS[provider],
   };
 }
 
 export const CLOUD_MODELS: CloudModel[] = [
-  // DeepSeek (managed + BYO)
-  cloud("DeepSeek", "deepseek-chat", "DeepSeek V3.2"),
-  cloud("DeepSeek", "deepseek-reasoner", "DeepSeek R1"),
+  // DeepSeek (managed + BYO). deepseek-chat / deepseek-reasoner were
+  // retired upstream 2026-07-24; the desktop catalogue moved to the V4
+  // Flash ids (the -thinking id is the reasoning toggle) plus V4 Pro.
+  cloud("DeepSeek", "deepseek-v4-flash", "DeepSeek V4 Flash (chat)"),
+  cloud("DeepSeek", "deepseek-v4-flash-thinking", "DeepSeek V4 Flash (reasoning)"),
+  cloud("DeepSeek", "deepseek-v4-pro", "DeepSeek V4 Pro"),
 
   // OpenAI (BYO only)
   cloud("OpenAI", "gpt-5.6-sol", "GPT-5.6 Sol"),
   cloud("OpenAI", "gpt-5.6-terra", "GPT-5.6 Terra"),
   cloud("OpenAI", "gpt-5.6-luna", "GPT-5.6 Luna"),
   cloud("OpenAI", "gpt-5.5", "GPT-5.5"),
+  cloud("OpenAI", "gpt-5.5-pro", "GPT-5.5 Pro"),
   cloud("OpenAI", "gpt-5.4", "GPT-5.4"),
   cloud("OpenAI", "gpt-5.4-mini", "GPT-5.4 Mini"),
+  cloud("OpenAI", "gpt-5.4-nano", "GPT-5.4 Nano"),
   cloud("OpenAI", "gpt-4.1", "GPT-4.1"),
+  cloud("OpenAI", "gpt-4.1-mini", "GPT-4.1 Mini"),
+  cloud("OpenAI", "gpt-4.1-nano", "GPT-4.1 Nano"),
   cloud("OpenAI", "gpt-4o", "GPT-4o"),
   cloud("OpenAI", "o3", "o3"),
   cloud("OpenAI", "o4-mini", "o4 Mini"),
@@ -158,14 +167,20 @@ export const CLOUD_MODELS: CloudModel[] = [
   cloud("OpenAI", "gpt-5.3-chat", "GPT-5.3 Chat"),
 
   // Anthropic (managed + BYO)
+  cloud("Anthropic", "claude-opus-4-8", "Claude Opus 4.8"),
+  cloud("Anthropic", "claude-sonnet-5", "Claude Sonnet 5"),
+  cloud("Anthropic", "claude-fable-5", "Claude Fable 5"),
   cloud("Anthropic", "claude-opus-4-7", "Claude Opus 4.7"),
   cloud("Anthropic", "claude-opus-4-6", "Claude Opus 4.6"),
   cloud("Anthropic", "claude-sonnet-4-6", "Claude Sonnet 4.6"),
   cloud("Anthropic", "claude-haiku-4-5-20251001", "Claude Haiku 4.5"),
 
   // Google (managed + BYO)
-  cloud("Google", "gemini-2.5-flash", "Gemini 2.5 Flash"),
+  cloud("Google", "gemini-3.5-flash", "Gemini 3.5 Flash"),
+  cloud("Google", "gemini-3.1-flash-lite", "Gemini 3.1 Flash Lite"),
+  cloud("Google", "gemini-3.1-pro-preview", "Gemini 3.1 Pro (Preview)"),
   cloud("Google", "gemini-2.5-pro", "Gemini 2.5 Pro"),
+  cloud("Google", "gemini-2.5-flash", "Gemini 2.5 Flash"),
 
   // Qwen (BYO only)
   cloud("Qwen", "qwen3.7-max", "Qwen 3.7 Max"),

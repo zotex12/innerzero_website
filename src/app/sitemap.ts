@@ -20,21 +20,26 @@ const STATIC_PATHS: {
   path: string;
   priority: number;
   changeFrequency: ChangeFrequency;
+  // Set when the page's content is meaningfully revised (release updates,
+  // copy corrections). Static pages previously emitted no lastModified at
+  // all, so a release day changed /download and /changelog without
+  // signalling anything to crawlers, while blog and feature entries did.
+  lastModified?: string;
 }[] = [
-  { path: "/", priority: 1.0, changeFrequency: "weekly" },
-  { path: "/features", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/", priority: 1.0, changeFrequency: "weekly", lastModified: "2026-08-16" },
+  { path: "/features", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-08-16" },
   { path: "/pricing", priority: 0.8, changeFrequency: "monthly" },
-  { path: "/download", priority: 0.8, changeFrequency: "weekly" },
-  { path: "/models", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/download", priority: 0.8, changeFrequency: "weekly", lastModified: "2026-08-16" },
+  { path: "/models", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-08-16" },
   { path: "/blog", priority: 0.8, changeFrequency: "daily" },
-  { path: "/what-is-local-ai", priority: 0.7, changeFrequency: "monthly" },
-  { path: "/changelog", priority: 0.6, changeFrequency: "weekly" },
+  { path: "/what-is-local-ai", priority: 0.7, changeFrequency: "monthly", lastModified: "2026-08-16" },
+  { path: "/changelog", priority: 0.6, changeFrequency: "weekly", lastModified: "2026-08-16" },
   { path: "/about", priority: 0.6, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.5, changeFrequency: "yearly" },
   { path: "/for/writers", priority: 0.6, changeFrequency: "monthly" },
   { path: "/for/students", priority: 0.6, changeFrequency: "monthly" },
-  { path: "/for/developers", priority: 0.6, changeFrequency: "monthly" },
-  { path: "/for/researchers", priority: 0.6, changeFrequency: "monthly" },
+  { path: "/for/developers", priority: 0.6, changeFrequency: "monthly", lastModified: "2026-08-16" },
+  { path: "/for/researchers", priority: 0.6, changeFrequency: "monthly", lastModified: "2026-08-16" },
   { path: "/for/offline-work", priority: 0.6, changeFrequency: "monthly" },
   { path: "/privacy", priority: 0.3, changeFrequency: "yearly" },
   { path: "/terms", priority: 0.3, changeFrequency: "yearly" },
@@ -45,6 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: absoluteUrl(p.path),
     changeFrequency: p.changeFrequency,
     priority: p.priority,
+    ...(p.lastModified ? { lastModified: p.lastModified } : {}),
   }));
 
   // Feature category pages. Derived from the registry rather than listed

@@ -37,7 +37,7 @@ function formatReviewDate(iso: string): string {
 }
 
 function backendLabel(backend: LocalModel["backend"]): string {
-  if (backend === "both") return "Ollama or LM Studio";
+  if (backend === "both") return "Ollama, LM Studio, or llama.cpp";
   if (backend === "ollama") return "Ollama";
   return "LM Studio";
 }
@@ -229,10 +229,13 @@ export default function ModelsPage() {
               Cloud models
             </h2>
             <p className="mt-3 max-w-3xl text-base text-text-secondary">
-              This section is optional. Use these only if you choose to add an
-              API key or subscribe to a managed cloud plan. Managed plans
-              bundle multiple providers under one bill; BYO sends your prompts
-              directly to the provider you configure.
+              This section is optional, and it is the bring-your-own-key
+              catalogue: add your own provider API key and your prompts go
+              directly to that provider, at the provider&apos;s own prices with
+              no markup. Managed cloud plans are separate: they run on
+              InnerZero&apos;s own cloud service with monthly credits and
+              per-tier routing rather than a per-model choice. See pricing for
+              the plans.
             </p>
             <div className="mt-8 space-y-10">
               {PROVIDER_ORDER.map((provider) => {

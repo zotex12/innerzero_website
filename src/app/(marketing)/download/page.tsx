@@ -43,7 +43,7 @@ const INCLUDED_FEATURES = [
   { icon: Palette, title: "7 Themes", desc: "Dark Zero, Light, Classic Carbon, Soft Pink, Dark Teal, Neon Tokyo, and High Contrast." },
   { icon: Shield, title: "100% Private", desc: "No account, no telemetry, no data collection. Ever." },
   { icon: Monitor, title: "Screen Automation", desc: "Read your screen, click, type, and scroll other apps." },
-  { icon: Cloud, title: "Optional Cloud AI", desc: "Add your own API keys for GPT-4, Claude, Gemini, and more." },
+  { icon: Cloud, title: "Optional Cloud AI", desc: "Add your own API keys for GPT-5.6, Claude, Gemini, and more." },
   { icon: Volume2, title: "Cloud Voice", desc: "Optional OpenAI voices for natural spoken responses." },
 ];
 

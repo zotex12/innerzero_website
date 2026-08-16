@@ -8,7 +8,7 @@ export const customisation: FeatureCategory = {
   seoDescription:
     "Change the theme, give your AI a personality, switch off tools you do not want, and pick which local engine runs the models. All of it on your own machine.",
   hubTeaser:
-    "Five free themes plus premium ones, custom AI personalities, per-tool switches, and your choice of local engine.",
+    "Six free themes plus premium ones, custom AI personalities, per-tool switches, and your choice of local engine.",
   leadIn:
     "Most assistants offer a light mode and call that customisation. The settings that actually change how the thing feels to live with, the tone of the replies, which tools it is allowed to touch, where files land, and which engine runs the model, are usually decided for you and left alone.",
   leadOut:
@@ -20,15 +20,15 @@ export const customisation: FeatureCategory = {
       "Choose a prebuilt personality or write your own. It applies to both text chat and voice.",
   },
   stats: [
-    { value: "10", label: "Themes in the app" },
+    { value: "11", label: "Themes in the app" },
     { value: "9", label: "Personality presets, three free" },
     { value: "3", label: "Local AI engines supported" },
   ],
   capabilities: [
     {
       id: "themes",
-      title: "Ten themes, including two animated ones",
-      body: "Dark Zero is the default, with Light Zero, Soft Pink, Dark Teal, and Classic Carbon alongside it. The grid starts with three visible and a More themes control opens the rest, so the list is short until you go looking. Golden Pro, Matrix Green, Arctic White, and Tactical Red are the Pro themes, and Neon Tokyo is a separate exclusive one that unlocks with a code rather than a subscription. Golden Pro draws a slow gold starfield behind the app, which is rendered as static dots instead of an animation when your system asks for reduced motion, and Neon Tokyo draws a receding neon grid.",
+      title: "Eleven themes, including two animated ones",
+      body: "Dark Zero is the default, with Light Zero, Soft Pink, Dark Teal, Classic Carbon, and the new High Contrast alongside it. High Contrast pairs a true-black background with maximum-contrast text for low-vision use. The grid starts with three visible and a More themes control opens the rest, so the list is short until you go looking. Golden Pro, Matrix Green, Arctic White, and Tactical Red are the Pro themes, and Neon Tokyo is a separate exclusive one that unlocks with a code rather than a subscription. Golden Pro draws a slow gold starfield behind the app, which is rendered as static dots instead of an animation when your system asks for reduced motion, and Neon Tokyo draws a receding neon grid.",
     },
     {
       id: "ai-personality",
@@ -102,7 +102,7 @@ export const customisation: FeatureCategory = {
     {
       question: "How many themes does InnerZero have?",
       answer:
-        "Ten. Dark Zero, Light Zero, Soft Pink, Dark Teal, and Classic Carbon come with the free app. Golden Pro, Matrix Green, Arctic White, and Tactical Red are premium themes included with InnerZero Pro, and Neon Tokyo is an exclusive theme that unlocks with a code.",
+        "Eleven. Dark Zero, Light Zero, Soft Pink, Dark Teal, Classic Carbon, and High Contrast come with the free app. Golden Pro, Matrix Green, Arctic White, and Tactical Red are premium themes included with InnerZero Pro, and Neon Tokyo is an exclusive theme that unlocks with a code.",
     },
     {
       question: "Can I change how the AI talks to me?",
@@ -132,5 +132,5 @@ export const customisation: FeatureCategory = {
   ],
   related: ["setup", "ai-chat", "voice"],
   published: "2026-07-27",
-  modified: "2026-07-27",
+  modified: "2026-08-16",
 };

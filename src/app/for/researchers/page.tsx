@@ -26,7 +26,7 @@ const PAGE_DATA: PersonaPageProps = {
   leadPain:
     "Research often involves sensitive sources, unpublished data, or interview transcripts that cannot go through a third party's logging pipeline. Provider retention policies change, API terms shift, and your supervisor is right to be cautious about what lands in a cloud prompt.",
   leadFit:
-    "InnerZero processes documents entirely on your hardware by default and offers an optional bring-your-own-key path to Claude Opus 4.7 or Gemini 2.5 Pro for tasks where a frontier model earns its keep. Cloud use is explicit, auditable, and on your own provider account.",
+    "InnerZero processes documents entirely on your hardware by default and offers an optional bring-your-own-key path to Claude Opus 4.8 or Gemini 3.1 Pro for tasks where a frontier model earns its keep. Cloud use is explicit, auditable, and on your own provider account.",
   whyBullets: [
     {
       title: "No third-party retention of your sources",
@@ -75,7 +75,7 @@ const PAGE_DATA: PersonaPageProps = {
       title: "BYO frontier models",
       body: (
         <>
-          Claude Opus 4.7 and Gemini 2.5 Pro are available via your own
+          Claude Opus 4.8 and Gemini 3.1 Pro are available via your own
           provider account. Pay the provider directly, no markup from
           InnerZero.{" "}
           <Link

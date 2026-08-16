@@ -110,7 +110,7 @@ No. InnerZero is proprietary software. It is built on top of open-source AI mode
 1. Go to https://innerzero.com/download.
 2. The page auto-detects your operating system and highlights the matching installer.
 3. Click Download for your platform (Windows .exe, macOS .dmg, or Linux .AppImage).
-4. Run the installer. On Windows you may see a SmartScreen warning; click More Info then Run Anyway. On macOS you may need to right-click, select Open, then confirm. On Linux, install system dependencies first: sudo apt install -y espeak-ng portaudio19-dev xclip libwebkit2gtk-4.1-0 libgirepository-1.0-1 libfuse2 gir1.2-webkit2-4.1.
+4. Run the installer. On Windows you may see a SmartScreen warning; click More Info then Run Anyway. On macOS the DMG is signed, notarised, and stapled, so it opens with a normal double click. On Linux, install system dependencies first: sudo apt install -y espeak-ng portaudio19-dev xclip libwebkit2gtk-4.1-0 libgirepository-1.0-1 libfuse2 gir1.2-webkit2-4.1.
 5. On first launch, a setup wizard detects your hardware, picks the best AI model for your system, downloads it, and runs a speed benchmark.
 6. Click Launch InnerZero. The main app opens and you can start chatting.
 
@@ -274,7 +274,7 @@ Add cloud power when you need it.
 - BYO API keys. Add your own keys for 7 providers: DeepSeek, OpenAI, Anthropic, Google AI, xAI Grok, Qwen, and Kimi. Zero markup.
 - Private by default. Cloud mode is off until you turn it on. Clearly labelled when active.
 - Smart routing. Auto-routes to the best engine based on task complexity.
-- Only the prompt is sent. Your memory database, files, and history stay local. Only the current message goes to the provider.
+- The assembled prompt is sent, nothing more. On your own keys a cloud request carries your current message, a short profile block, a few relevant memory snippets, a short slice of recent exchanges, and the relevant part of any file you attach. On a managed plan the profile block and memory snippets are stripped and only the last few exchanges are carried, with the attached-file exception applying on either path. The full memory database, your wider files, and your full conversation history stay on your machine.
 - Cloud voice Standard mode. Split reasoning and TTS for roughly 15x lower cost than Premium bundled mode.
 - Privacy blacklist. Scrub sensitive terms (names, addresses, company info) from cloud messages before they leave your machine. Reversed on response.
 - Connection log. See every outbound connection InnerZero makes. Filterable inline log with daily rotation.
@@ -301,7 +301,6 @@ Full control for adults.
 
 ## Coming Soon
 
-- Mac notarisation. The macOS installer is already signed with Developer ID and hardened runtime; stapled notarisation is next, removing the one-time online Gatekeeper check.
 - More knowledge packs. Science, history, and specialised reference databases.
 - More connectors. Outlook, Discord, and LinkedIn on the same connector framework that powers Gmail and Google Calendar.
 
@@ -498,11 +497,11 @@ Your prompts are forwarded to the selected AI provider and the response is retur
 
 Proxy logs are limited to: timestamp, plan tier, model used, and usage count deducted. These are retained for 30 days for billing dispute resolution only, then automatically deleted.
 
-AI providers process your data under their own privacy policies and our Data Processing Agreements:
+AI providers process your data under their own privacy policies and, where applicable, data processing agreements. The authoritative, current subprocessor list is in the privacy policy at innerzero.com/privacy; providers may include:
 
-- Microsoft Azure (DeepSeek) in EU West Europe region, covered by Microsoft DPA
-- Google, covered by Google Cloud Data Processing Addendum
-- Anthropic, covered by Anthropic DPA
+- DeepSeek (direct API), under DeepSeek's privacy policy and API terms
+- Google (Gemini models)
+- Anthropic (Claude models)
 
 ## Voice and microphone
 
@@ -577,20 +576,20 @@ No Local Model (8+ GB RAM, no GPU, nothing to download): no local AI is installe
 ## Cloud routing
 
 - BYO key path: direct from your machine to the provider. InnerZero servers are not in the path. Keys are encrypted locally.
-- Managed plan path: encrypted proxy routes to DeepSeek (hosted on Microsoft Azure EU West Europe), Google Gemini, and Anthropic Claude. Prompts are forwarded; responses are returned. Proxy logs retain only billing metadata for 30 days.
+- Managed plan path: an encrypted proxy forwards your prompt to the AI provider and returns the response. Prompts and responses are not stored; proxy logs retain only billing metadata for 30 days. The current subprocessor list is in the privacy policy.
 - Privacy blacklist: scrubs custom sensitive terms from all outbound cloud messages before they leave your machine, then unscrubs the response before display, memory storage, and logging.
 - Offline mode: one-click toggle that blocks all outbound network calls.
 - Connection log: every outbound network call made by InnerZero is logged locally and viewable in a filterable UI with daily rotation.
 
 ## Supported API providers (BYO or managed)
 
-- DeepSeek: deepseek-chat (V3.2), deepseek-reasoner
-- OpenAI: GPT-5.4, GPT-5.4 Mini, GPT-4.1, GPT-4o, o3, o4-mini, GPT-5.3 Codex, GPT-5.3 Chat
-- Anthropic: Claude Opus 4.6, Claude Sonnet 4.6, Claude Haiku 4.5
-- Google AI: Gemini 2.5 Flash, Gemini 2.5 Pro
-- Qwen (Alibaba): Qwen Max, Qwen Plus, Qwen Turbo, Qwen3 Coder Plus
-- xAI: Grok 4.20 Reasoning, Grok 4.20 Non-reasoning, Grok 4.1 Fast (both variants), Grok 4, Grok 3
-- Kimi (Moonshot): Kimi K2.5
+- DeepSeek: DeepSeek V4 Flash (chat and reasoning), DeepSeek V4 Pro
+- OpenAI: GPT-5.6 (Sol, Terra, Luna), GPT-5.5, GPT-5.5 Pro, GPT-5.4 family, GPT-4.1 family, GPT-4o, o3, o4-mini, GPT-5.3 Codex, GPT-5.3 Chat
+- Anthropic: Claude Opus 4.8, Claude Sonnet 5, Claude Fable 5, Claude Opus 4.7, Claude Opus 4.6, Claude Sonnet 4.6, Claude Haiku 4.5
+- Google AI: Gemini 3.5 Flash, Gemini 3.1 Flash Lite, Gemini 3.1 Pro (Preview), Gemini 2.5 Flash, Gemini 2.5 Pro
+- Qwen (Alibaba): Qwen 3.7 Max, Qwen 3.7 Plus, Qwen Max, Qwen Plus, Qwen Turbo, Qwen3 Coder Plus
+- xAI: Grok 4.5, Grok 4.3
+- Kimi (Moonshot): Kimi K3, Kimi K2.6, Kimi K2.7 Code, Kimi K2.5
 
 ## Data storage locations
 

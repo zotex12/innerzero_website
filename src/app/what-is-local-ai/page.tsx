@@ -104,7 +104,7 @@ const FAQ_ITEMS: { question: string; answer: string }[] = [
   {
     question: "Is local AI as good as ChatGPT?",
     answer:
-      "For daily tasks like writing, summarising, and conversational help, modern open-source models are competitive with GPT-4-class cloud models. For the hardest reasoning and coding problems, frontier cloud models (Claude Opus, GPT-5, Gemini 2.5 Pro) still lead. The honest answer is that local AI is good enough for most work and you reach for cloud only when the task requires it.",
+      "For daily tasks like writing, summarising, and conversational help, modern open-source models are competitive with GPT-4-class cloud models. For the hardest reasoning and coding problems, frontier cloud models (Claude Opus 4.8, GPT-5.6, Gemini 3.1 Pro) still lead. The honest answer is that local AI is good enough for most work and you reach for cloud only when the task requires it.",
   },
   {
     question: "Can I use my own Claude or GPT API key?",

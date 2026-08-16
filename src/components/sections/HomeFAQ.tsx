@@ -36,7 +36,7 @@ export const HOME_FAQ: HomeFAQItem[] = [
   {
     question: "Do I need a high-end PC?",
     answer:
-      "No. InnerZero detects your hardware on first launch and picks the right AI model for your system. It runs on modest laptops with 16 GB of RAM, and scales up to high-end workstations with 64 GB and a GPU.",
+      "No. InnerZero detects your hardware on first launch and picks the right AI model for your system. It runs on machines with as little as 4 GB of RAM using the smallest model, works comfortably on laptops with 16 GB, and scales up to high-end workstations with 64 GB and a GPU. There is also a no-local-model option if you only use cloud AI.",
   },
   {
     question: "Can I use Claude, GPT, or Gemini with InnerZero?",
