@@ -86,9 +86,12 @@ checks `tier_access` ONLY when the user has a subscription plan
 (`if (hasPlan)` in the proxy route). A plan-free PAYG user is NOT
 tier-restricted at the trust boundary despite the seed rows' tier_access
 arrays - they can request premium/ultra and simply pay 4x/8x credits for
-the same B0 model. No provider-cost harm (margin improves), but do not
-document or promise a PAYG tier restriction anywhere customer-facing until
-the server enforces one; whether to enforce is an operator decision.
+the same B0 model. No provider-cost harm, but do not document or promise a
+PAYG tier restriction anywhere customer-facing until the server enforces
+one. OPERATOR DECIDED 2026-08-16: enforce it server-side so PAYG matches
+subscriptions - tracked as a known bug in the desktop repo backlog
+(`InnerZero/.ai/phases/knownbugs_todolist/payg-tier-access-not-enforced-server-side.md`);
+flip this note to the enforced state when that phase ships.
 
 ## Margin snapshot (computed 2026-08-16, DeepSeek peak-schedule rates)
 
