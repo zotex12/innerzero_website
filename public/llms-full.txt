@@ -11,7 +11,7 @@ Product type: Desktop AI assistant application
 Category: Local-first AI, private AI, offline AI, on-device AI
 Website: https://innerzero.com
 Download: https://innerzero.com/download
-Current version: v0.1.9 (released July 2026)
+Current version: v0.2.0 (released August 2026)
 Platforms: Windows 10/11 (64-bit), macOS 14+, Linux x86_64
 Company: Summers Solutions Ltd, Birmingham, England, UK
 UK company number: 16448945
@@ -56,13 +56,13 @@ By default, InnerZero uses open-source models via Ollama. For the main assistant
 
 If you prefer to manage models yourself, InnerZero also supports LM Studio or your own llama.cpp llama-server as an alternative backend (OpenAI-compatible API at localhost:1234).
 
-In optional cloud mode, you can access: DeepSeek (V3.2, Reasoner), OpenAI (GPT-5.4, GPT-5.4 Mini, GPT-4.1, GPT-4o, o3, o4-mini, GPT-5.3 Codex, GPT-5.3 Chat), Anthropic (Claude Opus 4.6, Sonnet 4.6, Haiku 4.5), Google AI (Gemini 2.5 Flash, Gemini 2.5 Pro), xAI (Grok 4.20, Grok 4.1 Fast, Grok 4, Grok 3), Qwen (Qwen Max, Plus, Turbo, Qwen3 Coder Plus), and Kimi (K2.5).
+In optional cloud mode with your own API keys, you can access the current provider catalogues: OpenAI (GPT-5.6, GPT-5.5), Anthropic (Claude Opus 4.8, Sonnet 5, Fable 5), Google AI (Gemini 3.5 Flash, 3.1 Flash-Lite, 3.1 Pro), Qwen (3.7 Max, 3.7 Plus), xAI (Grok 4.5, Grok 4.3), Kimi (K3, K2.6, K2.7 Code), and DeepSeek (V4 Pro).
 
 ## What platforms does InnerZero support?
 
-- Windows 10 or 11, 64-bit only. Installer size: 1.32 GB. Signed by Summers Solutions Ltd via Microsoft Trusted Signing.
-- macOS 14 (Sonoma) or later, Apple Silicon. Installer size: 654 MB. Signed with Developer ID and hardened runtime; first-launch Gatekeeper does a one-time online check with Apple. If you are offline on first launch, right-click the app, select Open, then click Open again.
-- Linux x86_64, glibc 2.31 or later. AppImage size: 1.24 GB. Requires espeak-ng, portaudio19-dev, xclip, libwebkit2gtk-4.1-0, libgirepository-1.0-1, libfuse2, and gir1.2-webkit2-4.1.
+- Windows 10 or 11, 64-bit only. Installer size: 1.18 GB. Signed by Summers Solutions Ltd via Microsoft Trusted Signing.
+- macOS 14 (Sonoma) or later, Apple Silicon. Installer size: 736 MB. Signed with Developer ID, notarised by Apple, and stapled, so it opens with a normal double click even offline.
+- Linux x86_64, glibc 2.31 or later. AppImage size: 1.32 GB. Requires espeak-ng, portaudio19-dev, xclip, libwebkit2gtk-4.1-0, libgirepository-1.0-1, libfuse2, and gir1.2-webkit2-4.1.
 
 No mobile support (iOS or Android).
 
@@ -284,7 +284,7 @@ Add cloud power when you need it.
 
 Make it yours.
 
-- 6 themes. Dark Zero, Light Zero, Classic Carbon, Soft Pink, Dark Teal, and Neon Tokyo (exclusive).
+- 7 themes. Dark Zero, Light Zero, Classic Carbon, Soft Pink, Dark Teal, Neon Tokyo (exclusive), and High Contrast (a true-black, maximum-contrast accessibility theme).
 - AI personality. Professional, Friendly, Concise, or create your own custom personality.
 - Tool preferences. Enable or disable individual tools.
 - Configurable output folder. Choose where Zero saves files.
@@ -325,7 +325,7 @@ Includes:
 - Document upload and Q&A
 - Knowledge packs (offline Wikipedia)
 - Screen automation
-- 6 themes and AI personality
+- 7 themes and AI personality
 - Unrestricted mode (18+)
 - Remote Ollama support
 - All free. No account required.
@@ -416,24 +416,24 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 
 ## Windows 10/11
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.9.exe
-- Version: 0.1.9
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.2.0.exe
+- Version: 0.2.0
 - Size: 1.18 GB
 - Requirements: 64-bit, 4 GB+ RAM
 - Note: Windows may show a SmartScreen warning on first install. Click More Info then Run Anyway. The installer is signed by Summers Solutions Ltd via Microsoft Trusted Signing.
 
 ## macOS 14+
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.1.9-mac.dmg
-- Version: 0.1.9
-- Size: 738 MB
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.2.0-mac.dmg
+- Version: 0.2.0
+- Size: 736 MB
 - Requirements: Apple Silicon, 4 GB+ RAM
 - Note: Signed with Developer ID, notarised by Apple, and stapled. It opens with a normal double click, with no Gatekeeper warning and no workaround needed.
 
 ## Linux x86_64
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.1.9-x86_64.AppImage
-- Version: 0.1.9
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.2.0-x86_64.AppImage
+- Version: 0.2.0
 - Size: 1.32 GB
 - Requirements: x86_64, glibc 2.31+, 4 GB+ RAM
 - Note: Install system dependencies first: sudo apt install -y espeak-ng portaudio19-dev xclip libwebkit2gtk-4.1-0 libgirepository-1.0-1 libfuse2 gir1.2-webkit2-4.1
@@ -636,7 +636,7 @@ InnerZero is an end-user assistant. It can actually use LM Studio as its local b
 
 Both are privacy-focused desktop AI apps.
 
-InnerZero has more breadth: a deeper memory system with overnight sleep processing, 30+ built-in tools, full voice mode with local speech-to-text and text-to-speech, offline knowledge packs, screen automation, a privacy blacklist, a connection log, and more customisation (6 themes, multiple personalities).
+InnerZero has more breadth: a deeper memory system with overnight sleep processing, 30+ built-in tools, full voice mode with local speech-to-text and text-to-speech, offline knowledge packs, screen automation, a privacy blacklist, a connection log, and more customisation (7 themes, multiple personalities).
 
 Jan is a solid, clean option for private chat. InnerZero is a solid option for a complete private AI assistant.
 

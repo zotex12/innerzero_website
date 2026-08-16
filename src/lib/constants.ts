@@ -169,7 +169,7 @@ export const PRICING_FREE = {
     "Gmail and Google Calendar connectors",
     "Knowledge packs (offline Wikipedia)",
     "Screen automation",
-    "6 themes and AI personality",
+    "7 themes and AI personality",
     "Unrestricted mode (18+)",
     "Remote Ollama support",
     "All free. No account required.",

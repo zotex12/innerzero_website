@@ -97,7 +97,7 @@ export default function Home() {
               applicationCategory: "UtilitiesApplication",
               applicationSubCategory: "AI Assistant",
               operatingSystem: "Windows, macOS, Linux",
-              softwareVersion: "0.1.9",
+              softwareVersion: "0.2.0",
               description:
                 "A free private AI assistant that runs entirely on your PC. No cloud. No tracking. No subscription.",
               url: absoluteUrl("/"),
@@ -105,6 +105,7 @@ export default function Home() {
               featureList: [
                 "Runs 100% locally, no cloud required",
                 "Interface in 26 languages",
+                "WCAG AA contrast with a High Contrast accessibility theme",
                 "Persistent memory system",
                 "Voice and text interaction",
                 "30+ built-in tools",

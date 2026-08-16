@@ -9,8 +9,8 @@ Website: https://innerzero.com
 Download: https://innerzero.com/download
 Company: Summers Solutions Ltd, a UK company based in Birmingham, England (Company No. 16448945)
 Data protection: ICO registered (registration ZC122497)
-Current version: v0.1.9 (July 2026)
-Install sizes: 1.18 GB (Windows), 738 MB (macOS), 1.32 GB (Linux)
+Current version: v0.2.0 (August 2026)
+Install sizes: 1.18 GB (Windows), 736 MB (macOS), 1.32 GB (Linux)
 Minimum requirements: 4 GB RAM, 2 GB free disk, modern 64-bit CPU, no GPU required. That runs the smallest local model on the CPU, slowly. InnerZero also runs with no local model at all on a cloud plan or your own API key.
 Recommended: 16+ GB RAM, a dedicated GPU with 8+ GB VRAM or an Apple Silicon Mac, SSD. A GPU is what enables local voice; CPU-only setups are text and tools.
 
@@ -42,7 +42,7 @@ InnerZero is a private AI assistant desktop application. It provides:
 - Action Hub: an opt-in research and apply assistant. With your own Apify API key it gathers sources from the web, and with your saved job profile it can help fill in and submit job applications, with your approval on every action. Actions can be saved and re-run in one click, or scheduled; scheduled runs always stop at a draft for your review.
 - Sleep and reflection: overnight processing that extracts facts from conversations, prunes duplicates, and strengthens important memories.
 - AI personality system: Professional, Friendly, Concise, or custom personalities that adjust Zero's tone without overriding core behaviour.
-- 6 themes: Dark Zero, Light Zero, Classic Carbon, Soft Pink, Dark Teal, and Neon Tokyo.
+- 7 themes: Dark Zero, Light Zero, Classic Carbon, Soft Pink, Dark Teal, Neon Tokyo, and High Contrast.
 - Unrestricted mode: optional uncensored AI models for adults (18+ age verification, full safety systems preserved including CSAM hard block and file approval gates).
 - Remote Ollama support: point InnerZero at an Ollama server running on another machine on your network.
 

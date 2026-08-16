@@ -1,34 +1,34 @@
 {
   "_comment": "Email content for the latest release. Update this each release as part of /release-update, then run send.mjs. Keep it to the highlights; this is an email, not the full changelog. British English, no em dashes, no emojis, no permanence words.",
-  "version": "0.1.8",
-  "dateLabel": "June 2026",
-  "subject": "InnerZero 0.1.8 is out",
-  "preheader": "llama.cpp engine support, a unified AI and Models tab, open at login, and more.",
-  "intro": "Version 0.1.8 of InnerZero is now available. Here are the highlights.",
+  "version": "0.2.0",
+  "dateLabel": "August 2026",
+  "subject": "InnerZero 0.2.0 is out",
+  "preheader": "A High Contrast theme, bundled fonts for true offline privacy, smarter setup, and the biggest reliability sweep since launch.",
+  "intro": "Version 0.2.0 of InnerZero is now available. It is our largest update since launch, focused on reliability, honesty, accessibility, and privacy. Here are the highlights.",
   "groups": [
     {
       "label": "New",
       "items": [
-        "llama.cpp engine support: point InnerZero at your own llama-server and chat, voice, and memory all route through it.",
-        "A single AI and Models settings tab that brings your engine, hardware, model assignments, and cloud keys together.",
-        "Open at login: an optional toggle that starts InnerZero when you sign in, on Windows, macOS, and Linux.",
-        "Action Hub saved actions and scheduling: save an action once, re-run it in a click, or put it on a schedule that always stops at a draft for your review."
+        "High Contrast theme: a seventh free theme with a true-black background, plus WCAG AA text contrast across every theme and a readable minimum text size app-wide.",
+        "Drag and drop a document or screenshot straight onto the chat box to attach it, and copy any reply as clean plain text with the new Copy button.",
+        "Setup can now adopt models you already have installed instead of re-downloading them, and the window opens immediately with a progress line naming each startup step."
       ]
     },
     {
       "label": "Improved",
       "items": [
-        "A shorter, better ordered Settings layout with wider model dropdowns so long names are readable.",
-        "Voice settings labels are now in plain language across all 26 interface languages.",
-        "Model downloads now show the real error message when something fails."
+        "Fonts are now bundled with the app, so launching InnerZero no longer contacts Google's font servers and the Offline and Private badges are truthful from the first moment.",
+        "The assistant makes fewer wrong tool detours, no longer returns raw encyclopedia dumps for simple questions, and engine errors are no longer stored into memory.",
+        "The Costs page now works across all eight time periods, with bring-your-own-key estimates refreshed to provider prices verified in August 2026.",
+        "Approvals are honest end to end: a failed action shows as a failure, and decided approval cards stay decided."
       ]
     },
     {
       "label": "Fixed",
       "items": [
-        "Sending a message while a file attachment is still loading no longer drops the message.",
-        "GGUF model names keep their quantisation tags in menus, so you can tell variants apart.",
-        "Every in-app hint that pointed at the old Mode tab now points at the right place."
+        "Chat, Settings, and the other main pages no longer paint stale content over the page you navigated to, and cleared chats stay cleared.",
+        "Marking a calendar event private now reliably removes the copy previously synced to Google.",
+        "Windows saves files to your real Documents folder even when OneDrive has redirected it, and macOS and Linux now see models in your existing Ollama store."
       ]
     }
   ]

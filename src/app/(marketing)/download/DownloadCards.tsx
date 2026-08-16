@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, Monitor, Apple, Terminal } from "lucide-react";
 
-const VERSION = "0.1.9";
+const VERSION = "0.2.0";
 
 const PLATFORMS = [
   {
@@ -22,7 +22,7 @@ const PLATFORMS = [
     label: "macOS 14+",
     icon: Apple,
     file: `InnerZero-Setup-${VERSION}-mac.dmg`,
-    size: "738 MB",
+    size: "736 MB",
     url: `/download/thanks?asset=InnerZero-Setup-${VERSION}-mac.dmg`,
     reqs: "Apple Silicon, 4 GB+ RAM",
     note: "Signed with Developer ID, notarised by Apple, and stapled. It opens with a normal double click. No Gatekeeper warning and no workaround needed.",

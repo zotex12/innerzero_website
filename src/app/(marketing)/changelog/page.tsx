@@ -36,10 +36,63 @@ export interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "0.2.0",
+    date: "August 2026",
+    releaseDate: "2026-08-16",
+    latest: true,
+    groups: [
+      {
+        label: "New",
+        entries: [
+          { text: "High Contrast theme: a seventh free theme with a true-black background and maximum-contrast text on every surface, built for low-vision use. Alongside it, every theme was brought up to WCAG AA text contrast and all text below 11px was raised to a readable minimum." },
+          { text: "Drag and drop files into chat: drop a document or image straight onto the chat box to attach it, exactly like using the paperclip." },
+          { text: "Copy button on chat messages: copy any reply as clean plain text, without the hidden styling that could paste as invisible near-white text into other apps." },
+          { text: "Setup can adopt models you already have: if a suitable model is already installed, the first-run wizard offers to use it for the assistant or voice role instead of forcing a fresh download. Choosing a tier and committing to it are now separate steps, so one click can no longer finish setup by accident." },
+          { text: "Honest startup: the window now opens immediately and a progress line names the exact step the app is on, instead of blocking invisibly for up to half a minute on slower machines. The first-run wizard gained its own loading screen too." },
+          { text: "Safer knowledge pack downloads: packs now check disk space first, download to a staging file, verify a checksum, show real megabyte progress, and can no longer be started twice at once and corrupt themselves." },
+          { text: "Unvetted model warning: picking an assistant model InnerZero has never vetted for tool use now shows a clear note, instead of silently claiming everything is fine." },
+          { text: "Better hardware detection: Windows now names AMD, Intel, and integrated GPUs instead of reporting none, and Linux machines with two AMD GPUs are detected and tiered correctly." },
+        ],
+      },
+      {
+        label: "Improved",
+        entries: [
+          { text: "Fonts are now bundled with the app, so launching InnerZero no longer contacts Google's font servers. The Offline and Private badges are now truthful from the first moment the window opens." },
+          { text: "Marking a calendar event private now reliably removes the copy that was previously synced to Google, even if the connector is disconnected at the time; the cleanup completes when it reconnects." },
+          { text: "Approvals got honest end to end: an approved action that then fails shows as a failure rather than a green tick, decided approval cards stay decided when you navigate away and back, and a reply from the model can no longer draw a working approval button of its own." },
+          { text: "Unrestricted Mode reliability: the toggle no longer unticks itself for users whose consent was recorded under an older format, the off switch stays reachable even when the model is missing or the backend changed, the uncensored-model badges now light up in every case they should, and the mode is clearly disclosed as inactive on LM Studio and llama.cpp." },
+          { text: "Costs page accuracy: all eight time period options now work, and the bring-your-own-key cost estimates were refreshed to provider prices verified in August 2026. One model had been under-stated by around twelve times. DeepSeek estimates use its new schedule's peak rate, so off-peak usage may be over-stated but is never under-stated. Old logged usage keeps the rates it was billed at." },
+          { text: "Fewer wrong tool detours: the assistant no longer fires the calculator, date, or location tools on innocent words like \"update\" or \"chicago\", answers ordinary questions directly instead of preferring tools, and no longer returns raw encyclopedia dumps for simple questions." },
+          { text: "Chat clears cleanly: clearing a conversation now takes effect everywhere at once, a reply that was still being written stops instead of painting into the cleared chat, and cleared history no longer reappears on your next message. Chat also now discloses its seven-day history retention and how many old rows were trimmed." },
+          { text: "Status bar honesty: cloud availability is now a three-state signal instead of showing green until a send fails, cloud-only setups no longer show a permanent red local-AI warning, and the label names the engine that is actually down, including llama.cpp." },
+          { text: "Startup recovery: if the local AI service fails to start, the cause is now recorded and the Retry button genuinely restarts it; the chat warmup gate also recovers by itself on slow machines instead of leaving Send blocked." },
+          { text: "First-run polish: the disk space check now counts everything it lists, download bars show reconnection attempts instead of freezing, failed steps are reported as failures instead of a clean finish, re-running setup asks before changing models you already chose, and setup ends with a summary and a Continue button instead of a flash." },
+          { text: "Voice: the start of an utterance is no longer clipped when speaker recognition is active, changing the voice model takes effect without a restart, and voice no longer reads out tool payloads or approval reference ids as if they were the answer." },
+          { text: "Windows: files now save to your real Documents folder, including when OneDrive has redirected it, and in-app updates now guard against relaunching mid-install and show a banner if an update failed. macOS and Linux: the app now sees models in your existing Ollama store instead of forcing its own." },
+          { text: "Screen readers now narrate the interface in your selected language, spell-check follows your locale instead of flagging everything as misspelt English, and countdown and wizard messages are translated across all 26 languages." },
+          { text: "Error messages from the AI engine are no longer stored into memory, so a bad afternoon can no longer contaminate later answers. Tool failure messages no longer embed file paths or usernames." },
+        ],
+      },
+      {
+        label: "Fixed",
+        entries: [
+          { text: "Navigating away from a page while it was still loading no longer paints the old page over the one you moved to. Closed on Chat, Agents, My Privacy, Costs, the dashboard, every Settings tab, and the knowledge pack downloader." },
+          { text: "Leaving Chat and returning no longer discards a file you had just attached, and My Privacy can no longer briefly claim Private while the backend is still in Cloud mode." },
+          { text: "The status bar clock no longer wipes what you are typing into dropdown fields once a second, so custom timers and labels can actually be set." },
+          { text: "A reply sent from Telegram no longer types itself into the desktop chat box, and agent status messages no longer duplicate every time you reopen Chat." },
+          { text: "Specialist agents: a failed specialist call is no longer presented as a successful answer, a crash restores your main assistant model so the next message works, and a specialist's prepared task brief is no longer silently thrown away on GPU and cloud setups." },
+          { text: "Overnight memory processing no longer marks items as done when the extraction actually failed, and a malformed cloud response no longer permanently ends a document's retries. Degraded overnight runs are now visible in the status bar with the cause." },
+          { text: "On LM Studio and llama.cpp, having no chat model selected now says exactly that instead of replying \"could you rephrase\"." },
+          { text: "Visiting the Schedule page twice no longer breaks calendar connector updates." },
+          { text: "The in-app Help page was removed; Settings and the / command browser already cover everything it showed. The /help command still works." },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.1.9",
     date: "July 2026",
     releaseDate: "2026-07-22",
-    latest: true,
     groups: [
       {
         label: "New",
