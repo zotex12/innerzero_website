@@ -85,7 +85,15 @@ export async function checkSpendingCap(
   userId: string,
   spendingCapPence: number | null,
   billingCycleEnd: string | null,
-  requestCost: number
+  requestCost: number,
+  // Worst-case REAL provider-cost estimate for this request in pence
+  // (B0-rates fold, 2026-08-16). The flat credit estimate under-states a
+  // token-dense request under the DeepSeek peak rates; at the cap boundary
+  // that passed the advisory, paid the provider, and was rejected only by
+  // the atomic deduction - which does not advance spend, so the call could
+  // repeat at provider cost. The advisory rejects on whichever estimate is
+  // larger; 0 (the default) reproduces the pre-fold behaviour exactly.
+  providerEstimatePence: number = 0
 ): Promise<string | null> {
   // No cap configured — skip.
   if (spendingCapPence === null) return null;
@@ -98,7 +106,10 @@ export async function checkSpendingCap(
   const currentSpend = await getSpendingThisCyclePence(
     admin, userId, billingCycleEnd
   );
-  const requestEstimate = requestCost * PENCE_PER_USAGE_UNIT;
+  const requestEstimate = Math.max(
+    requestCost * PENCE_PER_USAGE_UNIT,
+    providerEstimatePence
+  );
 
   if (currentSpend + requestEstimate > spendingCapPence) {
     return "Monthly spending cap reached. Increase your cap in account settings or wait for your next billing cycle.";

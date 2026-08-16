@@ -11,10 +11,12 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import {
+  checkSpendingCap,
   effectiveSpendCapPence,
   totalRequestChars,
   MAX_TOTAL_REQUEST_CHARS,
 } from "../src/lib/spending-cap";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 // Tests run from the repo root (npx tsx --test tests/...), matching the
 // documented invocation in every test file header.
@@ -97,4 +99,50 @@ test("the budget is 90k chars and below the old worst case", () => {
   // A single max-size message (50k) plus the max system prompt (2k)
   // still fits: normal desktop traffic is unaffected.
   assert.ok(50_000 + 2_000 <= MAX_TOTAL_REQUEST_CHARS);
+});
+
+// ── Advisory provider-cost floor (B0-rates fold, 2026-08-16) ──────────
+// The flat credit-based advisory (1 credit = 0.5p) can under-state a
+// token-dense request's real provider cost under the 2026-08-16 DeepSeek
+// peak rates. At the cap boundary that let a request PASS the advisory,
+// pay the provider, and be rejected only by the atomic deduction - which
+// does not advance spend on rejection, so the same call could repeat at
+// provider cost, bounded only by the rate limit. The advisory now takes a
+// worst-case provider-cost estimate and rejects on whichever is larger.
+
+function stubAdmin(spendPence: number): SupabaseClient {
+  return {
+    from: () => ({
+      select: () => ({
+        eq: () => ({
+          single: async () => ({
+            data: { spending_this_cycle_pence: spendPence },
+          }),
+        }),
+      }),
+    }),
+  } as unknown as SupabaseClient;
+}
+
+test("advisory rejects at the boundary when the provider estimate exceeds the credit estimate", async () => {
+  // 1p of headroom (cap 100p, spent 99p). The 1-credit estimate (0.5p)
+  // fits; the 2p worst-case provider estimate must reject BEFORE the
+  // provider is called and paid.
+  const msg = await checkSpendingCap(stubAdmin(99), "u1", 100, null, 1, 2);
+  assert.ok(msg, "a 2p provider estimate must reject at 1p headroom");
+});
+
+test("advisory still passes the same boundary without a provider estimate", async () => {
+  // Companion case proving the new term does the rejecting above: the
+  // credit-only path keeps its previous behaviour byte-for-byte.
+  const msg = await checkSpendingCap(stubAdmin(99), "u1", 100, null, 1);
+  assert.equal(msg, null);
+});
+
+test("advisory keeps the credit estimate when it is the larger term", async () => {
+  // ultra tier (8 credits = 4p) with a small provider estimate: the
+  // credit term must still govern, so the floor can never LOWER the
+  // advisory below its pre-fold strictness.
+  const msg = await checkSpendingCap(stubAdmin(97), "u1", 100, null, 8, 1);
+  assert.ok(msg, "8 credits at 0.5p/credit exceeds 3p headroom regardless of the provider term");
 });

@@ -90,19 +90,23 @@ test("direct body omits system message when no system prompt", () => {
   assert.equal(messages[0].role, "user");
 });
 
-// ── Cost table (decision 10 inputs; official 2026-07-17 prices) ───────
+// ── Cost table (decision 10 inputs; official prices re-verified 2026-08-16) ──
 
 test("deepseek-v4-flash cost rows present at official prices", () => {
   const rates = PROVIDER_COSTS["deepseek-v4-flash"];
   assert.ok(rates, "deepseek-v4-flash missing from PROVIDER_COSTS");
-  // $0.14/1M in, $0.28/1M out at the file's 0.79 GBP convention, rounded up.
-  assert.equal(rates.input_per_1k, 0.0111);
-  assert.equal(rates.output_per_1k, 0.0223);
+  // DeepSeek's V4 peak/off-peak schedule took effect 2026-08-16 16:00 UTC.
+  // The single-row table carries the PEAK rate ($0.44/1M in, $1.32/1M out;
+  // off-peak is half) at the file's 0.79 GBP convention, rounded up, so the
+  // spend caps and plan cost ceilings can only over-protect off-peak, never
+  // under-protect peak. The retired 2026-07-17 rates were $0.14/$0.28.
+  assert.equal(rates.input_per_1k, 0.0348);
+  assert.equal(rates.output_per_1k, 0.1043);
 });
 
 test("v4-flash estimate uses its own rows, not the opus fallback", () => {
   const pence = estimateCostPence("deepseek-v4-flash", 1000, 1000);
-  assert.ok(Math.abs(pence - (0.0111 + 0.0223)) < 1e-9);
+  assert.ok(Math.abs(pence - (0.0348 + 0.1043)) < 1e-9);
 });
 
 test("legacy deepseek-chat rows still present for the flag-off path", () => {

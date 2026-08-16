@@ -407,12 +407,30 @@ export async function POST(request: Request) {
         planCeiling = null;
       }
     }
+    // B0-rates fold (2026-08-16): give the advisory a worst-case provider
+    // cost for THIS request (chars/4 input approximation, full 2048-token
+    // output at the B0 primary's rates) so a token-dense call at the cap
+    // boundary is rejected BEFORE the provider is called and paid, closing
+    // the repeatable pay-then-402 loop the higher DeepSeek rates opened.
+    // Approximate only (a CJK-dense prompt tokenises above chars/4) - the
+    // atomic deduction stays the authority. Flag-off path passes 0, which
+    // reproduces the legacy advisory byte-for-byte.
+    const advisoryProviderPence = B0_ENABLED
+      ? Math.ceil(
+          estimateCostPence(
+            B0_PRIMARY.modelId,
+            Math.ceil(requestChars / 4),
+            2048
+          )
+        )
+      : 0;
     const capMsg = await checkSpendingCap(
       admin,
       userId,
       effectiveSpendCapPence(profile.spending_cap_pence ?? null, planCeiling),
       null,
-      cost
+      cost,
+      advisoryProviderPence
     );
     if (capMsg) {
       console.debug("[proxy 402] spending_cap_exceeded (pre-call advisory)");

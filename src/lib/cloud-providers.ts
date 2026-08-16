@@ -397,9 +397,14 @@ export const PROVIDER_COSTS: Record<
   // provider-level model_id from model_tiers.models (proxy passes that in).
   // The Azure deployment name "DeepSeek-V3.2" lives only inside callDeepSeek.
   "deepseek-chat": { input_per_1k: 0.0459, output_per_1k: 0.1328 },
-  // Direct DeepSeek V4 Flash (B0): $0.14/1M input (cache miss), $0.28/1M
-  // output. Official api-docs.deepseek.com prices verified 2026-07-17.
-  "deepseek-v4-flash": { input_per_1k: 0.0111, output_per_1k: 0.0223 },
+  // Direct DeepSeek V4 Flash (B0). DeepSeek's peak/off-peak schedule took
+  // effect 2026-08-16 16:00 UTC (peak 01:00-04:00 + 06:00-10:00 UTC;
+  // off-peak is HALF the peak rate). This single row carries the PEAK rate
+  // ($0.44/1M input cache-miss, $1.32/1M output; verified 2026-08-16) so the
+  // spend caps and plan cost ceilings that estimate from it can only
+  // over-protect off-peak, never under-protect peak. Cache-hit input
+  // ($0.014/1M peak) not modelled.
+  "deepseek-v4-flash": { input_per_1k: 0.0348, output_per_1k: 0.1043 },
   // Google Gemini 2.5 Flash: $0.30/1M input, $2.50/1M output
   "gemini-2.5-flash": { input_per_1k: 0.0237, output_per_1k: 0.1975 },
   // Google Gemini 2.5 Flash-Lite: $0.10/1M input, $0.40/1M output

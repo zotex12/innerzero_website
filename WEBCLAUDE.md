@@ -12,6 +12,8 @@ Phase 1 (marketing frontend), Phase 2 (auth + database), pricing pivot, terms/pr
 
 Phase 5 desktop app integration (account.py, cloud routing, BYO API key UI) is complete in the desktop codebase. The website API routes that support it were built in Phase 3b.
 
+**Managed cloud pricing/economics reference:** `MANAGED_CLOUD_ECONOMICS.md` (repo root). Read it BEFORE any work touching managed-cloud prices, provider costs, credits, margins, or plan changes. It records the live routing state (B0 direct DeepSeek since 2026-07-19; Azure retired; model_tiers rows are access-gating + credit-multiplier only, their model lists are routing-dead), where every pricing piece lives in both repos, the margin math, and the price-update checklist. The `model_tiers` seed in migration 007 is NOT routing truth.
+
 **Remaining website work:**
 - Phase 3: Founder slot tracking (100 cap), account dashboard plan/supporter/founder display
 - Phase 4: Credit metering (done: spending caps, usage alerts, cost logging). Overage billing deferred by design (overage_enabled defaults to false)
