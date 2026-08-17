@@ -125,7 +125,7 @@ const PAGE_DATA: PersonaPageProps = {
     {
       question: "Does voice mode work offline?",
       answer:
-        "Yes, fully. Speech-to-text runs locally via faster-whisper, text-to-speech runs locally via Kokoro. Your audio never leaves the machine. Optional cloud voice exists (OpenAI TTS) but it is off unless you enable it.",
+        "Yes, fully. Speech-to-text runs locally via faster-whisper, text-to-speech runs locally via Kokoro. With local voice, your audio never leaves the machine. Optional cloud voice exists (including a speech-to-speech mode that streams audio to OpenAI) but it is off unless you enable it, and it is blocked entirely in Offline mode.",
     },
     {
       question: "Will the AI hallucinate facts without internet?",

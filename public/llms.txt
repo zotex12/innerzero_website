@@ -155,7 +155,7 @@ Each page covers what that area does and links to the step-by-step guides for it
 - No telemetry in the desktop app. No analytics, no tracking, no phone-home.
 - No account required for local use.
 - All conversations, memory, voice audio, and document content stay on your PC by default.
-- Microphone audio is processed locally; raw audio is never uploaded (even in cloud voice Standard mode, only the transcript text goes to the provider).
+- Local voice is fully local: microphone audio is processed on your device and never uploaded. In cloud voice text-in modes (including Standard), only the transcript text goes to the provider. The one exception is speech-to-speech voice, including managed voice, where raw audio streams directly from your device to OpenAI; it is off by default, blocked in Offline and Private modes, and gated behind a one-time notice.
 - Cloud mode is off by default. When enabled, an assembled prompt is forwarded, not your data store. With your own keys that is your current message, a short profile block, relevant memory snippets, a short truncated slice of recent exchanges, and the relevant part of any attached file. On a managed plan the profile block and memory snippets are stripped before the request leaves and only the last few exchanges are carried, with the attached-file exception applying on either path. The memory database itself, your wider files, and your full conversation history are never sent.
 - ICO registered (ZC122497).
 - Data processors (cloud mode only): DeepSeek (direct API), Google (Gemini), Anthropic (Claude), Stripe (payments), Supabase (account data), Resend (emails). Full DPA details in the privacy policy.

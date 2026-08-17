@@ -48,7 +48,7 @@ No. Once the app is installed and the AI models are downloaded, InnerZero works 
 
 ## Does InnerZero send my data to the cloud?
 
-No, not by default. All AI processing, memory storage, voice audio, document content, and conversation history stay on your PC. InnerZero does not include any telemetry, analytics, tracking, or crash reporting. When you explicitly enable cloud mode and choose a provider, only the current prompt and a short conversation window (last 4 exchanges) are forwarded to that provider. Your memory database, personal profile facts, and file contents are never sent. InnerZero does not store or log the contents of your prompts or AI responses.
+No, not by default. All AI processing, memory storage, voice audio, document content, and conversation history stay on your PC. InnerZero does not include any telemetry, analytics, tracking, or crash reporting. When you explicitly enable cloud mode and choose a provider, an assembled prompt is forwarded: with your own keys that is your current message, a short profile block, a few relevant memory snippets, a short slice of recent exchanges, and the relevant part of any file you deliberately attach; on a managed plan the profile block and memory snippets are stripped and only the last few exchanges are carried. Local voice audio always stays on your device; the optional speech-to-speech voice modes are the exception and are described in the Voice and microphone section. The memory database itself, your wider files, and your full conversation history are never sent. InnerZero does not store or log the contents of your prompts or AI responses.
 
 ## What AI models does InnerZero use?
 
