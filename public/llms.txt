@@ -68,7 +68,7 @@ InnerZero is a private AI assistant desktop application. It provides:
 
 - **Free (personal use):** Complete desktop app. All AI chat, voice, memory, 30+ tools, document Q&A, knowledge packs, screen automation, themes, personalities, and unrestricted mode. No account required, no limits, no trial.
 - **Business Licence:** Per seat. £19.99/month, or £149.99/year (£129.99/year from 5 seats). 1 to 24 seats self-serve; 25+ seats via help@innerzero.com. Required for commercial, freelance, business, or revenue-generating use. Educational institutions, charities, and non-profits are exempt.
-- **Cloud AI Starter:** £9.99/month. 1,000 credits per month. Access to managed DeepSeek, Google Gemini, and Anthropic Claude.
+- **Cloud AI Starter:** £9.99/month. 1,000 credits per month. Managed cloud AI chat (currently powered by DeepSeek) and managed voice (powered by an OpenAI GPT voice model).
 - **Cloud AI Plus:** £19.99/month. 2,500 credits per month.
 - **Cloud AI Pro:** £39.99/month. 6,000 credits per month.
 - **Pay-as-you-go credit packs:** £5 for 200 credits, £12 for 600 credits, £25 for 1,500 credits.

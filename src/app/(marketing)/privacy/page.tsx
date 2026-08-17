@@ -227,7 +227,7 @@ export default function PrivacyPage() {
                     <li>Your IP address is not included in the data sent to AI providers and is not stored in InnerZero application logs</li>
                   </ul>
                   <p className="mt-2">
-                    Your prompts are routed to one of our AI subprocessors according to your plan tier, and the response is returned to you. If the primary model is unavailable, your request may be automatically retried with a fallback subprocessor from the list below to try to keep your chat working. When that happens, a provider-switch event is recorded for reliability monitoring; it contains provider and status information, not your message content. InnerZero does not store or log the content of your prompts or AI responses, and does not access them for human review.
+                    Your prompts are routed to one of our AI subprocessors according to your plan tier, and the response is returned to you. If the model is temporarily unavailable, your request may be retried with the same provider or returned as an error, in which case the app falls back to your local model where one is installed; your prompts are not rerouted to any cloud provider not listed below. InnerZero does not store or log the content of your prompts or AI responses, and does not access them for human review.
                   </p>
                   <p className="mt-2">
                     Proxy logs are limited to: timestamp, plan tier, model used, and usage count deducted. To prevent duplicate billing and abuse, the proxy may also retain billing-integrity records consisting of a request identifier, a one-way fingerprint of the request (a cryptographic hash that is not designed to be reversible and does not contain a copy of your text), the usage units charged, and timestamps. All of these records are retained for up to 30 days for billing dispute resolution and abuse prevention, then automatically deleted.
@@ -236,10 +236,7 @@ export default function PrivacyPage() {
                     Your prompts may be processed by one or more of the following AI subprocessors. The exact provider depends on your plan, current model availability, and our routing configuration at the time of your request. Each processes data under its own privacy policy and, where applicable, a data processing agreement:
                   </p>
                   <ul className="mt-2 list-disc pl-6 space-y-1">
-                    <li>Microsoft Azure (DeepSeek models): EU West Europe region, covered by Microsoft DPA</li>
                     <li>DeepSeek (direct API): covered by DeepSeek&apos;s privacy policy and API terms</li>
-                    <li>Google (Gemini models): covered by Google Cloud Data Processing Addendum</li>
-                    <li>Anthropic (Claude models): covered by Anthropic DPA</li>
                   </ul>
                   <p className="mt-2">
                     If you use managed voice, your spoken audio is processed by an additional subprocessor for the audio itself:

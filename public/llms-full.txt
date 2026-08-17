@@ -359,7 +359,7 @@ Optional cloud AI for faster responses and premium models, with built-in privacy
 - **Plus** — £19.99 per month. 2,500 credits per month.
 - **Pro** — £39.99 per month. 6,000 credits per month.
 
-Managed plans include DeepSeek, Google Gemini, and Anthropic Claude. Model selection is automatic based on your chosen tier.
+Managed plans cover cloud AI chat (currently powered by DeepSeek) and managed voice (powered by an OpenAI GPT voice model). Model selection is automatic based on your chosen tier.
 
 ### Pay-as-you-go credit packs
 
@@ -391,7 +391,7 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 
 **Is InnerZero really free?** Yes. The desktop app is completely free. No trial. No subscription. No account required. It runs on your hardware using open-source AI models.
 
-**What are cloud plans?** Optional. If you want faster reasoning or access to premium AI models (Claude, GPT, DeepSeek), you can subscribe to a cloud plan. Your local AI always works without one.
+**What are cloud plans?** Optional. A managed plan gives you cloud AI chat (currently powered by DeepSeek) and managed voice (powered by an OpenAI GPT voice model) on subscription credits, with no keys to manage. Your local AI always works without one, and premium models from Anthropic, OpenAI, Google, and others are available by bringing your own API keys.
 
 **Can I use my own API keys?** Yes. Add your own API keys from any supported provider: DeepSeek, OpenAI, Anthropic, and more. Zero markup. We never touch your keys.
 
@@ -497,15 +497,14 @@ Your prompts are forwarded to the selected AI provider and the response is retur
 
 Proxy logs are limited to: timestamp, plan tier, model used, and usage count deducted. These are retained for 30 days for billing dispute resolution only, then automatically deleted.
 
-AI providers process your data under their own privacy policies and, where applicable, data processing agreements. The authoritative, current subprocessor list is in the privacy policy at innerzero.com/privacy; providers may include:
+AI providers process your data under their own privacy policies and, where applicable, data processing agreements. The authoritative, current subprocessor list is in the privacy policy at innerzero.com/privacy:
 
-- DeepSeek (direct API), under DeepSeek's privacy policy and API terms
-- Google (Gemini models)
-- Anthropic (Claude models)
+- DeepSeek (direct API), under DeepSeek's privacy policy and API terms, for managed chat
+- OpenAI, for managed voice sessions (audio streams directly from your device to OpenAI)
 
 ## Voice and microphone
 
-If you use InnerZero's voice features, the application accesses your microphone to capture speech for local speech-to-text processing. All audio is processed locally on your device using offline speech recognition models. No audio recordings are transmitted, stored, or sent to any server. Audio data is processed in real-time and discarded immediately after transcription. If Cloud Voice mode is enabled, your transcribed text (not audio) is sent to OpenAI for response generation.
+If you use InnerZero's voice features, the application accesses your microphone to capture speech. By default, and whenever cloud voice is off, all audio is processed locally on your device using offline speech recognition models: no audio recordings are transmitted, stored, or sent to any server, and audio is discarded immediately after transcription. If you enable cloud voice in text-in mode, your speech is still transcribed locally first and only the transcribed text, not your audio, is sent to OpenAI for response generation. In speech-to-speech mode, and for managed voice subscriptions, your raw microphone audio streams directly from your device to OpenAI's Realtime service, which returns spoken audio; it does not pass through InnerZero's servers. Speech-to-speech voice is off by default, blocked entirely in Offline and Private modes, and gated behind a one-time in-app notice.
 
 ## What the website collects
 
