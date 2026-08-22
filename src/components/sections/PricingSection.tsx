@@ -31,10 +31,11 @@ interface CloudPlan {
   sort_order: number;
 }
 
+// `name` is the display label ("Auto", "Budget", ...). There is no
+// display_name column on model_tiers — see src/lib/supabase/types.ts.
 interface ModelTier {
   id: string;
   name: string;
-  display_name: string;
   usage_multiplier: number;
   sort_order: number;
 }
@@ -666,14 +667,18 @@ export function PricingSection({ className }: PricingSectionProps) {
 
                       <ul className="mt-5 flex flex-col gap-2 text-left">
                         {plan.tier_access.map((tier) => {
-                          const tierInfo = modelTiers.find((t) => t.name === tier);
+                          // Match on id, not name — tier_access holds ids
+                          // ("auto"), the row's name is the label ("Auto").
+                          // Same id-vs-name fix the server routes took in
+                          // Phase 90 Batch 7; this component was missed.
+                          const tierInfo = modelTiers.find((t) => t.id === tier);
                           return (
                             <li
                               key={tier}
                               className="flex items-center gap-2 text-sm text-text-secondary"
                             >
                               <Check className="h-3.5 w-3.5 shrink-0 text-success" />
-                              {tierInfo?.display_name ?? tier} models
+                              {tierInfo?.name ?? tier} models
                             </li>
                           );
                         })}
@@ -819,7 +824,7 @@ export function PricingSection({ className }: PricingSectionProps) {
                           className="rounded-lg border border-border-default bg-bg-secondary p-3 text-center"
                         >
                           <p className="text-xs font-medium text-text-muted uppercase tracking-wide">
-                            {tier.display_name}
+                            {tier.name}
                           </p>
                           <p className="mt-1 text-lg font-bold text-text-primary">
                             {tier.usage_multiplier}

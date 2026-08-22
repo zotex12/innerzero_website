@@ -60,14 +60,25 @@ export async function GET(request: Request) {
     });
   }
 
-  // Get all active model tiers
-  const { data: modelTiers } = await admin
+  // Get all active model tiers.
+  // Select real columns only — same regression guard as usage_packs above.
+  // This previously asked for `display_name` and `cost_per_request`, which
+  // have never existed on model_tiers (see migration 007). PostgREST answered
+  // 42703, data came back null, and `?? []` below silently turned every
+  // response into `model_tiers: []`. The tier list the desktop actually uses
+  // comes from /api/cloud/plans, so nothing downstream broke, which is
+  // exactly why it went unnoticed. Display label is `name`.
+  const { data: modelTiers, error: tiersError } = await admin
     .from("model_tiers")
-    .select(
-      "id, name, display_name, usage_multiplier, cost_per_request, models"
-    )
+    .select("id, name, usage_multiplier, models")
     .eq("active", true)
     .order("sort_order", { ascending: true });
+  if (tiersError) {
+    console.error("[balance] model_tiers query failed", {
+      code: tiersError.code,
+      message: tiersError.message,
+    });
+  }
 
   // Cycle spend is now a column on profiles — single-row read, maintained
   // atomically by atomic_deduct_sub_with_cap. `spending_cap_pence` is

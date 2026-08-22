@@ -256,12 +256,17 @@ export type Database = {
         };
         Relationships: [];
       };
+      // NOTE: model_tiers has no `display_name` and no `cost_per_request`
+      // column, and never has (migration 007 created the table). Both were
+      // declared here for months, which is what let /api/cloud/balance select
+      // them and silently return an empty tier list. The per-row display
+      // label is `name` ("Auto", "Budget", ...); `id` is the lowercase key
+      // used in cloud_plans.tier_access. The nested `display_name` inside the
+      // `models` JSONB is a different thing and does exist.
       model_tiers: {
         Row: {
           id: string;
           name: string;
-          display_name: string;
-          cost_per_request: number;
           usage_multiplier: number;
           models: { model_id: string; provider: string; priority?: number; display_name?: string }[];
           sort_order: number;
@@ -271,8 +276,6 @@ export type Database = {
         Insert: {
           id?: string;
           name: string;
-          display_name: string;
-          cost_per_request: number;
           usage_multiplier?: number;
           models?: { model_id: string; provider: string; priority?: number; display_name?: string }[];
           sort_order?: number;
@@ -280,8 +283,6 @@ export type Database = {
         };
         Update: {
           name?: string;
-          display_name?: string;
-          cost_per_request?: number;
           usage_multiplier?: number;
           models?: { model_id: string; provider: string; priority?: number; display_name?: string }[];
           sort_order?: number;
