@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 type CloudPlanRow = {
   id: string;
@@ -49,6 +50,54 @@ export async function getCloudPlanByProductId(
     .eq("active", true)
     .single();
   return data;
+}
+
+/**
+ * Tier set a PLAN-FREE managed-cloud user may request (PAYG packs or a
+ * retained balance after cancellation). Phase payg-tier-gate-server-side:
+ * the proxy used to check tier_access only for subscribers, so a plan-free
+ * user could buy premium/ultra at 4x/8x credits with nothing to gate it.
+ *
+ * The set is the UNION of tier_access over the ACTIVE plan_type='payg'
+ * cloud_plans rows, read live so a widened pack row widens access without a
+ * deploy. A read error or no active rows resolves to [] which the caller
+ * treats as "refuse every tier" - the same fail-closed shape the subscriber
+ * branch has when its plan row is missing. Never throws.
+ */
+export async function getPaygTierAccess(
+  admin: SupabaseClient
+): Promise<string[]> {
+  try {
+    const { data, error } = await admin
+      .from("cloud_plans")
+      .select("tier_access")
+      .eq("plan_type", "payg")
+      .eq("active", true);
+    if (error || !data) {
+      // Logged so an entitlement-read outage (every PAYG user refused) can
+      // be told apart from a deliberately empty configuration (Codex fold).
+      console.error("[cloud-plans] payg tier_access read failed", {
+        code: (error as { code?: string } | null)?.code,
+        message: (error as { message?: string } | null)?.message,
+      });
+      return [];
+    }
+    const union = new Set<string>();
+    for (const row of data as { tier_access: string[] | null }[]) {
+      for (const tier of row.tier_access ?? []) union.add(tier);
+    }
+    return [...union];
+  } catch (err) {
+    console.error("[cloud-plans] payg tier_access read threw", {
+      message: err instanceof Error ? err.message : String(err),
+    });
+    return [];
+  }
+}
+
+/** Plain membership check; an empty allowed set refuses every tier. */
+export function isTierAllowed(allowed: string[], tier: string): boolean {
+  return allowed.includes(tier);
 }
 
 export async function grantUsage(

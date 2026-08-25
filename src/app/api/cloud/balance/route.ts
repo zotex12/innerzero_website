@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getPaygTierAccess } from "@/lib/cloud-plans";
 import { getDesktopUser } from "@/lib/auth-desktop";
 import { checkRateLimit } from "@/lib/rate-limit";
 
@@ -29,9 +30,13 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Profile not found." }, { status: 404 });
   }
 
-  // Get tier_access from the user's cloud plan
+  // Get tier_access from the user's cloud plan. Plan-free users are
+  // resolved AFTER the packs read below: with spendable packs or a retained
+  // balance they get the payg set the proxy now enforces (phase
+  // payg-tier-gate-server-side), otherwise [] as before.
   let tierAccess: string[] = [];
-  if (profile.plan && profile.plan !== "free") {
+  const hasPlan = Boolean(profile.plan && profile.plan !== "free");
+  if (hasPlan) {
     const { data: cloudPlan } = await admin
       .from("cloud_plans")
       .select("tier_access")
@@ -58,6 +63,15 @@ export async function GET(request: Request) {
       code: packsError.code,
       message: packsError.message,
     });
+  }
+
+  // Plan-free users with spendable credits (packs, or a retained balance
+  // after cancellation) get the payg tier set the proxy enforces.
+  if (
+    !hasPlan &&
+    ((paygPacks?.length ?? 0) > 0 || (profile.usage_balance ?? 0) > 0)
+  ) {
+    tierAccess = await getPaygTierAccess(admin);
   }
 
   // Get all active model tiers.

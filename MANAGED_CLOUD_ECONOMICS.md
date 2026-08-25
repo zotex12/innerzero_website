@@ -81,17 +81,19 @@ ceilings are sized at 50% of net plan revenue (locked decision 10), so the
 worst-case gross margin floor is ~50% by construction - PROVIDED
 `PROVIDER_COSTS` is current, because the ceiling counts ESTIMATED pence.
 
-PAYG NOTE (verified in the proxy 2026-08-16, Codex round): the server
-checks `tier_access` ONLY when the user has a subscription plan
-(`if (hasPlan)` in the proxy route). A plan-free PAYG user is NOT
-tier-restricted at the trust boundary despite the seed rows' tier_access
-arrays - they can request premium/ultra and simply pay 4x/8x credits for
-the same B0 model. No provider-cost harm, but do not document or promise a
-PAYG tier restriction anywhere customer-facing until the server enforces
-one. OPERATOR DECIDED 2026-08-16: enforce it server-side so PAYG matches
-subscriptions - tracked as a known bug in the desktop repo backlog
-(`InnerZero/.ai/phases/knownbugs_todolist/payg-tier-access-not-enforced-server-side.md`);
-flip this note to the enforced state when that phase ships.
+PAYG NOTE (ENFORCED since phase payg-tier-gate-server-side, 2026-08-25):
+the proxy gates tier_access for EVERY managed-cloud user. Subscribers are
+gated by their own cloud_plans row; plan-free users (PAYG packs, or a
+retained balance after cancellation) by the union of the ACTIVE
+plan_type='payg' rows' tier_access, read live per request (today
+auto/budget/standard on all three packs, verified against the live table
+2026-08-25). premium/ultra from a plan-free user is a 403 before any
+deduction or provider call, the same envelope subscribers get. A read
+failure or no active payg rows fails CLOSED. /api/cloud/balance reports
+the same set to the desktop. Widening a pack row in cloud_plans widens
+access without a deploy; the seed in migration 007 is NOT the authority,
+the live rows are. Closed the desktop-repo backlog file
+`InnerZero/.ai/phases/knownbugs_todolist/done/payg-tier-access-not-enforced-server-side.md`.
 
 ## Margin snapshot (computed 2026-08-16, DeepSeek peak-schedule rates)
 

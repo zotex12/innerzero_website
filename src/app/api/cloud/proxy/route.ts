@@ -1,7 +1,11 @@
 import { NextResponse, after } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getDesktopUser } from "@/lib/auth-desktop";
-import { deductUsage } from "@/lib/cloud-plans";
+import {
+  deductUsage,
+  getPaygTierAccess,
+  isTierAllowed,
+} from "@/lib/cloud-plans";
 import {
   routeToProvider,
   estimateCostPence,
@@ -287,21 +291,33 @@ export async function POST(request: Request) {
     );
   }
 
-  // Check tier access if user has a subscription plan
+  // Tier access gate. Subscribers are gated by their own plan row; plan-free
+  // users (PAYG packs or a retained balance) by the union of the active
+  // payg rows' tier_access (phase payg-tier-gate-server-side, operator
+  // decision 2026-08-16: PAYG matches subscriptions at the trust boundary).
+  // Both branches fail closed: a missing row or a failed read yields [] and
+  // every tier is refused. Runs BEFORE any cost, cap, reservation or
+  // provider work, so a refused request deducts nothing.
+  let tierAccess: string[];
   if (hasPlan) {
     const { data: cloudPlan } = await admin
       .from("cloud_plans")
       .select("tier_access")
       .eq("id", profile.plan!)
       .single();
-
-    const tierAccess = cloudPlan?.tier_access ?? [];
-    if (!tierAccess.includes(requestedTier)) {
-      return NextResponse.json(
-        { error: `Your plan does not include access to the '${requestedTier}' tier.` },
-        { status: 403 }
-      );
-    }
+    tierAccess = cloudPlan?.tier_access ?? [];
+  } else {
+    tierAccess = await getPaygTierAccess(admin);
+  }
+  if (!isTierAllowed(tierAccess, requestedTier)) {
+    console.debug(
+      "[proxy 403] tier_not_in_plan, tier=", requestedTier,
+      "has_plan=", Boolean(hasPlan),
+    );
+    return NextResponse.json(
+      { error: `Your plan does not include access to the '${requestedTier}' tier.` },
+      { status: 403 }
+    );
   }
 
   const cost = tier.usage_multiplier;

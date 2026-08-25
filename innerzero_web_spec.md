@@ -292,8 +292,7 @@ Credit costs vary by model tier — the system auto-routes by default, or users 
 
 #### Pay As You Go — no subscription
 - Buy credit packs: 100 credits = £5 (£0.05/credit)
-- Access to Budget + Standard tiers
-- Premium/Ultra available at higher credit cost
+- Access to Auto + Budget + Standard tiers only (enforced server-side by the active payg cloud_plans rows since 2026-08-25; Premium/Ultra are subscription-only)
 - Credits expire after 90 days
 - No monthly commitment
 
