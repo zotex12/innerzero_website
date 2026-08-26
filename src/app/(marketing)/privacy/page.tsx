@@ -32,7 +32,7 @@ const FAQ_ITEMS = [
   {
     question: "Where is my data stored with InnerZero?",
     answer:
-      "All your conversations, memories, files, and settings are stored locally on your machine in a local database. Nothing is uploaded to any server unless you choose to enable optional cloud mode.",
+      "All your conversations, memories, files, and settings are stored locally on your machine in a local database. Nothing is uploaded to any server unless you choose to enable optional cloud mode or send us feedback from the app.",
   },
   {
     question: "Does InnerZero send data to the cloud?",
@@ -150,7 +150,7 @@ export default function PrivacyPage() {
                 Privacy Policy
               </h2>
               <p className="mt-2 text-sm text-text-muted">
-                Last updated: 2026-07-19
+                Last updated: 2026-08-26
               </p>
 
               <div className="mt-6 space-y-6 text-text-secondary leading-relaxed text-sm">
@@ -186,6 +186,15 @@ export default function PrivacyPage() {
                   </h3>
                   <p>
                     The InnerZero desktop application does not collect or transmit any personal data by default. All AI processing, conversations, memory, and documents remain on your local machine. No telemetry, analytics, usage tracking, or crash reporting is included.
+                  </p>
+                  <h4 className="text-sm font-semibold text-text-primary mt-4 mb-1">
+                    In-app feedback and optional diagnostic logs
+                  </h4>
+                  <p>
+                    The app has a feedback box you can use to send us a message (the message is optional when you attach a log, see below). When you send one, the message you typed, your app version and operating system are emailed to our support inbox, and a record is stored in our Supabase database so we can respond and keep track of reports. That record holds the message, app version, operating system, the app&apos;s network user agent string, and a salted one-way hash of your IP address that we use only to limit abuse of the feedback service (never the address itself). Nothing is sent unless you press Send.
+                  </p>
+                  <p className="mt-2">
+                    You can choose to attach a window of the app&apos;s own activity log to a feedback message (the last 15 minutes, hour or 24 hours, all entries or errors only). Before it leaves your device the log is reduced to event names, timestamps, short technical labels, numbers and sizes: your prompts, the assistant&apos;s replies, file names and paths, your user name and any other written content are removed. The exact text that will be sent is available in a preview inside the feedback box, so you can check it before you press Send. The attached log is emailed to our support inbox with your message. The stored record notes only whether a log was attached, which window you chose and its size, never the log itself. If you do not choose to attach a log, none is sent.
                   </p>
                 </div>
 
@@ -405,6 +414,7 @@ export default function PrivacyPage() {
                     <li>Ko-fi and PayPal: one-off donation payment processing</li>
                     <li>Stripe: InnerZero Pro, cloud AI subscription, Business Licence, and credit pack payment processing</li>
                     <li>Formspree: contact form submissions</li>
+                    <li>Resend: delivery of in-app feedback emails (your message and, if you attached one, the redacted activity log) to our support inbox (United States); processes the email content under its data processing terms</li>
                   </ul>
                 </div>
 
@@ -413,7 +423,7 @@ export default function PrivacyPage() {
                     11. Data Retention and Deletion
                   </h3>
                   <p>
-                    All desktop data is stored locally on your machine and can be deleted at any time by you. Account data (email address) is retained for as long as your account is active. You can permanently delete your account and all associated data at any time from your{" "}
+                    All desktop data is stored locally on your machine and can be deleted at any time by you. Feedback messages and any attached redacted log are kept only for as long as we need them to investigate and respond, and are deleted on request via the contact address below. Account data (email address) is retained for as long as your account is active. You can permanently delete your account and all associated data at any time from your{" "}
                     <Link href="/account/settings" className="text-accent-gold hover:text-accent-gold-hover transition-colors">account settings page</Link>.
                   </p>
                 </div>
