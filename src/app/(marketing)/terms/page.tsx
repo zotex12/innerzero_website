@@ -22,7 +22,7 @@ export default function TermsPage() {
           <h1 className="text-3xl font-bold text-text-primary md:text-[2.5rem] md:leading-[1.2]">
             Terms of Service
           </h1>
-          <p className="mt-2 text-sm text-text-muted">Last updated: July 2026</p>
+          <p className="mt-2 text-sm text-text-muted">Last updated: August 2026</p>
 
           <div className="mt-10 space-y-8 text-text-secondary leading-relaxed text-sm">
 
@@ -236,6 +236,9 @@ export default function TermsPage() {
               <p className="mt-2">
                 If your use of Cloud Mode or BYO API keys results in unexpected charges, account suspension, or any other consequence imposed by a third-party provider, Summers Solutions Ltd accepts no liability. Use of Cloud Mode and BYO API keys is entirely at your own risk.
               </p>
+              <p className="mt-2">
+                <strong>Feedback and diagnostic logs.</strong> The desktop application has a &quot;Give feedback or suggestions&quot; box. Sending it is your choice each time. Your message is emailed to Summers Solutions Ltd through an email delivery provider (see Section 12). You may also choose to attach a short extract of the application&apos;s own activity log; before it leaves your device all free text is removed (your prompts, replies, file names and paths, your user name and any other written content) and only event names, short technical labels, timestamps, numbers and sizes are kept. The exact content is available in a preview in the feedback box before you send. Feedback and any attached log are used to investigate and respond to what you sent, and feedback and suggestions may also be used to improve InnerZero; they are kept only for as long as that takes and are deleted on request. By sending feedback or suggestions you grant Summers Solutions Ltd a non-exclusive, perpetual, royalty-free licence to use them for the purpose of improving InnerZero, without any payment to you. Please do not include personal data about other people, passwords, payment details, or confidential material in feedback. How feedback is processed, and our own responsibilities under data protection law, are described in the Privacy Policy and are not reduced by this paragraph. This paragraph is interim wording pending solicitor review.
+              </p>
             </section>
 
             {/* Section 10 */}
@@ -320,6 +323,9 @@ export default function TermsPage() {
                 The optional Action Hub web research feature uses Apify (apify.com) under your own Apify account and API key. Apify is a third-party service, not software distributed by Summers Solutions Ltd, and your use of it is governed by Apify&apos;s own terms of service and privacy policy.
               </p>
               <p className="mt-2">
+                In-app feedback (Section 9) is delivered to Summers Solutions Ltd by Resend (resend.com), a third-party email delivery service acting as our processor. Resend is not software distributed by Summers Solutions Ltd and handles the email content under its own data processing terms.
+              </p>
+              <p className="mt-2">
                 The bundled Ollama distribution includes additional runtime components (Vulkan, OneAPI, CUDA runtime libraries, Apple Metal) under their respective vendor licences. Full attribution and licence details are available within the desktop application under Settings &gt; General &gt; Third-Party Licences &amp; Notices.
               </p>
               <p className="mt-2">
@@ -357,6 +363,9 @@ export default function TermsPage() {
               <p className="mt-2">
                 Content you create using InnerZero belongs to you, subject to any applicable third-party AI model licence terms. You are responsible for ensuring that content you create using InnerZero does not infringe the intellectual property rights of any third party.
               </p>
+              <p className="mt-2">
+                Feedback, suggestions, and ideas you send to Summers Solutions Ltd, whether through the in-app feedback box, email, or community channels, may be used to improve InnerZero under the licence described in Section 9. You keep any rights you hold in them; you simply agree that we may use them for that purpose without compensation.
+              </p>
             </section>
 
             {/* Section 15 */}
@@ -380,6 +389,7 @@ export default function TermsPage() {
                 <li>Any damage to your computer hardware, software, operating system, GPU, or data arising from installing, running, or uninstalling InnerZero, including but not limited to data loss, file corruption, system instability, hardware damage, driver conflicts, or overheating.</li>
                 <li>Any loss or damage arising from use of Screen Automation, the Action Hub, Cloud Mode, BYO API keys, or Unrestricted Mode.</li>
                 <li>Any charges, costs, or consequences imposed by third-party AI providers.</li>
+                <li>Any loss arising from personal data about other people, passwords, payment details, or confidential material that you choose to include in feedback contrary to Section 9, to the extent that loss is not caused or contributed to by us or our processor.</li>
               </ul>
               <p className="mt-2">
                 You acknowledge that InnerZero runs AI models locally on your hardware, which may place significant load on your CPU, GPU, and memory. You are solely responsible for ensuring your hardware meets the recommended requirements, is adequately maintained, and is operated within safe thermal and electrical limits.
@@ -408,6 +418,7 @@ export default function TermsPage() {
                 <li>Your use of Unrestricted Mode and any content generated therein.</li>
                 <li>Any content you generate, store, distribute, or act upon using InnerZero.</li>
                 <li>Your use of Screen Automation, the Action Hub, Cloud Mode, or BYO API keys.</li>
+                <li>Claims by third parties arising from personal data about other people or confidential material that you include in feedback contrary to Section 9, to the extent the claim is not caused or contributed to by us or our processor.</li>
                 <li>Your violation of these terms or any applicable law or regulation.</li>
                 <li>Your violation of any third-party rights, including intellectual property rights, privacy rights, or contractual rights.</li>
                 <li>Any misrepresentation you make, including any misrepresentation regarding your age.</li>
