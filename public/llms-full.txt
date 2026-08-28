@@ -11,7 +11,7 @@ Product type: Desktop AI assistant application
 Category: Local-first AI, private AI, offline AI, on-device AI
 Website: https://innerzero.com
 Download: https://innerzero.com/download
-Current version: v0.2.0 (released August 2026)
+Current version: v0.2.1 (released August 2026)
 Platforms: Windows 10/11 (64-bit), macOS 14+, Linux x86_64
 Company: Summers Solutions Ltd, Birmingham, England, UK
 UK company number: 16448945
@@ -415,25 +415,25 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 
 ## Windows 10/11
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.2.0.exe
-- Version: 0.2.0
-- Size: 1.18 GB
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.2.1.exe
+- Version: 0.2.1
+- Size: 1.24 GB
 - Requirements: 64-bit, 4 GB+ RAM
 - Note: Windows may show a SmartScreen warning on first install. Click More Info then Run Anyway. The installer is signed by Summers Solutions Ltd via Microsoft Trusted Signing.
 
 ## macOS 14+
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.2.0-mac.dmg
-- Version: 0.2.0
-- Size: 736 MB
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.2.1-mac.dmg
+- Version: 0.2.1
+- Size: 775 MB
 - Requirements: Apple Silicon, 4 GB+ RAM
 - Note: Signed with Developer ID, notarised by Apple, and stapled. It opens with a normal double click, with no Gatekeeper warning and no workaround needed.
 
 ## Linux x86_64
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.2.0-x86_64.AppImage
-- Version: 0.2.0
-- Size: 1.32 GB
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.2.1-x86_64.AppImage
+- Version: 0.2.1
+- Size: 1.18 GB
 - Requirements: x86_64, glibc 2.31+, 4 GB+ RAM
 - Note: Install system dependencies first: sudo apt install -y espeak-ng portaudio19-dev xclip libwebkit2gtk-4.1-0 libgirepository-1.0-1 libfuse2 gir1.2-webkit2-4.1
 

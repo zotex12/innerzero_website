@@ -36,10 +36,51 @@ export interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "0.2.1",
+    date: "August 2026",
+    releaseDate: "2026-08-28",
+    latest: true,
+    groups: [
+      {
+        label: "New",
+        entries: [
+          { text: "Attach your app log to feedback: the Give feedback box in the sidebar can now include the last 15 minutes, hour, or day of InnerZero's own activity log. Only event names, labels, and sizes are sent; prompts, replies, file paths, and your username never leave the machine, and you see the exact preview before it goes. Settings > General also gained an Open Logs Folder row." },
+          { text: "Ask Zero about InnerZero itself: questions like \"how do I change the theme\" or \"what can you do\" are now answered from a built-in guide to the app, and asking how to report a bug points you at the feedback box." },
+          { text: "Use an Ollama server on your network from a low-spec machine: if your PC cannot run a local model, point Settings > AI & Models at another computer on your network running Ollama and chat works from there. The chat banner, blocked messages, and the setup wizard now offer three ways forward on that tier: a cloud plan or API key, choosing a tier yourself, or connecting a network Ollama server." },
+        ],
+      },
+      {
+        label: "Improved",
+        entries: [
+          { text: "Bundled Ollama updated from 0.22 to 0.32. Vulkan GPU acceleration is now on by default, so AMD and Intel GPUs work out of the box and the old experimental Vulkan toggle in Settings is gone. NVIDIA GPUs need driver 550 or newer for GPU acceleration, or 570 or newer for older Maxwell and Pascal cards, which may also run a little slower than before; older drivers fall back to the CPU. On Windows, AMD cards on the ROCm path need ROCm 7 drivers, and RDNA2 cards are now served by Vulkan instead." },
+          { text: "Office documents in chat: .pptx, .docx, .xlsx and other Office and document types are now recognised as files when you ask Zero to open, read, or find them." },
+          { text: "Settings > Hardware now names every GPU it detects rather than just the first, and machines with 32 GB installed that report 30 to 31 GB usable now pass the RAM checks for their proper tier." },
+          { text: "The first-run GPU check no longer fails on a cold first model load on slower machines." },
+          { text: "Connecting a network Ollama server no longer suggests a restart that changes nothing: Save tells you to pick an assistant model, and the model list refreshes from the new server straight away." },
+          { text: "Voice follows your chosen cloud source (managed plan or your own key) instead of quietly using the other one, and models InnerZero has not vetted are flagged in the voice and setup pickers as well as the assistant picker." },
+        ],
+      },
+      {
+        label: "Fixed",
+        entries: [
+          { text: "A machine on the No Local Model tier no longer answers \"hi\" and then blocks every real question, and voice now follows the same tier gate as chat instead of answering a turn that chat would refuse." },
+          { text: "Updating on Windows now removes the previous version's AI runtime libraries instead of leaving them beside the new ones." },
+          { text: "Deleting a calendar event that was pushed to Google no longer loses its link to the Google copy before you confirm." },
+          { text: "Unrestricted Mode: the manual model install instructions stay visible when you leave the Experimental tab and come back." },
+        ],
+      },
+      {
+        label: "Known limitations",
+        entries: [
+          { text: "Machines with only an integrated GPU that used the old Vulkan toggle may run on the CPU after this update, because Ollama 0.32 hides integrated GPUs by default. Set the environment variable OLLAMA_IGPU_ENABLE=1 before starting InnerZero to use it again." },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.2.0",
     date: "August 2026",
     releaseDate: "2026-08-16",
-    latest: true,
     groups: [
       {
         label: "New",

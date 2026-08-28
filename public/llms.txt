@@ -9,8 +9,8 @@ Website: https://innerzero.com
 Download: https://innerzero.com/download
 Company: Summers Solutions Ltd, a UK company based in Birmingham, England (Company No. 16448945)
 Data protection: ICO registered (registration ZC122497)
-Current version: v0.2.0 (August 2026)
-Install sizes: 1.18 GB (Windows), 736 MB (macOS), 1.32 GB (Linux)
+Current version: v0.2.1 (August 2026)
+Install sizes: 1.24 GB (Windows), 775 MB (macOS), 1.18 GB (Linux)
 Minimum requirements: 4 GB RAM, 2 GB free disk, modern 64-bit CPU, no GPU required. That runs the smallest local model on the CPU, slowly. InnerZero also runs with no local model at all on a cloud plan or your own API key.
 Recommended: 16+ GB RAM, a dedicated GPU with 8+ GB VRAM or an Apple Silicon Mac, SSD. A GPU is what enables local voice; CPU-only setups are text and tools.
 

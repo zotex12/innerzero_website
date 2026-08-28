@@ -1,33 +1,33 @@
 {
   "_comment": "Email content for the latest release. Update this each release as part of /release-update, then run send.mjs. Keep it to the highlights; this is an email, not the full changelog. British English, no em dashes, no emojis, no permanence words.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "dateLabel": "August 2026",
-  "subject": "InnerZero 0.2.0 is out",
-  "preheader": "A High Contrast theme, drag and drop into chat, smarter setup, and the biggest reliability sweep since launch.",
-  "intro": "Version 0.2.0 of InnerZero is now available. It is our largest update since launch, focused on reliability, honesty, accessibility, and privacy. Here are the highlights.",
+  "subject": "InnerZero 0.2.1 is out",
+  "preheader": "A newer Ollama runtime, feedback with an optional redacted log, Zero can explain the app, and network Ollama for low-spec machines.",
+  "intro": "Version 0.2.1 of InnerZero is now available. It updates the bundled AI runtime, makes it easier to send us useful feedback, and opens the door for machines that cannot run a model of their own. Here are the highlights.",
   "groups": [
     {
       "label": "New",
       "items": [
-        "High Contrast theme: a seventh free theme with a true-black background, plus WCAG AA text contrast across every theme and a readable minimum text size app-wide.",
-        "Drag and drop a document or screenshot straight onto the chat box to attach it, and copy any reply as clean plain text with the new Copy button.",
-        "Setup can now adopt models you already have installed instead of re-downloading them, and the window opens immediately with a progress line naming each startup step."
+        "Attach your app log to feedback: the sidebar feedback box can include the last 15 minutes, hour, or day of InnerZero's activity log, reduced to event names, labels, and sizes only, with a preview before anything is sent.",
+        "Ask Zero about InnerZero itself: questions like how do I change the theme or what can you do are answered from a built-in guide to the app.",
+        "Use an Ollama server on your network from a low-spec machine: point Settings > AI & Models at another computer running Ollama and chat works from there without a local model."
       ]
     },
     {
       "label": "Improved",
       "items": [
-        "The assistant makes fewer wrong tool detours, no longer returns raw encyclopedia dumps for simple questions, and engine errors are no longer stored into memory.",
-        "The Costs page now works across all eight time periods, with bring-your-own-key estimates refreshed to provider prices verified in August 2026.",
-        "Approvals are honest end to end: a failed action shows as a failure, and decided approval cards stay decided."
+        "Bundled Ollama updated from 0.22 to 0.32, with Vulkan GPU acceleration on by default for AMD and Intel GPUs. NVIDIA GPUs need driver 550 or newer for GPU acceleration (570 or newer for older Maxwell and Pascal cards).",
+        "Office documents such as .pptx and .docx are recognised as files in chat, Settings > Hardware names every GPU it detects, and 32 GB machines that report slightly less usable RAM now land on the right tier.",
+        "Connecting a network Ollama server no longer suggests a pointless restart, and the model list refreshes from the new server straight away."
       ]
     },
     {
       "label": "Fixed",
       "items": [
-        "Chat, Settings, and the other main pages no longer paint stale content over the page you navigated to, and cleared chats stay cleared.",
-        "Marking a calendar event private now reliably removes the copy previously synced to Google.",
-        "Windows saves files to your real Documents folder even when OneDrive has redirected it, and macOS and Linux now see models in your existing Ollama store."
+        "A No Local Model machine no longer answers hi and then blocks every real question.",
+        "Updating on Windows now removes the previous version's AI runtime libraries instead of leaving them behind.",
+        "Deleting a calendar event that was pushed to Google keeps its link to the Google copy until you confirm."
       ]
     }
   ]
