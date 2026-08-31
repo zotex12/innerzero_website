@@ -55,6 +55,10 @@ export function DownloadCards() {
   const [copied, setCopied] = useState<string | null>(null);
 
   useEffect(() => {
+    // Deliberate hydration swap: the server cannot read the visitor's
+    // user agent here, so the first render assumes Windows and the mount
+    // effect re-sorts the cards for the detected platform.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setUserPlatform(detectPlatform());
   }, []);
 

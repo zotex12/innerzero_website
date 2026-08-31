@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useImperativeHandle, forwardRef } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useCallback,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
 
 const TURNSTILE_SCRIPT_URL =
   "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
@@ -55,12 +62,22 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const widgetIdRef = useRef<string | null>(null);
 
+    // Latest-ref pattern: the Turnstile widget captures its callbacks once
+    // at render(), so these refs let it always call the newest props. The
+    // assignments live in a layout effect (not the render body) per the
+    // react-hooks/refs rule. Layout effects run synchronously after every
+    // commit, which matters because widget callbacks are not only
+    // user-triggered (expiry and errors fire asynchronously): a passive
+    // effect would leave a brief window where a callback could see a
+    // stale prop.
     const onVerifyRef = useRef(onVerify);
     const onExpireRef = useRef(onExpire);
     const onErrorRef = useRef(onError);
-    onVerifyRef.current = onVerify;
-    onExpireRef.current = onExpire;
-    onErrorRef.current = onError;
+    useLayoutEffect(() => {
+      onVerifyRef.current = onVerify;
+      onExpireRef.current = onExpire;
+      onErrorRef.current = onError;
+    });
 
     const resetWidget = useCallback(() => {
       if (widgetIdRef.current && window.turnstile) {

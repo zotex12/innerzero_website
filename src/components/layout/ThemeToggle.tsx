@@ -8,6 +8,10 @@ export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Deliberate hydration guard: the server cannot know the visitor's
+    // theme, so the first render is a fixed placeholder and this mount
+    // effect swaps in the real value set by the layout's inline script.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const stored = document.documentElement.getAttribute("data-theme");
     if (stored === "light" || stored === "dark") {

@@ -71,6 +71,10 @@ export function TimeAgo({ date, className }: TimeAgoProps) {
 
   useEffect(() => {
     const rel = getRelativeLabel(date, new Date());
+    // Deliberate hydration swap (see the component comment): server and
+    // first client render must be byte-identical, so the relative label
+    // can only be set after mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (rel !== null) setLabel(rel);
   }, [date]);
 
