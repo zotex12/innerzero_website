@@ -26,14 +26,14 @@ const STATIC_PATHS: {
   // signalling anything to crawlers, while blog and feature entries did.
   lastModified?: string;
 }[] = [
-  { path: "/", priority: 1.0, changeFrequency: "weekly", lastModified: "2026-08-16" },
+  { path: "/", priority: 1.0, changeFrequency: "weekly", lastModified: "2026-08-28" },
   { path: "/features", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-08-16" },
   { path: "/pricing", priority: 0.8, changeFrequency: "monthly" },
-  { path: "/download", priority: 0.8, changeFrequency: "weekly", lastModified: "2026-08-16" },
+  { path: "/download", priority: 0.8, changeFrequency: "weekly", lastModified: "2026-08-28" },
   { path: "/models", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-08-16" },
   { path: "/blog", priority: 0.8, changeFrequency: "daily" },
   { path: "/what-is-local-ai", priority: 0.7, changeFrequency: "monthly", lastModified: "2026-08-16" },
-  { path: "/changelog", priority: 0.6, changeFrequency: "weekly", lastModified: "2026-08-16" },
+  { path: "/changelog", priority: 0.6, changeFrequency: "weekly", lastModified: "2026-08-28" },
   { path: "/about", priority: 0.6, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.5, changeFrequency: "yearly" },
   { path: "/for/writers", priority: 0.6, changeFrequency: "monthly" },
@@ -41,8 +41,8 @@ const STATIC_PATHS: {
   { path: "/for/developers", priority: 0.6, changeFrequency: "monthly", lastModified: "2026-08-16" },
   { path: "/for/researchers", priority: 0.6, changeFrequency: "monthly", lastModified: "2026-08-16" },
   { path: "/for/offline-work", priority: 0.6, changeFrequency: "monthly" },
-  { path: "/privacy", priority: 0.3, changeFrequency: "yearly" },
-  { path: "/terms", priority: 0.3, changeFrequency: "yearly" },
+  { path: "/privacy", priority: 0.3, changeFrequency: "yearly", lastModified: "2026-08-26" },
+  { path: "/terms", priority: 0.3, changeFrequency: "yearly", lastModified: "2026-08-28" },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

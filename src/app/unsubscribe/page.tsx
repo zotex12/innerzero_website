@@ -5,7 +5,9 @@ import { UnsubscribeConfirm } from "@/components/sections/UnsubscribeConfirm";
 // Utility page reached from the unsubscribe link in update emails. Kept
 // out of search indexes; it is only useful with a per-subscriber token.
 export const metadata: Metadata = {
-  title: "Unsubscribe | InnerZero",
+  // Absolute: the string carries the brand, so the root template suffix
+  // would double it (WEBCLAUDE.md title duplicate-brand rule).
+  title: { absolute: "Unsubscribe | InnerZero" },
   description: "Unsubscribe from InnerZero update emails.",
   robots: { index: false, follow: false },
 };
