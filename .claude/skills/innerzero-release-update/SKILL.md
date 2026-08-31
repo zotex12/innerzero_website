@@ -40,6 +40,7 @@ After a new InnerZero desktop version `vX.Y.Z` is built and published, update th
 - **Capability-mention sweep (mandatory when a release adds or changes a backend, engine, provider, platform, or connector):** the fixed file list above is NOT sufficient. Grep the whole site for every place the OLD capability set is stated and update each one, e.g. for engines: `grep -rlE "Ollama|LM Studio" src/ public/ --include="*.tsx" --include="*.ts" --include="*.txt"` then check each hit file for the new capability. Judge each mention in context (educational prose, FAQ answers, JSON-LD, and AEO files usually need the update; blog-post links, logo grids, and legal copy about software actually DISTRIBUTED usually do not; a capability that ships inert or BYO-only must be framed as such, never as bundled or managed).
 - `src/app/(marketing)/privacy/page.tsx` and `terms/page.tsx`: ONLY if the release adds NEW third-party data flows or processors (a new connector, a scraping or automation service, new PII egress). Add interim copy flagged "pending solicitor review". Do NOT renumber Terms sections; house new clauses in an existing adjacent section plus the liability and indemnification carve-out lists plus the third-party-software inventory. Note any controllership position for the operator's solicitor to confirm.
 - `src/content/blog/*.mdx` (optional): sweep for stale facts (old version, "Windows only", theme counts).
+- **`src/app/sitemap.ts` (mandatory):** bump the `STATIC_PATHS` `lastModified` (format `YYYY-MM-DD`, the date the release update ships) for every static page this update touched. A release update always touches at least `/`, `/download`, and `/changelog`; also bump `/models`, `/what-is-local-ai`, `/features`, `/for/*`, `/pricing` (free-plan feature list), and `/privacy` or `/terms`, each ONLY if this update actually edited that page (a false bump tells crawlers a page changed when it did not). Feature category pages take their date from the `modified` field in `src/lib/features/*.ts` (already a step above) and blog posts from frontmatter, so only `STATIC_PATHS` needs the manual bump. The v0.2.1 update missed this and shipped with `/`, `/download`, and `/changelog` still dated 2026-08-16 (the v0.2.0 sweep date).
 
 ## Step 3 — GitHub releases README (`zotex12/innerzero-releases`)
 
@@ -51,6 +52,7 @@ After a new InnerZero desktop version `vX.Y.Z` is built and published, update th
 
 - `npm run lint` and `npm run build`. Next 16 runs TypeScript at build time, not ESLint, so the pre-existing `Turnstile.tsx` `react-hooks/refs` lint errors are not yours and do not block the build.
 - Greps: no stray old version (except historical changelog rows and a deliberate "fixes the vPREV issue" sentence); no em dashes or emojis in customer copy; exactly one changelog `latest: true`; every download asset filename equals the real release asset.
+- Sitemap freshness: `grep lastModified src/app/sitemap.ts` and confirm every page this update edited carries today's date, `/`, `/download`, and `/changelog` at minimum (see the Step 2 sitemap bullet).
 
 ## Step 5 — Audit + review
 
@@ -100,4 +102,5 @@ After a new InnerZero desktop version `vX.Y.Z` is built and published, update th
 - "Deferred" plan notes can be stale; verify shipped via git log.
 - Keep the `features/page.tsx` background alternation correct when inserting sections.
 - The blog auto-publisher cron may race your push; rebase and re-push.
+- `src/app/sitemap.ts` `lastModified` dates do NOT update themselves for static pages; forgetting the Step 2 sitemap bullet leaves crawlers told the site has not changed (the v0.2.1 update shipped with the home, download, and changelog entries still carrying the v0.2.0 sweep date).
 - Check the GitHub release-notes body against the site for version-string consistency (for example the macOS minimum OS) and flag mismatches to the operator.
