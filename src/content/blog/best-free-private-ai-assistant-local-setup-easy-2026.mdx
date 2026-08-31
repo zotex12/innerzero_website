@@ -8,6 +8,7 @@ slug: "best-free-private-ai-assistant-local-setup-easy-2026"
 tags: ["local ai", "getting started", "privacy"]
 readingTime: "8 min read"
 featured: false
+updated: "2026-08-31"
 ---
 
 The best free private AI assistant on Windows in 2026 is the one that gets you from [installer](/features/setup) to working chat in under five minutes without an account, without a subscription, and without sending a single message to anyone else's server. InnerZero is built around that goal. This is what the local setup actually looks like, what hardware it asks for, and how it compares to the other free local AI tools people are using this year.
@@ -16,6 +17,14 @@ The best free private AI assistant on Windows in 2026 is the one that gets you f
 
 The realistic answer is between three and twelve minutes depending on your internet speed. Three steps. [Download the installer](/download) (about 280 MB), run it like any other Windows installer, and launch the app. The first launch runs a one-time wizard that takes a few seconds: it scans your CPU, RAM, GPU, and free disk, then picks the right model for what it sees. The model download is the only step that takes real time. On a 100 Mbps connection the standard tier model is done in three to five minutes. After that, every launch is instant and everything runs locally. There is no second wizard, no account creation, no email confirmation. The first message you type is the same as the millionth: a request handled entirely by software running on your hardware.
 
+<PostImage
+  src="/images/features/setup1-system-detect-and-language-select.webp"
+  alt="InnerZero setup wizard welcome screen offering to check your hardware, download the right AI models, and run a quick performance test"
+  width={981}
+  height={986}
+  caption="The one-time setup wizard on first launch."
+/>
+
 ## What hardware do I actually need?
 
 The comfortable minimum is 16 GB of RAM, a modern multi-core CPU, and 10 GB of free disk space. That gets you a smaller model running on CPU only. It is functional, but the responses arrive at thinking pace rather than typing pace. The recommended tier is 32 GB of RAM, an 8-core CPU or better, and an NVIDIA GPU with at least 8 GB of VRAM. With that you get sub-second responses on the standard model.
@@ -23,6 +32,14 @@ The comfortable minimum is 16 GB of RAM, a modern multi-core CPU, and 10 GB of f
 Apple Silicon Macs benefit from unified memory: a 16 GB M-series machine punches above its weight because the GPU and CPU share the same memory pool, no VRAM bottleneck. AMD GPUs work via Vulkan in the latest builds but the NVIDIA path is more mature. If you only have an integrated GPU, the CPU fallback is your friend.
 
 There is no hardware floor below which the app refuses to install. It will run on a 2017 ultrabook with 8 GB of RAM. It will just be slow. The full per-tier breakdown of which model the wizard picks at which RAM and VRAM budget is in the [hardware guide](/blog/hardware-for-local-ai).
+
+<PostImage
+  src="/images/features/setup4-download-done-launch-innerzero.webp"
+  alt="InnerZero setup complete screen showing the detected system tier, the chosen director model and voice model, and a measured speed of 18.2 tokens per second"
+  width={1345}
+  height={1122}
+  caption="Setup done: the wizard reports your tier, models, and measured speed before first launch."
+/>
 
 ## Is it actually free?
 

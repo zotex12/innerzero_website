@@ -7,6 +7,7 @@ import { getCategoriesForGuide } from "@/lib/features";
 import { extractFaqs } from "@/lib/blog-faq";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
+import { PostImage } from "@/components/blog/PostImage";
 import { Button } from "@/components/ui/Button";
 import { absoluteUrl } from "@/lib/metadata";
 import { SITE_AUTHOR } from "@/lib/constants";
@@ -140,6 +141,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="blog-prose">
             <MDXRemote
               source={post.content}
+              components={{ PostImage }}
               options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
             />
           </div>

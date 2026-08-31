@@ -8,6 +8,7 @@ slug: "how-innerzero-stays-private"
 tags: ["privacy", "local ai", "innerzero"]
 readingTime: "5 min read"
 featured: false
+updated: "2026-08-31"
 ---
 
 Privacy isn't a feature we added to InnerZero. It's the reason InnerZero exists. Every design decision starts with one question: does this keep the user's data on their machine?
@@ -19,6 +20,14 @@ Here's exactly how it works, with no hand-waving.
 When you send a message to InnerZero, it's processed by an AI model running on your GPU. The model lives on your hard drive. The computation happens on your hardware. Your message never leaves your machine.
 
 This isn't "end-to-end encrypted" cloud processing, which still sends your data to a server. This is genuinely local. Unplug your ethernet cable and it still works. That's the test.
+
+<PostImage
+  src="/images/appprivacypage.png"
+  alt="InnerZero My Privacy page showing the Offline, Private, and Cloud mode cards, the local connection log, and a privacy snapshot of what stays on your machine"
+  width={2555}
+  height={1349}
+  caption="The My Privacy page: pick a mode, watch the connection log, and see exactly what stays local."
+/>
 
 ## Where is my memory stored?
 

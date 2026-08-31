@@ -8,6 +8,7 @@ slug: "hardware-for-local-ai"
 tags: ["guide", "local ai", "getting started"]
 readingTime: "5 min read"
 featured: false
+updated: "2026-08-31"
 ---
 
 This is the first question everyone asks. Can my PC run [local AI](/what-is-local-ai)? The short answer: probably yes, if it was made in the last five years. The longer answer depends on how fast you want it to be.
@@ -48,7 +49,17 @@ Plan for at least 10 GB of free space. 30 GB gives you room for multiple models 
 
 ## How does InnerZero pick a model for my hardware?
 
-When you install InnerZero, it scans your hardware and assigns a tier automatically. You don't need to pick models or configure anything. Here's what the tiers look like:
+When you install InnerZero, it scans your hardware and assigns a tier automatically. You don't need to pick models or configure anything.
+
+<PostImage
+  src="/images/features/setup2-model-download.webp"
+  alt="InnerZero setup wizard showing detected hardware: an 8-core AMD CPU, 32 GB of RAM, an NVIDIA RTX 3080 with 10 GB of VRAM, and the assigned system tier with its models installed"
+  width={975}
+  height={972}
+  caption="The setup wizard reads your CPU, RAM, GPU, and free disk, then assigns a tier and installs the matching models."
+/>
+
+Here's what the tiers look like:
 
 **CPU-only tiers** (4 GB RAM and up, no GPU needed). Four of them, from the smallest model on 4 to 7 GB of RAM up to a 14b model on 32 GB. They work, just slower, and local voice is not available without a GPU.
 

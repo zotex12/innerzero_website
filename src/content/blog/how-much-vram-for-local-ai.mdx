@@ -8,6 +8,7 @@ slug: "how-much-vram-for-local-ai"
 tags: ["hardware", "local ai", "guide"]
 readingTime: "7 min read"
 featured: false
+updated: "2026-08-31"
 ---
 
 "How much VRAM do I need?" is the first question almost everyone asks before running AI on their own computer. This guide gives you a clear answer with an approximate table by model size, explains the simple maths behind the numbers so you can work out any model yourself, and covers what to do if you do not have a dedicated graphics card.
@@ -58,6 +59,14 @@ InnerZero is designed to work across a wide range of machines, because it runs t
 - **Entry level:** any modern laptop or desktop with 16 GB of system RAM runs small models on the CPU.
 - **Comfortable:** a graphics card with 8 GB of VRAM, such as a mid-range NVIDIA card, runs 7 to 8 billion parameter models smoothly.
 - **Enthusiast:** 16 to 24 GB of VRAM runs the mid and larger model sizes well.
+
+<PostImage
+  src="/images/features/setup3-optional-model-select-or-nomodel-select.webp"
+  alt="InnerZero tier picker listing hardware tiers from No Local Model up to Performance, each with the RAM, VRAM, and model download size it needs"
+  width={1295}
+  height={1073}
+  caption="InnerZero's tier picker shows the RAM, VRAM, and download size for each tier before anything downloads."
+/>
 
 InnerZero [sets the model up](/features/setup) automatically based on your hardware, so you do not have to pick quantization settings by hand. To compare it with other local tools, see [local AI assistants compared](/blog/local-ai-assistants-compared-2026). For the top end of local hardware, see [frontier tier hardware for local AI](/blog/frontier-tier-hardware-local-ai).
 
