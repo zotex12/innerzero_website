@@ -117,6 +117,15 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        // The pre-launch waitlist page was removed in the security-hardening
+        // phase (e12e952) with no redirect, so the URL 404ed while Google
+        // still had it indexed (GSC "Not found" report, last crawled
+        // 2026-08-02). Send it to /download, the page that superseded it.
+        source: "/waitlist",
+        destination: "/download",
+        permanent: true,
+      },
+      {
         // The JSON Feed moved off the robots-blocked /api/* namespace to a
         // clean top-level /feed.json (consistent with /feed.xml and
         // /changelog.xml), which cleared the Google Search Console
