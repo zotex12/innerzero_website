@@ -207,6 +207,22 @@ const nextConfig: NextConfig = {
           { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
         ],
       },
+      // Phase gsc-feed-noindex-headers. Google Search Console listed the
+      // RSS feeds, the JSON Feed and a /_next/static font file under
+      // "Crawled - currently not indexed". Those are machine resources with
+      // no place in a search index, so tell crawlers so explicitly. Feed
+      // readers ignore X-Robots-Tag; route handlers inherit next.config
+      // headers (WEBCLAUDE architecture note, Phase 7A), so the feed route
+      // files need no change. /api/feed 308s to /feed.json and picks the
+      // header up there. llms.txt and favicon.ico are deliberately NOT in
+      // this list: AI crawlers read llms.txt and some treat noindex as a
+      // do-not-use signal, and Google requires favicons to stay crawlable.
+      ...["/feed.xml", "/changelog.xml", "/feed.json", "/_next/static/:path*"].map(
+        (source) => ({
+          source,
+          headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+        }),
+      ),
     ];
   },
 };
