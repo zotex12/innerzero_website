@@ -494,6 +494,21 @@ export default function WhatIsLocalAiPage() {
             >
               privacy policy
             </Link>
+            . For what that privacy looks like in daily use, read{" "}
+            <Link
+              href="/blog/private-ai-journal"
+              className="text-accent-gold transition-colors hover:text-accent-gold-hover"
+            >
+              using a private AI assistant as a journal
+            </Link>
+            , and if a workplace or school network sits between you and the
+            model download, see{" "}
+            <Link
+              href="/blog/local-ai-behind-a-proxy"
+              className="text-accent-gold transition-colors hover:text-accent-gold-hover"
+            >
+              running local AI behind a proxy
+            </Link>
             .
           </Body>
 
@@ -606,7 +621,14 @@ export default function WhatIsLocalAiPage() {
             product instead of a tinkering project. Cloud is optional and
             always opt-in: add your own API key for any of seven providers,
             or subscribe to the managed plan. Either way, the local app stays
-            free. Start at the{" "}
+            free. If you are still weighing options,{" "}
+            <Link
+              href="/blog/how-to-choose-a-private-ai-assistant"
+              className="text-accent-gold transition-colors hover:text-accent-gold-hover"
+            >
+              how to choose a private AI assistant
+            </Link>{" "}
+            lists the criteria worth comparing before you commit. Start at the{" "}
             <Link
               href="/features"
               className="text-accent-gold transition-colors hover:text-accent-gold-hover"
