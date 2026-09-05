@@ -26,14 +26,14 @@ const STATIC_PATHS: {
   // signalling anything to crawlers, while blog and feature entries did.
   lastModified?: string;
 }[] = [
-  { path: "/", priority: 1.0, changeFrequency: "weekly", lastModified: "2026-08-28" },
+  { path: "/", priority: 1.0, changeFrequency: "weekly", lastModified: "2026-09-05" },
   { path: "/features", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-08-16" },
   { path: "/pricing", priority: 0.8, changeFrequency: "monthly" },
-  { path: "/download", priority: 0.8, changeFrequency: "weekly", lastModified: "2026-08-28" },
+  { path: "/download", priority: 0.8, changeFrequency: "weekly", lastModified: "2026-09-05" },
   { path: "/models", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-08-16" },
   { path: "/blog", priority: 0.8, changeFrequency: "daily" },
   { path: "/what-is-local-ai", priority: 0.7, changeFrequency: "monthly", lastModified: "2026-09-04" },
-  { path: "/changelog", priority: 0.6, changeFrequency: "weekly", lastModified: "2026-08-28" },
+  { path: "/changelog", priority: 0.6, changeFrequency: "weekly", lastModified: "2026-09-05" },
   { path: "/about", priority: 0.6, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.5, changeFrequency: "yearly" },
   { path: "/for/writers", priority: 0.6, changeFrequency: "monthly" },

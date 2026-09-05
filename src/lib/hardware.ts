@@ -41,7 +41,7 @@ export const HARDWARE_TIERS: HardwareTier[] = [
     storage: "2 GB free, plus the model",
     modelExamples: ["Qwen 3 1.7B"],
     notes:
-      "The app's own floor. It runs the smallest model on the CPU, and responses are slow at this level. Voice needs a dedicated GPU, so it is off here. If a machine cannot run a local model at all, No Local Model is a supported choice: InnerZero works fully on a cloud plan or your own API key.",
+      "The app's own floor. It runs the smallest model on the CPU, and responses are slow at this level. Voice needs a dedicated GPU, so it is off here. If a machine cannot run a local model at all, No Local Model is a supported choice: InnerZero works on a cloud plan, your own API key, or an Ollama server on your network, with voice when you choose a voice-capable model that server has.",
   },
   {
     id: "recommended",

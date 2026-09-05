@@ -97,7 +97,7 @@ export default function Home() {
               applicationCategory: "UtilitiesApplication",
               applicationSubCategory: "AI Assistant",
               operatingSystem: "Windows, macOS, Linux",
-              softwareVersion: "0.2.1",
+              softwareVersion: "0.2.2",
               description:
                 "A free private AI assistant that runs entirely on your PC. No cloud. No tracking. No subscription.",
               url: absoluteUrl("/"),

@@ -425,7 +425,7 @@ export const SYSTEM_REQUIREMENTS = {
     "16GB+ RAM",
     "20GB+ free disk space",
     "Dedicated GPU with 8GB+ VRAM, or an Apple Silicon Mac with 16GB+ unified memory",
-    "A GPU is what enables local voice. CPU-only setups are text and tools",
+    "A GPU is what enables local voice. CPU-only setups are text and tools, unless, on the No Local Model tier, you choose a voice-capable model that a connected network Ollama server has",
     "SSD for faster model loading",
   ],
 } as const;

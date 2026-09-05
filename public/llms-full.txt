@@ -11,7 +11,7 @@ Product type: Desktop AI assistant application
 Category: Local-first AI, private AI, offline AI, on-device AI
 Website: https://innerzero.com
 Download: https://innerzero.com/download
-Current version: v0.2.1 (released August 2026)
+Current version: v0.2.2 (released September 2026)
 Platforms: Windows 10/11 (64-bit), macOS 14+, Linux x86_64
 Company: Summers Solutions Ltd, Birmingham, England, UK
 UK company number: 16448945
@@ -60,9 +60,9 @@ In optional cloud mode with your own API keys, you can access the current provid
 
 ## What platforms does InnerZero support?
 
-- Windows 10 or 11, 64-bit only. Installer size: 1.18 GB. Signed by Summers Solutions Ltd via Microsoft Trusted Signing.
-- macOS 14 (Sonoma) or later, Apple Silicon. Installer size: 736 MB. Signed with Developer ID, notarised by Apple, and stapled, so it opens with a normal double click even offline.
-- Linux x86_64, glibc 2.31 or later. AppImage size: 1.32 GB. Requires espeak-ng, portaudio19-dev, xclip, libwebkit2gtk-4.1-0, libgirepository-1.0-1, libfuse2, and gir1.2-webkit2-4.1.
+- Windows 10 or 11, 64-bit only. Installer size: 1.24 GB. Signed by Summers Solutions Ltd via Microsoft Trusted Signing.
+- macOS 14 (Sonoma) or later, Apple Silicon. Installer size: 780 MB. Signed with Developer ID, notarised by Apple, and stapled, so it opens with a normal double click even offline.
+- Linux x86_64, glibc 2.31 or later. AppImage size: 1.18 GB. Requires espeak-ng, portaudio19-dev, xclip, libwebkit2gtk-4.1-0, libgirepository-1.0-1, libfuse2, and gir1.2-webkit2-4.1.
 
 No mobile support (iOS or Android).
 
@@ -415,24 +415,24 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 
 ## Windows 10/11
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.2.1.exe
-- Version: 0.2.1
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.2.2.exe
+- Version: 0.2.2
 - Size: 1.24 GB
 - Requirements: 64-bit, 4 GB+ RAM
 - Note: Windows may show a SmartScreen warning on first install. Click More Info then Run Anyway. The installer is signed by Summers Solutions Ltd via Microsoft Trusted Signing.
 
 ## macOS 14+
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.2.1-mac.dmg
-- Version: 0.2.1
-- Size: 775 MB
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-Setup-0.2.2-mac.dmg
+- Version: 0.2.2
+- Size: 780 MB
 - Requirements: Apple Silicon, 4 GB+ RAM
 - Note: Signed with Developer ID, notarised by Apple, and stapled. It opens with a normal double click, with no Gatekeeper warning and no workaround needed.
 
 ## Linux x86_64
 
-- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.2.1-x86_64.AppImage
-- Version: 0.2.1
+- Download: https://github.com/zotex12/innerzero-releases/releases/latest/download/InnerZero-0.2.2-x86_64.AppImage
+- Version: 0.2.2
 - Size: 1.18 GB
 - Requirements: x86_64, glibc 2.31+, 4 GB+ RAM
 - Note: Install system dependencies first: sudo apt install -y espeak-ng portaudio19-dev xclip libwebkit2gtk-4.1-0 libgirepository-1.0-1 libfuse2 gir1.2-webkit2-4.1
@@ -452,7 +452,7 @@ Any amount via Ko-fi. Helps fund development and keeps InnerZero free for everyo
 - 16 GB+ RAM
 - 20 GB+ free disk space
 - Dedicated GPU with 8 GB+ VRAM, or an Apple Silicon Mac (unified memory routes to a GPU-class tier without a discrete card)
-- A GPU is what enables local voice. CPU-only tiers are text and tools only.
+- A GPU is what enables local voice. CPU-only tiers are text and tools only, unless, on the No Local Model tier, you choose a voice-capable model that a connected network Ollama server has.
 - SSD for faster model loading
 
 ===============================================================================
@@ -545,7 +545,7 @@ Under UK GDPR, you have the right to: access your personal data; correct inaccur
 
 InnerZero automatically picks models based on detected hardware:
 
-Detection picks a tier automatically and you can override it manually, in the setup wizard or later in Settings. Local voice needs a GPU tier; every CPU-only tier is text and tools.
+Detection picks a tier automatically and you can override it manually, in the setup wizard or later in Settings. Local voice needs a GPU tier; every CPU-only tier is text and tools, unless, on the No Local Model tier, you choose a voice-capable model that a connected network Ollama server has.
 
 GPU tiers:
 

@@ -36,10 +36,55 @@ export interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "0.2.2",
+    date: "September 2026",
+    releaseDate: "2026-09-05",
+    latest: true,
+    groups: [
+      {
+        label: "New",
+        entries: [
+          { text: "Voice on a network Ollama server: on the No Local Model tier, voice now works when you choose a voice-capable model that the connected Ollama server actually has, so a low-spec machine gets spoken conversation from another computer on your network, and the voice warm-up only reports ready once that server has answered." },
+          { text: "Speech models download during setup: the first-run setup bar shows a third segment for the speech models (speech recognition, the text-to-speech voice and the voice-activity detector) with real progress, and the Voice page says when a first-time download is happening instead of sitting on Loading models." },
+          { text: "The chat history notice can be snoozed: the notice that older messages are no longer shown now explains that Zero still remembers what you talked about, and its close button hides it for seven days." },
+        ],
+      },
+      {
+        label: "Improved",
+        entries: [
+          { text: "Offline mode now blocks a network AI server too: with Offline on, nothing you say, nothing from memory and nothing else that carries your content reaches an Ollama, LM Studio or llama.cpp server on another machine, the automatic Ollama status and keep-alive calls stop as well, and an Offline setting that cannot be read is treated as on. A few plain is-the-server-up checks still reach a network server and are next on the list. Private mode with a network server is unchanged." },
+          { text: "GPU detection on newer cards: hardware detection gives the bundled runtime's start-up the time it needs (up to 90 seconds on Windows) instead of giving up early, Settings > Hardware says when detection is still running or did not complete instead of reporting CPU only, and the first-run check now notices a model that landed on the CPU of a GPU machine and reports it rather than counting it as a pass. Detection no longer starts a second AI server, so Settings > Hardware opens faster." },
+          { text: "Voice start problems are visible: if voice cannot start because no microphone could be opened or speech recognition did not load, the Voice page and the chat microphone say so and return to a ready state instead of hanging on Loading models." },
+          { text: "Memory recall: what you said is matched more closely against what Zero remembers, a newer version of a fact outranks the older one, and the overnight memory pass now reads your side of the conversation as well as Zero's." },
+          { text: "The dashboard shows the live status from the first paint after start-up, and the Services / Health card is gone." },
+          { text: "Briefings: the Test-run flash no longer disappears when the card refreshes, and Quick Add keeps your draft when you switch tabs." },
+          { text: "Questions about another product's schedule, personality or knowledge packs (an Outlook schedule, an Alexa personality, a Kindle download) are no longer mistaken for questions about InnerZero itself, so web search stays available for them." },
+          { text: "Installer licence: the EULA now covers feedback and attached logs, and points at innerzero.com/pricing for the Business Licence instead of quoting a figure." },
+          { text: "The bundled Ollama runtime no longer makes unsolicited requests to Ollama's cloud service; pulling a model yourself works as before." },
+        ],
+      },
+      {
+        label: "Fixed",
+        entries: [
+          { text: "/forget by id now works for every memory id; ids below 1000 could not be forgotten by id before." },
+          { text: "A network Ollama address with no host name is rejected instead of being saved." },
+          { text: "The status bar no longer triggers a hardware detection when the tier pill is not shown." },
+          { text: "A failed model unload before the first-run GPU check no longer moves a healthy GPU machine to the CPU tier." },
+          { text: "Local models no longer read the memory relevance percentages back to you as if they were facts, and asking Zero to remember something no longer makes it plan a memory tool that does not exist; everything you tell it is stored automatically." },
+        ],
+      },
+      {
+        label: "Known limitations",
+        entries: [
+          { text: "Machines with only an integrated GPU that used the old Vulkan toggle may run on the CPU, because Ollama 0.32 hides integrated GPUs by default. Set the environment variable OLLAMA_IGPU_ENABLE=1 before starting InnerZero to use it again." },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.2.1",
     date: "August 2026",
     releaseDate: "2026-08-28",
-    latest: true,
     groups: [
       {
         label: "New",
