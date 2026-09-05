@@ -43,6 +43,7 @@ MCP accounts (Supabase / Stripe / Cloudflare):
 - Cloudflare: use the "claude.ai Cloudflare Developer Platform" connector, NOT `cloudflare-axon`.
 - NEVER use the plugin `supabase` or plugin `stripe` MCP servers here. Those are logged into the Axon Neuro accounts (SW HEALTH LTD, project iqabofslusulvsaevmyq).
 - If unsure, verify BEFORE any write: Supabase list_projects must show innerzero_website; Stripe get_stripe_account_info must show SUMMERS SOLUTIONS LTD. Wrong account: STOP and report.
+- Search Console: use the `gsc` MCP server (user scope, signed in as louie@summerssolutions.co.uk). Property `sc-domain:innerzero.com` (`gsc_property` in .ai\project.json); an older URL-prefix property `https://www.innerzero.com/` also exists, prefer the domain one. Reads, URL inspection and sitemap submission only. Never call the Google Indexing API. Never read, print or commit anything under C:\Users\sumlu\.secrets. Check the live URL (curl -sI) before calling a Search Console row a defect.
 
 Tool availability:
 - Preferred: Claude Code primary builder, Codex reviewer and fallback builder.

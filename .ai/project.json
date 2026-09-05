@@ -5,6 +5,7 @@
   "expected_remote_slug": "zotex12/innerzero_website",
   "main_branch": "main",
   "guide": "C:\\Users\\sumlu\\Documents\\innerzero_website\\WEBCLAUDE.md",
+  "gsc_property": "sc-domain:innerzero.com",
   "workflow_profile": "innerzero_website",
   "preferred_builder": "claude_code",
   "fallback_builder": "codex"
