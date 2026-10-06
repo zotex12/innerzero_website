@@ -36,10 +36,36 @@ export interface Release {
 
 export const RELEASES: Release[] = [
   {
+    version: "0.2.3",
+    date: "October 2026",
+    releaseDate: "2026-10-06",
+    latest: true,
+    groups: [
+      {
+        label: "Improved",
+        entries: [
+          { text: "Voice models load once: with Keep speech recognition ready or Keep the speaking voice ready switched on, voice chat, read aloud and chat dictation now share the models that are already loaded instead of loading a second copy, which saves memory and time." },
+          { text: "Clearer voice errors: if the speech recognition model could not be downloaded or saved, the Voice page, the Speech to Text panel and the chat microphone now say so and suggest checking your internet connection and antivirus. The log also records which loading step failed, so a problem report is easier to diagnose." },
+          { text: "Offline mode: the status bar's automatic check no longer contacts an LM Studio or llama.cpp server on another machine while Offline mode is on, matching what 0.2.2 did for Ollama." },
+          { text: "Settings > Voice no longer shows the Speaker enrollment option, which could not work in current builds." },
+        ],
+      },
+      {
+        label: "Fixed",
+        entries: [
+          { text: "Voice on the installed Windows app no longer hangs on Loading models: the voice components now start properly when InnerZero runs without a console window, voice activity detection loads, and the English language data the text to speech voice needs is now part of InnerZero's own install on every platform, instead of being installed on the fly when voice first starts. After updating on Windows, the first launch finishes installing the voice components in the background, which can take a few minutes; until then voice says it is still finishing setup, and text chat works as normal." },
+          { text: "Fixed a start-up race that could leave InnerZero stuck on its loading screen, most often when the computer was busy as the app opened. It affected 0.2.2 as well." },
+          { text: "Speech recognition on an NVIDIA GPU without the CUDA runtime installed now switches to the CPU when the model loads, instead of failing on the first thing you say." },
+          { text: "On the Schedule page, the History tab labels the previous day's runs as Yesterday correctly on the day after the clocks change." },
+          { text: "Fixed a rare case where closing the chat history notice could hide a later notice about newly hidden older messages." },
+        ],
+      },
+    ],
+  },
+  {
     version: "0.2.2",
     date: "September 2026",
     releaseDate: "2026-09-05",
-    latest: true,
     groups: [
       {
         label: "New",

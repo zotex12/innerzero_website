@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, Monitor, Apple, Terminal } from "lucide-react";
 
-const VERSION = "0.2.2";
+const VERSION = "0.2.3";
 
 const PLATFORMS = [
   {
@@ -22,7 +22,7 @@ const PLATFORMS = [
     label: "macOS 14+",
     icon: Apple,
     file: `InnerZero-Setup-${VERSION}-mac.dmg`,
-    size: "780 MB",
+    size: "721 MB",
     url: `/download/thanks?asset=InnerZero-Setup-${VERSION}-mac.dmg`,
     reqs: "Apple Silicon, 4 GB+ RAM",
     note: "Signed with Developer ID, notarised by Apple, and stapled. It opens with a normal double click. No Gatekeeper warning and no workaround needed.",
@@ -33,7 +33,7 @@ const PLATFORMS = [
     label: "Linux x86_64",
     icon: Terminal,
     file: `InnerZero-${VERSION}-x86_64.AppImage`,
-    size: "1.18 GB",
+    size: "1.20 GB",
     url: `/download/thanks?asset=InnerZero-${VERSION}-x86_64.AppImage`,
     reqs: "x86_64, glibc 2.31+, 4 GB+ RAM",
     note: "Install system dependencies first: sudo apt install -y espeak-ng portaudio19-dev xclip libwebkit2gtk-4.1-0 libgirepository-1.0-1 libfuse2 gir1.2-webkit2-4.1",
