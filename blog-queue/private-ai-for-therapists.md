@@ -73,7 +73,7 @@ A short checklist:
 - If I work for an agency or the NHS, what does their information governance policy permit?
 - Have I told clients how their information is handled, including any tools I use?
 
-With a local-first tool, several of these collapse to "the data never left the machine." That is not a complete answer, but it is the strongest starting position you can have. For practice-wide or commercial use, a Business Licence starts at £19.99 per seat a month.
+With a local-first tool, several of these collapse to "the data never left the machine." That is not a complete answer, but it is the strongest starting position you can have. Client work is commercial use under [our terms](/terms), and that includes sole traders in private practice, so each person needs a Business Licence seat: £19.99 per seat per month, or £149.99 per seat per year (£129.99 from 5 seats). Counsellors working for a charity or non-profit count as personal use.
 
 ## How does local AI compare to cloud AI for therapy notes?
 
@@ -86,7 +86,7 @@ For confidential clinical work, local AI wins on every dimension that touches cl
 | Works offline | Yes, fully | No |
 | Data processing agreement needed | No | Usually yes |
 | Breach exposure for your caseload | Limited to your own device | The vendor can be breached |
-| Cost to run the local app | Free to download, no account | Subscription, account required |
+| Cost to run the local app | Free to download, no account for personal use; Business Licence per seat for commercial use | Subscription, account required |
 | Memory of your note style | Stored locally on your disk | Held in a cloud account |
 | Best for | Session notes, supervision prep, reflection | General, fully anonymised drafting only |
 
@@ -116,6 +116,6 @@ No high-spec machine is needed: note-taking and drafting are light tasks that ru
 
 ### Does it cost anything to write session notes locally with InnerZero?
 
-The desktop app is free to download with no account required, and it runs entirely on your machine. Optional cloud features exist if you want them, either your own provider API keys at zero markup or a managed plan from £9.99 a month, but none are required for local note-taking. Commercial or practice-wide use takes a Business Licence.
+For client work in private practice or for an employer such as an agency, yes: that is commercial use, so each person needs a Business Licence seat. Work for a charity or non-profit counts as personal use and needs no Business Licence. The desktop app itself is free to download with no account required, and it runs entirely on your machine. Optional cloud features exist if you want them, either your own provider API keys at zero markup or a managed plan from £9.99 a month, but none are required for local note-taking.
 
 

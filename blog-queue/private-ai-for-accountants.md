@@ -15,7 +15,7 @@ featured: false
 > - InnerZero runs local models (Qwen3, Gemma3, gpt-oss) with no account required, so no third-party cloud holds your clients' financial records.
 > - You can summarise statements, draft client emails, and reconcile narratives entirely offline, with document upload and on-device text recognition.
 > - Cloud mode is off by default and optional. If you turn it on, only the current prompt plus its context is sent, never your whole memory database or files.
-> - The local app is free to download. Client work is commercial use, so each person needs a Business Licence seat: £19.99 per seat per month or £149.99 per seat per year.
+> - The local app is free to download. Client work is commercial use, so each person needs a Business Licence seat: £19.99 per seat per month or £149.99 per seat per year (£129.99 from 5 seats).
 
 Accountants and bookkeepers hold some of the most sensitive data any small business has: national insurance numbers, salary figures, VAT records, full bank histories. Pasting any of that into a public chatbot is a confidentiality problem and, given your engagement letters and UK GDPR duties, a compliance one. This post is about getting the speed of AI for the boring drafting and summarising work without shipping a client's data to someone else's server.
 

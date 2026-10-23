@@ -98,7 +98,7 @@ Yes, settings and the Prompt Library live in separate files from the memory data
 
 ### Is moving InnerZero to a new PC allowed on the free download?
 
-Yes. The desktop app is free to download with no account required, and there is no per-device activation to fight with. You can install it on the new PC and copy your data across without any licence transfer step. Optional paid plans like InnerZero Pro or a Business Licence are tied to your subscription, not to a specific machine.
+Yes. The free desktop app needs no account and no activation, so you can install it on the new PC and copy your data across without any licence transfer step.
 
 ### What happens to my BYO API keys when I migrate?
 

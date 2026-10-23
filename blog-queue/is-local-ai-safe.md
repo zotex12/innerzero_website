@@ -85,7 +85,7 @@ Not by itself. A model reads and writes text and has no direct access to your fi
 
 ### Is the InnerZero local app actually free, and what is the catch?
 
-The desktop app is free to download with no account required, and it runs fully offline. Optional extras include InnerZero Pro membership and a managed cloud plan from £9.99 per month, plus a Business Licence from £19.99 per seat per month. Cloud mode is off by default, so the free local app is complete on its own.
+The desktop app is free to download with no account required, and it runs fully offline. Optional extras include InnerZero Pro membership and a managed cloud plan from £9.99 per month. Commercial use needs a Business Licence: £19.99 per seat per month, or £149.99 per seat per year (£129.99 from 5 seats). Cloud mode is off by default, so the free local app is complete on its own.
 
 ### How do I know a local AI app is not secretly sending my data somewhere?
 

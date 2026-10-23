@@ -8,7 +8,7 @@ QUICK-EDIT CHECKLIST (before publish day):
 -->
 ---
 title: "Private AI for Small Business"
-description: "Private AI for small business keeps client and company data on your own machines. How local AI, optional BYO-key cloud, and a business licence change the maths."
+description: "Private AI for small business keeps client and company data on your own machines. How local AI, optional cloud, and a Business Licence change the maths."
 date: "2026-10-27"
 author: "Louie Summers"
 authorRole: "Founder"
@@ -22,9 +22,9 @@ Private AI for small business means running an AI assistant where your client da
 
 > **Quick summary**
 > - Private AI for small business runs the model on your own hardware, so client and company data stays on-device by default.
-> - With InnerZero, cloud models are optional and bring-your-own-key, never required and never on by default.
-> - The local app is free to download; costs are predictable because there is no per-seat monthly subscription to run local models.
-> - A business licence covers commercial use across a team, with current terms on the pricing page.
+> - With InnerZero, cloud models are optional, through your own API key or a managed cloud plan, never required and never on by default.
+> - The local app is free to download, and costs are predictable because local models carry no usage fee.
+> - Commercial use needs a Business Licence seat for each person: £19.99 per seat per month, or £149.99 per seat per year (£129.99 from 5 seats).
 > - InnerZero does not promise regulatory compliance for you. It gives you the architecture (data stays local) that makes your own compliance work easier.
 
 ## Why does where AI data goes matter for a small business?
@@ -41,24 +41,24 @@ InnerZero runs open-source model families like Qwen3, Gemma3, and gpt-oss locall
 
 ## Is cloud AI ever involved, and is it required?
 
-Cloud AI is optional in InnerZero and is never required to use the product. The local model covers everyday work offline. If you want the extra reasoning of a frontier model for a hard task, you can route a single message to a cloud provider, but only when you choose to and only with your own API key.
+Cloud AI is optional in InnerZero and is never required to use the product. The local model covers everyday work offline. If you want the extra reasoning of a frontier model for a hard task, you can turn on cloud mode, but only when you choose to. You can use your own API key or an optional [managed cloud plan](/pricing), which currently runs text chat on DeepSeek, per our [privacy page](/privacy).
 
 InnerZero supports seven bring-your-own-key cloud providers: Anthropic, OpenAI, Google, DeepSeek, Qwen, xAI, and Kimi. BYO-key means you hold the account and the key, you see the usage on your own vendor dashboard, and InnerZero never sits in the middle as a billing reseller. When you do route a message to the cloud, only that prompt with its assembled context is sent. Your full memory database, stored files, and prior conversation history stay on your machine. The trade-offs between buying credits from a middle layer versus holding your own keys are covered in [cloud credits vs BYO keys](/blog/cloud-credits-vs-byo-keys).
 
 ## How predictable are the costs compared with a cloud AI subscription?
 
-Local AI shifts you from a recurring per-seat subscription to a mostly fixed cost: the hardware you already own, plus electricity. There is no monthly fee to run a local model, so a five-person team does not pay five seats every month for the baseline assistant. That predictability is the part small businesses tend to underrate.
+Local AI turns most of the bill into fixed costs: the hardware you already own, electricity, and a Business Licence seat for each person who uses it commercially. There is no usage fee to run a local model, so a heavy month of drafting adds no usage charge. That predictability is the part small businesses tend to underrate.
 
 Hosted business AI tools are typically billed per user per month. As an anchor, OpenAI lists ChatGPT Business and its API pricing on its [official pricing page](https://openai.com/chatgpt/pricing/); multiply a per-seat figure by your headcount and twelve months and the annual number grows quickly. With local AI, the marginal cost of an extra conversation is close to zero once the hardware is in place. There are still real costs to running local AI well; the [hidden costs of local AI](/blog/hidden-costs-of-local-ai) post is the honest accounting.
 
 | Factor | Cloud AI subscription | Private AI on your hardware |
 |---|---|---|
 | Where your data goes | Vendor data centre, under their terms | Stays on your machine by default |
-| Baseline cost model | Per seat, per month, recurring | Hardware you own, plus electricity |
-| Cost of an extra user | Another monthly seat | No per-seat fee for local use |
+| Baseline cost model | Per seat, per month, recurring | Hardware, electricity, and a Business Licence seat per person |
+| Cost of an extra user | Another monthly seat | One more Business Licence seat, monthly or yearly |
 | Internet required | Yes, for every request | No, local models work offline |
-| Cloud model access | Built in and always on | Optional, BYO-key, opt-in per message |
-| Who holds the API billing | The vendor | You, on your own provider account |
+| Cloud model access | Built in and always on | Optional, BYO-key or managed plan, opt-in |
+| Who holds the API billing | The vendor | Your own provider account, or InnerZero on a managed plan |
 
 ## How does InnerZero keep business data private on the machine?
 
@@ -74,9 +74,9 @@ For UK businesses, the [Information Commissioner's Office](https://ico.org.uk/) 
 
 ## How does a small team license InnerZero for commercial use?
 
-Through the business licence, which covers commercial use across a team rather than the personal use the free download is intended for. The app is free to download and free to run local models; the licence is the route for using it inside a company and at scale. Current terms are on the [pricing page](/pricing).
+Through the per-seat Business Licence, which covers commercial use rather than the personal use the free download is intended for. Each person using InnerZero commercially needs one seat, and that includes sole traders and freelancers; educational institutions, charities, and non-profits count as personal use under [our terms](/terms). The current price is £19.99 per seat per month, or £149.99 per seat per year (£129.99 from 5 seats).
 
-Because the heavy lifting is local, licensing a team does not carry the per-message cloud bill that hosted tools fold into their subscription. You are paying for the right to use the software commercially and for support, not for metered access to a remote model. Any frontier cloud model a team member wants runs on your own provider key and shows up on your own vendor account, kept separate from the licence, so budgeting stays clear.
+Because the heavy lifting is local, licensing a team does not carry the per-message cloud bill that hosted tools fold into their subscription. You are paying for the right to use the software commercially, not for metered access to a remote model. Any cloud model a team member wants runs on your own provider key or an optional managed cloud plan, kept separate from the licence, so budgeting stays clear.
 
 ## Frequently asked questions
 
@@ -90,7 +90,7 @@ No. InnerZero installs on each person's Windows, macOS, or Linux machine and det
 
 ### What happens to my data if I stop paying for the licence?
 
-Your data is local SQLite on your own machine, so it stays with you. The business licence governs your right to use the software commercially, not access to your own conversations or memory, which never depended on a remote service in the first place. You can always inspect or export the underlying database yourself.
+Your data is local SQLite on your own machine, so it stays with you. The Business Licence governs your right to use the software commercially, not access to your own conversations or memory, which never depended on a remote service in the first place. You can always inspect or export the underlying database yourself.
 
 ### Can the AI work without internet for client work on the move?
 
@@ -98,6 +98,6 @@ Yes. Once the model is downloaded, local chat, voice, project document knowledge
 
 ### How is the cost different from paying per seat for a cloud AI tool?
 
-Running local models carries no per-seat monthly fee, so adding a team member does not add a recurring subscription line for the baseline assistant. Your main costs are the hardware you already own and electricity, plus the business licence for commercial use. Any cloud model use is an optional variable cost on your own provider account, controlled message by message.
+Running local models carries no usage fee, so adding a team member adds one Business Licence seat, billed monthly or yearly, and no usage charge. Your other costs are the hardware you already own and electricity. Any cloud model use is optional, on your own provider account or a managed cloud plan, and only when you turn it on.
 
-If keeping client and company data out of third-party AI systems matters to your business, local-first is the architecture that makes it the default rather than an afterthought. Download InnerZero to try it on your own hardware, then check the pricing page when you are ready to license it for your team.
+If keeping client and company data out of third-party AI systems matters to your business, local-first is the architecture that makes it the default rather than an afterthought. Download InnerZero, then buy one Business Licence seat per person from the pricing page before your team uses it commercially.

@@ -93,7 +93,7 @@ The same Claude model can sit under consumer rules in the app and commercial rul
 
 **In InnerZero's local mode, nothing reaches Anthropic, because the model runs on your own computer.** InnerZero starts in private mode, and cloud stays off until you turn it on. If you then add your own Anthropic API key, requests go from your computer straight to Anthropic's API and do not pass through InnerZero's servers.
 
-That makes each request an API request, so Anthropic's commercial terms apply rather than the consumer Claude terms: no training by default, and deletion within 30 days apart from the exceptions above. Your key is stored encrypted on your machine, and each cloud request shows up in a local connection log you can view in the app. Setup and cost are in the [guide to using Claude with your own Anthropic key](/blog/claude-opus-4-7-byo-keys).
+That makes each request an API request, so Anthropic's commercial terms apply rather than the consumer Claude terms: no training by default, and deletion within 30 days apart from the exceptions above. Your key is stored encrypted on your machine, and each text chat request that Anthropic accepts is listed in a local connection log you can view in the app. Setup and cost are in the [guide to using Claude with your own Anthropic key](/blog/claude-opus-4-7-byo-keys).
 
 The privacy blacklist swaps terms you list, such as client names or project codenames, for placeholders before a request leaves your machine, then restores them in the reply; [how the privacy blacklist works](/blog/privacy-blacklist-explained) shows it in action. And InnerZero's optional managed cloud plans are a separate route: for text chat, the provider our [privacy page](/privacy) currently lists is DeepSeek, not Anthropic.
 
