@@ -78,14 +78,14 @@ const PAGE_DATA: PersonaPageProps = {
         <>
           Chat, voice mode, and knowledge packs all keep working with the
           WiFi off. Ideal for bus commutes, patchy campus WiFi, and
-          concentration sessions with distractions off.{" "}
+          concentration sessions with distractions off. More in{" "}
           <Link
             href="/blog/use-ai-offline"
             className="text-accent-gold transition-colors hover:text-accent-gold-hover"
           >
             Using AI offline
           </Link>{" "}
-          or{" "}
+          and{" "}
           <Link
             href="/blog/ai-for-students-offline"
             className="text-accent-gold transition-colors hover:text-accent-gold-hover"

@@ -105,7 +105,7 @@ export const setup: FeatureCategory = {
     },
     {
       slug: "how-much-vram-for-local-ai",
-      title: "How Much VRAM Do You Need for Local AI? A 2026 Guide",
+      title: "How Much VRAM Do You Need for Local AI? 8-24 GB",
       blurb:
         "How VRAM decides which model size fits, and what happens when it does not.",
     },
