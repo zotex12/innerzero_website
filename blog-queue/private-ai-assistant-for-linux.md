@@ -84,7 +84,7 @@ InnerZero combines a one-file install, persistent local memory, local voice, and
 | Data stays on device | Yes | Yes | Yes | No |
 | Optional cloud, off by default | Yes | N/A | N/A | Always cloud |
 
-The honest framing: if you only want to run a model from the terminal, plain Ollama or a llama.cpp server is enough, and InnerZero sits on those engines anyway. The app earns its place when you want it to remember context across sessions, handle voice and documents, and keep all of it on your own disk. It is free to download with no account. Optional managed cloud plans start at £9.99 per month for frontier models routed through InnerZero, and a per-seat Business Licence (£19.99 per seat per month, or £129.99 per seat per year) covers commercial use. Neither is required to run everything locally.
+The honest framing: if you only want to run a model from the terminal, plain Ollama or a llama.cpp server is enough, and InnerZero sits on those engines anyway. The app earns its place when you want it to remember context across sessions, handle voice and documents, and keep all of it on your own disk. It is free to download with no account. Optional managed cloud plans start at £9.99 per month and currently run text chat on DeepSeek, per our [privacy page](/privacy), while requests with your own API keys go direct to the provider. A per-seat Business Licence (£19.99 per seat per month, or £149.99 per seat per year, dropping to £129.99 from 5 seats) covers commercial use. Neither is needed for personal use.
 
 ## Frequently asked questions
 
@@ -106,7 +106,7 @@ Yes. With NVIDIA's proprietary driver and CUDA installed, the local engine offlo
 
 ### Is InnerZero free on Linux, and is there a subscription?
 
-The desktop app is free to download and run on Linux with no account and no trial period, and every local feature is included: memory, voice, document handling, and the built-in tools. Optional cloud plans and a per-seat Business Licence for commercial use exist, but neither is required.
+The desktop app is free to download and run on Linux with no account and no trial period, and every local feature is included: memory, voice, document handling, and the built-in tools. Optional cloud plans exist, and the per-seat Business Licence applies only to commercial use.
 
 ### Does InnerZero work on Wayland, or do I need X11?
 

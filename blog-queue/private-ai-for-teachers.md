@@ -1,7 +1,13 @@
+<!--
+QUICK-EDIT CHECKLIST (before publish day):
+- [ ] Verify no factual claims are stale (DfE generative AI guidance, school licensing terms, prices)
+- [ ] Re-check /terms on educational institutions and Business Licence prices
+- [ ] Confirm the gov.uk guidance link and paraphrase still match
+-->
 ---
 title: "The Best Private AI Assistant for Teachers"
 description: "Private AI for teachers that runs on your laptop for lesson planning, marking drafts, and differentiation without uploading student names or work to the cloud."
-date: "2026-12-04"
+date: "2026-11-03"
 author: "Louie Summers"
 authorRole: "Founder"
 slug: "private-ai-for-teachers"
@@ -33,7 +39,7 @@ With InnerZero in local mode, the model loads on your laptop through Ollama or L
 
 Load the student's work into the on-device document Q&A, ask for a marking draft against your criteria, and the file contents stay on your laptop the whole time. You read the draft, correct its judgement, and write the real feedback yourself.
 
-In practice: drop a pupil's essay (PDF, Word, or a photo of handwriting, which InnerZero reads with on-device text recognition) into the chat, paste your mark scheme, and ask for strengths, gaps, and two next steps in your feedback format. Because the text recognition and the model both run locally, the essay never touches a server. The assistant drafts comments for you to verify, not grades to award.
+In practice: drop a pupil's essay (PDF, Word, or a clear photo of a printed page, which InnerZero reads with on-device text recognition; handwriting results vary) into the chat, paste your mark scheme, and ask for strengths, gaps, and two next steps in your feedback format. Because the text recognition and the model both run locally, the essay never touches a server. The assistant drafts comments for you to verify, not grades to award.
 
 A few habits keep this defensible. Anonymise where you can, so "Pupil A" rather than a full name, especially if you ever switch on a cloud model. Keep your laptop disk encrypted with BitLocker on Windows or FileVault on macOS, which protects the files at rest. And remember the AI can misjudge tone or miss context, so its draft starts your work, never ends it.
 
@@ -47,7 +53,7 @@ When a draft is ready, the artifacts panel exports it to PDF, Word, or Markdown 
 
 ## What are a school's data-protection duties when teachers use AI?
 
-Your school is the data controller for pupil personal data, which means it must know where that data goes, have a lawful basis for processing it, and avoid sending it to unapproved third parties. The Department for Education's guidance on generative AI is clear that pupil data should not be entered into tools that lack appropriate protection, and that schools remain accountable for any data they put in.
+Your school is the data controller for pupil personal data, which means it must know where that data goes, have a lawful basis for processing it, and avoid sending it to unapproved third parties. The Department for Education's [guidance on generative AI in education](https://www.gov.uk/government/publications/generative-artificial-intelligence-in-education/generative-artificial-intelligence-ai-in-education) recommends that personal data is not used in generative AI tools, and where it is strictly necessary, the school or college must take all steps to protect it and make sure the tools comply with data protection law.
 
 A short checklist before any teacher uses AI on real pupil information:
 
@@ -73,6 +79,8 @@ Local AI fits school data rules more cleanly because pupil information never lea
 
 Cloud AI is not useless for teachers. For generic tasks with zero pupil data, a quiz on the water cycle or a starter activity, the frontier cloud models are strong and convenient. InnerZero supports optional cloud mode through your own provider keys at no markup, or a managed plan from £9.99 per month, and even then it sends only your current prompt and context, never your saved memory or files. Cloud mode is off by default, and a privacy blacklist can scrub sensitive terms first. The rule of thumb stays simple: anything with a real pupil in it belongs on the local model.
 
+The same local setup works for older students' own study, as this guide to [free offline AI for students](/blog/ai-for-students-offline) explains.
+
 ## Frequently asked questions
 
 ### Does InnerZero need an internet connection to plan lessons?
@@ -81,7 +89,7 @@ No. Once you have installed a local model on first launch, lesson planning, mark
 
 ### Can I use InnerZero on a school-managed laptop?
 
-In most cases yes, though it depends on your school's device policy and what your IT team allows you to install. InnerZero runs on Windows 10 and 11, macOS 14 or later on Apple Silicon, and 64-bit Linux. For school-wide or commercial deployment, a Business Licence is the right route at £19.99 per seat per month or £129.99 per seat per year, giving your IT and data protection officer a single tool to assess.
+In most cases yes, though it depends on your school's device policy and what your IT team allows you to install. InnerZero runs on Windows 10 and 11, macOS 14 or later on Apple Silicon, and 64-bit Linux. Schools and other educational institutions count as personal use under [our terms](/terms), so a school does not need a Business Licence. Private tutoring is different: sole traders and freelancers using InnerZero in the course of their business need a Business Licence, at £19.99 per seat per month, or £149.99 per seat per year (£129.99 from 5 seats).
 
 ### Is using AI to mark allowed by exam boards and schools?
 
@@ -89,7 +97,7 @@ AI can draft feedback, but a qualified teacher must make the actual judgement, a
 
 ### Can InnerZero mark a full class set of essays on a standard school laptop?
 
-Yes, a class set works on a normal school laptop; you feed essays through one at a time rather than as a single batch. Each essay is read on-device and drafted against your rubric in a minute or two, so a class of thirty is realistically an evening job you start and step away from. More RAM or a GPU speeds each pass, but the gating factor is your own checking time, since every draft needs your eyes before it becomes feedback.
+Yes, a class set works on a normal school laptop; you feed essays through one at a time rather than as a single batch. Each essay is read on-device and drafted against your rubric, and how long each one takes depends on your laptop and the size of the model it runs. More RAM or a GPU speeds each pass, but the gating factor is your own checking time, since every draft needs your eyes before it becomes feedback.
 
 ### How do I stop pupil names reaching the cloud by accident?
 

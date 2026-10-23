@@ -15,7 +15,7 @@ featured: false
 > - InnerZero runs local models (Qwen3, Gemma3, gpt-oss) with no account required, so no third-party cloud holds your clients' financial records.
 > - You can summarise statements, draft client emails, and reconcile narratives entirely offline, with document upload and on-device text recognition.
 > - Cloud mode is off by default and optional. If you turn it on, only the current prompt plus its context is sent, never your whole memory database or files.
-> - The local app is free to download. A Business Licence is available from £19.99 per seat per month for practice use.
+> - The local app is free to download. Client work is commercial use, so each person needs a Business Licence seat: £19.99 per seat per month or £149.99 per seat per year.
 
 Accountants and bookkeepers hold some of the most sensitive data any small business has: national insurance numbers, salary figures, VAT records, full bank histories. Pasting any of that into a public chatbot is a confidentiality problem and, given your engagement letters and UK GDPR duties, a compliance one. This post is about getting the speed of AI for the boring drafting and summarising work without shipping a client's data to someone else's server.
 
@@ -63,7 +63,7 @@ That last point matters for a practice. Many AI features bolted onto cloud accou
 | Works offline | Yes, fully | No |
 | Data used for training | No | Varies by vendor and tier |
 | New sub-processor to disclose | None | The AI vendor |
-| Cost | Free to download | Subscription, usually per seat |
+| Cost | Free to download; Business Licence per seat for client work | Subscription, usually per seat |
 
 If you do want a frontier model for one hard task, InnerZero lets you bring your own API key from seven providers at zero markup, or use an optional managed plan from £9.99 per month. Even then only the prompt and its context go out, and a privacy blacklist can scrub sensitive terms before any cloud send. The trade-offs between those routes are covered in [cloud credits versus bring-your-own keys](/blog/cloud-credits-vs-byo-keys). For the broader picture, [what is local AI](/what-is-local-ai) is the place to start.
 
@@ -71,7 +71,7 @@ If you do want a frontier model for one hard task, InnerZero lets you bring your
 
 A Windows 10/11, macOS 14+, or 64-bit Linux machine with 16GB or more of RAM runs InnerZero comfortably. It works without a dedicated GPU, just slower, and on first launch it checks your hardware and picks a suitable local model, so you are not stuck choosing model files.
 
-Most modern office laptops are already capable. The first launch downloads a model once (that step needs internet), and after that the AI works entirely offline, which helps if you work from a client site with patchy connectivity or switch the network off while handling year-end records. There is no per-seat metering on the local app itself. If you are rolling this out across a practice and want centralised licensing and support, the Business Licence is £19.99 per seat per month or £129.99 per seat per year, while individual practitioners can use the free local download.
+Most modern office laptops are already capable. The first launch downloads a model once (that step needs internet), and after that the AI works entirely offline, which helps if you work from a client site with patchy connectivity or switch the network off while handling year-end records. Using it for client work is commercial use under [our terms](/terms), and that includes sole traders and freelancers, so each person using InnerZero for the practice needs a Business Licence seat: £19.99 per seat per month, or £149.99 per seat per year (£129.99 from 5 seats).
 
 ## Frequently asked questions
 
@@ -93,7 +93,7 @@ Turning off history still sends your prompt to a remote server to be processed; 
 
 ### Can a whole bookkeeping practice share the same local memory?
 
-No, and that is by design. Each install keeps its own memory in a local database on that machine, so one bookkeeper's client notes do not leak into a colleague's assistant. A practice that wants several seats under one licence with support can use the Business Licence, which still keeps each user's data on their own device.
+No, and that is by design. Each install keeps its own memory in a local database on that machine, so one bookkeeper's client notes do not leak into a colleague's assistant. Each person using InnerZero for the practice needs their own Business Licence seat, and each user's data still stays on their own device.
 
 ### What happens if my laptop has no internet during a client visit?
 

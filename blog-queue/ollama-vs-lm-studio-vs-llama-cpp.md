@@ -1,7 +1,7 @@
 ---
 title: "Ollama vs LM Studio vs llama.cpp: Which Local AI Engine Should You Use?"
 description: "Ollama, LM Studio, and llama.cpp compared on setup, model management, speed, and GPU support, plus how InnerZero runs on all three so you are not locked in."
-date: "2026-11-03"
+date: "2026-12-04"
 author: "Louie Summers"
 authorRole: "Founder"
 slug: "ollama-vs-lm-studio-vs-llama-cpp"
