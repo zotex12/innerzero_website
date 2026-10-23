@@ -4,6 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import type { BlogMeta } from "@/lib/blog";
 import { TimeAgo } from "@/components/ui/TimeAgo";
+import { cn } from "@/lib/utils";
+
+// Every card is server-rendered so crawlers reach every post from /blog;
+// only visibility is client state (cards past this index stay hidden until Show more).
+const INITIAL_VISIBLE = 8;
 
 interface Props {
   posts: BlogMeta[];
@@ -17,8 +22,6 @@ export function BlogGrid({ posts, tags }: Props) {
   const filtered = activeTag
     ? posts.filter((p) => p.tags.includes(activeTag))
     : posts;
-
-  const visible = showAll ? filtered : filtered.slice(0, 8);
 
   return (
     <>
@@ -57,11 +60,16 @@ export function BlogGrid({ posts, tags }: Props) {
 
       {/* Post grid */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {visible.map((post) => (
+        {filtered.map((post, i) => {
+          const collapsed = !showAll && i >= INITIAL_VISIBLE;
+          return (
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="group block rounded-xl border border-border-default bg-bg-card p-6 transition-all duration-200 hover:border-accent-gold hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(212,168,67,0.06)]"
+            className={cn(
+              "group rounded-xl border border-border-default bg-bg-card p-6 transition-all duration-200 hover:border-accent-gold hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(212,168,67,0.06)]",
+              collapsed ? "hidden" : "block"
+            )}
           >
             <div className="flex flex-wrap gap-2 mb-3">
               {post.tags.map((tag) => (
@@ -85,11 +93,12 @@ export function BlogGrid({ posts, tags }: Props) {
               <span>{post.author}</span>
             </div>
           </Link>
-        ))}
+          );
+        })}
       </div>
 
       {/* Show more */}
-      {!showAll && filtered.length > 8 && (
+      {!showAll && filtered.length > INITIAL_VISIBLE && (
         <div className="mt-8 text-center">
           <button
             onClick={() => setShowAll(true)}
