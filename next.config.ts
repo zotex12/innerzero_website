@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 import { buildStaticCsp, REPORT_TO } from "./src/lib/csp";
+import { existsSync, readdirSync } from "node:fs";
+import path from "node:path";
 
 // Resolved at build time. On preview deploys we allow the preview URL so
 // browser testing works; production always uses the canonical domain.
@@ -99,6 +101,107 @@ const STATIC_CSP_EXCLUDED_PREFIXES = [
   "auth",
 ].join("|");
 
+// Phase ai-slug-redirects. A Google Search Console page pull over the full
+// 16-month range (requested 2025-06-21 to 2026-10-23, pulled 2026-10-23;
+// GSC data lags a few days) showed impressions on /blog URLs that never
+// existed, most likely from AI answers or AI-written pages that cite
+// invented slugs (a post's title slugified, a near-miss slug, or a doubled
+// path).
+// Each source below returned 404 on the live site before this phase, so it
+// now 308s to the post it was meant to point at.
+//
+// Mapping rules, applied in order (each row's comment names its rule):
+//   A  slugified title: the source is the hyphenated slug of the post's
+//      title, or a prefix of it. The title is quoted with the commit it was
+//      read at, because posts can be retitled later.
+//   B  near slug: the source and the real slug differ by at most 2
+//      hyphen-separated tokens, and that slug is the unique nearest of all
+//      published slugs.
+//   C  doubled path: /blog/<junk>/<real-slug>, the last segment is a real
+//      slug.
+//   D  topical: the GSC queries for the exact URL and the post content both
+//      point to one post. Missing or split evidence means the URL stays 404
+//      (left 404 on purpose: /blog/local-ai-hardware-budget-economics, no
+//      query data and four posts fit on content alone).
+//
+// Invariants:
+//   - The www host rule stays first in redirects(); these rows come last.
+//   - Relative /blog/ destinations only, no has/missing, no patterns (no
+//     :param, * or regex), so each row matches one path. Next compares it
+//     case-insensitively, and a trailing slash is stripped first by Next's
+//     own 308, so those variants reach the row too.
+//   - No redirects for garbage URLs (/$, /&, base64 nonce strings), per the
+//     gsc-indexing-remediation pre-audit; 404 is the right answer for those.
+//   - A published post always wins. Redirects run before the filesystem, so
+//     a row whose source later becomes a real post (the blog cron publishes
+//     unattended) would hide it. aiInventedBlogRedirects() drops such a row,
+//     and any row whose destination is not a published post, at build time.
+//
+// Maintenance: if a build prints "[ai-slug-redirects] dropped ...", delete
+// that row. Keep one row per line; validation scripts parse them.
+interface AiInventedBlogRedirect {
+  source: `/blog/${string}`;
+  destination: `/blog/${string}`;
+}
+
+const AI_INVENTED_BLOG_REDIRECTS: readonly AiInventedBlogRedirect[] = [
+  { source: "/blog/best-ai-windows-2026", destination: "/blog/best-free-ai-windows-2026" }, // B: drops "free"
+  { source: "/blog/best-local-private-voice-ai-assistant-for-pc-in-2026", destination: "/blog/best-local-private-voice-ai-assistant-2026" }, // A: title "Best Local Private Voice AI Assistant for PC in 2026: Ollama, LM Studio, Jan, Whisper, Piper Compared" @ed0b751
+  { source: "/blog/best-local-private-voice-ai-assistant-for-pc-in-2026-ollama-lm-studio-jan", destination: "/blog/best-local-private-voice-ai-assistant-2026" }, // A: title "Best Local Private Voice AI Assistant for PC in 2026: Ollama, LM Studio, Jan, Whisper, Piper Compared" @ed0b751
+  { source: "/blog/best-local-private-voice-assistant-2026", destination: "/blog/best-local-private-voice-ai-assistant-2026" }, // B: drops "ai"
+  { source: "/blog/best-local-voice-ai-assistant-2026", destination: "/blog/best-local-private-voice-ai-assistant-2026" }, // B: drops "private"
+  { source: "/blog/how-much-vram-do-you-need-for-local-ai", destination: "/blog/how-much-vram-for-local-ai" }, // A: title "How Much VRAM Do You Need for Local AI? A 2026 Guide" @ed0b751
+  { source: "/blog/innerzero-blog/how-much-vram-for-local-ai", destination: "/blog/how-much-vram-for-local-ai" }, // C: doubled path
+  { source: "/blog/vram-requirements-for-local-ai", destination: "/blog/how-much-vram-for-local-ai" }, // D: only query "vram for ai models"; the post covers VRAM requirements by model size
+  { source: "/blog/self-hosted-ai-assistant-works-apps-compared", destination: "/blog/self-hosted-ai-assistant-works-across-apps-compared" }, // B: drops "across"
+  { source: "/blog/innerzero.com/blog/self-hosted-ai-chatbot-zanus-ai-option", destination: "/blog/self-hosted-ai-chatbot-zanus-ai-option" }, // C: doubled path (impressions likely rank-tracker noise)
+];
+
+// Published post slugs are the .mdx filename stems in src/content/blog
+// (every post pins its frontmatter slug to its filename), read the way
+// src/lib/blog.ts reads them. This does not parse frontmatter, so a post
+// whose frontmatter slug differs from its filename is not seen here.
+// Sources are compared lowercased because Next matches custom route sources
+// case-insensitively. Drops rows, never throws: if the directory is missing
+// or cannot be read, every row is dropped with a warning (the safe outcome),
+// so an unattended auto-publish deploy cannot fail here.
+function aiInventedBlogRedirects() {
+  const blogDir = path.join(process.cwd(), "src/content/blog");
+  let stems: string[] = [];
+  try {
+    if (existsSync(blogDir)) {
+      stems = readdirSync(blogDir)
+        .filter((file) => file.endsWith(".mdx"))
+        .map((file) => file.slice(0, -".mdx".length));
+    }
+  } catch (err) {
+    console.warn(
+      `[ai-slug-redirects] could not read ${blogDir}: ${String(err)}`,
+    );
+  }
+  const published = new Set(stems);
+  const publishedLower = new Set(stems.map((stem) => stem.toLowerCase()));
+  return AI_INVENTED_BLOG_REDIRECTS.filter(({ source, destination }) => {
+    if (publishedLower.has(source.slice("/blog/".length).toLowerCase())) {
+      console.warn(
+        `[ai-slug-redirects] dropped ${source}: a published post owns this slug`,
+      );
+      return false;
+    }
+    if (!published.has(destination.slice("/blog/".length))) {
+      console.warn(
+        `[ai-slug-redirects] dropped ${source}: destination ${destination} is not a published post`,
+      );
+      return false;
+    }
+    return true;
+  }).map(({ source, destination }) => ({
+    source,
+    destination,
+    permanent: true,
+  }));
+}
+
 const nextConfig: NextConfig = {
   // Phase 7A: stop leaking the framework name.
   poweredByHeader: false,
@@ -137,6 +240,7 @@ const nextConfig: NextConfig = {
         destination: "/feed.json",
         permanent: true,
       },
+      ...aiInventedBlogRedirects(),
     ];
   },
   async headers() {
