@@ -82,6 +82,7 @@ InnerZero is a private AI assistant desktop application. It provides:
 - [Features](https://innerzero.com/features): Every feature category.
 - [Pricing](https://innerzero.com/pricing): Free, Business Licence, cloud plans, PAYG credits, InnerZero Pro, FAQ.
 - [Download](https://innerzero.com/download): Per-OS installers, system requirements, CLI commands.
+- [VRAM calculator](https://innerzero.com/vram-calculator): Enter your graphics card's VRAM to see which local AI model sizes our VRAM guide recommends at 4-bit, with approximate figures and a CPU-only mode.
 - [Privacy](https://innerzero.com/privacy): Privacy policy, ICO registration, local-first guarantees, cloud mode data flow, voice and microphone handling, cloud AI DPAs.
 - [Terms of Service](https://innerzero.com/terms): 23 sections covering free local software, optional paid cloud services, AI output disclaimer, unrestricted mode liability, screen automation, BYO keys, commercial use, and UK consumer rights.
 - [About](https://innerzero.com/about): Mission and company.

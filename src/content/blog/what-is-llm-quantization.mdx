@@ -72,11 +72,11 @@ Rough guidance for where common quants land:
 | Your memory | Reasonable target |
 |---|---|
 | 8GB VRAM or RAM | A 7B to 8B model at Q4_K_M |
-| 12GB | A 8B model at Q5_K_M or Q6_K, or a 14B at Q4_K_M |
+| 12GB | An 8B model at Q5_K_M or Q6_K, or a 14B at Q4_K_M |
 | 16GB | A 14B model at Q4_K_M to Q5_K_M comfortably |
 | 24GB+ | A 14B at Q8_0, or a larger model at Q4_K_M |
 
-These are starting points, not hard limits. Exact fit depends on the model family, the context length you set, and whether some layers are offloaded between GPU and CPU. The [Ollama documentation](https://docs.ollama.com/) and a model's Hugging Face card list the actual quantized file sizes so you can check before downloading.
+These are starting points, not hard limits. Exact fit depends on the model family, the context length you set, and whether some layers are offloaded between GPU and CPU. The [Ollama documentation](https://docs.ollama.com/) and a model's Hugging Face card list the actual quantized file sizes so you can check before downloading. For a quick look at which model sizes suit your VRAM at 4-bit, use the [VRAM calculator](/vram-calculator).
 
 ## Do I need to understand quantization to use InnerZero?
 

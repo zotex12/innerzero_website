@@ -444,6 +444,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
       { label: "Features", href: "/features" },
       { label: "What is local AI?", href: "/what-is-local-ai" },
       { label: "Models", href: "/models" },
+      { label: "VRAM calculator", href: "/vram-calculator" },
       { label: "Pricing", href: "/pricing" },
       { label: "Download", href: "/download" },
       { label: "Changelog", href: "/changelog" },

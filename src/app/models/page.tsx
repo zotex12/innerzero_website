@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { JsonLd } from "@/components/JsonLd";
 import { createMetadata } from "@/lib/metadata";
@@ -192,7 +193,15 @@ export default function ModelsPage() {
             </h2>
             <p className="mt-3 max-w-3xl text-base text-text-secondary">
               Installed automatically based on your hardware tier. These run
-              entirely on your machine, offline if you want.
+              entirely on your machine, offline if you want. Not sure which
+              sizes your PC can handle? Try the{" "}
+              <Link
+                href="/vram-calculator"
+                className="text-accent-gold transition-colors hover:text-accent-gold-hover"
+              >
+                VRAM calculator
+              </Link>
+              .
             </p>
             <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {LOCAL_MODELS.map((m) => (
