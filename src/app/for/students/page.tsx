@@ -84,6 +84,13 @@ const PAGE_DATA: PersonaPageProps = {
             className="text-accent-gold transition-colors hover:text-accent-gold-hover"
           >
             Using AI offline
+          </Link>{" "}
+          or{" "}
+          <Link
+            href="/blog/ai-for-students-offline"
+            className="text-accent-gold transition-colors hover:text-accent-gold-hover"
+          >
+            the offline AI guide for students
           </Link>
           .
         </>

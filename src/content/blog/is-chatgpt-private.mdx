@@ -1,7 +1,8 @@
 ---
-title: "Is ChatGPT Private? Where Your Conversations Actually Go"
-description: "Is ChatGPT private? It sends conversations to OpenAI, stores them, and trains on them by default. Where your data goes, and the private local alternative."
+title: "Are ChatGPT Chats Private? What OpenAI Stores"
+description: "Are ChatGPT chats private? On consumer plans OpenAI stores them and can train on them unless you opt out. Where your data goes, and the local option."
 date: "2026-09-25"
+updated: "2026-10-23"
 author: "Louie Summers"
 authorRole: "Founder"
 slug: "is-chatgpt-private"
@@ -33,19 +34,21 @@ According to [OpenAI's Privacy Policy](https://openai.com/policies/row-privacy-p
 
 ## Does ChatGPT use my conversations to train its models?
 
-On consumer plans, yes, by default, unless you opt out. OpenAI states that content from ChatGPT Free, Plus, and Pro may be used to help improve its models, and it gives you a setting to turn this off. Business and API products are treated differently.
+On consumer plans, yes, by default, unless you opt out. OpenAI states that content from ChatGPT Free, Go, Plus, and Pro may be used to help improve its models, and it gives you a setting to turn this off. Business and API products are treated differently.
 
-OpenAI's own help article, ["Does OpenAI train its models on my content?"](https://help.openai.com/en/articles/5722486-how-your-data-is-used-to-improve-model-performance), explains that you can disable model training for your account under Data Controls, and that ChatGPT Enterprise, Team, and the API do not use your inputs to train models by default. So the training behaviour depends entirely on which product you use and whether you have visited the settings page. The default for the consumer apps most people use is opt-out, not opt-in, which is the opposite of what many users assume.
+OpenAI's own help article, ["How your data is used to improve model performance"](https://help.openai.com/en/articles/5722486-how-your-data-is-used-to-improve-model-performance), explains that you can disable model training for your account under Data Controls. The company's [enterprise privacy page](https://openai.com/enterprise-privacy/) states that OpenAI does not train its models on data from ChatGPT Business, Enterprise, Edu, or the API Platform by default. ChatGPT Business is the plan OpenAI previously called Team. So the training behaviour depends entirely on which product you use and whether you have visited the settings page. The default for the consumer apps most people use is opt-out, not opt-in, which is the opposite of what many users assume.
 
 | Question | ChatGPT (consumer) | Local AI (InnerZero) |
 |---|---|---|
 | Where conversations are processed | OpenAI's cloud servers | Your own computer |
 | Where conversations are stored | OpenAI account, retained remotely | Local SQLite file on your disk |
-| Used to train models by default | Yes on Free/Plus/Pro unless you opt out | No, nothing leaves the machine to train on |
+| Used to train models by default | Yes on Free/Go/Plus/Pro unless you opt out | No, nothing leaves the machine to train on |
 | Possible human review | Yes, per OpenAI policy | No external party can access it |
 | Account required | Yes | No |
 | Works with no internet | No | Yes, once models are installed |
 | Who holds the data | OpenAI and its subprocessors | You |
+
+Last verified 2026-10-23 against OpenAI's help centre, [pricing page](https://openai.com/chatgpt/pricing/), and enterprise privacy page.
 
 ## Can OpenAI staff or humans read my ChatGPT chats?
 
@@ -68,7 +71,7 @@ The honest framing is that these are good cloud-privacy controls. They are not t
 
 ## How is a local AI like InnerZero more private than ChatGPT?
 
-A local AI is more private because the conversation never leaves your computer at all. There is no upload, no remote account storing your history, and no training pipeline on the other end. The model runs on your own hardware, and your chats are saved to a file on your own disk.
+A [local AI](/what-is-local-ai) is more private because the conversation never leaves your computer at all. There is no upload, no remote account storing your history, and no training pipeline on the other end. The model runs on your own hardware, and your chats are saved to a file on your own disk.
 
 InnerZero runs open models through [Ollama](https://ollama.com), LM Studio, or llama.cpp directly on your PC. Your conversations and the facts it remembers about you are kept in a local SQLite database in your user folder, protected by your operating system's own disk encryption (BitLocker, FileVault, or LUKS). InnerZero does not require an account, and it can run with no internet connection once the models are downloaded. There is no provider on the other side to review, retain, or train on your words, because there is no other side. For the full architecture, see [how InnerZero stays private](/blog/how-innerzero-stays-private).
 
@@ -82,7 +85,7 @@ For genuinely confidential material such as client data, legal documents, health
 
 ### Does turning off training make ChatGPT fully private?
 
-No. Opting out of model training stops your consumer chats being used to improve OpenAI's models, but your conversations are still transmitted to and stored on OpenAI's infrastructure. The training opt-out is a useful control, not a guarantee that your data stays with you.
+No. Opting out of model training stops your consumer chats being used to improve OpenAI's models, but your conversations are still transmitted to and stored on OpenAI's infrastructure. The training opt-out is a useful control, not a guarantee that your data stays with you. OpenAI also notes that rating a response with a thumbs up or down can make that conversation eligible for training even with the setting off.
 
 ### Are ChatGPT conversations encrypted?
 

@@ -7,21 +7,27 @@ import { SITE_AUTHOR } from "@/lib/constants";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://innerzero.com";
 const PUBLISHED = "2026-04-19";
-const MODIFIED = "2026-04-19";
+const MODIFIED = "2026-09-04";
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/what-is-local-ai" },
-  // Absolute title bypasses the "%s | InnerZero..." template so the page
-  // ranks cleanly against the bare "What is local AI" query.
-  title: { absolute: "What is Local AI? - InnerZero" },
+  // The title carries the brand, so it uses absolute to bypass the
+  // "%s | InnerZero..." template (WEBCLAUDE.md Rules > SEO duplicate-brand
+  // rule) and keep the rendered title within 60 characters.
+  title: { absolute: "Local AI Explained: What It Is and How It Works - InnerZero" },
   description:
-    "Local AI is artificial intelligence that runs on your own PC. Models download once, inference is local, and no data leaves your machine.",
+    "Local AI runs language models on your own computer, not a cloud server. How it works, what hardware you need, what it costs, and how private it is.",
   openGraph: {
-    title: "What is Local AI? - InnerZero",
+    title: "Local AI Explained: What It Is and How It Works",
     description:
       "Plain-English guide to local AI: how it works, what hardware you need, and how it compares to cloud AI.",
     url: "https://innerzero.com/what-is-local-ai",
     type: "article",
+  },
+  twitter: {
+    title: "Local AI Explained: What It Is and How It Works",
+    description:
+      "Plain-English guide to local AI: how it works, what hardware you need, and how it compares to cloud AI.",
   },
 });
 
