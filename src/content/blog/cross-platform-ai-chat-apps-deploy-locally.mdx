@@ -26,7 +26,7 @@ Both work, and they solve different problems. Install a desktop app on each mach
 
 The desktop-app pattern is the simplest thing that works. Each machine downloads the app and a model and runs everything on its own hardware, so nothing depends on the network. The cost is duplication: the same weights sit on every disk, and a laptop with integrated graphics is far slower than the desktop in the next room.
 
-The server pattern moves inference to one machine. In its purest form that server hosts the interface too, so clients need only a browser. Open WebUI and LibreChat are the common examples, both usually deployed with Docker. That is cross platform in the widest sense, including tablets.
+The server pattern moves inference to one machine. In its purest form that server hosts the interface too, so clients need only a browser. Open WebUI and LibreChat are the common examples, both usually deployed with Docker. That is cross platform in the widest sense, including tablets. For how LibreChat compares with a desktop assistant, see [InnerZero vs LibreChat](/blog/innerzero-vs-librechat).
 
 The third shape gets overlooked, and it is the one I would recommend to most people asking this. Run a full desktop app on each machine, but point its model engine at a shared host. You keep the desktop features (voice, files, memory, tools) and still pay for one GPU. That is how I run my own setup: a tower with the graphics card in it, and a laptop that does the typing.
 

@@ -74,7 +74,7 @@ Four honest constraints worth knowing about before you rely on this for anything
 
 ## How does this compare to ChatPDF, Adobe AI Assistant, and NotebookLM?
 
-These tools take a different trade-off. They are designed around uploading documents to a cloud service and indexing them server-side. That gives them capabilities InnerZero does not always match: very large source collections (NotebookLM in particular), polished web UIs, persistent shared workspaces.
+These tools take a different trade-off. They are designed around uploading documents to a cloud service and indexing them server-side. That gives them capabilities InnerZero does not always match: very large source collections (NotebookLM in particular), polished web UIs, persistent shared workspaces. [InnerZero vs NotebookLM](/blog/innerzero-vs-notebooklm) compares the two directly.
 
 The cost is that every document you ask about lives on the vendor's infrastructure. Even with retention policies and "we do not train on your data" statements, the file has been transmitted, parsed, and stored somewhere you do not control. For some documents that is fine. For NDAs, medical records, source documents, legal filings, or anything covered by client confidentiality, it is a hard no.
 

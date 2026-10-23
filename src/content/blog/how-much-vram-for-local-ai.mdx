@@ -29,7 +29,7 @@ The exact figure depends on two things: how big the model is, measured in billio
 
 The size of a model in memory comes from its parameter count multiplied by the number of bytes used to store each parameter. Full precision uses about 2 bytes per parameter, but local tools almost always run quantized models, which compress each parameter to roughly 4 bits, or half a byte.
 
-At 4-bit quantization the maths is simple: about 0.5 GB of memory per billion parameters for the weights, then add 1 to 2 GB of headroom for the context window and working space. So an 8 billion parameter model is roughly 4 GB of weights plus headroom, which is why it fits on an 8 GB card. The Ollama [model library](https://ollama.com/library) lists the real download size of each model, and [Hugging Face](https://huggingface.co) model cards show parameter counts, so you can check any specific model against this rule.
+At 4-bit quantization the maths is simple: about 0.5 GB of memory per billion parameters for the weights, then add 1 to 2 GB of headroom for the context window and working space. So an 8 billion parameter model is roughly 4 GB of weights plus headroom, which is why it fits on an 8 GB card. The Ollama [model library](https://ollama.com/library) lists the real download size of each model, and [Hugging Face](https://huggingface.co) model cards show parameter counts, so you can check any specific model against this rule. For how download size relates to VRAM once a model is loaded, see [model download size and VRAM impact](/blog/ai-model-download-size-vram-impact).
 
 ## What are the VRAM requirements by model size?
 
@@ -48,7 +48,7 @@ Popular model families map onto this directly. A Gemma3 4B or Llama 3 8B suits a
 
 ## Can you run local AI without a dedicated GPU?
 
-Yes. Models can run on your CPU using ordinary system RAM instead of VRAM, which means any modern computer can run smaller local models without a graphics card at all. The trade-off is speed: CPU inference is slower, so a model that feels instant on a GPU may produce a few words per second on a CPU.
+Yes. Models can run on your CPU using ordinary system RAM instead of VRAM, which means any modern computer can run smaller local models without a graphics card at all. The trade-off is speed: CPU inference is slower, so a model that feels instant on a GPU may produce a few words per second on a CPU. [Running a local AI without a GPU](/blog/run-local-ai-without-gpu) covers which small models suit a CPU and what speed to expect.
 
 The practical approach with no GPU is to stick to models in the 1 to 8 billion parameter range and make sure you have enough system RAM, ideally 16 GB or more. Apple Silicon Macs are a special case, because their unified memory lets the chip use system RAM as fast graphics memory, so they punch above their weight for local AI. For a full setup walkthrough, see [run AI on your PC](/blog/run-ai-on-your-pc).
 

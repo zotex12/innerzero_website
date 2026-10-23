@@ -31,7 +31,7 @@ The practical payoff is that quantization is what lets a model designed on data-
 
 ## What do Q4, Q8, and the _K_M suffix actually mean?
 
-The number after the Q is the bits per weight: Q4 is roughly 4-bit, Q8 is roughly 8-bit. Lower number means smaller file and lower memory use, at the cost of some accuracy. The letters after it describe the method and the size variant within that method.
+The number after the Q is the bits per weight: Q4 is roughly 4-bit, Q8 is roughly 8-bit. Lower number means [smaller file and lower memory use](/blog/ai-model-download-size-vram-impact), at the cost of some accuracy. The letters after it describe the method and the size variant within that method.
 
 In the GGUF format used by llama.cpp (the engine under Ollama, LM Studio, and many local apps), the modern quants use a "K-quant" scheme. That is the `K` in `Q4_K_M`. The trailing letter is the size tier: `S` for small, `M` for medium, `L` for large. So `Q4_K_M` reads as "4-bit K-quant, medium variant". The llama.cpp project's [quantize tool documentation](https://github.com/ggml-org/llama.cpp/tree/master/tools/quantize) lists the full set of available types.
 

@@ -487,7 +487,15 @@ export default function WhatIsLocalAiPage() {
             >
               AI without a subscription
             </Link>{" "}
-            for the full maths.
+            for the full maths. For costs that are not money, such as disk
+            space, heat and model updates, see{" "}
+            <Link
+              href="/blog/hidden-costs-of-local-ai"
+              className="text-accent-gold transition-colors hover:text-accent-gold-hover"
+            >
+              the hidden costs of running local AI
+            </Link>
+            .
           </Body>
 
           {/* 6. Privacy */}
@@ -769,6 +777,14 @@ export default function WhatIsLocalAiPage() {
                   className="transition-colors hover:text-accent-gold"
                 >
                   What models does InnerZero use
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/blog/run-local-ai-without-gpu"
+                  className="transition-colors hover:text-accent-gold"
+                >
+                  How to run local AI without a GPU
                 </Link>
               </li>
               <li>
