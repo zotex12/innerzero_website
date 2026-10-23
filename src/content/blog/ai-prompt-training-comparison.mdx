@@ -2,6 +2,7 @@
 title: "Does Your AI Train on Your Prompts? Anthropic, OpenAI, Google, DeepSeek, Kimi Compared"
 description: "Plain-English audit of how each major AI provider handles your API prompts. Who trains on your data by default, who doesn't, what the fine print says."
 date: "2026-05-05"
+updated: "2026-10-23"
 author: "Louie Summers"
 authorRole: "Founder"
 slug: "ai-prompt-training-comparison"
@@ -41,7 +42,7 @@ There's also a separate question about retention: how long the provider stores y
 From Anthropic's commercial terms and privacy policy:
 
 - API prompts: **not used for training** by default
-- Consumer Claude.ai chat: **may be used** depending on your account settings and region
+- Consumer Claude.ai chat (Free, Pro, Max): **may be used** unless you opt out in Privacy Settings
 - Retention: inputs/outputs retained for a limited period for abuse monitoring, typically 30 days
 
 What this means for InnerZero users. If you use your own Anthropic [API key](/features/cloud-ai) with InnerZero in Cloud mode, your prompts are not feeding into training. Anthropic keeps them briefly for abuse monitoring, then deletes them. You can read the current terms at Anthropic's own documentation pages (linked from their website).
@@ -129,11 +130,11 @@ For tasks that need frontier reasoning quality beyond what local models can deli
 
 ### Does InnerZero itself train on my prompts?
 
-No. InnerZero doesn't run any model training infrastructure. It's a desktop application that either uses local models on your machine or forwards your prompts directly to the cloud provider you've configured. No intermediate server, no logging of prompt content, no training data collection on our side.
+No. InnerZero doesn't run any model training infrastructure. It's a desktop application that either uses local models on your machine or sends your prompts to a cloud model you've chosen. With your own API key the request goes directly to that model's provider with no intermediate server; text requests on the optional managed cloud plan go through our server to the provider listed on our privacy page. In every mode we do not log prompt content on our servers or collect training data.
 
 ### What about the managed cloud subscription? Does that train on my prompts?
 
-No. The managed cloud is a billing wrapper that routes your requests to the underlying providers (currently a curated set of Anthropic, OpenAI, and others). Those underlying providers honour their own no-training-by-default API terms. InnerZero doesn't retain prompt content for training or any other purpose.
+Not by InnerZero. The managed cloud is a billing wrapper that currently routes text requests to DeepSeek, the provider listed on our [privacy page](/privacy). InnerZero doesn't retain prompt content for training or any other purpose.
 
 ### How often do these policies change?
 
