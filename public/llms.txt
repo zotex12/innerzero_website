@@ -137,7 +137,7 @@ Each page covers what that area does and links to the step-by-step guides for it
 
 - **Language and runtime:** Python 3.12 with a PyWebView desktop shell.
 - **Local AI backend:** Ollama (default, bundled with installer), LM Studio (OpenAI-compatible API at localhost:1234), or your own llama.cpp llama-server. Switchable in Settings with no reinstall.
-- **Default models:** Qwen3 family for the main assistant (sizes 4B to 30B chosen by hardware tier). Gemma3 family for voice (1B to 12B).
+- **Default models:** Qwen3 family for the main assistant (sizes 1.7B to 30B chosen by hardware tier, with gpt-oss 120B on the top tiers). Gemma3 family for voice (1B to 12B).
 - **Speech-to-text:** faster-whisper (large-v3-turbo) running on GPU where available.
 - **Text-to-speech:** Kokoro 82M (local, always private) or OpenAI TTS (optional, cloud).
 - **Voice activity detection:** Silero VAD with echo suppression.

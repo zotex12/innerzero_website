@@ -52,7 +52,7 @@ No, not by default. All AI processing, memory storage, voice audio, document con
 
 ## What AI models does InnerZero use?
 
-By default, InnerZero uses open-source models via Ollama. For the main assistant, this is the Qwen3 family (sizes from 4B to 30B parameters, chosen automatically based on your hardware). For voice, it uses the Gemma3 family (1B to 12B). Speech-to-text is handled by faster-whisper (large-v3-turbo) running on GPU where available. Text-to-speech is handled by Kokoro 82M locally.
+By default, InnerZero uses open-source models via Ollama. For the main assistant, this is the Qwen3 family (sizes from 1.7B to 30B parameters, chosen automatically based on your hardware), with gpt-oss 120B on the top tiers. For voice, it uses the Gemma3 family (1B to 12B). Speech-to-text is handled by faster-whisper (large-v3-turbo) running on GPU where available. Text-to-speech is handled by Kokoro 82M locally.
 
 If you prefer to manage models yourself, InnerZero also supports LM Studio or your own llama.cpp llama-server as an alternative backend (OpenAI-compatible API at localhost:1234).
 

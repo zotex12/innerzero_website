@@ -78,7 +78,7 @@ You phrase these naturally. If the assistant cannot identify the right element i
 
 Three trade-offs worth knowing about before you turn the feature on.
 
-**Latency.** A click takes a beat to execute. On a modern PC with an NVIDIA GPU, the read-pick-dispatch loop runs in roughly 1 to 3 seconds for a clear instruction. Cluttered windows or ambiguous instructions can push it to 5 seconds or more, especially on entry-tier hardware (16 GB RAM, 6 GB VRAM). This is not fast in the way a hand-written keyboard shortcut is fast; screen automation is for tasks where you would otherwise be moving the mouse around manually.
+**Latency.** A click takes a beat to execute. On a modern PC with an NVIDIA GPU, the read-pick-dispatch loop runs in roughly 1 to 3 seconds for a clear instruction. Cluttered windows or ambiguous instructions can push it to 5 seconds or more, especially on entry-tier hardware (16 GB RAM, 8 GB VRAM). This is not fast in the way a hand-written keyboard shortcut is fast; screen automation is for tasks where you would otherwise be moving the mouse around manually.
 
 **Accuracy on cluttered UIs.** Old desktop apps with many similar buttons, custom-rendered UIs that ignore accessibility APIs, or browser pages with deep nesting can confuse the element picker. The assistant tries to disambiguate, asks you for clarification when it cannot decide, and falls back to read-only when the right click target is genuinely ambiguous.
 

@@ -7,7 +7,7 @@ import { SITE_AUTHOR } from "@/lib/constants";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://innerzero.com";
 const PUBLISHED = "2026-04-19";
-const MODIFIED = "2026-09-04";
+const MODIFIED = "2026-10-23";
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: "/what-is-local-ai" },
@@ -420,19 +420,33 @@ export default function WhatIsLocalAiPage() {
             What hardware do I need to run local AI?
           </SectionHeading>
           <Answer>
-            Any modern laptop can run a small model (4B parameters) on CPU
-            alone. A consumer GPU with 8 to 16 GB of VRAM comfortably runs
-            the mid-range models most users reach for. Frontier models in the
-            30B to 120B range need a high-end GPU or multi-card setup.
+            Any modern laptop can run a small model (1.7B to 4B parameters)
+            on CPU alone. A consumer GPU with 8 to 16 GB of VRAM comfortably
+            runs the mid-range models most users reach for. Large open models
+            in the 30B to 120B range need a high-end GPU or a multi-card
+            setup.
           </Answer>
           <Body>
             InnerZero ships with a tier ladder so the right model gets picked
-            automatically for your machine. Entry tier (8 to 16 GB VRAM) runs
-            Qwen 3 8B for chat and code. Standard tier (16 to 24 GB VRAM)
-            steps up to Qwen 3 30B for stronger reasoning. Pro tier (48 to 80
-            GB VRAM or a pair of cards) runs gpt-oss 120B for heavy tasks.
-            Enterprise and frontier tiers push into multi-GPU workstations
-            and the 235B class. For the full matrix, see the{" "}
+            automatically for your machine. With no usable GPU, a GPU with
+            under 8 GB of VRAM, or less system RAM than the matching GPU tier
+            needs, setup picks a CPU tier instead: Qwen 3 from 1.7B on 4 GB of
+            RAM up to 14B on 32 GB with no GPU, or a smaller size when a small
+            GPU sets the limit, for text and tools without local voice.
+            Entry tier (16+ GB RAM, 8 to 16 GB VRAM) runs Qwen 3
+            4B on the GPU and adds local voice. Standard tier (32+ GB RAM, 16
+            to 24 GB VRAM) steps up to Qwen 3 8B, and Performance tier (32+ GB
+            RAM, 24 to 48 GB VRAM) to Qwen 3 14B. Pro tier (64+ GB RAM, 48 to
+            80 GB VRAM, which can be a pair of cards) runs Qwen 3 30B, and
+            Enterprise tier (128+ GB RAM, 80+ GB VRAM, workstation and server
+            hardware) runs gpt-oss 120B. On an Apple Silicon Mac, unified
+            memory sets the tier instead. These defaults are deliberately
+            conservative: each GPU tier leaves room for voice, speech
+            recognition and the context window alongside the chat model, so
+            a card that could hold a bigger model on its own gets a smaller
+            default. If memory is still short, setup can turn local voice off
+            before it picks a smaller model. You can switch tier yourself from
+            Manual Profiles in Settings. For the full matrix, see the{" "}
             <Link
               href="/models"
               className="text-accent-gold transition-colors hover:text-accent-gold-hover"
@@ -555,16 +569,18 @@ export default function WhatIsLocalAiPage() {
           </SectionHeading>
           <Answer>
             The three families InnerZero installs by default are Qwen 3,
-            Gemma 3, and gpt-oss. Together they cover everything from a 1B
-            voice model on a basic laptop up to a 235B reasoning model on a
-            datacenter-class workstation.
+            Gemma 3, and gpt-oss. Together they cover everything from Qwen 3
+            1.7B on a low-spec laptop with 4 GB of RAM up to gpt-oss 120B on a
+            workstation with 128 GB or more of RAM and 80 GB or more of VRAM.
           </Answer>
           <Body>
             Qwen 3 (by Alibaba) is the daily-driver family: Apache 2.0
-            licensed, sizes from 4B to 235B, strong at chat and code. Gemma 3
-            (by Google) covers the smaller sizes well and powers voice
-            transcription. gpt-oss (OpenAI&apos;s open-weight release, 120B)
-            is the top end of the default install on high-memory machines.
+            licensed, installed in sizes from 1.7B to 30B depending on your
+            hardware, strong at chat and code. Gemma 3 (by Google) covers the
+            smaller sizes well and handles voice conversations, where speed
+            matters; speech recognition itself runs on faster-whisper. gpt-oss
+            (OpenAI&apos;s open-weight release, 120B) is the top end of the
+            default install on high-memory machines.
             For the complete catalogue and hardware mapping, see the{" "}
             <Link
               href="/models"

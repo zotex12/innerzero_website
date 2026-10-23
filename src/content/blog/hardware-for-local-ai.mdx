@@ -8,7 +8,7 @@ slug: "hardware-for-local-ai"
 tags: ["guide", "local ai", "getting started"]
 readingTime: "5 min read"
 featured: false
-updated: "2026-08-31"
+updated: "2026-10-23"
 ---
 
 This is the first question everyone asks. Can my PC run [local AI](/what-is-local-ai)? The short answer: probably yes, if it was made in the last five years. The longer answer depends on how fast you want it to be.
@@ -25,9 +25,9 @@ If your PC has 8 GB of RAM, local AI will struggle. It's technically possible bu
 
 The GPU is the single biggest factor in how fast your AI responds. Specifically, the amount of VRAM (video memory) on the card. More VRAM means larger, more capable models. Clock speed matters less than memory.
 
-**6 GB VRAM (entry level).** Cards like the RTX 3060 or GTX 1660 Super. Runs smaller models well. Responses in 2 to 5 seconds. Good enough for everyday use.
+**8 GB VRAM (entry level).** Cards like the RTX 4060 or the 8 GB RTX 3060. Runs smaller models well. Good enough for everyday use. Below 8 GB of VRAM, or with less than 16 GB of system RAM, InnerZero's setup picks a CPU tier instead.
 
-**10 to 16 GB VRAM (standard).** Cards like the RTX 3080, RTX 4070, or RTX 4070 Ti. This is the sweet spot. Runs mid-size models with fast response times. Most people will be happy here.
+**10 to 16 GB VRAM (mid-range).** Cards like the RTX 3080, RTX 4070, or RTX 4070 Ti. This is the sweet spot. Runs mid-size models with fast response times. Most people will be happy here.
 
 **24 GB+ VRAM (performance).** Cards like the RTX 4090 or professional cards like the A6000. Runs the largest consumer models at excellent speeds. Feels as fast as cloud AI.
 
@@ -43,7 +43,7 @@ Core count matters less than you'd think for AI inference. A modern quad-core is
 
 ## How much disk space do I need?
 
-AI models need to be downloaded once and stored on disk. A basic model is about 2 to 5 GB. A mid-range model is 5 to 18 GB. InnerZero itself is around 280 MB.
+AI models need to be downloaded once and stored on disk. A basic model is about 2 to 5 GB. A mid-range model is 5 to 18 GB. The InnerZero installer itself is about 0.7 to 1.2 GB depending on your platform, and the download page lists the current sizes.
 
 Plan for at least 10 GB of free space. 30 GB gives you room for multiple models and offline [knowledge packs](/blog/knowledge-packs-explained).
 

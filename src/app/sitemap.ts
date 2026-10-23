@@ -74,7 +74,7 @@ const STATIC_PATHS: {
   // lastModified for /blog is derived inside sitemap() (latestListingDate).
   // A lastModified set on this row is ignored: bump BLOG_LISTING_MODIFIED.
   { path: "/blog", priority: 0.8, changeFrequency: "daily" },
-  { path: "/what-is-local-ai", priority: 0.7, changeFrequency: "monthly", lastModified: "2026-09-04" },
+  { path: "/what-is-local-ai", priority: 0.7, changeFrequency: "monthly", lastModified: "2026-10-23" },
   { path: "/changelog", priority: 0.6, changeFrequency: "weekly", lastModified: "2026-10-06" },
   { path: "/about", priority: 0.6, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.5, changeFrequency: "yearly" },
