@@ -16,7 +16,7 @@ I'm not going to pretend Opus 4.7 is the right choice for every task. Most of wh
 
 > **Quick summary**
 > - Opus 4.7 works in InnerZero via your own Anthropic API key, direct from your machine to Anthropic, no middleman
-> - Costs $5 per million input tokens and $25 per million output tokens, same as Opus 4.6
+> - Launched at the same per-token price as Opus 4.6, roughly 1 to 2 US cents for a typical message
 > - Works for both the main chat and the coding specialist agent
 > - You can mix and match: local model for casual, Opus for hard problems
 
@@ -46,7 +46,7 @@ The Settings UI shows you which provider will handle the next request before you
 
 ## What does Claude Opus 4.7 cost per message?
 
-**Anthropic charges $5 per million input tokens and $25 per million output tokens for Opus 4.7**, same pricing as Opus 4.6. A typical back-and-forth in InnerZero sends roughly 500 to 1,500 input tokens and gets 200 to 600 output tokens back, so most individual messages land between roughly $0.01 and $0.02.
+**Anthropic launched Opus 4.7 at the same per-token price as Opus 4.6**, and current rates are on [Anthropic's pricing page](https://claude.com/pricing). A typical back-and-forth in InnerZero sends roughly 500 to 1,500 input tokens and gets 200 to 600 output tokens back, so at launch prices most individual messages land between roughly 1 and 2 US cents.
 
 Tokens aren't characters. They're roughly word-fragments. The exact cost per message depends on how long your conversation history is, how big your [memory](/blog/ai-that-remembers) pack is, and how verbose the reply needs to be. InnerZero's Costs page logs every cloud API call with the actual token counts returned by Anthropic, so you can see what you've spent this month without guessing.
 
@@ -71,7 +71,7 @@ Honest opinion. I default to local. The open-source models you can run on a mid-
 | Aspect | Claude Opus 4.7 | qwen3:8b (local) |
 |--------|-----------------|------------------|
 | Runs on | Anthropic's servers | Your hardware |
-| Cost per message | ~$0.01 to $0.02 | Free after hardware |
+| Cost per message | Roughly 1 to 2 US cents at launch prices | Free after hardware |
 | Privacy | Sent to Anthropic | Never leaves your PC |
 | Setup | Anthropic account + API key | Auto-configured on first launch |
 | Internet required | Yes | No, after model download |

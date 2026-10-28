@@ -139,9 +139,20 @@ BRAND NAMING (strict):
 - Product name is "InnerZero" (one word, capital I, capital Z). NEVER "Inner Zero". Lowercase "innerzero" only inside the slogan and inside URLs.
 - Casual reference: "Zero".
 - Tagline (only when verbatim quoted): `inner peace. inner joy. innerzero.` (all lowercase, three full stops).
-- Currency: GBP only (£). No $ or € in pricing claims.
+- Currency: InnerZero prices are always GBP (£). No $ or € symbols in pricing claims. Rough cost bands for other companies' API models may say "US cents" or "US dollars" in words, because providers bill in dollars (see THIRD-PARTY PRICES below).
 - Local app: "Free to download" or "Free". NEVER "free forever", "always free", "for life", "permanent".
 - Cloud plans: always "optional", never "required".
+
+THIRD-PARTY PRICES AND PRODUCT NAMES (durable wording):
+
+Competitor prices, plan names and per-token rates change faster than published posts are refreshed. In the 2026-10-28 sweep, 5 of 7 rows in one API price table were wrong, a Copilot add-on price and "Copilot Pro" were gone, Cursor had replaced its plans, and NotebookLM had been renamed. Write so the post stays true when that happens.
+
+- Third-party subscriptions: describe the pricing model, not the figure. "a monthly subscription per person", "per user, per month, as an add-on to an eligible plan", "rising steeply on the higher tiers". Link the vendor's official pricing page so readers can see the current price. Do not quote figures such as "$20 a month" or "£23.10 per user".
+- API costs in a cost comparison: give rough bands per typical message ("about 1 to 2 US cents", "a fraction of a US cent"), worked out from the providers' published rates on a stated date, and point readers to `/models` for current rates. Never put per-million-token rates in a table. `src/lib/models.ts` deliberately carries no pricing figures for the same reason.
+- A price that belongs to a dated event (a model launch) may be described as of that date, relatively or as a band: "launched at the same per-token price as Opus 4.6", "roughly 1 to 2 US cents a message at launch prices".
+- InnerZero's own prices (`stripe.ts`, `constants.ts`, the pricing page) are exact and in GBP. This rule is about other companies' prices only.
+- Renamed products: "New name (formerly Old name)" at the first mention, then the new name. Keep the old name in a heading or FAQ where people still search for it.
+- Policy claims (training, retention): keep them specific and hedged ("may be used", "the privacy policy keeps..."), linked to the vendor document, with a `last verified` date. Vagueness does not help here; a dated, sourced summary does.
 
 VOICE: direct, factual, slightly conversational. Match the existing /blog corpus tone. Read 2-3 recent comparison posts before drafting if unsure.
 
@@ -249,6 +260,7 @@ The highest-signal section. Read every time.
 12. Trailing slash discipline. Internal links use `/blog/<slug>`, not `/blog/<slug>/`. Centralised in `src/lib/metadata.ts:absoluteUrl()`.
 13. Tags use SPACES, not hyphens. `"local ai"` not `"local-ai"`. `"coding agent"` not `"coding-agent"`. Audited across all 28 published posts.
 14. PROJECT_MAP.md is a desktop-repo concern only. Website publishes do not regenerate it.
+15. No exact competitor prices. Before commit, grep the file for `\$[0-9]` and for `£` next to a competitor name; every hit should be an InnerZero price. See "THIRD-PARTY PRICES AND PRODUCT NAMES" above.
 
 ## References
 

@@ -34,7 +34,7 @@ The seven currently supported BYO providers:
 - **xAI** (Grok 4.5, Grok 4.3)
 - **Kimi / Moonshot** (K3, K2.6, K2.7 Code)
 
-Each provider has their own pricing. The cheapest (DeepSeek, Kimi, Gemini Flash) run pennies per million tokens. The priciest (Opus 4.8, Grok 4.5 Reasoning) are around $5 per million input tokens.
+Each provider has its own pricing, and it changes often. Budget models such as DeepSeek's and Gemini Flash cost a small fraction of premium models such as Claude Opus.
 
 ## How do managed cloud plans work?
 
@@ -52,19 +52,19 @@ For full current pricing and plan details, check the [pricing page](/pricing). T
 
 ## What does a typical AI message actually cost?
 
-**A typical back-and-forth sends roughly 500 to 1,500 input tokens and gets 200 to 600 output tokens back.** Cost per message depends heavily on which model and how long your conversation history is. Here's the rough math for representative models at current provider pricing.
+**A typical back-and-forth sends roughly 500 to 1,500 input tokens and gets 200 to 600 output tokens back.** Cost per message depends heavily on which model and how long your conversation history is. Here's the rough cost for representative models, worked out from each provider's published rates on 2026-10-28.
 
-| Model | Input $/M | Output $/M | Cost per typical message |
-|-------|-----------|------------|--------------------------|
-| Claude Opus 4.8 | $5.00 | $25.00 | $0.01 to $0.02 |
-| Claude Sonnet 5 | $3.00 | $15.00 | $0.005 to $0.012 |
-| GPT-5.6 | $2.50 | $15.00 | $0.004 to $0.010 |
-| Gemini 3.1 Pro | $1.25 | $10.00 | $0.003 to $0.008 |
-| Gemini 3.5 Flash | $0.30 | $2.50 | $0.001 to $0.002 |
-| DeepSeek V4 Pro | $0.28 | $0.42 | $0.0003 to $0.0006 |
-| Kimi K3 | $0.60 | $2.50 | $0.001 to $0.003 |
+| Model | Cost tier | Rough cost per typical message |
+|-------|-----------|--------------------------------|
+| Claude Opus 4.8 | Premium | About 1 to 2 US cents |
+| Kimi K3 | Mid | Around 1 US cent |
+| GPT-5.6 Terra | Mid | Up to about 1 US cent |
+| Gemini 3.1 Pro | Mid | Up to about 1 US cent |
+| Claude Sonnet 5 | Mid | Under 1 US cent |
+| DeepSeek V4 Pro | Budget | A fraction of a US cent |
+| Gemini 3.5 Flash | Budget | A fraction of a US cent |
 
-These dollar figures are approximate raw provider rates and move over time, so check each provider (or the [pricing page](/pricing)) for current numbers.
+Per-token rates change often, and some vary by time of day or carry promotional pricing, so follow the provider links on the [models page](/models) for current prices.
 
 Coding agent tasks cost more because the prompts include file context (often several thousand input tokens) and produce longer outputs. Figure roughly 2 to 5x a chat message depending on how much code is involved.
 
@@ -74,7 +74,7 @@ Coding agent tasks cost more because the prompts include file context (often sev
 
 Worked example. Claude Opus 4.8 at $0.015 per average message. If you send 500 Opus messages in a month, that's $7.50. You'd need to send 660+ messages at that price to match a £9.99/month managed plan that includes Opus access. If half your messages go to cheaper models (Sonnet, Haiku, or others), the break-even shifts further up.
 
-Another example. DeepSeek V4 Pro at $0.0005 per average message. Even at 2,000 messages a month, that's $1. BYO wins decisively for anyone using DeepSeek as their primary cloud model.
+Another example. DeepSeek V4 Pro costs a fraction of a US cent per average message, so even 2,000 messages a month comes to under 10 US dollars. At that volume, using DeepSeek with your own key costs less than a typical monthly plan.
 
 ## Which approach is cheaper if I only use one cloud provider?
 
