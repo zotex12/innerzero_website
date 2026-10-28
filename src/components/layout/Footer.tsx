@@ -222,7 +222,7 @@ export function Footer() {
             <p>
               Built by{" "}
               <a
-                href="https://summerssolutions.co.uk"
+                href="https://www.summerssolutions.co.uk/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-text-secondary transition-colors hover:text-text-primary"
@@ -237,7 +237,7 @@ export function Footer() {
             )}
           </div>
           <a
-            href="http://validator.w3.org/feed/check.cgi?url=https%3A//innerzero.com/feed.xml"
+            href="https://validator.w3.org/feed/check.cgi?url=https%3A//innerzero.com/feed.xml"
             target="_blank"
             rel="noopener noreferrer"
             title="Validate InnerZero RSS feed"

@@ -169,7 +169,7 @@ Each page covers what that area does and links to the step-by-step guides for it
 - **Country:** United Kingdom
 - **UK Company Number:** 16448945
 - **Registered address:** Birmingham, England
-- **Website:** https://summerssolutions.co.uk
+- **Website:** https://www.summerssolutions.co.uk/
 - **Data Protection registration:** ICO ZC122497
 - **Founder:** Louie Summers
 
@@ -189,4 +189,4 @@ Each page covers what that area does and links to the step-by-step guides for it
 - [Forgot password](https://innerzero.com/forgot-password): Password reset for cloud accounts.
 - [Sitemap](https://innerzero.com/sitemap.xml): Full XML site index.
 - [Robots](https://innerzero.com/robots.txt): Crawler directives.
-- [Summers Solutions](https://summerssolutions.co.uk): Parent company.
+- [Summers Solutions](https://www.summerssolutions.co.uk/): Parent company.

@@ -712,7 +712,7 @@ InnerZero's blog covers private AI, local AI, comparisons, and how-to guides. Fu
 - UK Company Number: 16448945
 - Registered address: Mclaren Building, 46 The Priory Queensway, Birmingham, B4 7LR
 - ICO registration (data protection): ZC122497
-- Company website: https://summerssolutions.co.uk
+- Company website: https://www.summerssolutions.co.uk/
 - Founder: Louie Summers
 - Product website: https://innerzero.com
 - Contact: help@innerzero.com

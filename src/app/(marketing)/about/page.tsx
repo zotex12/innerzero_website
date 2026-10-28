@@ -84,7 +84,7 @@ export default function AboutPage() {
                 <p>
                   InnerZero is built by{" "}
                   <a
-                    href="https://summerssolutions.co.uk"
+                    href={SUMMERS_SOLUTIONS_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-accent-gold hover:text-accent-gold-hover transition-colors"
@@ -299,7 +299,7 @@ export default function AboutPage() {
             parentOrganization: {
               "@type": "Organization",
               name: "Summers Solutions",
-              url: "https://summerssolutions.co.uk",
+              url: SUMMERS_SOLUTIONS_URL,
             },
           }),
         }}

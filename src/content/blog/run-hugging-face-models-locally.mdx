@@ -31,7 +31,7 @@ Think of [Hugging Face](https://huggingface.co/docs/hub/index) as the warehouse,
 
 GGUF is a single-file format that packages a model's weights plus the metadata a runtime needs to load it. It is the format used by llama.cpp and the tools built on it, including Ollama and LM Studio. To run Hugging Face models locally on consumer hardware, GGUF is almost always the file you want.
 
-The reason GGUF matters is quantisation. The original model on Hugging Face is often stored in 16-bit precision, which can mean tens of gigabytes. A GGUF file is usually a quantised version, with the weights compressed to 4, 5, 6, or 8 bits. That shrinks the file and lets a model that would otherwise need a server GPU run on a laptop or mid-range desktop card. The llama.cpp project, which defines the format, documents the supported quant types in its [GGUF quantisation reference](https://github.com/ggml-org/llama.cpp/blob/master/examples/quantize/README.md). Not every model has a GGUF version, but popular open families like Qwen3, Gemma3, and gpt-oss almost always do, usually published by community quantisers within days of release.
+The reason GGUF matters is quantisation. The original model on Hugging Face is often stored in 16-bit precision, which can mean tens of gigabytes. A GGUF file is usually a quantised version, with the weights compressed to 4, 5, 6, or 8 bits. That shrinks the file and lets a model that would otherwise need a server GPU run on a laptop or mid-range desktop card. The llama.cpp project, which defines the format, documents the supported quant types in its [GGUF quantisation reference](https://github.com/ggml-org/llama.cpp/blob/master/tools/quantize/README.md). Not every model has a GGUF version, but popular open families like Qwen3, Gemma3, and gpt-oss almost always do, usually published by community quantisers within days of release.
 
 ## How do I find a GGUF model on the Hugging Face Hub?
 
@@ -69,7 +69,7 @@ If you are unsure, start with Q4_K_M. Step up to Q5_K_M or Q6_K when your card h
 
 Once you have the GGUF file, load it with whichever runtime you prefer. All three read GGUF, so the model is portable and only the commands differ.
 
-**Ollama.** Many models are already in the Ollama library, so the simplest path is `ollama run <model>`. For a GGUF file you downloaded yourself, point Ollama at it with a short Modelfile and `ollama create`, documented in the [Ollama import guide](https://github.com/ollama/ollama/blob/main/docs/import.md). InnerZero uses Ollama as its default backend, and [the InnerZero Ollama desktop app guide](/blog/ollama-desktop-app) covers connecting the two.
+**Ollama.** Many models are already in the Ollama library, so the simplest path is `ollama run <model>`. For a GGUF file you downloaded yourself, point Ollama at it with a short Modelfile and `ollama create`, documented in the [Ollama import guide](https://github.com/ollama/ollama/blob/main/docs/import.mdx). InnerZero uses Ollama as its default backend, and [the InnerZero Ollama desktop app guide](/blog/ollama-desktop-app) covers connecting the two.
 
 **LM Studio.** LM Studio has a built-in model browser that searches the Hugging Face Hub directly. You find the model, the app shows the available quants with a hint about which fit your machine, and it downloads and loads the GGUF for you. It is the most beginner-friendly route, since the file picking happens in a graphical interface.
 

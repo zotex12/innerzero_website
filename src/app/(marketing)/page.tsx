@@ -86,7 +86,7 @@ export default function Home() {
               parentOrganization: {
                 "@type": "Organization",
                 name: "Summers Solutions",
-                url: "https://summerssolutions.co.uk",
+                url: "https://www.summerssolutions.co.uk/",
               },
             },
             {

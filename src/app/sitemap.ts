@@ -70,7 +70,7 @@ const STATIC_PATHS: {
   { path: "/features", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-08-16" },
   { path: "/pricing", priority: 0.8, changeFrequency: "monthly" },
   { path: "/download", priority: 0.8, changeFrequency: "weekly", lastModified: "2026-10-06" },
-  { path: "/models", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-08-16" },
+  { path: "/models", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-10-23" },
   { path: "/vram-calculator", priority: 0.7, changeFrequency: "monthly", lastModified: "2026-10-23" },
   // lastModified for /blog is derived inside sitemap() (latestListingDate).
   // A lastModified set on this row is ignored: bump BLOG_LISTING_MODIFIED.
