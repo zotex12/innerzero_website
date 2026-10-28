@@ -27,7 +27,7 @@ InnerZero is one such app. It runs models through [Ollama](https://ollama.com) o
 
 ## How does Microsoft Copilot handle my data?
 
-Microsoft 365 Copilot processes your prompts, responses, and the Microsoft Graph data it reads in Microsoft's cloud, under the same commercial data-protection commitments as the rest of Microsoft 365. According to [Microsoft's data, privacy and security documentation](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-privacy), prompts and responses "aren't used to train the foundation LLMs" that Copilot uses, and the data stays within your tenant's protection boundary. That is a meaningful commitment, and for many businesses it is enough.
+Microsoft 365 Copilot processes your prompts, responses, and the Microsoft Graph data it reads in Microsoft's cloud, under the same commercial data-protection commitments as the rest of Microsoft 365. According to [Microsoft's data, privacy and security documentation](https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-privacy), prompts and responses "aren't used to train the foundation LLMs" that Copilot uses, and the data stays within your tenant's protection boundary. That is a meaningful commitment, and for many businesses it is enough.
 
 The point is not that Microsoft mishandles data. The point is where the data goes. Copilot reads across your mailbox, files, chats, and calendar through Microsoft Graph, then sends the relevant slice to a model running in Microsoft's data centres. Your administrator's settings, sensitivity labels, and retention policies all apply, but the processing is still off your device and governed by Microsoft's terms. With a local assistant the equivalent processing happens on your own machine, which is a different trust model entirely. I cover how that works in [how InnerZero stays private](/blog/how-innerzero-stays-private).
 
@@ -82,7 +82,7 @@ For private, personal, and offline tasks, yes. A local assistant like InnerZero 
 
 ### Does Microsoft use my Copilot prompts to train its AI?
 
-According to [Microsoft's official documentation](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-privacy), prompts, responses, and Microsoft Graph data are not used to train the foundation models behind Microsoft 365 Copilot, and the data stays within your tenant's protection boundary. The data is still processed in Microsoft's cloud under its commercial terms, which is a different model from a local assistant where processing stays on your own device. Re-check the live documentation, since vendor terms can change.
+According to [Microsoft's official documentation](https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-privacy), prompts, responses, and Microsoft Graph data are not used to train the foundation models behind Microsoft 365 Copilot, and the data stays within your tenant's protection boundary. The data is still processed in Microsoft's cloud under its commercial terms, which is a different model from a local assistant where processing stays on your own device. Re-check the live documentation, since vendor terms can change.
 
 ### How much can I save by using local AI instead of Copilot?
 

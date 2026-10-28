@@ -106,13 +106,13 @@ export interface CloudModel {
 // Provider-level canonical pricing pages. Reader follows these for
 // current rates; they change too often for a static site to track.
 const PROVIDER_PRICING_URLS: Record<CloudProvider, string> = {
-  DeepSeek: "https://api-docs.deepseek.com/quick_start/pricing",
-  OpenAI: "https://openai.com/api/pricing/",
-  Anthropic: "https://www.anthropic.com/pricing",
+  DeepSeek: "https://api-docs.deepseek.com/quick_start/pricing/",
+  OpenAI: "https://developers.openai.com/api/docs/pricing",
+  Anthropic: "https://claude.com/pricing",
   Google: "https://ai.google.dev/gemini-api/docs/pricing",
-  Qwen: "https://www.alibabacloud.com/help/en/model-studio/getting-started/models",
-  xAI: "https://docs.x.ai/docs/models",
-  Kimi: "https://platform.moonshot.ai/docs/pricing/chat-completion",
+  Qwen: "https://www.alibabacloud.com/help/en/model-studio/models",
+  xAI: "https://docs.x.ai/developers/models",
+  Kimi: "https://platform.kimi.ai/docs/pricing/chat",
 };
 
 // This catalogue is the BYO (bring-your-own-key) picker list, mirrored

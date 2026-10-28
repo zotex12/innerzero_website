@@ -28,9 +28,9 @@ InnerZero treats that as the wrong default. The wording on the [features page](/
 
 ## How does InnerZero connect to Google Calendar?
 
-The integration uses [Google's standard Calendar OAuth flow](https://developers.google.com/calendar/api/auth). When you connect your Google account in Settings, you grant InnerZero the read and write permissions needed for two-way sync. Google's OAuth consent screen lists the exact scopes before you approve them, and you can revoke them at any time from your Google Account permissions page (`myaccount.google.com/permissions`) without uninstalling InnerZero.
+The integration uses [Google's standard Calendar OAuth flow](https://developers.google.com/workspace/calendar/api/auth). When you connect your Google account in Settings, you grant InnerZero the read and write permissions needed for two-way sync. Google's OAuth consent screen lists the exact scopes before you approve them, and you can revoke them at any time from your Google Account permissions page (`myaccount.google.com/permissions`) without uninstalling InnerZero.
 
-Once connected, events from Google appear locally so the assistant can answer schedule questions without re-querying Google's API on every chat. Events you create or edit in InnerZero publish back to Google through the [Calendar API events endpoint](https://developers.google.com/calendar/api/v3/reference/events) so the change shows up on your phone, on the web, and on any other device signed into the same Google account.
+Once connected, events from Google appear locally so the assistant can answer schedule questions without re-querying Google's API on every chat. Events you create or edit in InnerZero publish back to Google through the [Calendar API events endpoint](https://developers.google.com/workspace/calendar/api/v3/reference/events) so the change shows up on your phone, on the web, and on any other device signed into the same Google account.
 
 Private events get different treatment. An event marked private at creation stays local and does not publish back to Google. The local AI can still reason over it; Google never sees it. Useful for the things you might want the assistant to know about but Google does not need to (therapy slots, job interviews, sensitive medical appointments).
 

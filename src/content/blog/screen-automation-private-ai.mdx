@@ -32,7 +32,7 @@ At a surface level, InnerZero uses standard accessibility APIs to read the scree
 
 Reading from a structured tree matters for two reasons. First, it is more accurate than running computer vision over a screenshot, because the operating system already knows what each control is and what role it plays. Second, it is far cheaper to compute on a consumer PC, which is why InnerZero can do it without renting cloud GPUs.
 
-When you ask the assistant to act on the screen, it picks an element from that tree and triggers a click, type, or scroll. The mechanics are similar to what [pywinauto](https://pywinauto.readthedocs.io) has used for years to drive Windows UIs from scripts, except the instruction comes from your chat rather than a hand-written script.
+When you ask the assistant to act on the screen, it picks an element from that tree and triggers a click, type, or scroll. The mechanics are similar to what [pywinauto](https://pywinauto.readthedocs.io/en/latest/) has used for years to drive Windows UIs from scripts, except the instruction comes from your chat rather than a hand-written script.
 
 The model deciding which element to interact with is a local open-source model running on your PC via [Ollama](https://ollama.com). The element it chose, the click it sent, the text it typed: none of that leaves your machine. OpenAI does not see it. Anthropic does not see it. We do not see it.
 

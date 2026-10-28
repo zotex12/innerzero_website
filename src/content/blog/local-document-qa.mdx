@@ -30,7 +30,7 @@ This matters most for documents you would not be comfortable handing to a third 
 
 ## How does InnerZero read your documents locally?
 
-When you add a document, the app extracts the text using standard, well-documented file format parsers. PDF text comes from the [Adobe PDF specification](https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf) layout. DOCX content comes from the [Office Open XML](https://learn.microsoft.com/en-us/openspecs/office_standards/ms-docx/) container; XLSX is the same family. CSV, Markdown, and `.txt` are read as plain text.
+When you add a document, the app extracts the text using standard, well-documented file format parsers. PDF text comes from the [Adobe PDF specification](https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf) layout. DOCX content comes from the [Office Open XML](https://learn.microsoft.com/en-us/openspecs/office_standards/ms-docx/b839fe1f-e1ca-4fa6-8c26-5954d0abbccd) container; XLSX is the same family. CSV, Markdown, and `.txt` are read as plain text.
 
 The extracted text stays on your machine. When you ask the assistant a question, the local model reads the text and answers from it. In private mode, none of this involves a network at all. In cloud mode, only the prompt you typed (and the slice of document text relevant to your question) travels to whichever cloud provider you have explicitly configured. The full document still does not get uploaded.
 
