@@ -2,7 +2,7 @@
 title: "Does Your AI Train on Your Prompts? Anthropic, OpenAI, Google, DeepSeek, Kimi Compared"
 description: "Plain-English audit of how each major AI provider handles your API prompts. Who trains on your data by default, who doesn't, what the fine print says."
 date: "2026-05-05"
-updated: "2026-10-23"
+updated: "2026-10-28"
 author: "Louie Summers"
 authorRole: "Founder"
 slug: "ai-prompt-training-comparison"
@@ -17,12 +17,12 @@ The answer is "it depends on the provider, the product, and whether you read the
 
 > **Quick summary**
 > - Anthropic, OpenAI, and Google do not train on API prompts by default, but their consumer products often do
-> - DeepSeek's policy is less clear and varies by region and product
-> - Kimi (Moonshot) has the least detailed public documentation of the five
+> - DeepSeek's terms allow your prompts to be used to improve its services
+> - Kimi's API terms allow the same unless you have a separate written agreement with Moonshot AI
 > - Default-on vs default-off training, plus retention windows, are the two things you actually need to check
 > - When in doubt, run locally. InnerZero's default mode sends nothing to any cloud provider
 
-All dates and policy quotes in this post reflect the author's reading of each vendor's public terms at the time of writing. Last verified: 2026-05-05.
+Policy summaries reflect the author's reading of each vendor's public terms; each "Verify here" line gives the date it was last checked.
 
 ## What does "training on your prompts" actually mean?
 
@@ -82,31 +82,30 @@ Verify here: https://ai.google.dev/gemini-api/terms (last verified: 2026-05-05)
 
 ## Does DeepSeek train on my API prompts?
 
-**DeepSeek's public documentation is less specific than the Western providers.** Their current terms state prompts may be used to improve services, with some regional variation and specific enterprise options for stricter handling. The default is closer to "may train" than "will not train".
+**DeepSeek's terms allow it to use your prompts to improve its services, so the default is closer to "may train" than "will not train".** Its [API terms](https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html) build on its general Terms of Use, which allow de-identified inputs and outputs to be used "to a minimal extent" to improve the services.
 
 From what's publicly available:
 
-- DeepSeek API: **may be used** to improve services per the public terms
-- Enterprise deals: customisable contractual terms
-- Retention: not clearly documented in public terms
+- DeepSeek API: **may be used**, in de-identified form, to improve services
+- Opt-out: described in its policies, but not spelled out for API traffic
+- Retention: the privacy policy keeps input personal data while you have an account, stored in China
 
-What this means for InnerZero users. If privacy is a hard requirement, DeepSeek is not the right BYO choice. It's good value (DeepSeek V4 Pro is genuinely strong per-dollar) but the data handling story is less clear than Anthropic or OpenAI. Use it for non-sensitive work or skip it in favour of a provider with cleaner defaults. DeepSeek also publishes open-weight models you can run on your own hardware: see [how to run DeepSeek locally](/blog/how-to-run-deepseek-locally).
+What this means for InnerZero users. If privacy is a hard requirement, DeepSeek is not the right BYO choice. It's good value, but its default data handling is looser than Anthropic's or OpenAI's. Use it for non-sensitive work or skip it in favour of a provider with cleaner defaults. DeepSeek also publishes open-weight models you can run on your own hardware: see [how to run DeepSeek locally](/blog/how-to-run-deepseek-locally).
 
-Verify here: https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html (last verified: 2026-05-05)
+Verify here: https://cdn.deepseek.com/policies/en-US/deepseek-terms-of-use.html, section 4.3 (last verified: 2026-10-28)
 
 ## Does Kimi (Moonshot) train on my API prompts?
 
-**Kimi's public English-language documentation is limited, and the training policy for API usage isn't stated in the same detail as the Western providers.** Moonshot AI's terms imply service improvement use of prompts, but specifics are thin.
+**Kimi's API terms say your content may be used to develop and improve its services unless you agree otherwise in writing.** Restricting training means arranging an enterprise or separate written agreement with Moonshot AI.
 
 From what's publicly available:
 
-- Kimi API: **policy unclear** from public English docs; likely used for service improvement
-- Enterprise deals: available, terms negotiated per contract
-- Retention: not clearly documented
+- Kimi API: **may be used**, including to improve its models, unless agreed otherwise in writing
+- Retention: the privacy policy keeps input information while your account is active, on servers in Singapore
 
-What this means for InnerZero users. Same as DeepSeek, with even less clarity. If you're using Kimi for cost or capability reasons, assume the data handling is looser than the Western providers until the docs say otherwise. Read the current ToS directly at moonshot.ai and form your own view.
+What this means for InnerZero users. Similar to DeepSeek, so keep sensitive work off it. Read Kimi's current terms (linked below) and form your own view.
 
-Verify here: https://platform.kimi.ai/docs/agreement/modeluse (last verified: 2026-05-05)
+Verify here: https://platform.kimi.ai/docs/agreement/modeluse (last verified: 2026-10-28)
 
 ## Comparison table: default training behaviour by provider
 
@@ -115,8 +114,8 @@ Verify here: https://platform.kimi.ai/docs/agreement/modeluse (last verified: 20
 | Anthropic (Claude) | Not used for training | May be used (settings-dependent) | ~30 days | High |
 | OpenAI (GPT) | Not used for training | May be used (opt-out available) | ~30 days | High |
 | Google (Gemini) | Not used on paid tier | May be used on free tier | 30 to 60 days | Moderate |
-| DeepSeek | May be used | May be used | Unclear | Low |
-| Kimi (Moonshot) | May be used (implied) | May be used (implied) | Unclear | Low |
+| DeepSeek | May be used | May be used (opt-out available) | Input personal data: while you have an account | Moderate |
+| Kimi (Moonshot) | May be used (unless agreed in writing) | May be used (implied) | Input information: while your account is active | Moderate |
 
 This table is a summary. Check each vendor's current ToS before making decisions that matter.
 
